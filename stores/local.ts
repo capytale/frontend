@@ -16,6 +16,7 @@ export const useLocalStore = defineStore('local', {
   state: () => ({
     data: initData,
     timestamp: Date.now(),
+    dataSource: "?"
   }),
   actions: {
     async getAsyncData() {
@@ -24,9 +25,11 @@ export const useLocalStore = defineStore('local', {
       if (k.includes('data')) {
         console.log('A')
         this.data = localData
+        this.dataSource = "Locales"
       } else {
         console.log('B')
         this.data = fetchedData
+        this.dataSource = "Distantes"
       }
     },
     async clear() {

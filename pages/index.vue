@@ -69,6 +69,7 @@ const saveStorage = function () {
             </Column>
           </DataTable>
         </p>
+      <p>Données {{ local.dataSource }}</p>
       </template>
     </Card>
     <Card class="flex-1">
