@@ -8,15 +8,11 @@ const local = useLocalStore();
 // Charge les données locales ou distantes
 local.getAsyncData()
 
-
 const clear = function () {
   local.clear().then(() => {
     local.getAsyncData()
   })
 }
-// const saveStorage = function () {
-//   local.saveStorage()
-// }
 
 </script>
 
@@ -71,7 +67,7 @@ const clear = function () {
 
             <Column field="title" header="Titre">
               <template #body="p">
-                <MyTableTitle :title="p.data.title" :nid="p.data.nid" :player="p.data.player" :whoami="p.data.whoami"/>
+                <MyTableTitle :title="p.data.title" :nid="p.data.nid" :whoami="p.data.whoami"/>
               </template>
             </Column>
 
