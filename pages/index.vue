@@ -1,7 +1,7 @@
 <script setup>
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
 import Card from 'primevue/card';
-import Badge from 'primevue/badge';
-import Tag from 'primevue/tag';
 import { useLocalStore } from '@/stores/local';
 const local = useLocalStore();
 
@@ -51,34 +51,48 @@ const clear = function () {
         <div class="grid grid-cols-3 gap-4">
           <div class="col-span-2">
             Mes activités
-            <a href="/actiList" class="p-2">
-              <i class="pi pi-window-maximize"></i>
-            </a>
+            <a href="/actiList" class="p-2"> <i class="pi pi-window-maximize"></i> </a>
           </div>
           <div class="text-right">
-            <Button @click="clear" icon="pi pi-refresh" rounded raised class="bg-green-400"  />
+            <Button @click="clear" icon="pi pi-refresh" rounded raised class="bg-green-400" />
           </div>
         </div>
       </template>
       <template #content>
         <p class="m-0">
-          <DataTable :value="local.data" removableSort stripedRows tableStyle="min-width: 50rem">
+          <DataTable :value="local.data" removableSort stripedRows tableStyle="min-width: 50rem" sortField="changed"
+            :sortOrder="-1" paginator :rows="20" :rowsPerPageOptions="[10, 20, 50, 100]">
+
             <Column field="icon" header="">
               <template #body="slotProps">
-                <img :src="slotProps.data.icon" class="w-10">
+                <MyTableIcon :icon="slotProps.data.icon" :type="slotProps.data.type" />
               </template>
             </Column>
-            <Column field="title" header="Titre"></Column>
-            <Column field="code" header="code" sortable>
+
+            <Column field="title" header="Titre">
               <template #body="slotProps">
-                <Tag :value="slotProps.data.code" class="font-mono"></Tag>
+                <MyTableTitle :title="slotProps.data.title" :player="slotProps.data.player"/>
               </template>
             </Column>
+
+            <Column field="views_total" header="Nb vues" sortable>
+              <template #body="slotProps">
+                <MyTableViews :views_total="slotProps.data.views_total" />
+              </template>
+            </Column>
+
             <Column field="changed" header="Dernière modif." sortable>
               <template #body="slotProps">
-                <Tag :value="slotProps.data.changed" severity="secondary"></Tag>
+                <MyTableChanged :changed="slotProps.data.changed" />
               </template>
             </Column>
+
+            <Column field="code" header="code" sortable>
+              <template #body="slotProps">
+                <MyTableCode :code="slotProps.data.code" />
+              </template>
+            </Column>
+
           </DataTable>
         </p>
       </template>
