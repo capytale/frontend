@@ -5,16 +5,18 @@ import Tag from 'primevue/tag';
 import { useLocalStore } from '@/stores/local';
 const local = useLocalStore();
 
-// console.log('data', local.getData)
-local.getAsyncData().then((data) => { console.log('AsyncData', data) })
+// Charge les données locales ou distantes
+local.getAsyncData()
 
 
 const clear = function () {
-  local.clear()
+  local.clear().then(() => {
+    local.getAsyncData()
+  })
 }
-const saveStorage = function () {
-  local.saveStorage()
-}
+// const saveStorage = function () {
+//   local.saveStorage()
+// }
 
 </script>
 
@@ -45,46 +47,39 @@ const saveStorage = function () {
   </div>
   <div class="flex gap-4 ">
     <Card class="flex-1">
-      <template #title>Mes activités
-        <i @click="clear" class="p-2 pi pi-refresh"></i>
-        <i @click="saveStorage" class="p-2 pi pi-save"></i>
-        <a href="/actiList" class="p-2">
-          <i class="pi pi-window-maximize"></i>
-        </a>
+      <template #title>
+        <div class="grid grid-cols-3 gap-4">
+          <div class="col-span-2">
+            Mes activités
+            <a href="/actiList" class="p-2">
+              <i class="pi pi-window-maximize"></i>
+            </a>
+          </div>
+          <div class="text-right">
+            <Button @click="clear" icon="pi pi-refresh" rounded raised class="bg-green-400"  />
+          </div>
+        </div>
       </template>
       <template #content>
         <p class="m-0">
           <DataTable :value="local.data" removableSort stripedRows tableStyle="min-width: 50rem">
-            <Column field="icon" header=""></Column>
+            <Column field="icon" header="">
+              <template #body="slotProps">
+                <img :src="slotProps.data.icon" class="w-10">
+              </template>
+            </Column>
             <Column field="title" header="Titre"></Column>
             <Column field="code" header="code" sortable>
               <template #body="slotProps">
-                <Badge :value="slotProps.data.code" class="font-mono"></Badge>
+                <Tag :value="slotProps.data.code" class="font-mono"></Tag>
               </template>
             </Column>
-            <Column field="update" header="Dernière modif." sortable>
+            <Column field="changed" header="Dernière modif." sortable>
               <template #body="slotProps">
-                <Tag :value="slotProps.data.update" severity="secondary"></Tag>
+                <Tag :value="slotProps.data.changed" severity="secondary"></Tag>
               </template>
             </Column>
           </DataTable>
-        </p>
-      <p>Données {{ local.dataSource }}</p>
-      </template>
-    </Card>
-    <Card class="flex-1">
-      <template #title>Bibliothèque
-        <i class="p-2 pi pi-refresh"></i>
-        <i class="p-2 pi pi-window-maximize"></i>
-      </template>
-      <template #content>
-        <p class="m-0">
-          Ici, on fait apparaître :
-        <ul>
-          <li>- Icône de type</li>
-          <li>- Titre </li>
-        </ul>
-        Ces infos proviennent d'une requête sans jointure sur une unique table
         </p>
       </template>
     </Card>
