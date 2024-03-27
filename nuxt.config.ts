@@ -12,7 +12,11 @@ export default defineNuxtConfig({
   primevue: {
     usePrimeVue: true
   },
-  css: ['primevue/resources/themes/aura-light-green/theme.css', 'primeicons/primeicons.css'],
+  css: [
+    'primevue/resources/themes/aura-light-green/theme.css',
+    'primeicons/primeicons.css',
+    '@fortawesome/fontawesome-svg-core/styles.css'
+  ],
     nitro: {
     devProxy: {
       '/vanilla': { target: 'https://capytaledev.ac-paris.fr/vanilla', changeOrigin: false, secure: false },
