@@ -64,32 +64,32 @@ const clear = function () {
             :sortOrder="-1" paginator :rows="20" :rowsPerPageOptions="[10, 20, 50, 100]">
 
             <Column field="icon" header="">
-              <template #body="slotProps">
-                <MyTableIcon :icon="slotProps.data.icon" :type="slotProps.data.type" />
+              <template #body="p">
+                <MyTableIcon :icon="p.data.icon" :type="p.data.type" />
               </template>
             </Column>
 
             <Column field="title" header="Titre">
-              <template #body="slotProps">
-                <MyTableTitle :title="slotProps.data.title" :player="slotProps.data.player"/>
+              <template #body="p">
+                <MyTableTitle :title="p.data.title" :nid="p.data.nid" :player="p.data.player" :whoami="p.data.whoami"/>
               </template>
             </Column>
 
             <Column field="views_total" header="Nb vues" sortable>
-              <template #body="slotProps">
-                <MyTableViews :views_total="slotProps.data.views_total" />
+              <template #body="p">
+                <MyTableViews :views_total="p.data.views_total" />
               </template>
             </Column>
 
             <Column field="changed" header="Dernière modif." sortable>
-              <template #body="slotProps">
-                <MyTableChanged :changed="slotProps.data.changed" />
+              <template #body="p">
+                <MyTableChanged :changed="p.data.changed" />
               </template>
             </Column>
 
             <Column field="code" header="code" sortable>
-              <template #body="slotProps">
-                <MyTableCode :code="slotProps.data.code" />
+              <template #body="p">
+                <MyTableCode :code="p.data.code" />
               </template>
             </Column>
 
