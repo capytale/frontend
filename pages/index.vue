@@ -67,13 +67,14 @@ const clear = function () {
 
             <Column field="title" header="Titre">
               <template #body="p">
-                <MyTableTitle :title="p.data.title" :nid="p.data.nid" :whoami="p.data.whoami"/>
+                <MyTableTitle :title="p.data.title" :nid="p.data.nid" :whoami="p.data.whoami" />
               </template>
             </Column>
 
-            <Column field="views_total" header="Nb vues" sortable>
+            <Column field="appr" header="Évaluations Appréciations" sortable>
               <template #body="p">
-                <MyTableViews :views_total="p.data.views_total" />
+                <MyTableEvalApprViews :views_total="p.data.views_total" :boss="p.data.boss" :whoami="p.data.whoami"
+                  :eval="p.data.evaluation" :appr="p.data.appreciation" />
               </template>
             </Column>
 
@@ -83,9 +84,9 @@ const clear = function () {
               </template>
             </Column>
 
-            <Column field="code" header="code" sortable>
+            <Column field="mode" header="Partage" sortable>
               <template #body="p">
-                <MyTableCode :code="p.data.code" />
+                <MyTableCodeMode :code="p.data.code" :mode="p.data.mode" />
               </template>
             </Column>
 
