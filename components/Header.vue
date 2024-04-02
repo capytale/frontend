@@ -1,6 +1,8 @@
 <script setup>
 import { useSideMenuStore } from '@/stores/ui'
+import { useUserStore } from '@/stores/user';
 const sideMenu = useSideMenuStore()
+const user = useUserStore();
 
 </script>
 <template>
@@ -9,6 +11,7 @@ const sideMenu = useSideMenuStore()
         <button @click="sideMenu.toggle"><i class="pi pi-bars"></i> </button>
       </span>
     <span class="text-2xl text-gray-100"> CAPYTALE </span>
+    <span class="text-gray-100">{{ user.data.firstname }} {{ user.data.lastname }}</span>
     <div class="menu">
     </div>
   </div>

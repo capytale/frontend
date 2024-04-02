@@ -2,8 +2,8 @@
 const props = defineProps({
   boss: String,
   whoami: String,
-  eval: String,
-  appr: String,
+  evalu: String,
+  appre: String,
   required: true
 })
 </script>
@@ -11,8 +11,8 @@ const props = defineProps({
 <template>
   <Tag :value="'Par ' + boss" severity="secondary"></Tag>
   <hr/>
-  {{ eval }}
+  {{ evalu }}
   <hr/>
-  {{ appr }}
+  {{ appre }}
 </template>
 

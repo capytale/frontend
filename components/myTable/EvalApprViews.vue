@@ -10,7 +10,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <MyTableEvalAppr v-if="whoami == 'ap' ":boss="boss" :whoami="whoami" :eval="evalu" :appr="appre" />
+  <MyTableEvalAppr v-if="whoami == 'ap' ":boss="boss" :whoami="whoami" :evalu="evalu" :appre="appre" />
   <MyTableViews v-else :views_total="views_total" />
 </template>
 
