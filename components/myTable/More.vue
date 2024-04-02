@@ -10,18 +10,38 @@ const props = defineProps({
 const menu = ref();
 const items = ref([
     {
-        label: 'Options',
         items: [
             {
-                label: 'Refresh',
-                icon: 'pi pi-refresh'
+                label: 'Paramètres',
+                icon: 'pi pi-cog'
             },
             {
-                label: 'Export',
-                icon: 'pi pi-upload'
-            }
+                label: 'Cloner',
+                icon: 'pi pi-clone'
+            },
+            {
+                label: 'Copier l\'URL d\'intégration dans Moodle',
+                icon: 'pi pi-link'
+            },
+            {
+                label: 'Bloquer la distribution',
+                icon: 'pi pi-lock'
+            },
+            {
+                label: 'Télécharger',
+                icon: 'pi pi-download'
+            },
+        ]
+    },
+    {
+        items: [
+            {
+                label: 'Supprimer',
+                icon: 'pi pi-trash'
+            },
         ]
     }
+
 ]);
 
 const toggle = (event) => {
@@ -30,8 +50,6 @@ const toggle = (event) => {
 </script>
 
 <template>
-
-
       <div class="card flex justify-content-center">
         <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu" />
         <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
