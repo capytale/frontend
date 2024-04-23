@@ -9,6 +9,6 @@ const props = defineProps({
 </script>
 
 <template>
-  <img :src="icon" class="w-10" v-tooltip="type" type="text" placeholder="Right">
+  <img :src="icon" class="w-10" v-tooltip="type" type="text" placeholder="Right" :alt="'Activité' + type">
 </template>
 

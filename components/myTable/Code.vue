@@ -45,7 +45,7 @@ const items = computed(() =>
 
 <template>
   <div class="card flex justify-content-center mystyle">
-    <Button type="button" :label="code" icon="pi pi-chevron-down" @click="toggle" class="mystyle" aria-haspopup="true" aria-controls="overlay_menu" />
+    <Button type="button" :label="code" icon="pi pi-angle-down" @click="toggle" class="mystyle" aria-haspopup="true" aria-controls="overlay_menu" />
     <!-- <Menu :model="items" /> -->
         <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
     <Toast />
@@ -53,9 +53,11 @@ const items = computed(() =>
 </template>
 
 <style>
-.mystyle .p-menuitem-content {
+.mystyle {
   font-family: monospace;
   background-color: #c6eee1;
+  border-radius: 5px;
+  padding:3px;
 }
 
 .mystyle .p-submenu-list .p-menuitem-content {

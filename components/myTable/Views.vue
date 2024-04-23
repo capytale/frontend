@@ -6,6 +6,9 @@ const props = defineProps({
 </script>
 
 <template>
-  {{ views_total }} {{ views_total > 1 ? 'vues' : 'vue' }}
+  <Badge v-if="views_total == 0" :value="views_total" severity="secondary"></Badge>
+  <a v-else href="https://capytale2.ac-paris.fr/web/assignments/1760082">
+    <Badge :value="views_total" severity="contrast"></Badge>
+  </a>
 </template>
 
