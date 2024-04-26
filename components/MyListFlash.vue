@@ -21,19 +21,10 @@ const clear = function () {
 <template>
   <Card class="flex-1">
     <template #title>
-      <div class="grid grid-cols-3 gap-4">
-        <div class="col-span-2">
           <h1>
           Mes activités
           <a href="/actiList" class="p-2" aria-label="maximize"> <i class="pi pi-window-maximize" ></i> </a>
           </h1>
-        </div>
-        <div class="text-right">
-          <Button @click="clear" icon="pi pi-refresh" rounded raised class="bg-green-400" value="refresh" aria-label="refresh"/>
-        </div>
-        <!-- 
-        -->
-      </div>
     </template>
     <template #content>
       <p class="m-0">
@@ -71,11 +62,11 @@ const clear = function () {
             </template>
           </Column>
 
-          <!-- <Column field="plus" header=""> -->
-          <!--   <template #body="p"> -->
-          <!--     <MyTableMore :type="p.data.type" :icon="p.data.icon" /> -->
-          <!--   </template> -->
-          <!-- </Column> -->
+          <Column field="plus" header="">
+            <template #body="p">
+              <MyTableMore :type="p.data.type" :icon="p.data.icon" />
+            </template>
+          </Column>
 
         </DataTable>
       </p>

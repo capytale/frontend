@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
     'nuxt-primevue',
-    '@nuxtjs/tailwindcss',
+    // '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     'nuxt3-localforage',
   ],
@@ -13,21 +13,33 @@ export default defineNuxtConfig({
     usePrimeVue: true
   },
   css: [
-    'primevue/resources/themes/aura-light-green/theme.css',
+    'primeflex/primeflex.css',
     'primeicons/primeicons.css',
     '@fortawesome/fontawesome-svg-core/styles.css'
   ],
-    nitro: {
+  nitro: {
     devProxy: {
       '/vanilla': { target: 'https://capytaledev.ac-paris.fr/vanilla', changeOrigin: false, secure: false },
       '/p': { target: 'https://capytaledev.ac-paris.fr/p', changeOrigin: false, secure: false },
       '/web': { target: 'https://capytaledev.ac-paris.fr/web', changeOrigin: false, secure: false },
     },
   },
-  devServer:{
+  devServer: {
     https: {
       key: resolve(process.env.HOME!, 'repos/virtual.ac-capytale.fr.key'),
       cert: resolve(process.env.HOME!, 'repos/virtual.ac-capytale.fr.crt')
+    }
+  },
+  app: {
+    head: {
+      link: [
+        {
+          id: 'theme-link',
+          rel: 'stylesheet',
+          // href: baseUrl + 'themes/lara-light-blue/theme.css'
+          href: '/' + 'themes/lara-light-blue/theme.css'
+        }
+      ]
     }
   }
 })

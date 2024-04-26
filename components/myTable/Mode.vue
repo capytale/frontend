@@ -12,8 +12,8 @@ const explainMode = computed(() => {
   const b = props.tr_beg
   const e = props.tr_end
   const strPeriode = `Libre pour les élèves du ${b} au ${e}`
-  const strC = "et en lecture seule en dehors"
-  const strL = "et non accessible en dehors"
+  const strC = " et en lecture seule en dehors"
+  const strL = " et non accessible en dehors"
 
   switch (props.mode) {
     case 'N_O':

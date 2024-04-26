@@ -17,6 +17,6 @@
 <style>
 .mycard {
   border: 1px solid #e2e8f0;
-  background-color: #f8fafc;
+  background-color: var(--surface-100);
 }
 </style>
