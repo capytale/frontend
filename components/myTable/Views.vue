@@ -8,7 +8,7 @@ const props = defineProps({
 <template>
   <Badge v-if="views_total == 0" :value="views_total" severity="secondary"></Badge>
   <a v-else href="https://capytale2.ac-paris.fr/web/assignments/1760082">
-    <Badge :value="views_total" severity="contrast"></Badge>
+    <Badge :value="views_total" severity="contrast" size="large"></Badge>
   </a>
 </template>
 

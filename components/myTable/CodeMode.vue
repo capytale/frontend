@@ -9,7 +9,9 @@ const props = defineProps({
 </script>
 
 <template>
+  <div class="flex flex-wrap align-items-center gap-2">
   <MyTableCode :code="code" />
   <MyTableMode :mode="mode" :tr_beg="tr_beg" :tr_end="tr_end" />
+    </div>
 </template>
 

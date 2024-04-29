@@ -8,9 +8,9 @@ const user = useUserStore();
 </script>
 <template>
   <div class="navbar">
-    <!-- <span class="text-2xl text-gray-100 p-2"> -->
-    <!--     <button @click="sideMenu.toggle"><i class="pi pi-bars"></i> </button> -->
-    <!--   </span> -->
+    <span class="text-2xl text-gray-100 p-2">
+        <button @click="sideMenu.toggle"><i class="pi pi-bars"></i> </button>
+      </span>
     <div class="navbarContainer">
       <span class="navbarLogo">
         <a href="#"> CAPYTALE </a>

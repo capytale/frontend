@@ -5,13 +5,11 @@ const code = useCodeStore()
 </script>
 
 <template>
-  <div :class="sideMenu.visible ? 'w-60' : 'w-0'" class="flex flex-col duration-300 bg-gray-800 shadow">
+  <div :class="sideMenu.visible ? 'sidemenu sidemenu-active' : 'sidemenu'"
+    class="flex flex-col duration-300 bg-gray-800 shadow">
     <div class="space-y-3 p-3">
       <div class="flex items-center justify-between">
         <h2 class="text-xl font-bold text-white">Dashboard</h2>
-        <button @click="sideMenu.toggle"><i
-            :class="sideMenu.visible ? 'pi pi-chevron-left text-gray-100' : 'text-gray-900'"></i>
-        </button>
       </div>
       <div class="flex-1">
         <ul class="pt-2 pb-4 space-y-1 text-sm">
@@ -49,3 +47,26 @@ const code = useCodeStore()
     </div>
   </div>
 </template>    
+
+<style scoped>
+.sidemenu {
+  position: fixed;
+  width: 300px;
+  height: calc(100vh - 6rem);
+  z-index: 999;
+  overflow-y: auto;
+  -webkit-user-select: none;
+  user-select: none;
+  top: 7.65rem;
+  left: 2rem;
+  transition: transform .2s, left .2s;
+  border-radius: 12px;
+  padding: .5rem 1.5rem;
+  box-shadow: 0 3px 5px #00000005, 0 0 2px #0000000d, 0 1px 4px #00000014;
+}
+
+.sidemenu-active {
+  transform: translate(-100%);
+  left: 0;
+}
+</style>

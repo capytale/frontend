@@ -45,7 +45,7 @@ const toggle = (event) => {
 
 <template>
   <div class="card flex justify-content-center">
-    <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" severity="secondary" outlined aria-haspopup="true"
+    <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" severity="secondary" link aria-haspopup="true"
       aria-controls="overlay_menu" />
     <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
   </div>

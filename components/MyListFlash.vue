@@ -43,7 +43,7 @@ const clear = function () {
             </template>
           </Column>
 
-          <Column field="appr" header="Évaluations Appréciations">
+          <Column field="appr" header="Évaluat° Appréciat°">
             <template #body="p">
               <MyTableEvalApprViews :views_total="p.data.views_total" :boss="p.data.boss" :whoami="p.data.whoami"
                 :evalu="p.data.evaluation" :appre="p.data.appreciation" />
