@@ -25,7 +25,6 @@ function timeElapsed(ts) {
 </script>
 
 <template>
-  <!-- {{ ts2local(changed) }} -->
   Il y a {{ timeElapsed(changed *1000 ) }}
 </template>
 
