@@ -48,6 +48,12 @@ body,
   margin: 0;
 }
 
+ .container {
+   min-width:400px;
+   max-width:80%;
+ }
+
+
 .appContainer {
   height: 100%;
   display: grid;

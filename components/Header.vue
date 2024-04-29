@@ -5,6 +5,11 @@ const sideMenu = useSideMenuStore()
 const theme = useThemeStore()
 const user = useUserStore();
 
+const themeIcon = () => {
+  return theme.current === 'light' ? 'pi pi-moon' : 'pi pi-sun';
+}
+
+
 </script>
 <template>
   <div class="navbar">
@@ -23,8 +28,8 @@ const user = useUserStore();
       </div>
       <div class="activityMenu">
         <span class="px-2">{{ user.data.firstname }} {{ user.data.lastname }}</span>
+        <Button @click="theme.toggle" :icon="themeIcon()" class="mr-2" outlined/>
         <span class="px-2">Déconnexion</span>
-        <span class="px-2" @click="theme.toggle">{{theme.current}}</span>
       </div>
     </div>
   </div>
