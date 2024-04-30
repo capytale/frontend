@@ -61,6 +61,7 @@ const actItems = ref([
     icon: 'pi pi-trash',
     class: 'redImportant',
     command: async () => {
+  // TODO ajouter une boîte de dialogue de confirmation
       const response = await my.deleteActivity(props.nid)
       console.log(response.ok)
       if (response.ok) {

@@ -39,6 +39,13 @@ const handleEdit = function () {
   window.location.href = url
 }
 
+const handleDelete = function () {
+  // TODO ajouter une boîte de dialogue de confirmation
+  for (const el of selectedNid.value) {
+    console.log(el.nid)
+  }
+}
+
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   title: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
@@ -65,7 +72,7 @@ const filters = ref({
             <template #start v-if="showToolbar">
               <Button v-if="oneCheckbox" label="Paramètres" @click="handleEdit()" icon="pi pi-cog" class="mr-2"
                 severity="secondary" />
-              <Button label="Supprimer" icon="pi pi-trash" class="mr-2" severity="danger" />
+              <Button label="Supprimer" @click="handleDelete()" icon="pi pi-trash" class="mr-2" severity="danger" />
               <Button label="Étiqueter" icon="pi pi-tags" class="mr-2" severity="secondary" />
               <Button label="Télécharger" icon="pi pi-download" class="mr-2" severity="secondary" />
               <Button label="CSV" icon="pi pi-file-excel" class="mr-2" severity="secondary" />

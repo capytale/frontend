@@ -10,7 +10,7 @@ export const useLocalStore = defineStore('local', {
       fetch("/web/my_json_data")
         .then(r => r.json())
         .then(json => {
-          console.log(json);
+          // console.log(json);
           this.data = json
         });
     },
