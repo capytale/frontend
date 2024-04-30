@@ -9,9 +9,9 @@ const nbViews = function () {
 </script>
 
 <template>
-  <Button v-if="views_total == 0" severity="secondary" rounded>0 vue</Button>
+  <Button v-if="views_total == 0" severity="secondary" rounded disabled>0 vue</Button>
   <a v-else href="https://capytale2.ac-paris.fr/web/assignments/1760082">
-    <Button severity="contrast" size="large" rounded>{{ nbViews() }}  </Button>
+    <Button severity="secondary" size="large" rounded>{{ nbViews() }}  </Button>
   </a>
 </template>
 

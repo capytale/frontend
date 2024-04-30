@@ -4,7 +4,6 @@ import Column from 'primevue/column';
 import Card from 'primevue/card';
 import { useLocalStore } from '@/stores/local';
 import { useUserStore } from '@/stores/user';
-import { useToast } from "primevue/usetoast";
 import { FilterMatchMode } from 'primevue/api';
 
 // Charge les données locales ou distantes
@@ -24,7 +23,6 @@ const onRowSelect = function () {
 const onRowSelectAll = function () {
   showToolbar.value = true
   oneCheckbox.value = local.data.length == 1
-  console.log(local.data.length)
 }
 const onRowUnselectAll = function () {
   showToolbar.value = false
@@ -33,6 +31,12 @@ const onRowUnselectAll = function () {
 const onRowUnselect = function () {
   showToolbar.value = selectedNid.value.length > 0
   oneCheckbox.value = selectedNid.value.length == 1
+}
+
+const handleEdit = function () {
+  const nid = selectedNid.value[0].nid
+  const url = `/web/node/${nid}/edit`
+  window.location.href = url
 }
 
 const filters = ref({
@@ -44,24 +48,23 @@ const filters = ref({
 
 <template>
   <Card class="flex-1">
-    <template #title>
-      <h1>
-        Mes activités
-        <a href="/actiList" class="p-2" aria-label="maximize"> <i class="pi pi-window-maximize"></i> </a>
-      </h1>
-    </template>
 
     <template #content>
 
       <DataTable v-model:filters="filters" v-model:selection="selectedNid" selectionMode="multiple" :value="local.data"
         dataKey="nid" sortField="changed" tableStyle="min-width: 50rem" :sortOrder="-1" paginator :rows="20"
         :rowsPerPageOptions="[10, 20, 50, 100]" @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()"
-        @rowUnselectAll="onRowUnselectAll()" @rowSelectAll="onRowSelectAll()" :globalFilterFields="['title', 'changed']">
+        @rowUnselectAll="onRowUnselectAll()" @rowSelectAll="onRowSelectAll()" :globalFilterFields="['title', 'changed']"
+        class="my-card">
 
         <template #header>
           <Toolbar>
+            <template #start v-if="!showToolbar">
+              <h2 style="margin:0px"> Mes activités </h2>
+            </template>
             <template #start v-if="showToolbar">
-              <Button v-if="oneCheckbox" label="Paramètres" icon="pi pi-cog" class="mr-2" severity="secondary" />
+              <Button v-if="oneCheckbox" label="Paramètres" @click="handleEdit()" icon="pi pi-cog" class="mr-2"
+                severity="secondary" />
               <Button label="Supprimer" icon="pi pi-trash" class="mr-2" severity="danger" />
               <Button label="Étiqueter" icon="pi pi-tags" class="mr-2" severity="secondary" />
               <Button label="Télécharger" icon="pi pi-download" class="mr-2" severity="secondary" />
@@ -84,40 +87,40 @@ const filters = ref({
 
         <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
 
-        <Column field="icon" header="Type" sortable>
+        <Column field="type" header="Type" sortable>
           <template #body="p">
-            <MyTableIcon :icon="p.data.icon" :type="p.data.type" />
+            <MyTableType :icon="p.data.icon" :type="p.data.type" />
           </template>
         </Column>
 
-        <Column field="title" header="Titre" sortable>
+        <Column field="title" header="Titre" style="width:50rem; max-width:50rem; overflow:hidden" sortable>
           <template #body="p">
             <MyTableTitle :title="p.data.title" :nid="p.data.nid" :whoami="p.data.whoami" />
-          </template>
+          </template>u
         </Column>
 
-        <Column field="appr" header="Évaluation">
+        <Column field="evaluation" header="Évaluation" style="max-width:10rem">
           <template #body="p">
-            <MyTableEvalApprViews :views_total="p.data.views_total" :boss="p.data.boss" :whoami="p.data.whoami"
+            <MyTableEvaluation :views_total="p.data.views_total" :boss="p.data.boss" :whoami="p.data.whoami"
               :evalu="p.data.evaluation" :appre="p.data.appreciation" />
           </template>
         </Column>
 
-        <Column field="changed" header="Dernière modif." sortable>
+        <Column field="changed" header="Dernière modif." style="max-width:10rem" sortable>
           <template #body="p">
             <MyTableChanged :changed="p.data.changed" />
           </template>
         </Column>
 
-        <Column field="mode" header="Partage">
+        <Column field="code" header="Partage" style="min-width: 13rem">
           <template #body="p">
-            <MyTableCodeMode :code="p.data.code" :mode="p.data.mode" :tr_beg="p.data.tr_beg" :tr_end="p.data.tr_end" />
+            <MyTableShare :code="p.data.code" :mode="p.data.mode" :tr_beg="p.data.tr_beg" :tr_end="p.data.tr_end" />
           </template>
         </Column>
 
-        <Column field="plus" header="">
+        <Column field="more" header="">
           <template #body="p">
-            <MyTableMore :type="p.data.type" :icon="p.data.icon" />
+            <MyTableMore :nid="p.data.nid" :whoami="p.data.whoami" />
           </template>
         </Column>
 
@@ -125,3 +128,10 @@ const filters = ref({
     </template>
   </Card>
 </template>
+
+
+<style>
+.p-datatable-hoverable-rows .p-selectable-row {
+  cursor: default;
+}
+</style>

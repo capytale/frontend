@@ -19,8 +19,8 @@ const editUrl = function (nid) {
 <template>
   <div class="group">
     <a :href="playerUrl(nid)" >{{ title }}</a>
-    <a v-if="whoami != 'ap'":href="editUrl(nid)" class="px-2 text-gray-100 group-hover:text-gray-600" v-tooltip="'Modifier les paramètres'" type="text" placeholder="Right" aria-label="Modifier les paramètres">
-      <font-awesome-icon icon="fa-solid fa-cog" />
+    <a v-if="whoami != 'ap'":href="editUrl(nid)" class="px-2" v-tooltip="'Modifier les paramètres'" type="text" placeholder="Right" aria-label="Modifier les paramètres">
+      <i class="pi pi-cog"></i>
     </a>
   </div>
 </template>
