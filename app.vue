@@ -20,7 +20,7 @@ useHead({
 <template>
   <div :class="'appContainer ' + currentThemeClass">
     <Header></Header>
-    <div class="flex">
+    <div class="flex bggray">
       <SideMenu></SideMenu>
       <div :class="sideMenu.visible ? 'container mx-auto' : 'container sidemenu-inactive'">
         <div>
@@ -51,6 +51,13 @@ body,
  .container {
    min-width:400px;
    max-width:80%;
+ }
+ .dark-theme .bggray {
+ background: var(--gray-700);
+ }
+
+ .bggray {
+ background: var(--gray-100);
  }
 
 
