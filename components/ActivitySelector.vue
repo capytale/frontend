@@ -90,7 +90,6 @@ const cols = [
 </script>
 
 <template>
-  <UContainer>
     <UCard class="mb-4 rounded-t-none">
       <div class="flex flex-row justify-between">
         <div class="text-lg font-bold">Créer une nouvelle activité</div>
@@ -162,7 +161,6 @@ const cols = [
         </div>
       </template>
     </UTable>
-  </UContainer>
 </template>
 
 <style>

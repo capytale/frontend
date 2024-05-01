@@ -1,4 +1,6 @@
 <template>
+  <HomeTetris />
+
     <div class="flex flex-row items-center justify-around">
       <img src="https://capytale2.ac-paris.fr/logo.svg" class="w-40 mr-4 rounded-lg" />
       <div>
@@ -8,8 +10,8 @@
         </h2>
       </div>
     </div>
-    <div class="grid m-0 gap-4">
-      <UCard v-for="(c, index) of cards" key="index" class="col-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 my-32">
+      <UCard v-for="(c, index) of cards" key="index">
         <div class="flex flex-row align-center">
           <UIcon :name="c.icon" class="text-primary-500 text-2xl mr-4" />
           <div class="font-semibold">{{ c.title }}</div>

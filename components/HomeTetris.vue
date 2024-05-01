@@ -8,7 +8,7 @@
     >
       <div
         ref="el"
-        class="fixed top-0 inset-0 grid justify-center auto-rows-[--cell] -space-y-px z-0"
+        class="fixed top-0 inset-0 grid justify-center auto-rows-[--cell] -space-y-px -z-10"
       >
         <div v-for="(row, rowIndex) in grid" :key="rowIndex" class="grid grid-flow-col auto-cols-[--cell] flex-1 -space-x-px">
           <div

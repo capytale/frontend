@@ -18,10 +18,10 @@ const themeIcon = () => {
       </span>
     <div class="navbarContainer">
       <span class="navbarLogo">
-        <a href="#"> CAPYTALE </a>
+        <NuxtLink href="/"> CAPYTALE </NuxtLink>
       </span>
       <div class="capytaleMenu">
-        <span class="px-2">Mes activités</span>
+        <NuxtLink to="/my"><span class="px-2">Mes activités</span></NuxtLink>
         <span class="px-2">La bibliothèque</span>
       </div>
       <div class="activityInfo">
