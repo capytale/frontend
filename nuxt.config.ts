@@ -5,12 +5,7 @@ const baseUrl = '/~';
 export default defineNuxtConfig({
   ssr: false,
   devtools: { enabled: true },
-  modules: [
-    'nuxt-primevue',
-    // '@nuxtjs/tailwindcss',
-    '@pinia/nuxt',
-    //'nuxt3-localforage',
-  ],
+  modules: ['nuxt-primevue', '@pinia/nuxt', "@nuxt/ui", '@vueuse/nuxt'],
   primevue: {
     usePrimeVue: true
   },

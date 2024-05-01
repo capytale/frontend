@@ -1,0 +1,3 @@
+<template>
+  <ActivitySelector />
+</template>
