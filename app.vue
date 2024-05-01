@@ -18,9 +18,11 @@ useHead({
 
 
 <template>
+
   <div :class="'appContainer ' + currentThemeClass">
     <Header></Header>
     <div class="flex bggray">
+    
       <SideMenu></SideMenu>
       <div :class="sideMenu.visible ? 'container mx-auto' : 'container sidemenu-inactive'">
         <div>

@@ -11,7 +11,7 @@ const value = ref(null);
     <template #content>
 
       <form action="/web/my" method="post" id="capytale">
-        <div class="flex flex-column gap-2">
+        <div class="flex flex-col gap-2">
           <label for="code">Saisir le code de partage</label>
           <div class="flex flex-wrap align-items-center gap-2">
             <InputText id="code" v-model="value" aria-describedby="code-help" placeholder="a12b-345678" />
