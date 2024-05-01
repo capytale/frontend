@@ -7,10 +7,11 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['nuxt-primevue', '@pinia/nuxt', "@nuxt/ui", '@vueuse/nuxt'],
   primevue: {
-    usePrimeVue: true
+    usePrimeVue: true,
+    cssLayerOrder: 'tailwind-base, primevue, tailwind-utilities'
   },
   css: [
-    'primeflex/primeflex.css',
+    // 'primeflex/primeflex.css',
     'primeicons/primeicons.css',
     '@fortawesome/fontawesome-svg-core/styles.css'
   ],
