@@ -1,5 +1,7 @@
 import { resolve } from 'path';
 
+const baseUrl = '/~';
+
 export default defineNuxtConfig({
   ssr: false,
   devtools: { enabled: true },
@@ -7,7 +9,7 @@ export default defineNuxtConfig({
     'nuxt-primevue',
     // '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
-    'nuxt3-localforage',
+    //'nuxt3-localforage',
   ],
   primevue: {
     usePrimeVue: true
@@ -31,13 +33,14 @@ export default defineNuxtConfig({
     }
   },
   app: {
+    baseURL: baseUrl,
     head: {
       link: [
         {
           id: 'theme-link',
           rel: 'stylesheet',
-          // href: baseUrl + 'themes/lara-light-blue/theme.css'
-          href: '/' + 'themes/lara-light-blue/theme.css'
+          href: baseUrl + 'themes/lara-light-blue/theme.css'
+          //href: '/' + 'themes/lara-light-blue/theme.css'
         }
       ]
     }

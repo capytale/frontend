@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import localforage from 'localforage'
+//import localforage from 'localforage'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
