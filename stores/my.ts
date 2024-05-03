@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
-import csrfBck from '@capytale/activity.js/backend/capytale/csrf'
+import httpClient from '@capytale/activity.js/backend/capytale/http'
+
+const myActivitiesApiEp = "/web/c-ui/api/my-activities"
 
 export const useMyStore = defineStore('my', {
   state: () => ({
@@ -7,26 +9,16 @@ export const useMyStore = defineStore('my', {
   }),
   actions: {
     async deleteActivity(nid: number) {
-      const headers = await csrfBck.addCsrfHeadersAsync() as HeadersInit
-      return fetch(
-        "/web/c-ui/api/my-activities",
-        {
-          method: "POST",
-          headers: headers,
-          body: JSON.stringify({ action: "delete", nid })
-        }
-      )
+      return httpClient.postJsonAsync(
+        myActivitiesApiEp,
+        { action: "delete", nid }
+      );
     },
     async cloneActivity(nid: number) {
-      const headers = await csrfBck.addCsrfHeadersAsync() as HeadersInit
-      return fetch(
-        "/web/c-ui/api/my-activities",
-        {
-          method: "POST",
-          headers: headers,
-          body: JSON.stringify({ action: "clone", nid })
-        }
-      )
+      return httpClient.postJsonAsync(
+        myActivitiesApiEp,
+        { action: "clone", nid }
+      );
     },
   }
 })
