@@ -2,9 +2,14 @@
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Card from 'primevue/card';
+import { useConfirm } from "primevue/useconfirm";
+import { useToast } from "primevue/usetoast";
 import { useLocalStore } from '@/stores/local';
 import { useUserStore } from '@/stores/user';
 import { FilterMatchMode } from 'primevue/api';
+
+const confirm = useConfirm();
+const toast = useToast();
 
 // Charge les données locales ou distantes
 const local = useLocalStore();
@@ -40,10 +45,24 @@ const handleEdit = function () {
 }
 
 const handleDelete = function () {
-  // TODO ajouter une boîte de dialogue de confirmation
-  for (const el of selectedNid.value) {
-    console.log(el.nid)
-  }
+  confirm.require({
+    message: 'Vous vous apprêtez à supprimer DÉFINITIVEMENT.',
+    header: 'Confirmation',
+    icon: 'pi pi-exclamation-triangle',
+    rejectLabel: 'Annuler',
+    rejectClass: 'p-button-secondary p-button-outlined',
+    acceptLabel: 'Supprimer',
+    acceptClass: 'p-button-danger',
+    accept: () => {
+      toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 30000 });
+    },
+    reject: () => {
+      toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+    }
+  });
+  // for (const el of selectedNid.value) {
+  //   console.log(el.nid)
+  // }
 }
 
 const filters = ref({
@@ -54,6 +73,7 @@ const filters = ref({
 </script>
 
 <template>
+  <ConfirmDialog></ConfirmDialog>
   <Card class="flex-1">
 
     <template #content>
