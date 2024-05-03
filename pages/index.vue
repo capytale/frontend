@@ -9,13 +9,15 @@
       </div>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 my-32">
-      <UCard v-for="(c, index) of cards" key="index">
+      <Card v-for="(c, index) of cards" key="index">
+      <template #content>
         <div class="flex flex-row align-center">
-          <UIcon :name="c.icon" class="text-primary-500 text-2xl mr-4" />
+          <Icon :name="c.icon" class="text-primary-500 text-2xl mr-4" />
           <div class="font-semibold">{{ c.title }}</div>
         </div>
         <div class="mt-2 text-gray-500" v-html="c.description"></div>
-      </UCard>
+      </template>
+      </Card>
     </div>
 
     <CarouselEdu />
@@ -27,7 +29,7 @@ const cards = [
     title: "Commun numérique tsoin tsoin",
     description:
       "Un projet inter-académique soutenu par le ministère. \nDes partenariats avec des enseignants, l’Edtech, ou des associations.",
-    icon: "i-heroicons-user-group",
+    icon: "heroicons:user-group",
   },
   {
     title: "Ressources éducatives libres",
