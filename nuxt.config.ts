@@ -40,8 +40,5 @@ export default defineNuxtConfig({
         }
       ]
     }
-  },
-  ui: {
-    icons: ['streamline']
   }
 })
