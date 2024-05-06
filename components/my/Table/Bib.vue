@@ -1,5 +1,9 @@
 <script setup>
+import Dialog from 'primevue/dialog'
 import { PrimeIcons as PI } from 'primevue/api'
+import { ref } from "vue";
+
+const visible = ref(false);
 const props = defineProps({
   nid: String,
   shared: String,
@@ -7,11 +11,21 @@ const props = defineProps({
 })
 const shareClass = props.shared == "0" ? " unshared " : " shared "
 </script>
-})
 
 <template>
-  <i v-if="web == '1'" :class="PI.GLOBE + ' globe'" :style="style" />
-  <i :class="PI.SHARE_ALT + shareClass" />
+  <button @click="visible = true">
+    <i v-if="web == '1'" :class="PI.GLOBE + ' globe'" :style="style" />
+    <i :class="PI.SHARE_ALT + shareClass" />
+  </button>
+
+
+  <Dialog v-model:visible="visible" header="Partage dans la bibliothèque" :style="{ width: '75%' }">
+    <MyTableBibForm :nid="nid"/>
+    <div class="flex justify-content-end gap-2">
+      <Button type="button" label="Cancel" severity="secondary" @click="visible = false"></Button>
+      <Button type="button" label="Save" @click="visible = false"></Button>
+    </div>
+  </Dialog>
 </template>
 
 <style scoped>
