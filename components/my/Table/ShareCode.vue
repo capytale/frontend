@@ -44,7 +44,6 @@ const items = computed(() =>
     <Button type="button" :label="code" icon="pi pi-angle-down" @click="toggle" class="mystyle" severity="primary"
       aria-haspopup="true" aria-controls="overlay_menu" />
     <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
-    <Toast />
   </div>
 </template>
 
