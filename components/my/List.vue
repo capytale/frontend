@@ -74,6 +74,7 @@ const filters = ref({
 
 <template>
   <ConfirmDialog></ConfirmDialog>
+  <Toast />
   <Card class="flex-1">
 
     <template #content>
@@ -140,9 +141,9 @@ const filters = ref({
         </Column>
 
         <Column field="code" header="Partage" style="min-width: 13rem">
-          <template #body="p">
-            <MyTableShare :code="p.data.code" :mode="p.data.mode" :tr_beg="p.data.tr_beg" :tr_end="p.data.tr_end" />
-          </template>
+          <!-- <template #body="p"> -->
+          <!--   <MyTableShare :code="p.data.code" :mode="p.data.mode" :tr_beg="p.data.tr_beg" :tr_end="p.data.tr_end" /> -->
+          <!-- </template> -->
         </Column>
 
         <Column field="more" header="">
