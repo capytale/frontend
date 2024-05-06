@@ -54,15 +54,21 @@ const handleDelete = function () {
     acceptLabel: 'Supprimer',
     acceptClass: 'p-button-danger',
     accept: () => {
-      toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 30000 });
+      // for (const el of selectedNid.value) {
+      //   console.log(el.nid)
+      // }
+      // const response = await my.deleteActivity(props.nid)
+      const response = {}
+      if (response.ok) {
+        toast.add({ severity: 'success', summary: 'Suppression effectuée : ', life: 2000 });
+      } else {
+        toast.add({ severity: 'error', summary: 'Échec de la suppression : ', detail: "nid = " });
+      }
     },
     reject: () => {
-      toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+      toast.add({ severity: 'info', summary: 'Annulation', life: 3000 });
     }
   });
-  // for (const el of selectedNid.value) {
-  //   console.log(el.nid)
-  // }
 }
 
 const filters = ref({
@@ -141,9 +147,15 @@ const filters = ref({
         </Column>
 
         <Column field="code" header="Partage" style="min-width: 13rem">
-          <!-- <template #body="p"> -->
-          <!--   <MyTableShare :code="p.data.code" :mode="p.data.mode" :tr_beg="p.data.tr_beg" :tr_end="p.data.tr_end" /> -->
-          <!-- </template> -->
+          <template #body="p">
+            <MyTableShare :code="p.data.code" :mode="p.data.mode" :tr_beg="p.data.tr_beg" :tr_end="p.data.tr_end" />
+          </template>
+        </Column>
+
+        <Column field="bib" header="Bib.">
+          <template #body="p">
+            <MyTableBib :nid="p.data.nid" :shared="p.data.status_shared" :web="p.data.status_web" />
+          </template>
         </Column>
 
         <Column field="more" header="">
