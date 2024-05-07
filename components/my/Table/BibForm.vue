@@ -1,7 +1,6 @@
 <script setup>
 import { _ } from 'vue-underscore'
-import { useThemesStore } from '@/stores/themes';
-import { useModulesStore } from '@/stores/modules';
+import { useBibIndexingStore } from '@/stores/bibIndexing';
 
 const props = defineProps({
   nid: String,
@@ -12,11 +11,11 @@ const share = ref(false);
 const web = ref(false);
 const selectedKey = ref(null)
 
-const themes = useThemesStore();
-themes.getThemes()
-// console.log(themes.data)
-// https://np.ac-capytale.fr/web/c-api/themes_rest?_format=json
-// https://tidpen.io/Nicolas-Poulain/pen/oNOKOpp?editors=1010
+const idxEls = useBibIndexingStore();
+idxEls.getIndexingElements()
+console.log(idxEls.data)
+
+
 const unflatten = function (array, parent, tree) {
   tree = typeof tree !== 'undefined' ? tree : [];
   parent = typeof parent !== 'undefined' ? parent : { id: 0 };
@@ -36,7 +35,7 @@ const unflatten = function (array, parent, tree) {
 // { "key": "1876", "label": "Histoire des Mathématiques", "id": "1876", "parentid": "1799" },
 // { "key": "3926", "label": "Histoire de l'Informatique", "id": "3936", "parentid": "1799" }
 // ]
-const nodes = unflatten(themes.data);
+const nodes = unflatten(idxEls.data.themes);
 // const nodes = [
 //   { "key": "1799", "label": "Histoire", "id": "1799", "parentid": "",
 //     "children": [
@@ -46,37 +45,23 @@ const nodes = unflatten(themes.data);
 //   }
 // ]
 
-
-const modules = useModulesStore();
-modules.getModules()
-// const modules = ref([
-//   { name: 'csv', tid: '123' },
-//   { name: 'cmath', tid: '234' },
-//   { name: 'matplotlib', tid: '345' },
-// ]);
 const selectedModule = ref();
 const filteredModules = ref();
 
 const search = (event) => {
   setTimeout(() => {
     if (!event.query.trim().length) {
-      filteredModules.value = [...modules.data];
+      filteredModules.value = [...idxEls.data.modules];
     } else {
-      filteredModules.value = modules.data.filter((module) => {
+      filteredModules.value = idxEls.data.modules.filter((module) => {
         return module.name.toLowerCase().includes(event.query.toLowerCase());
       });
     }
   }, 250);
 }
 
-
-const categories = ref([
-  { name: "Accounting", key: "A" },
-  { name: "Marketing", key: "M" },
-  { name: "Production", key: "P" },
-  { name: "Research", key: "R" }
-]);
-const selectedCategories = ref(['Marketing']);
+const selectedEnseignements = ref([]);
+const selectedNiveaux = ref([]);
 
 </script>
 
@@ -101,16 +86,17 @@ const selectedCategories = ref(['Marketing']);
   <div class="grid my-form-grid">
     <div class="col-12 mb-2 lg:col-4 lg:mb-0">
       <span class="font-semibold w-6rem">Enseignement(s)</span>
-      <div v-for="category of categories" :key="category.key" class="flex align-items-center">
-        <Checkbox v-model="selectedCategories" :inputId="category.key" name="category" :value="category.name" />
-        <label :for="category.key">{{ category.name }}</label>
+      <div v-for="enseignement of idxEls.data.enseignements" :key="enseignement.key" class="flex align-items-center">
+        <Checkbox v-model="selectedEnseignements" :inputId="enseignement.key" name="enseignement"
+          :value="enseignement.value" />
+        <label :for="enseignement.key">{{ enseignement.value }}</label>
       </div>
     </div>
     <div class="col-12 mb-2 lg:col-4 lg:mb-0">
       <span class="font-semibold w-6rem">Niveau(x)</span>
-      <div v-for="category of categories" :key="category.key" class="flex align-items-center">
-        <Checkbox v-model="selectedCategories" :inputId="category.key" name="category" :value="category.name" />
-        <label :for="category.key">{{ category.name }}</label>
+      <div v-for="niveau of idxEls.data.niveaux" :key="niveau.key" class="flex align-items-center">
+        <Checkbox v-model="selectedNiveaux" :inputId="niveau.key" name="niveau" :value="niveau.value" />
+        <label :for="niveau.key">{{ niveau.value }}</label>
       </div>
     </div>
     <div class="col-12 mb-2 lg:col-4 lg:mb-0">
@@ -134,10 +120,11 @@ const selectedCategories = ref(['Marketing']);
 .my-form-grid {
   grid-template-columns: 1.5fr 1.5fr 2fr;
 }
+
 ul.p-tree-container {
   padding-left: 0 !important;
 }
+
 .with-padding ul {
   padding-left: 1em;
-}
-  </style>
+}</style>

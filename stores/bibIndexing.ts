@@ -1,13 +1,13 @@
 import { defineStore } from 'pinia'
 //import localforage from 'localforage'
 
-export const useThemesStore = defineStore('themes', {
+export const useBibIndexingStore = defineStore('bibIndexing', {
   state: () => ({
     data: [{}],
   }),
   actions: {
-    async getThemes() {
-      fetch("/web/c-api/themes_rest?_format=json")
+    async getIndexingElements() {
+      fetch("/web/c-ui/api/my-bib-form-indexing-elements")
         .then(r => r.json())
         .then(json => {
           // console.log(json);
