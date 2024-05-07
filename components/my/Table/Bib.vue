@@ -19,7 +19,7 @@ const shareClass = props.shared == "0" ? " unshared " : " shared "
   </button>
 
 
-  <Dialog v-model:visible="visible" header="Partage dans la bibliothèque" :style="{ width: '75%' }">
+  <Dialog v-model:visible="visible" header="Partage dans la bibliothèque" :style="{ width: '75%'}" class="unpeusombre">
     <MyTableBibForm :nid="nid"/>
     <div class="flex justify-content-end gap-2">
       <Button type="button" label="Cancel" severity="secondary" @click="visible = false"></Button>
@@ -28,7 +28,7 @@ const shareClass = props.shared == "0" ? " unshared " : " shared "
   </Dialog>
 </template>
 
-<style scoped>
+<style>
 .shared {
   color: green;
   font-weight: bold;
@@ -37,6 +37,9 @@ const shareClass = props.shared == "0" ? " unshared " : " shared "
 
 .unshared {
   color: var(--surface-400);
+}
+.p-dialog-content {
+  background: var(--gray-100);
 }
 
 .globe {

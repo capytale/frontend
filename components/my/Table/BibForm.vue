@@ -13,7 +13,7 @@ const selectedKey = ref(null)
 
 const idxEls = useBibIndexingStore();
 idxEls.getIndexingElements()
-console.log(idxEls.data)
+// console.log(idxEls.data)
 
 
 const unflatten = function (array, parent, tree) {
@@ -35,7 +35,8 @@ const unflatten = function (array, parent, tree) {
 // { "key": "1876", "label": "Histoire des Mathématiques", "id": "1876", "parentid": "1799" },
 // { "key": "3926", "label": "Histoire de l'Informatique", "id": "3936", "parentid": "1799" }
 // ]
-const nodes = unflatten(idxEls.data.themes);
+const nodes = unflatten(idxEls.data.themes)
+
 // const nodes = [
 //   { "key": "1799", "label": "Histoire", "id": "1799", "parentid": "",
 //     "children": [
@@ -88,14 +89,14 @@ const selectedNiveaux = ref([]);
       <span class="font-semibold w-6rem">Enseignement(s)</span>
       <div v-for="enseignement of idxEls.data.enseignements" :key="enseignement.key" class="flex align-items-center">
         <Checkbox v-model="selectedEnseignements" :inputId="enseignement.key" name="enseignement"
-          :value="enseignement.value" />
+          :value="enseignement.value" class="mr-4" />
         <label :for="enseignement.key">{{ enseignement.value }}</label>
       </div>
     </div>
     <div class="col-12 mb-2 lg:col-4 lg:mb-0">
       <span class="font-semibold w-6rem">Niveau(x)</span>
       <div v-for="niveau of idxEls.data.niveaux" :key="niveau.key" class="flex align-items-center">
-        <Checkbox v-model="selectedNiveaux" :inputId="niveau.key" name="niveau" :value="niveau.value" />
+        <Checkbox v-model="selectedNiveaux" :inputId="niveau.key" name="niveau" :value="niveau.value" class="mr-4"  />
         <label :for="niveau.key">{{ niveau.value }}</label>
       </div>
     </div>
@@ -117,8 +118,16 @@ const selectedNiveaux = ref([]);
   margin-left: -1.5em;
 }
 
+.with-padding .p-treenode-content {
+  padding: 0;
+}
+.with-padding .p-treenode {
+  padding: 0;
+}
+
 .my-form-grid {
   grid-template-columns: 1.5fr 1.5fr 2fr;
+  column-gap: 0.5em;
 }
 
 ul.p-tree-container {
