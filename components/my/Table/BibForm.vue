@@ -49,16 +49,10 @@ const nodes = unflatten(themes.data);
 
 const modules = useModulesStore();
 modules.getModules()
-// modules['value'] = modules['data']
-// delete modules['data']
-// console.log(modules.value)
 // const modules = ref([
 //   { name: 'csv', tid: '123' },
 //   { name: 'cmath', tid: '234' },
 //   { name: 'matplotlib', tid: '345' },
-//   { name: 'folium', tid: '456' },
-//   { name: 'itertools', tid: '567' },
-//   { name: 'pil', tid: '678' }
 // ]);
 const selectedModule = ref();
 const filteredModules = ref();
@@ -74,6 +68,15 @@ const search = (event) => {
     }
   }, 250);
 }
+
+
+const categories = ref([
+  { name: "Accounting", key: "A" },
+  { name: "Marketing", key: "M" },
+  { name: "Production", key: "P" },
+  { name: "Research", key: "R" }
+]);
+const selectedCategories = ref(['Marketing']);
 
 </script>
 
@@ -93,12 +96,48 @@ const search = (event) => {
     </div>
   </template>
   <label for="description" class="font-semibold w-6rem">Résumé</label>
-  <Textarea id="resume" v-model="resume" autoResize rows="3" cols="30" />
+  <Textarea id="resume" v-model="resume" autoResize rows="5" class="w-full" />
 
-  <Tree v-model:selectionKeys="selectedKey" :value="nodes" selectionMode="checkbox" :filter="true" filterMode="lenient"
-    class="w-full md:w-30rem"></Tree>
+  <div class="grid my-form-grid">
+    <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+      <span class="font-semibold w-6rem">Enseignement(s)</span>
+      <div v-for="category of categories" :key="category.key" class="flex align-items-center">
+        <Checkbox v-model="selectedCategories" :inputId="category.key" name="category" :value="category.name" />
+        <label :for="category.key">{{ category.name }}</label>
+      </div>
+    </div>
+    <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+      <span class="font-semibold w-6rem">Niveau(x)</span>
+      <div v-for="category of categories" :key="category.key" class="flex align-items-center">
+        <Checkbox v-model="selectedCategories" :inputId="category.key" name="category" :value="category.name" />
+        <label :for="category.key">{{ category.name }}</label>
+      </div>
+    </div>
+    <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+      <label for="modules" class="font-semibold w-6rem">Modules utilisés</label>
+      <AutoComplete id="modules" v-model="selectedModule" multiple :suggestions="filteredModules" optionLabel="name"
+        @complete="search" class="w-full md:w-14rem" />
 
-
-  <AutoComplete v-model="selectedModule" multiple :suggestions="filteredModules" optionLabel="name" @complete="search"
-    class="w-full md:w-14rem" />
+      <label for="themes" class="font-semibold w-6rem">Thèmes abordés</label>
+      <Tree id="themes" v-model:selectionKeys="selectedKey" :value="nodes" selectionMode="checkbox" :filter="true"
+        filterMode="lenient" class="w-full md:w-30rem with-padding"></Tree>
+    </div>
+  </div>
 </template>
+
+
+<style>
+.with-padding {
+  margin-left: -1.5em;
+}
+
+.my-form-grid {
+  grid-template-columns: 1.5fr 1.5fr 2fr;
+}
+ul.p-tree-container {
+  padding-left: 0 !important;
+}
+.with-padding ul {
+  padding-left: 1em;
+}
+  </style>
