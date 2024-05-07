@@ -2,9 +2,10 @@
 import Tooltip from 'primevue/tooltip';
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
+import { useMyStore } from '@/stores/my';
 const confirm = useConfirm();
 const toast = useToast();
-
+const my = useMyStore();
 const props = defineProps({
   nid: String,
   whoami: String,
@@ -33,8 +34,8 @@ const actItems = ref([
     label: 'Cloner',
     icon: 'pi pi-clone',
     command: async () => {
-      // const response = await my.cloneActivity(props.nid)
-      const response = {}
+      const response = await my.cloneActivity(props.nid)
+      // const response = {}
       if (response.ok) {
         toast.add({ severity: 'success', summary: 'Clonage réussi : ', life: 2000 });
       } else {

@@ -1,13 +1,81 @@
-
 <script setup>
+import { _ } from 'vue-underscore'
+import { useThemesStore } from '@/stores/themes';
+import { useModulesStore } from '@/stores/modules';
+
 const props = defineProps({
   nid: String,
 })
+
+const resume = ref('')
 const share = ref(false);
 const web = ref(false);
+const selectedKey = ref(null)
+
+const themes = useThemesStore();
+themes.getThemes()
+// console.log(themes.data)
+// https://np.ac-capytale.fr/web/c-api/themes_rest?_format=json
+// https://tidpen.io/Nicolas-Poulain/pen/oNOKOpp?editors=1010
+const unflatten = function (array, parent, tree) {
+  tree = typeof tree !== 'undefined' ? tree : [];
+  parent = typeof parent !== 'undefined' ? parent : { id: 0 };
+  var children = _.filter(array, function (child) { return child.parentid == parent.id; });
+  if (!_.isEmpty(children)) {
+    if (parent.id == 0) {
+      tree = children;
+    } else {
+      parent['children'] = children
+    }
+    _.each(children, function (child) { unflatten(array, child) });
+  }
+  return tree;
+}
+// const themes.data = [
+// { "key": "1799", "label": "Histoire", "id": "1799", "parentid": ""},
+// { "key": "1876", "label": "Histoire des Mathématiques", "id": "1876", "parentid": "1799" },
+// { "key": "3926", "label": "Histoire de l'Informatique", "id": "3936", "parentid": "1799" }
+// ]
+const nodes = unflatten(themes.data);
+// const nodes = [
+//   { "key": "1799", "label": "Histoire", "id": "1799", "parentid": "",
+//     "children": [
+//       { "key": "1876", "label": "Histoire des Mathématiques", "id": "1876", "parentid": "1799" },
+//       { "key": "3926", "label": "Histoire de l'Informatique", "id": "3936", "parentid": "1799" }
+//     ]
+//   }
+// ]
+
+
+const modules = useModulesStore();
+modules.getModules()
+// modules['value'] = modules['data']
+// delete modules['data']
+// console.log(modules.value)
+// const modules = ref([
+//   { name: 'csv', tid: '123' },
+//   { name: 'cmath', tid: '234' },
+//   { name: 'matplotlib', tid: '345' },
+//   { name: 'folium', tid: '456' },
+//   { name: 'itertools', tid: '567' },
+//   { name: 'pil', tid: '678' }
+// ]);
+const selectedModule = ref();
+const filteredModules = ref();
+
+const search = (event) => {
+  setTimeout(() => {
+    if (!event.query.trim().length) {
+      filteredModules.value = [...modules.data];
+    } else {
+      filteredModules.value = modules.data.filter((module) => {
+        return module.name.toLowerCase().includes(event.query.toLowerCase());
+      });
+    }
+  }, 250);
+}
+
 </script>
-
-
 
 <template>
   <span class="p-text-secondary block mb-5">Titre de la ressource {{ nid }}</span>
@@ -26,4 +94,11 @@ const web = ref(false);
   </template>
   <label for="description" class="font-semibold w-6rem">Résumé</label>
   <Textarea id="resume" v-model="resume" autoResize rows="3" cols="30" />
+
+  <Tree v-model:selectionKeys="selectedKey" :value="nodes" selectionMode="checkbox" :filter="true" filterMode="lenient"
+    class="w-full md:w-30rem"></Tree>
+
+
+  <AutoComplete v-model="selectedModule" multiple :suggestions="filteredModules" optionLabel="name" @complete="search"
+    class="w-full md:w-14rem" />
 </template>

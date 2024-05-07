@@ -152,7 +152,7 @@ const filters = ref({
           </template>
         </Column>
 
-        <Column field="bib" header="Bib.">
+        <Column field="bib" header="Bib." style="">
           <template #body="p">
             <MyTableBib :nid="p.data.nid" :shared="p.data.status_shared" :web="p.data.status_web" />
           </template>

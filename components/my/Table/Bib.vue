@@ -14,7 +14,7 @@ const shareClass = props.shared == "0" ? " unshared " : " shared "
 
 <template>
   <button @click="visible = true">
-    <i v-if="web == '1'" :class="PI.GLOBE + ' globe'" :style="style" />
+    <i v-if="web == '1'" :class="PI.GLOBE + ' globe'" />
     <i :class="PI.SHARE_ALT + shareClass" />
   </button>
 

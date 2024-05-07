@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     usePrimeVue: true,
     cssLayerOrder: 'tailwind-base, primevue, tailwind-utilities'
   },
+  plugins: [{ src: '/plugins/underscore', ssr: false }],
   css: [
     //'primeflex/primeflex.css',
     'primeicons/primeicons.css',
