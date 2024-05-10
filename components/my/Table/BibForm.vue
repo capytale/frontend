@@ -1,6 +1,8 @@
 <script setup>
 import { _ } from 'vue-underscore'
 import { useBibIndexingStore } from '@/stores/bibIndexing';
+import { useConfirm } from "primevue/useconfirm";
+const confirm = useConfirm();
 
 const props = defineProps({
   nid: String,
@@ -63,11 +65,46 @@ const search = (event) => {
 const selectedEnseignements = ref([]);
 const selectedNiveaux = ref([]);
 
+
+
+
 const postBibForm = () => {
   // visible.value = false
-  // console.log(resume.value);
+  if (resume.value.length < 20) {
+    confirm.require({
+      message: 'Merci de saisir un résumé de 50 caractères au minimum.',
+      header: 'Attention',
+      icon: 'pi pi-exclamation-triangle',
+      rejectClass: 'invisible',
+      rejectLabel: 'Cancel',
+      acceptLabel: 'Ok',
+    });
+    return
+  }
   const selEnseignements = JSON.stringify(selectedEnseignements.value)
+  if (selectedEnseignements.value.length == 0) {
+    confirm.require({
+      message: 'Merci d\'indiquer au moins un enseignement.',
+      header: 'Attention',
+      icon: 'pi pi-exclamation-triangle',
+      rejectClass: 'invisible',
+      rejectLabel: 'Cancel',
+      acceptLabel: 'Ok',
+    });
+    return
+  }
   const selNiveaux = JSON.stringify(selectedNiveaux.value)
+  if (selectedNiveaux.value.length == 0) {
+    confirm.require({
+      message: 'Merci d\'indiquer au moins un niveau.',
+      header: 'Attention',
+      icon: 'pi pi-exclamation-triangle',
+      rejectClass: 'invisible',
+      rejectLabel: 'Cancel',
+      acceptLabel: 'Ok',
+    });
+    return
+  }
   const selModules = JSON.stringify(selectedModules.value)
   // const selThemes = selectedThemes.value ? Object.entries(selectedThemes.value).filter(([k, v]) => v.checked) : []
   let selThemes = []
@@ -80,6 +117,9 @@ const postBibForm = () => {
   }
   // for (const prop in selThemes) { console.log(`${prop}: ${selThemes[prop].checked}`) }
 
+  console.log('Share', share.value);
+  console.log('Web: ', web.value);
+  console.log('Résumé: ', resume.value);
   console.log('Enseignements: ', selEnseignements);
   console.log('Niveaux:', selNiveaux);
   console.log('Modules: ', selModules);
@@ -91,7 +131,7 @@ const postBibForm = () => {
 
 <template>
   <span class="p-text-secondary block mb-5">Titre de la ressource {{ nid }}</span>
-  <Checkbox v-model="share" id="share" :binary="true" class="mr-4" />
+  <Checkbox v-model="share" id="share" :binary="true" class="mr-4" @change="web=false"/>
   <label for="share" class="font-semibold w-6rem">Publier dans la bibliothèque ENTRE ENSEIGNANTS</label>
   <div class="details">
     En cochant cette case, vous partagez votre activité avec les enseignants possédant un compte sur Capytale.
