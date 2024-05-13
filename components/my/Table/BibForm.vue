@@ -174,7 +174,7 @@ const postBibForm = () => {
         filterMode="lenient" class="w-full md:w-30rem with-padding"></Tree>
     </div>
   </div>
-  <div class="flex justify-content-end gap-2">
+  <div class="flex justify-content-end gap-2" style="position: absolute; height:2em; bottom: 0;">
     <Button type="button" label="Cancel" severity="secondary" @click="visible = false"></Button>
     <Button type="button" label="Save" @click="postBibForm"></Button>
   </div>
