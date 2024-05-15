@@ -24,6 +24,7 @@
 </template>
 
 <script setup>
+// TODO : surveiller les références aux dépendances (composables ?)
 const cards = [
   {
     title: "Commun numérique tsoin tsoin",

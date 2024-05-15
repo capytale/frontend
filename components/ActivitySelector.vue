@@ -87,42 +87,45 @@ const cols = [
     label: "name",
   },
 ];
+
+const dispOptions = [{
+  icon: 'th-large',
+  value: 'icons'
+}, {
+  icon: 'bars',
+  value: 'desc'
+}, {
+  icon: 'list',
+  value: 'list'
+}]
+
 </script>
 
 <template>
-    <UCard class="mb-4 rounded-t-none">
+    <Card class="mb-4 rounded-t-none">
+    <template #content>
       <div class="flex flex-row justify-between">
         <div class="text-lg font-bold">Créer une nouvelle activité</div>
         <div class="flex flex-row gap-4">
-          <USelect v-model="catChoice" :options="cats" :ui="inputstyle" />
-          <USelect v-model="matChoice" :options="mats" :ui="inputstyle" />
-          <UButtonGroup class="self-center">
-            <UButton
-              :variant="dispV('icons')"
-              icon="i-streamline-image-photo-four-photos-camera-picture-photography-pictures-four-photo"
-              @click="dispActivities = 'icons'"
-            />
-            <UButton
-              :variant="dispV('desc')"
-              icon="i-streamline-image-photo-polaroid-four-photos-camera-polaroid-picture-photography-pictures-four-photo"
-              @click="dispActivities = 'desc'"
-            />
-            <UButton
-              :variant="dispV('list')"
-              icon="i-streamline-bullet-list"
-              @click="dispActivities = 'list'"
-            />
-          </UButtonGroup>
+          <Dropdown v-model="catChoice" :options="cats" option-label="label" option-value="value" :ui="inputstyle" />
+          <Dropdown v-model="matChoice" :options="mats" option-label="label" option-value="value" :ui="inputstyle" />
+          <SelectButton :options="dispOptions" v-model="dispActivities" option-value="value">
+            <template #option="slotProps">
+              <i class="pi" :class="'pi-' + slotProps.option.icon" />
+            </template>
+          </SelectButton>
         </div>
       </div>
-      <UButton
-        variant="soft"
+      <div class="w-full">
+      <Button
         class="mx-2"
         v-for="el of ['web', 'python', 'robots', 'cartes', 'blocs']"
         :label="el"
       />
-      <UInput v-model="search" class="mt-4" placeholder="Recherche..." />
-    </UCard>
+      </div>
+      <InputText v-model="search" class="mt-4" placeholder="Recherche..." />
+    </template>
+    </Card>
     <div
       v-if="['desc', 'icons'].includes(dispActivities)"
       :class="
@@ -143,24 +146,18 @@ const cols = [
       ></ActiCard>
     </div>
 
-    <UTable
+    <DataTable
       v-else
-      :ui="{ tr: { base: 'cursor-pointer hover:bg-primary-50' } }"
-      :rows="chosenCats.filter((a) => a.score > seuil).sort((a, b) => b.score - a.score)"
-      :columns="cols"
+      :value="chosenCats.filter((a) => a.score > seuil).sort((a, b) => b.score - a.score)"
+      @row-click="console.log($event)"
     >
-      <template #icon-data="{ row }">
-        <div class="w-16">
-          <img :src="'https://capytale2.ac-paris.fr'.concat(row.icon.path)" />
-        </div>
+    <Column header="">
+      <template #body="slotProps">
+        <img :src="`https://capytale2.ac-paris.fr${slotProps.data.icon.path}`" class="w-16" />
       </template>
-      <template #name-data="{ row }">
-        <div>
-          <div class="text-lg font-semibold">{{ row.name }}</div>
-          <div class="text-sm">{{ row.description }}</div>
-        </div>
-      </template>
-    </UTable>
+    </Column>
+    <Column field="name" header="name" />
+    </DataTable>
 </template>
 
 <style>
@@ -178,5 +175,13 @@ const cols = [
 .v-leave-to {
   opacity: 0;
   max-height: 0;
+}
+
+.p-row-even, .p-row-odd {
+  cursor: pointer;
+}
+
+.p-row-even:hover, .p-row-odd:hover {
+  background-color: #f5f5f5;
 }
 </style>
