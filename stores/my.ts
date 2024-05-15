@@ -1,4 +1,3 @@
-import { defineStore } from 'pinia'
 import httpClient from '@capytale/activity.js/backend/capytale/http'
 
 const myActivitiesApiEp = "/web/c-ui/api/my-activities"

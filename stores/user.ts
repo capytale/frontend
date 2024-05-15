@@ -1,5 +1,4 @@
-import { defineStore } from 'pinia'
-//import localforage from 'localforage'
+import httpClient from '@capytale/activity.js/backend/capytale/http'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -7,12 +6,7 @@ export const useUserStore = defineStore('user', {
   }),
   actions: {
     async getAsyncUser() {
-      fetch("/web/c-auth/api/me")
-        .then(r => r.json())
-        .then(json => {
-          // console.log(json);
-          this.data = json
-        });
+      this.data = await httpClient.getJsonAsync<any>("/web/c-auth/api/me")
     }
   }
 })

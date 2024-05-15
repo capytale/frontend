@@ -1,5 +1,4 @@
 <script setup>
-import { _ } from 'vue-underscore'
 import { useBibIndexingStore } from '@/stores/bibIndexing';
 import { useConfirm } from "primevue/useconfirm";
 const confirm = useConfirm();
@@ -16,36 +15,6 @@ const selectedThemes = ref(null)
 const idxEls = useBibIndexingStore();
 idxEls.getIndexingElements()
 // console.log(idxEls.data)
-
-const unflatten = function (array, parent, tree) {
-  tree = typeof tree !== 'undefined' ? tree : [];
-  parent = typeof parent !== 'undefined' ? parent : { id: 0 };
-  var children = _.filter(array, function (child) { return child.parentid == parent.id; });
-  if (!_.isEmpty(children)) {
-    if (parent.id == 0) {
-      tree = children;
-    } else {
-      parent['children'] = children
-    }
-    _.each(children, function (child) { unflatten(array, child) });
-  }
-  return tree;
-}
-// const themes.data = [
-// { "key": "1799", "label": "Histoire", "id": "1799", "parentid": ""},
-// { "key": "1876", "label": "Histoire des Mathématiques", "id": "1876", "parentid": "1799" },
-// { "key": "3926", "label": "Histoire de l'Informatique", "id": "3936", "parentid": "1799" }
-// ]
-const nodes = unflatten(idxEls.data.themes)
-
-// const nodes = [
-//   { "key": "1799", "label": "Histoire", "id": "1799", "parentid": "",
-//     "children": [
-//       { "key": "1876", "label": "Histoire des Mathématiques", "id": "1876", "parentid": "1799" },
-//       { "key": "3926", "label": "Histoire de l'Informatique", "id": "3936", "parentid": "1799" }
-//     ]
-//   }
-// ]
 
 const selectedModules = ref();
 const filteredModules = ref();
@@ -170,7 +139,7 @@ const postBibForm = () => {
         @complete="search" class="w-full md:w-14rem" />
 
       <label for="themes" class="font-semibold w-6rem">Thèmes abordés</label>
-      <Tree id="themes" v-model:selectionKeys="selectedThemes" :value="nodes" selectionMode="checkbox" :filter="true"
+      <Tree id="themes" v-model:selectionKeys="selectedThemes" :value="idxEls.data.themes" selectionMode="checkbox" :filter="true"
         filterMode="lenient" class="w-full md:w-30rem with-padding"></Tree>
     </div>
   </div>

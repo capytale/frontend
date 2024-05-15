@@ -1,5 +1,4 @@
-import { defineStore } from 'pinia'
-//import localforage from 'localforage'
+import httpClient from '@capytale/activity.js/backend/capytale/http'
 
 export const useLocalStore = defineStore('local', {
   state: () => ({
@@ -7,12 +6,7 @@ export const useLocalStore = defineStore('local', {
   }),
   actions: {
     async getAsyncData() {
-      fetch("/web/my_json_data")
-        .then(r => r.json())
-        .then(json => {
-          // console.log(json);
-          this.data = json
-        });
+      this.data = await httpClient.getJsonAsync<any>("/web/my_json_data")
     },
   }
 })
