@@ -4,16 +4,16 @@
     class="lg:grid lg:grid-cols-3 lg:grid-rows-none lg:gap-4 flex flex-col items-center w-full"
     v-if="carouItems && carouItems.length > 0"
   >
-    <UCard
+    <Card
       class="lg:col-span-2 order-2 lg:self-start mt-2"
       :ui="{ body: { base: `min-h-[630px]` } }"
       ref="vidCard"
     >
-      <template #header>
+      <template #title>
         <p class="text-lg font-semibold">{{ carouItems[acti].name }}</p>
         {{ carouItems[acti].description }}
       </template>
-
+      <template #content>
       <video
         controls
         autoplay
@@ -24,7 +24,8 @@
         "
         type="video/mp4"
       />
-    </UCard>
+      </template>
+    </Card>
 
     <div
       class="px-0 mb-4 pt-2 lg:mb-0 order-1 lg:order-2 flex flex-row sm:justify-center flex-nowrap lg:flex-col overflow-x-scroll lg:overflow-y-auto w-full"

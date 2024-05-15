@@ -11,12 +11,12 @@ const fav = useState("actiFav");
 const star = computed(() => {
   if (fav.value.includes(props.activite.id)) {
     return {
-      icon: "i-heroicons-star-solid",
+      icon: "heroicons:star-solid",
       color: "text-yellow-400",
     };
   } else {
     return {
-      icon: "i-heroicons-star",
+      icon: "heroicons:star",
       color: "",
     };
   }
@@ -48,13 +48,12 @@ const goActi = (event, msg) => {
 </script>
 
 <template>
-  <UCard
-    :ui="{ body: { base: 'py-2 sm:py-2 flex flex-col' } }"
+  <Card
     class="cursor-pointer hover:shadow-md"
     @click="(event) => goActi(event, 'coucou')"
     v-if="disp == 'desc'"
   >
-    <template #header>
+    <template #title>
       <div class="flex flex-row justify-between items-center w-full">
         <img
           :src="'https://capytale2.ac-paris.fr'.concat(activite.icon.path)"
@@ -64,33 +63,31 @@ const goActi = (event, msg) => {
           {{ activite.name }} <sup v-if="activite.beta" class="text-red-500">beta</sup>
           {{ activite.score }}
         </div>
-        <UIcon
+        <Icon
           @click="toggleFav()"
           :name="star.icon"
           class="mx-2 text-lg cursor-pointer starspin"
           :class="star.color"
-        ></UIcon>
+        ></Icon>
       </div>
     </template>
+    <template #content>
+      <div class="text-sm">{{ activite.description }}</div>
+    </template>
+  </Card>
 
-    <div class="text-sm">{{ activite.description }}</div>
-  </UCard>
-
-  <UCard
-    :ui="{
-      ring: 'ring-0',
-      shadow: 'shadow-none',
-      body: { base: 'py-2 px-0 sm:py-2 sm:px-0 flex flex-col items-center' },
-    }"
+  <Card
     class="cursor-pointer hover:shadow-md"
     @click="(event) => goActi(event, 'coucou')"
     v-else
   >
+  <template #content>
     <img :src="'https://capytale2.ac-paris.fr'.concat(activite.icon.path)" class="w-16" />
     <div class="text-sm">
       {{ activite.name.replace("Robot", "").replace("Carte", "").replace("Pi ", "") }}
     </div>
-  </UCard>
+  </template>
+  </Card>
 </template>
 
 <style>
