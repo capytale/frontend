@@ -5,18 +5,20 @@ import Card from 'primevue/card';
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 import { FilterMatchMode } from 'primevue/api';
-import Tooltip from 'primevue/tooltip';
-
-// app.directive('tooltip', Tooltip);
-
-
-const { data: activities, pending, error, status } = await fetchMyActivities()
-const { data: folders, pending: pnd, error: err, status: sts } = await fetchBibIndexingElements()
-const selectedThemes = ref(null)
-
 
 const confirm = useConfirm();
 const toast = useToast();
+
+
+const { data: activities, pending, error, status } = await fetchMyActivities()
+const { data: tags, pending: pnd, error: err, status: sts } = await fetchBibIndexingElements()
+const selectedTags = ref(null)
+const selectedThemes = ref(null)
+const opTags = ref();
+const opFolders = ref();
+const tagsToggle = (event) => { opTags.value.toggle(event); }
+const foldersToggle = (event) => { opFolders.value.toggle(event); }
+
 
 const selectedNid = ref();
 const showToolbar = ref(false);
@@ -77,71 +79,6 @@ const filters = ref({
   title: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
   changed: { value: null, matchMode: FilterMatchMode.IN },
 });
-
-
-
-const opTags = ref();
-const tagsToggle = (event) => {
-  opTags.value.toggle(event);
-}
-const opFolder = ref();
-const folderToggle = (event) => {
-  opFolder.value.toggle(event);
-}
-const nodesT = ref({
-  value: {
-    key: '0',
-    label: 'TAGS',
-    data: 'Documents TAGS',
-    icon: 'pi pi-fw pi-inbox',
-    children: [
-      {
-        key: '0-0',
-        label: 'Work',
-        data: 'Work Folder',
-        icon: 'pi pi-fw pi-cog',
-        children: [
-          { key: '0-0-0', label: 'Expenses.doc', icon: 'pi pi-fw pi-file', data: 'Expenses Document' },
-          { key: '0-0-1', label: 'Resume.doc', icon: 'pi pi-fw pi-file', data: 'Resume Document' }
-        ]
-      },
-      {
-        key: '0-1',
-        label: 'Home',
-        data: 'Home Folder',
-        icon: 'pi pi-fw pi-home',
-        children: [{ key: '0-1-0', label: 'Invoices.txt', icon: 'pi pi-fw pi-file', data: 'Invoices for this month' }]
-      }
-    ]
-  },
-})
-const nodesF = ref({
-  value: {
-    key: '0',
-    label: 'FOLDERS',
-    data: 'Documents Folder',
-    icon: 'pi pi-fw pi-inbox',
-    children: [
-      {
-        key: '0-0',
-        label: 'Work',
-        data: 'Work Folder',
-        icon: 'pi pi-fw pi-cog',
-        children: [
-          { key: '0-0-0', label: 'Expenses.doc', icon: 'pi pi-fw pi-file', data: 'Expenses Document' },
-          { key: '0-0-1', label: 'Resume.doc', icon: 'pi pi-fw pi-file', data: 'Resume Document' }
-        ]
-      },
-      {
-        key: '0-1',
-        label: 'Home',
-        data: 'Home Folder',
-        icon: 'pi pi-fw pi-home',
-        children: [{ key: '0-1-0', label: 'Invoices.txt', icon: 'pi pi-fw pi-file', data: 'Invoices for this month' }]
-      }
-    ]
-  },
-})
 </script>
 
 <template>
@@ -169,23 +106,27 @@ const nodesF = ref({
               <h2 style="margin:0px"> Mes activités </h2>
             </template>
             <template #start v-if="showToolbar">
-              <Button v-if="oneCheckbox" v-tooltip.bottom="'Paramètres'" @click="handleEdit()" icon="pi pi-cog" class="mr-2"
-                severity="secondary" />
-              <Button v-tooltip.bottom="'Supprimer'" @click="handleDelete()" icon="pi pi-trash" class="mr-2" severity="danger" />
+              <Button v-if="oneCheckbox" v-tooltip.bottom="'Paramètres'" @click="handleEdit()" icon="pi pi-cog"
+                class="mr-2" severity="secondary" />
+              <Button v-tooltip.bottom="'Supprimer'" @click="handleDelete()" icon="pi pi-trash" class="mr-2"
+                severity="danger" />
               <div class="card flex justify-content-center">
-                <Button v-tooltip.bottom="'Étiqueter'" icon="pi pi-tags" class="mr-2" severity="secondary" @click="tagsToggle"/>
+                <Button v-tooltip.bottom="'Étiqueter'" icon="pi pi-tags" class="mr-2" severity="secondary"
+                  @click="tagsToggle" />
                 <OverlayPanel ref="opTags">
                   <div class="flex flex-column gap-3 w-25rem">
-                    <Tree :value="nodesT" class="w-full md:w-30rem"></Tree>
+                    <Tree id="tags" v-model:selectionKeys="selectedTags" :value="tags.themes"
+                      selectionMode="multiple" class="w-full md:w-30rem"></Tree>
                   </div>
                 </OverlayPanel>
               </div>
               <div class="card flex justify-content-center">
-                <Button v-tooltip.bottom="'Déplacer'" icon="pi pi-folder-open" class="mr-2" severity="secondary" @click="folderToggle"/>
-                <OverlayPanel ref="opFolder">
+                <Button v-tooltip.bottom="'Déplacer'" icon="pi pi-folder-open" class="mr-2" severity="secondary"
+                  @click="foldersToggle" />
+                <OverlayPanel ref="opFolders">
                   <div class="flex flex-column gap-3 w-25rem">
-      <Tree id="folders" v-model:selectionKeys="selectedThemes" :value="folders.themes" selectionMode="checkbox"
-                    class="w-full md:w-30rem"></Tree>
+                    <Tree id="folders" v-model:selectionKeys="selectedThemes" :value="tags.themes"
+                      selectionMode="single" class="w-full md:w-30rem"></Tree>
                   </div>
                 </OverlayPanel>
               </div>
@@ -261,5 +202,4 @@ const nodesF = ref({
 <style>
 .p-datatable-hoverable-rows .p-selectable-row {
   cursor: default;
-}
-</style>
+}</style>
