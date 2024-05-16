@@ -1,9 +1,12 @@
 <script setup>
 import { useSideMenuStore } from '@/stores/ui'
-import { useUserStore } from '@/stores/user';
+// import { useUserStore } from '@/stores/user';
 const sideMenu = useSideMenuStore()
 const theme = useThemeStore()
-const user = useUserStore();
+// const user = useUserStore();
+
+const { data: user, pending, error, status } = await fetchCurrentUser()
+console.log(user)
 
 const themeIcon = () => {
   return theme.current === 'light' ? 'pi pi-moon' : 'pi pi-sun';
@@ -27,7 +30,7 @@ const themeIcon = () => {
       <div class="activityInfo">
       </div>
       <div class="activityMenu">
-        <span class="px-2">{{ user.data.firstname }} {{ user.data.lastname }}</span>
+        <span class="px-2">{{ user.firstname }} {{ user.lastname }}</span>
         <Button @click="theme.toggle" :icon="themeIcon()" class="mr-2" outlined/>
         <span class="px-2">Déconnexion</span>
       </div>

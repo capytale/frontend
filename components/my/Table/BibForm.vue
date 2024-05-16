@@ -1,5 +1,4 @@
 <script setup>
-import { useBibIndexingStore } from '@/stores/bibIndexing';
 import { useConfirm } from "primevue/useconfirm";
 const confirm = useConfirm();
 
@@ -12,9 +11,7 @@ const share = ref(false);
 const web = ref(false);
 const selectedThemes = ref(null)
 
-const idxEls = useBibIndexingStore();
-idxEls.getIndexingElements()
-// console.log(idxEls.data)
+const { data:idxEls, pending, error, status } = await fetchBibIndexingElements()
 
 const selectedModules = ref();
 const filteredModules = ref();
@@ -22,9 +19,9 @@ const filteredModules = ref();
 const search = (event) => {
   setTimeout(() => {
     if (!event.query.trim().length) {
-      filteredModules.value = [...idxEls.data.modules];
+      filteredModules.value = [...idxEls.value.modules];
     } else {
-      filteredModules.value = idxEls.data.modules.filter((module) => {
+      filteredModules.value = idxEls.value.modules.filter((module) => {
         return module.name.toLowerCase().includes(event.query.toLowerCase());
       });
     }
@@ -100,7 +97,7 @@ const postBibForm = () => {
 
 <template>
   <span class="p-text-secondary block mb-5">Titre de la ressource {{ nid }}</span>
-  <Checkbox v-model="share" id="share" :binary="true" class="mr-4" @change="web=false"/>
+  <Checkbox v-model="share" id="share" :binary="true" class="mr-4" @change="web = false" />
   <label for="share" class="font-semibold w-6rem">Publier dans la bibliothèque ENTRE ENSEIGNANTS</label>
   <div class="details">
     En cochant cette case, vous partagez votre activité avec les enseignants possédant un compte sur Capytale.
@@ -117,10 +114,16 @@ const postBibForm = () => {
   <label for="description" class="font-semibold w-6rem">Résumé</label>
   <Textarea id="resume" v-model="resume" autoResize rows="5" class="w-full" />
 
-  <div class="grid my-form-grid">
+  <div v-if="pending">
+    <p>Chargement des actvités...</p>
+  </div>
+  <div v-else-if="status == 'error'">
+    <p>Impossible de charger les activités.</p>
+  </div>
+  <div v-else class="grid my-form-grid">
     <div class="col-12 mb-2 lg:col-4 lg:mb-0">
       <span class="font-semibold w-6rem">Enseignement(s)</span>
-      <div v-for="enseignement of idxEls.data.enseignements" :key="enseignement.key" class="flex align-items-center">
+      <div v-for="enseignement of idxEls.enseignements" :key="enseignement.key" class="flex align-items-center">
         <Checkbox v-model="selectedEnseignements" :inputId="enseignement.key" name="enseignement"
           :value="enseignement.key" class="mr-4" />
         <label :for="enseignement.key">{{ enseignement.value }}</label>
@@ -128,7 +131,7 @@ const postBibForm = () => {
     </div>
     <div class="col-12 mb-2 lg:col-4 lg:mb-0">
       <span class="font-semibold w-6rem">Niveau(x)</span>
-      <div v-for="niveau of idxEls.data.niveaux" :key="niveau.key" class="flex align-items-center">
+      <div v-for="niveau of idxEls.niveaux" :key="niveau.key" class="flex align-items-center">
         <Checkbox v-model="selectedNiveaux" :inputId="niveau.key" name="niveau" :value="niveau.key" class="mr-4" />
         <label :for="niveau.key">{{ niveau.value }}</label>
       </div>
@@ -139,8 +142,8 @@ const postBibForm = () => {
         @complete="search" class="w-full md:w-14rem" />
 
       <label for="themes" class="font-semibold w-6rem">Thèmes abordés</label>
-      <Tree id="themes" v-model:selectionKeys="selectedThemes" :value="idxEls.data.themes" selectionMode="checkbox" :filter="true"
-        filterMode="lenient" class="w-full md:w-30rem with-padding"></Tree>
+      <Tree id="themes" v-model:selectionKeys="selectedThemes" :value="idxEls.themes" selectionMode="checkbox"
+        :filter="true" filterMode="lenient" class="w-full md:w-30rem with-padding"></Tree>
     </div>
   </div>
   <div class="flex justify-content-end gap-2" style="position: absolute; height:2em; bottom: 0;">

@@ -1,18 +1,21 @@
-import { defineStore } from 'pinia'
 import httpClient from '@capytale/activity.js/backend/capytale/http'
 
-export const useBibIndexingStore = defineStore('bibIndexing', {
-  state: () => ({
-    data: [{}],
-  }),
-  actions: {
-    async getIndexingElements() {
-      const mydata = await httpClient.getJsonAsync<any>("/web/c-ui/api/my-bib-form-indexing-elements")
-      mydata.themes = unflatten(mydata.themes)
-      this.data = mydata
-    },
-  }
-})
+let bibIndexingElementsCache
+
+export function fetchBibIndexingElements() {
+  return useAsyncData('Idx', async () => {
+    bibIndexingElementsCache = await httpClient.getJsonAsync<any>("/web/c-ui/api/my-bib-form-indexing-elements")
+    bibIndexingElementsCache.themes = unflatten(bibIndexingElementsCache.themes)
+    return bibIndexingElementsCache
+  },
+    {
+      getCachedData() {
+        return bibIndexingElementsCache
+      }
+    }
+  )
+}
+
 
 // const ORI = [
 // { "key": "1799", "label": "Histoire", "id": "1799", "parentid": ""},
@@ -28,8 +31,6 @@ export const useBibIndexingStore = defineStore('bibIndexing', {
 //     ]
 //   }
 // ]
-
-
 const unflatten = function(array: any[], parent?: any, tree?: any) {
   tree = typeof tree !== 'undefined' ? tree : [];
   parent = typeof parent !== 'undefined' ? parent : { id: 0 };

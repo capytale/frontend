@@ -4,18 +4,14 @@ import Column from 'primevue/column';
 import Card from 'primevue/card';
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
-import { useLocalStore } from '@/stores/local';
-import { useUserStore } from '@/stores/user';
 import { FilterMatchMode } from 'primevue/api';
+
+
+const { data: activities, pending, error, status } = await fetchMyActivities()
+
 
 const confirm = useConfirm();
 const toast = useToast();
-
-// Charge les données locales ou distantes
-const local = useLocalStore();
-local.getAsyncData()
-const user = useUserStore();
-user.getAsyncUser()
 
 const selectedNid = ref();
 const showToolbar = ref(false);
@@ -80,14 +76,20 @@ const filters = ref({
 
 <template>
   <ConfirmDialog></ConfirmDialog>
-  <Toast position="bottom-right"/>
+  <Toast position="bottom-right" />
   <Card class="flex-1">
 
     <template #content>
 
-      <DataTable v-model:filters="filters" v-model:selection="selectedNid" selectionMode="multiple" :value="local.data"
-        dataKey="nid" sortField="changed" tableStyle="min-width: 50rem" :sortOrder="-1" paginator :rows="20"
-        :rowsPerPageOptions="[10, 20, 50, 100]" @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()"
+      <div v-if="pending">
+        <p>Chargement des actvités...</p>
+      </div>
+      <div v-else-if="status == 'error'">
+        <p>Impossible de charger les activités.</p>
+      </div>
+      <DataTable v-else v-model:filters="filters" v-model:selection="selectedNid" selectionMode="multiple"
+        :value="activities" dataKey="nid" sortField="changed" tableStyle="min-width: 50rem" :sortOrder="-1" paginator
+        :rows="20" :rowsPerPageOptions="[10, 20, 50, 100]" @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()"
         @rowUnselectAll="onRowUnselectAll()" @rowSelectAll="onRowSelectAll()" :globalFilterFields="['title', 'changed']"
         class="my-card">
 
