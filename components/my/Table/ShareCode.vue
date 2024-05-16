@@ -7,33 +7,35 @@ const props = defineProps({
 import { useToast } from "primevue/usetoast";
 const toast = useToast();
 
+const visible = ref(false);
 const menu = ref();
 const toggle = (event) => {
   menu.value.toggle(event);
 };
+const url = `https://np.ac-capytale.fr/web/c/${props.code}`
 const items = computed(() =>
   [
     {
       label: 'Copier le code partage avec la classe',
       icon: 'pi pi-copy',
-
       command: () => {
-        toast.add({ severity: 'success', summary: 'Copié !', detail: '', life: 2000 });
+        navigator.clipboard.writeText(props.code);
+        toast.add({ severity: 'success', summary: 'Copié !', detail: props.code, life: 2000 });
       }
     },
     {
-      label: 'Copier l\'URL de partgae avec la classe',
+      label: 'Copier l\'URL de partage avec la classe',
       icon: 'pi pi-link',
-
       command: () => {
-        toast.add({ severity: 'success', summary: 'Copié !', detail: '', life: 2000 });
+        navigator.clipboard.writeText(url);
+        toast.add({ severity: 'success', summary: 'Copié !', detail: url, life: 3000 });
       }
     },
     {
       label: 'Afficher le QRCode de partage',
       icon: 'pi pi-qrcode',
       command: () => {
-        toast.add({ severity: 'error', summary: 'Error', detail: 'No printer connected', life: 3000 });
+        visible.value = true;
       }
     }
   ])
@@ -45,6 +47,10 @@ const items = computed(() =>
       aria-haspopup="true" aria-controls="overlay_menu" />
     <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
   </div>
+  <Dialog v-model:visible="visible" header="Accès à l'activité" modal
+    :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }" :style="{ width: '75%' }">
+    <MyTableQrcode :code="code" :url="url" />
+  </Dialog>
 </template>
 
 <style scoped>

@@ -19,7 +19,8 @@ const shareClass = props.shared == "0" ? " unshared " : " shared "
   </button>
 
 
-  <Dialog v-model:visible="visible" header="Partage dans la bibliothèque" :style="{ width: '75%'}" >
+  <Dialog v-model:visible="visible" header="Partage dans la bibliothèque" modal
+    :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }" :style="{ width: '75%' }">
     <MyTableBibForm :nid="nid"/>
   </Dialog>
 </template>
