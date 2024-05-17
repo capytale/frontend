@@ -1,9 +1,8 @@
 import httpClient from '@capytale/activity.js/backend/capytale/http'
 
 let bibIndexingElementsCache
-
 export function fetchBibIndexingElements() {
-  return useAsyncData('Idx', async () => {
+  return useAsyncData('idxKey', async () => {
     bibIndexingElementsCache = await httpClient.getJsonAsync<any>("/web/c-ui/api/my-bib-form-indexing-elements")
     bibIndexingElementsCache.themes = unflatten(bibIndexingElementsCache.themes)
     return bibIndexingElementsCache
