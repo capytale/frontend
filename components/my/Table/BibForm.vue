@@ -31,9 +31,6 @@ const search = (event) => {
 const selectedEnseignements = ref([]);
 const selectedNiveaux = ref([]);
 
-
-
-
 const postBibForm = () => {
   // visible.value = false
   if (resume.value.length < 20) {

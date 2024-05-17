@@ -43,11 +43,11 @@ const { data: tags, pending: pnd, error: err, status: sts } = await fetchTags()
               <span class="">Mes activités</span>
             </a>
           </li>
-                    <Tree id="folders" :value="tags" class="w-full md:w-30rem">
-                      <template #default="slotProps">
-                        <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
-                      </template>
-                    </Tree>
+          <Tree id="folders" :value="tags" class="w-full md:w-30rem">
+            <template #default="slotProps">
+              <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
+            </template>
+          </Tree>
         </ul>
       </div>
     </div>

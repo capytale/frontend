@@ -15,7 +15,7 @@ export function fetchMyActivities() {
 
 let myTagsCache
 export function fetchTags() {
-  return useAsyncData('Idx', async () => {
+  return useAsyncData('tagsKey', async () => {
     myTagsCache = await httpClient.getJsonAsync<any>("/web/c-ui/api/my-private-tags")
     // console.log("myTagsCache", unflatten(myTagsCache))
     return unflatten(myTagsCache)
