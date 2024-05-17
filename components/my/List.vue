@@ -11,9 +11,9 @@ const toast = useToast();
 
 
 const { data: activities, pending, error, status } = await fetchMyActivities()
-const { data: tags, pending: pnd, error: err, status: sts } = await fetchBibIndexingElements()
+const { data: tags, pending: pnd, error: err, status: sts } = await fetchTags()
 const selectedTags = ref(null)
-const selectedThemes = ref(null)
+const selectedFolders = ref(null)
 const opTags = ref();
 const opFolders = ref();
 const tagsToggle = (event) => { opTags.value.toggle(event); }
@@ -115,8 +115,12 @@ const filters = ref({
                   @click="tagsToggle" />
                 <OverlayPanel ref="opTags">
                   <div class="flex flex-column gap-3 w-25rem">
-                    <Tree id="tags" v-model:selectionKeys="selectedTags" :value="tags.themes"
-                      selectionMode="multiple" class="w-full md:w-30rem"></Tree>
+                    <Tree id="tags" v-model:selectionKeys="selectedTags" :value="tags" selectionMode="multiple"
+                      class="w-full md:w-30rem">
+                      <template #default="slotProps">
+                        <i class="pi pi-tag" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
+                      </template>
+                    </Tree>
                   </div>
                 </OverlayPanel>
               </div>
@@ -125,8 +129,12 @@ const filters = ref({
                   @click="foldersToggle" />
                 <OverlayPanel ref="opFolders">
                   <div class="flex flex-column gap-3 w-25rem">
-                    <Tree id="folders" v-model:selectionKeys="selectedThemes" :value="tags.themes"
-                      selectionMode="single" class="w-full md:w-30rem"></Tree>
+                    <Tree id="folders" v-model:selectionKeys="selectedFolders" :value="tags" selectionMode="single"
+                      class="w-full md:w-30rem">
+                      <template #default="slotProps">
+                        <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
+                      </template>
+                    </Tree>
                   </div>
                 </OverlayPanel>
               </div>
@@ -202,4 +210,5 @@ const filters = ref({
 <style>
 .p-datatable-hoverable-rows .p-selectable-row {
   cursor: default;
-}</style>
+}
+</style>

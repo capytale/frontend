@@ -34,7 +34,7 @@ export function fetchBibIndexingElements() {
   *   }
   * ]
   */
-const unflatten = function(array: any[], parent?: any, tree?: any) {
+export const unflatten = function(array: any[], parent?: any, tree?: any) {
   tree = typeof tree !== 'undefined' ? tree : [];
   parent = typeof parent !== 'undefined' ? parent : { id: 0 };
   var children = array.filter(function(child: any) { return child.parentid == parent.id; });
