@@ -195,6 +195,12 @@ const filters = ref({
           </template>
         </Column>
 
+        <Column field="tags" header="Étiquettes" style="">
+          <template #body="p">
+            <MyTableTags :nid="p.data.nid" :tags="p.data.tags" />
+          </template>
+        </Column>
+
         <Column field="more" header="">
           <template #body="p">
             <MyTableMore :nid="p.data.nid" :whoami="p.data.whoami" />
