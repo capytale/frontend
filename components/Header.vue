@@ -1,12 +1,9 @@
 <script setup>
 import { useSideMenuStore } from '@/stores/ui'
-// import { useUserStore } from '@/stores/user';
 const sideMenu = useSideMenuStore()
 const theme = useThemeStore()
-// const user = useUserStore();
 
 const { data: user, pending, error, status } = await fetchCurrentUser()
-console.log(user)
 
 const themeIcon = () => {
   return theme.current === 'light' ? 'pi pi-moon' : 'pi pi-sun';
