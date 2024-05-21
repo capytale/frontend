@@ -9,6 +9,8 @@ import { FilterMatchMode } from 'primevue/api';
 const confirm = useConfirm();
 const toast = useToast();
 
+const { data: user, pending: usrpnd, error: usrerr, status: usrstts } = await fetchCurrentUser()
+const isTeacher = user.value.roles.includes('teacher')
 
 const { data: activities, pending, error, status } = await fetchMyActivities()
 const { data: tags, pending: pnd, error: err, status: sts } = await fetchTags()
@@ -183,13 +185,13 @@ const filters = ref({
           </template>
         </Column>
 
-        <Column field="code" header="Partage" style="min-width: 13rem">
+        <Column v-if="isTeacher" field="code" header="Partage" style="min-width: 13rem">
           <template #body="p">
             <MyTableShare :code="p.data.code" :mode="p.data.mode" :tr_beg="p.data.tr_beg" :tr_end="p.data.tr_end" />
           </template>
         </Column>
 
-        <Column field="bib" header="Bib." style="">
+        <Column v-if="isTeacher" field="bib" header="Bib." style="">
           <template #body="p">
             <MyTableBib :nid="p.data.nid" :shared="p.data.status_shared" :web="p.data.status_web" />
           </template>
@@ -203,7 +205,7 @@ const filters = ref({
 
         <Column field="more" header="">
           <template #body="p">
-            <MyTableMore :nid="p.data.nid" :whoami="p.data.whoami" />
+            <MyTableMore :nid="p.data.nid" :whoami="p.data.whoami" :isTeacher="isTeacher" />
           </template>
         </Column>
 
