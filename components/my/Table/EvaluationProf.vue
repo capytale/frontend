@@ -1,17 +1,21 @@
 <script setup>
 const props = defineProps({
   views_total: Number,
+  isTeacher: Boolean,
   required: true
 })
 const nbViews = function () {
-  return props.views_total > 1 ? props.views_total + ' vues' : props.views_total + ' vue'
+  if (!props.isTeacher)
+    return "Activité personnelle"
+  else
+    return props.views_total > 1 ? props.views_total + ' vues' : props.views_total + ' vue'
 }
 </script>
 
 <template>
   <Button v-if="views_total == 0" severity="secondary" rounded disabled>0 vue</Button>
   <a v-else href="https://capytale2.ac-paris.fr/web/assignments/1760082">
-    <Button severity="secondary" size="large" rounded>{{ nbViews() }}  </Button>
+    <Button severity="secondary" size="large" rounded>{{ nbViews() }} </Button>
   </a>
 </template>
 

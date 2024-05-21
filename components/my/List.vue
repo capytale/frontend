@@ -6,9 +6,6 @@ import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 import { FilterMatchMode } from 'primevue/api';
 
-const confirm = useConfirm();
-const toast = useToast();
-
 const { data: user, pending: usrpnd, error: usrerr, status: usrstts } = await fetchCurrentUser()
 const isTeacher = user.value.roles.includes('teacher')
 
@@ -21,11 +18,9 @@ const opFolders = ref();
 const tagsToggle = (event) => { opTags.value.toggle(event); }
 const foldersToggle = (event) => { opFolders.value.toggle(event); }
 
-
 const selectedNid = ref();
 const showToolbar = ref(false);
 const oneCheckbox = ref(false);
-
 const onRowSelect = function () {
   showToolbar.value = true
   oneCheckbox.value = selectedNid.value.length == 1
@@ -49,6 +44,8 @@ const handleEdit = function () {
   window.location.href = url
 }
 
+const confirm = useConfirm();
+const toast = useToast();
 const handleDelete = function () {
   confirm.require({
     message: 'Vous vous apprêtez à supprimer DÉFINITIVEMENT.',
@@ -166,16 +163,27 @@ const filters = ref({
           </template>
         </Column>
 
-        <Column field="title" header="Titre" style="width:50rem; max-width:50rem; overflow:hidden" sortable>
+        <Column v-if="isTeacher" field="title" header="Titre" style="width:50rem; max-width:50rem; overflow:hidden" sortable>
+          <template #body="p">
+            <MyTableTitle :title="p.data.title" :nid="p.data.nid" :whoami="p.data.whoami" />
+          </template>u
+        </Column>
+        <Column v-else field="title" header="Titre" style="width:40rem; max-width:40rem; overflow:hidden" sortable>
           <template #body="p">
             <MyTableTitle :title="p.data.title" :nid="p.data.nid" :whoami="p.data.whoami" />
           </template>u
         </Column>
 
-        <Column field="evaluation" header="Évaluation" style="max-width:10rem">
+        <Column v-if="isTeacher" field="evaluation" header="Évaluation" style="max-width:10rem">
           <template #body="p">
             <MyTableEvaluation :views_total="p.data.views_total" :boss="p.data.boss" :whoami="p.data.whoami"
-              :evalu="p.data.evaluation" :appre="p.data.appreciation" />
+              :evalu="p.data.evaluation" :appre="p.data.appreciation" :isTeacher="isTeacher" />
+          </template>
+        </Column>
+        <Column v-else field="evaluation" header="Évaluation" style="max-width:20rem">
+          <template #body="p">
+            <MyTableEvaluation :views_total="p.data.views_total" :boss="p.data.boss" :whoami="p.data.whoami"
+              :evalu="p.data.evaluation" :appre="p.data.appreciation" :isTeacher="isTeacher"/>
           </template>
         </Column>
 
