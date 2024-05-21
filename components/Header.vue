@@ -1,12 +1,10 @@
 <script setup>
 import { useSideMenuStore } from '@/stores/ui'
-// import { useUserStore } from '@/stores/user';
 const sideMenu = useSideMenuStore()
 const theme = useThemeStore()
-// const user = useUserStore();
 
 const { data: user, pending, error, status } = await fetchCurrentUser()
-console.log(user)
+// console.log(user)
 
 const themeIcon = () => {
   return theme.current === 'light' ? 'pi pi-moon' : 'pi pi-sun';
@@ -17,22 +15,27 @@ const themeIcon = () => {
 <template>
   <div class="navbar">
     <span class="text-2xl text-gray-100 p-2">
-        <button @click="sideMenu.toggle"><i class="pi pi-bars"></i> </button>
+        <button v-if="user" @click="sideMenu.toggle"><i class="pi pi-bars"></i> </button>
       </span>
     <div class="navbarContainer">
       <span class="navbarLogo">
         <NuxtLink href="/"> CAPYTALE </NuxtLink>
       </span>
       <div class="capytaleMenu">
-        <NuxtLink to="/my"><span class="px-2">Mes activités</span></NuxtLink>
-        <span class="px-2">La bibliothèque</span>
+        <NuxtLink v-if="user" to="/my"><span class="px-2">Mes activités</span></NuxtLink>
+        <span v-if="user"class="px-2">La bibliothèque</span>
       </div>
       <div class="activityInfo">
       </div>
       <div class="activityMenu">
-        <span class="px-2">{{ user.firstname }} {{ user.lastname }}</span>
         <Button @click="theme.toggle" :icon="themeIcon()" class="mr-2" outlined/>
-        <span class="px-2">Déconnexion</span>
+        <div v-if = "user">
+          <span class="px-2">{{ user.firstname }} {{ user.lastname }}</span>
+        <span class="px-2"><i class="pi pi-sign-out"></i></span>
+        </div>
+        <div v-else>
+        <span class="px-2">Connexion <i class="pi pi-sign-in"></i></span>
+        </div>
       </div>
     </div>
   </div>

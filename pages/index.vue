@@ -27,7 +27,7 @@
 // TODO : surveiller les références aux dépendances (composables ?)
 const cards = [
   {
-    title: "Commun numérique tsoin tsoin",
+    title: "Commun numérique",
     description:
       "Un projet inter-académique soutenu par le ministère. \nDes partenariats avec des enseignants, l’Edtech, ou des associations.",
     icon: "heroicons:user-group",

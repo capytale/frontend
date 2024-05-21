@@ -9,22 +9,11 @@ const my = useMyStore();
 const props = defineProps({
   nid: String,
   whoami: String,
+  isTeacher: Boolean,
   required: true
 })
 
 const menu = ref();
-const saItems = ref([
-  {
-    label: 'Télécharger',
-    icon: 'pi pi-download'
-  },
-  { separator: true },
-  {
-    label: 'Supprimer',
-    icon: 'pi pi-trash',
-    class: 'redImportant'
-  }
-]);
 const actItems = ref([
   {
     label: 'Paramètres',
@@ -38,11 +27,13 @@ const actItems = ref([
         const response = await my.cloneActivity(props.nid)
         toast.add({ severity: 'success', summary: 'Clonage réussi : ', life: 2000 });
       }
-      catch(e) {
+      catch (e) {
         toast.add({ severity: 'error', summary: 'Échec du clonage : ', detail: `nid = ${props.nid} - ${e}` });
       }
     }
-  },
+  }
+])
+const actTeacherItems = ref([
   {
     label: 'Copier l\'URL d\'intégration dans Moodle',
     icon: 'pi pi-link'
@@ -50,7 +41,9 @@ const actItems = ref([
   {
     label: 'Bloquer la distribution',
     icon: 'pi pi-lock'
-  },
+  }
+])
+const commonItems = ref([
   {
     label: 'Télécharger',
     icon: 'pi pi-download',
@@ -88,11 +81,25 @@ const actItems = ref([
     }
   }
 ]);
-const items = computed(() => props.whoami == 'ap' ? saItems.value : actItems.value);
+const items = computed(() => {
+  if (props.isTeacher) {
+    if (props.whoami == 'ap') {
+      return commonItems.value
+    } else {
+      return [...actItems.value, ...actTeacherItems.value, ...commonItems.value]
+    }
+  } else {
+    if (props.whoami == 'ap') {
+      return commonItems.value
+    } else {
+      return [...actItems.value, ...commonItems.value]
+    }
+  }
+})
 
-const toggle = (event) => {
+  const toggle = (event) => {
   menu.value.toggle(event);
-};
+}
 </script>
 
 <template>
