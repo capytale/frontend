@@ -3,6 +3,37 @@ import { useSideMenuStore } from '@/stores/ui'
 const sideMenu = useSideMenuStore()
 const code = useCodeStore()
 const { data: tags, pending: pnd, error: err, status: sts } = await fetchTags()
+
+
+const menu = ref();
+const items = ref([
+  {
+    label: "Pour cette étiquette",
+    items: [
+
+      {
+        label: 'Couleur',
+        icon: 'pi pi-circle-fill'
+      },
+      {
+        label: 'Modifier',
+        icon: 'pi pi-cog'
+      },
+      {
+        label: 'Ajouter une sous-étiquette',
+        icon: 'pi pi-plus'
+      },
+      {
+        label: 'Supprimer',
+        icon: 'pi pi-trash'
+      }
+    ]
+  }
+]);
+
+const toggle = (event) => {
+  menu.value.toggle(event);
+};
 </script>
 
 <template>
@@ -45,7 +76,14 @@ const { data: tags, pending: pnd, error: err, status: sts } = await fetchTags()
           </li>
           <Tree id="folders" :value="tags" class="w-full md:w-30rem">
             <template #default="slotProps">
-              <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
+              <div class="primary-nav">
+                <div class="left">
+                  <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
+                </div>
+                <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" class="right" aria-haspopup="true"
+                  aria-controls="overlay_menu" />
+                <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
+              </div>
             </template>
           </Tree>
         </ul>
@@ -72,5 +110,26 @@ const { data: tags, pending: pnd, error: err, status: sts } = await fetchTags()
 .sidemenu-active {
   transform: translate(-100%);
   left: 0;
+}
+
+.primary-nav {
+  display: -webkit-flex;
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+  justify-content: flex-end;
+  width: 150px;
+}
+
+.left {
+  margin-right: auto;
+}
+
+.primary-nav:hover .right {
+  visibility: visible;
+}
+
+.right {
+  visibility: hidden;
 }
 </style>
