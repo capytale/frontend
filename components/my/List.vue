@@ -12,7 +12,7 @@ const isTeacher = user.value.roles.includes('teacher')
 const { data: activities, pending, error, status } = await fetchMyActivities()
 const { data: tags, pending: pnd, error: err, status: sts } = await fetchTags()
 const selectedTags = ref(null)
-const selectedFolders = ref(null)
+const selectedFolder = ref(null)
 const opTags = ref();
 const opFolders = ref();
 const tagsToggle = (event) => { opTags.value.toggle(event); }
@@ -128,7 +128,7 @@ const filters = ref({
                   @click="foldersToggle" />
                 <OverlayPanel ref="opFolders">
                   <div class="flex flex-column gap-3 w-25rem">
-                    <Tree id="folders" v-model:selectionKeys="selectedFolders" :value="tags" selectionMode="single"
+                    <Tree id="folders" v-model:selectionKeys="selectedFolder" :value="tags" selectionMode="single"
                       class="w-full md:w-30rem">
                       <template #default="slotProps">
                         <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}

@@ -1,46 +1,10 @@
 <script setup>
-import Dialog from 'primevue/dialog';
-
 import { useSideMenuStore } from '@/stores/ui'
 const sideMenu = useSideMenuStore()
 const code = useCodeStore()
 const { data: tags, pending: pnd, error: err, status: sts } = await fetchTags()
 
 
-const menu = ref();
-const items = ref([
-  {
-    label: "Pour cette étiquette",
-    items: [
-
-      {
-        label: 'Couleur',
-        icon: 'pi pi-circle-fill'
-      },
-      {
-        label: 'Modifier',
-        icon: 'pi pi-cog'
-      },
-      {
-        label: 'Ajouter une sous-étiquette',
-        icon: 'pi pi-plus',
-        command: () => {
-          visible.value = true;
-        }
-      },
-      {
-        label: 'Supprimer',
-        icon: 'pi pi-trash'
-      }
-    ]
-  }
-]);
-
-const toggle = (event) => {
-  menu.value.toggle(event);
-};
-
-const visible = ref(false);
 </script>
 
 <template>
@@ -62,7 +26,7 @@ const visible = ref(false);
             <a href="#" class="flex items-center p-2 space-x-3 rounded-md">
               <i class="pi pi-play"></i>
               <span @click="code.toggle">Jouer une activité</span>
-            </a>
+      e       </a>
             <div v-if="code.visible" class="relative mt-2 rounded-md shadow-sm">
               <input type="text" name="code" id="code"
                 class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -87,9 +51,7 @@ const visible = ref(false);
                 <div class="left">
                   <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
                 </div>
-                <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" class="right" aria-haspopup="true"
-                  aria-controls="overlay_menu" />
-                <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
+                <MyTagEdit :slotProps="slotProps" :tags="tags" />
               </div>
             </template>
           </Tree>
@@ -99,21 +61,6 @@ const visible = ref(false);
   </div>
 
 
-  <Dialog v-model:visible="visible" modal header="Edit Profile" :style="{ width: '25rem' }">
-    <span class="p-text-secondary block mb-5">Update your information.</span>
-    <div class="flex align-items-center gap-3 mb-3">
-      <label for="username" class="font-semibold w-6rem">Username</label>
-      <InputText id="username" class="flex-auto" autocomplete="off" />
-    </div>
-    <div class="flex align-items-center gap-3 mb-5">
-      <label for="email" class="font-semibold w-6rem">Email</label>
-      <InputText id="email" class="flex-auto" autocomplete="off" />
-    </div>
-    <div class="flex justify-content-end gap-2">
-      <Button type="button" label="Cancel" severity="secondary" @click="visible = false"></Button>
-      <Button type="button" label="Save" @click="visible = false"></Button>
-    </div>
-  </Dialog>
 </template>    
 
 <style scoped>
