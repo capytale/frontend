@@ -30,6 +30,8 @@ useHead({
         </div>
       </div>
     </div>
+  <Toast position="bottom-right" />
+
   </div>
 </template>
 

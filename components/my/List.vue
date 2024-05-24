@@ -82,7 +82,6 @@ const filters = ref({
 
 <template>
   <ConfirmDialog></ConfirmDialog>
-  <Toast position="bottom-right" />
   <Card class="flex-1">
 
     <template #content>
