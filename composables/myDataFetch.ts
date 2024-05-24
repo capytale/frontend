@@ -4,6 +4,7 @@ import { myJsonData } from '@/mockup_data/my_json_data'
 import { myPrivateTags } from '@/mockup_data/my-private-tags'
 
 let myActivitiesCache: { property: object }
+// renvoie {data, pending, error, status}
 export function fetchMyActivities() {
   return useAsyncData('activKey', async () => {
     if (online) {
