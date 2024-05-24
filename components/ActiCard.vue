@@ -4,6 +4,7 @@ const props = defineProps({
   activite: Object,
   disp: String,
 });
+import { useToast } from "primevue/usetoast";
 
 const toast = useToast();
 const myStore = useMyStore();
@@ -23,17 +24,18 @@ const star = computed(() => {
 });
 
 const toggleFav = async () => {
+
   if (myStore.favorites.includes(props.activite.id)) {
     myStore.favorites = await TypeApi.removeFavorite(props.activite.id);
-    toast.add({ title: "L'élément a été retiré des favoris." });
+    toast.add({ severity: 'success', summary: 'Suppression effectuée : ', life: 2000 });
   } else {
     myStore.favorites = await TypeApi.addFavorite(props.activite.id);
-    toast.add({ title: "L'élément a été ajouté aux favoris." });
+    toast.add({ severity: 'success', summary: 'Suppression effectuée : ', life: 2000 });
   }
 };
 
 const goActi = (event, msg) => {
-  console.log(msg);
+  console.log(event.target.tagName);
   // if (!event.target.classList.contains("starspin")) {
   //   appState.value.creaActiPanel = true;
   //   appState.value.newActiPanel = false;
@@ -42,7 +44,7 @@ const goActi = (event, msg) => {
   //     title: props.activite.fullName,
   //   });
   // }
-  if (!event.target.classList.contains("starspin"))
+  if (!['svg', 'path'].includes(event.target.tagName))
     window.location.href = "/web/node/add/activity?type=" + props.activite.id;
 };
 </script>
@@ -66,8 +68,7 @@ const goActi = (event, msg) => {
         <Icon
           @click="toggleFav()"
           :name="star.icon"
-          class="mx-2 text-lg cursor-pointer starspin"
-          :class="star.color"
+          :class="'mx-2 text-lg cursor-pointer starspin '+star.color"
         ></Icon>
       </div>
     </template>
