@@ -56,7 +56,7 @@ export const useMats = () => [
   },
 ]
 export const useActivities = async () => {
-    const tmp:Ref<ActivityType[]> = useState('typeActivites')
+    const tmp:Ref<ActivityType[]> = ref()
     tmp.value = await TypeApi.getList()
     console.log("loaded from server");
     console.log(tmp.value.length);
