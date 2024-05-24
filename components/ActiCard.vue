@@ -27,10 +27,10 @@ const toggleFav = async () => {
 
   if (myStore.favorites.includes(props.activite.id)) {
     myStore.favorites = await TypeApi.removeFavorite(props.activite.id);
-    toast.add({ severity: 'success', summary: 'Suppression effectuée : ', life: 2000 });
+    toast.add({ severity: 'success', summary: 'Suppression effectuée', life: 2000 });
   } else {
     myStore.favorites = await TypeApi.addFavorite(props.activite.id);
-    toast.add({ severity: 'success', summary: 'Suppression effectuée : ', life: 2000 });
+    toast.add({ severity: 'success', summary: 'Ajout effectué : ', life: 2000 });
   }
 };
 
