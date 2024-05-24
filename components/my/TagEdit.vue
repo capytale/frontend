@@ -9,6 +9,7 @@ const props = defineProps({
 })
 
 
+
 const header = ref("Modifier l'étiquette");
 const label = ref(props.slotProps.node.label);
 const wantSubTag = ref([]);
@@ -70,10 +71,12 @@ const save = () => {
   console.log("label: ", label)
   console.log("wantSubTag: ", wantSubTag)
   console.log("selectedTag: ", Object.keys(selectedTag.value)[0])
+  props.slotProps.node.label = label.value
   editVisible.value = false;
 }
 const saveColor = () => {
   console.log("color: ", color)
+  props.slotProps.node.color = "#"+color.value
   colorVisible.value = false;
 }
 
