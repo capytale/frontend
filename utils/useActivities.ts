@@ -60,5 +60,5 @@ export const useActivities = async () => {
     tmp.value = await TypeApi.getList()
     console.log("loaded from server");
     console.log(tmp.value.length);
-    return tmp
+    return tmp.value
   }
