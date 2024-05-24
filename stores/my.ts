@@ -5,6 +5,8 @@ const myActivitiesApiEp = "/web/c-ui/api/my-activities"
 export const useMyStore = defineStore('my', {
   state: () => ({
     data: [{}],
+    favorites: [],
+    types: [],
   }),
   actions: {
     async deleteActivity(nid: number) {
@@ -21,3 +23,6 @@ export const useMyStore = defineStore('my', {
     },
   }
 })
+
+// TODO : peaufiner la gestion de la récupération des favoris : pour l'instant, c'est géré dans les composants.
+// Il faudrait peut-être gérer ça ici.

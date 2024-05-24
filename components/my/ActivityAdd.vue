@@ -6,9 +6,14 @@
       </h2>
     </template>
     <template #content>
-      <p class="m-0">
-        TODO : faire apparaître ici les types favoris de l'utilisateur
-      </p>
+      <span v-for="el of myStore.favorites" :key="el.id">{{ el }}</span>
     </template>
   </Card>
 </template>
+
+<script setup>
+import TypeApi from "@capytale/activity.js/backend/capytale/activityType";
+const myStore = useMyStore();
+
+myStore.favorites = await TypeApi.getFavorites();
+</script>

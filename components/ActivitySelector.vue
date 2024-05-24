@@ -7,16 +7,15 @@ const inputstyle = {
     "relative inline w-auto disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0",
 };
 
-const fav = useState("actiFav");
-fav.value = await TypeApi.getFavorites();
-console.log(fav);
+const myStore = useMyStore();
+myStore.favorites = await TypeApi.getFavorites();
 
-const typeActivites = await useActivities();
+myStore.types = await useActivities();
 
-console.log(typeActivites.value);
+console.log(myStore.types);
 
 const fuse = ref(
-  new Fuse(typeActivites.value, {
+  new Fuse(myStore.types, {
     keys: ["name", "description", "tags"],
     includeScore: true,
     includeMatches: true,
@@ -51,7 +50,7 @@ const chosenCats = computed(() => {
       return { ...el.item, ...el, score: 1 - el.score };
     });
   } else
-    return typeActivites.value.map((el) => {
+    return myStore.types.map((el) => {
       return {
         ...el,
         score: el.niveau[catChoice.value] * (el.sujet[matChoice.value] ?? 1),
@@ -59,9 +58,9 @@ const chosenCats = computed(() => {
     });
 });
 
-watch(typeActivites, () => {
-  //console.log(typeActivites)
-  fuse.value = new Fuse(typeActivites.value, {
+watch(myStore.types, () => {
+  //console.log(myStore.types)
+  fuse.value = new Fuse(myStore.types, {
     keys: ["name", "description", "tags"],
     includeScore: true,
     includeMatches: true,

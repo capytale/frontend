@@ -6,10 +6,10 @@ const props = defineProps({
 });
 
 const toast = useToast();
-const fav = useState("actiFav");
+const myStore = useMyStore();
 
 const star = computed(() => {
-  if (fav.value.includes(props.activite.id)) {
+  if (myStore.favorites.includes(props.activite.id)) {
     return {
       icon: "heroicons:star-solid",
       color: "text-yellow-400",
@@ -23,11 +23,11 @@ const star = computed(() => {
 });
 
 const toggleFav = async () => {
-  if (fav.value.includes(props.activite.id)) {
-    fav.value = await TypeApi.removeFavorite(props.activite.id);
+  if (myStore.favorites.includes(props.activite.id)) {
+    myStore.favorites = await TypeApi.removeFavorite(props.activite.id);
     toast.add({ title: "L'élément a été retiré des favoris." });
   } else {
-    fav.value = await TypeApi.addFavorite(props.activite.id);
+    myStore.favorites = await TypeApi.addFavorite(props.activite.id);
     toast.add({ title: "L'élément a été ajouté aux favoris." });
   }
 };
