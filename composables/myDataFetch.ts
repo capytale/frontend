@@ -20,6 +20,7 @@ export function fetchMyActivities() {
   )
 }
 
+
 let myTagsCache
 export function fetchTags() {
   return useAsyncData('tagsKey', async () => {
@@ -33,6 +34,24 @@ export function fetchTags() {
     {
       getCachedData() {
         return myTagsCache
+      }
+    }
+  )
+}
+
+let myFlatTagsCache
+export function fetchFlatTags() {
+  return useAsyncData('flatTagsKey', async () => {
+    if (online) {
+      myFlatTagsCache = await httpClient.getJsonAsync<any>("/web/c-ui/api/my-private-tags")
+      return myFlatTagsCache
+    } else {
+      return myFlatTagsCache = myPrivateTags
+    }
+  },
+    {
+      getCachedData() {
+        return myFlatTagsCache
       }
     }
   )

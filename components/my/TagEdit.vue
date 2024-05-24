@@ -8,6 +8,7 @@ const props = defineProps({
   required: true
 })
 
+
 const header = ref("Modifier l'étiquette");
 const label = ref(props.slotProps.node.label);
 const wantSubTag = ref([]);
@@ -45,9 +46,9 @@ const items = ref([
         icon: 'pi pi-plus',
         command: () => {
           header.value = "Ajouter une sous-étiquette"
-          label.value = "" 
+          label.value = ""
           wantSubTag.value = ['subTag']
-          selectedTag.value = {[props.slotProps.node.id]: true}
+          selectedTag.value = { [props.slotProps.node.id]: true }
           editVisible.value = true;
         }
       },
@@ -107,7 +108,7 @@ const saveColor = () => {
   </Dialog>
   <Dialog v-model:visible="colorVisible" modal :header="header" :style="{ width: '55rem' }">
     <div class="flex align-items-center gap-3 mb-3">
-            <ColorPicker v-model="color" inline />
+      <ColorPicker v-model="color" inline />
     </div>
     <div class="flex align-items-center gap-3 mb-3">
       <label for="label" class="font-semibold w-6rem">Couleur </label>
