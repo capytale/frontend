@@ -6,4 +6,5 @@ const url = useRequestURL()
 export const online = url.hostname != "localhost" 
 
 // Set mockup_data user role 'teacher' ou 'student'
-export const user = "student"
+// export const user = "student"
+export const user = "teacher"
