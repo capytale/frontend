@@ -74,6 +74,11 @@ const handleDelete = function () {
     }
   });
 }
+const handleMoveToFolder = function () {
+  const folder = Object.keys(selectedFolder.value)[0]
+  console.log("folder: ", folder)
+  my.moveActivities(selectedNid.value, folder)
+}
 
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -114,13 +119,15 @@ const filters = ref({
                 <Button v-tooltip.bottom="'Étiqueter'" icon="pi pi-tags" class="mr-2" severity="secondary"
                   @click="tagsToggle" />
                 <OverlayPanel ref="opTags">
-                  <div class="flex flex-column gap-3 w-25rem">
+                  <div class="gap-3 w-25rem">
                     <Tree id="tags" v-model:selectionKeys="selectedTags" :value="my.tags.data" selectionMode="multiple"
-                      class="w-full md:w-30rem">
+                      class="w-full md:w-30rem scroll">
                       <template #default="slotProps">
                         <i class="pi pi-tag" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
                       </template>
                     </Tree>
+                    <Button v-if="selectedTags && Object.keys(selectedTags).length" type="button" label="Étiqueter"
+                      class="w-full" />
                   </div>
                 </OverlayPanel>
               </div>
@@ -128,13 +135,15 @@ const filters = ref({
                 <Button v-tooltip.bottom="'Déplacer'" icon="pi pi-folder-open" class="mr-2" severity="secondary"
                   @click="foldersToggle" />
                 <OverlayPanel ref="opFolders">
-                  <div class="flex flex-column gap-3 w-25rem">
-                    <Tree id="folders" v-model:selectionKeys="selectedFolder" :value="my.tags.data" selectionMode="single"
-                      class="w-full md:w-30rem">
+                  <div class="gap-3 w-25rem">
+                    <Tree id="folder" v-model:selectionKeys="selectedFolder" :value="my.tags.data" selectionMode="single"
+                      class="w-full md:w-30rem scroll">
                       <template #default="slotProps">
                         <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
                       </template>
                     </Tree>
+                    <Button v-if="selectedFolder && Object.keys(selectedFolder).length" type="button" label="Déplacer"
+                      class="w-full" @click="handleMoveToFolder" />
                   </div>
                 </OverlayPanel>
               </div>
@@ -228,5 +237,10 @@ const filters = ref({
 <style>
 .p-datatable-hoverable-rows .p-selectable-row {
   cursor: default;
+}
+
+.scroll {
+  height: 50%;
+  overflow: scroll;
 }
 </style>

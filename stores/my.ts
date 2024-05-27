@@ -60,6 +60,12 @@ export const useMyStore = defineStore('my', {
         { action: "clone", nid }
       );
     },
+    async moveActivities(items: array, tid: number) {
+      for (let item of items) {
+        console.log("moveActivity", item.nid, tid)
+        this.activities.data = this.activities.data.map(el => el.nid == item.nid ? { ...el, tags: { tids: tid } } : el);
+      }
+    },
   }
 })
 
