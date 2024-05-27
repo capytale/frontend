@@ -2,9 +2,10 @@
 import { useSideMenuStore } from '@/stores/ui'
 const sideMenu = useSideMenuStore()
 const code = useCodeStore()
-const { data: tags, pending: pnd, error: err, status: sts } = await fetchTags()
 
-
+import { useMyStore } from '@/stores/my'
+const my = useMyStore()
+my.getTags()
 </script>
 
 <template>
@@ -45,13 +46,14 @@ const { data: tags, pending: pnd, error: err, status: sts } = await fetchTags()
               <span class="">Mes activités</span>
             </a>
           </li>
-          <Tree id="folders" :value="tags" class="w-full md:w-30rem">
+  <div v-if="my.tags.pending">loading......</div>
+          <Tree v-else id="folders" :value="my.tags.data" class="w-full md:w-30rem">
             <template #default="slotProps">
               <div class="primary-nav">
                 <div class="left">
                   <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
                 </div>
-                <MyTagEdit :slotProps="slotProps" :tags="tags" />
+                <MyTagEdit :slotProps="slotProps" :tags="my.tags.data" />
               </div>
             </template>
           </Tree>

@@ -1,12 +1,16 @@
 <script setup>
 import Dialog from 'primevue/dialog';
 import ColorPicker from 'primevue/colorpicker';
+import { useMyStore } from '@/stores/my'
+const my = useMyStore()
 
 const props = defineProps({
   slotProps: Object,
   tags: Object,
   required: true
 })
+my.getFlatTags()
+
 
 
 
@@ -71,12 +75,12 @@ const save = () => {
   console.log("label: ", label)
   console.log("wantSubTag: ", wantSubTag)
   console.log("selectedTag: ", Object.keys(selectedTag.value)[0])
-  props.slotProps.node.label = label.value
+  // props.slotProps.node.label = label.value
+  my.setTagLabel(props.slotProps.node.id, label.value)
   editVisible.value = false;
 }
 const saveColor = () => {
-  console.log("color: ", color)
-  props.slotProps.node.color = "#"+color.value
+  my.setTagColor(props.slotProps.node.id, "#"+color.value)
   colorVisible.value = false;
 }
 

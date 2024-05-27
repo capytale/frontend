@@ -1,5 +1,9 @@
 <script setup>
 import { useToast } from "primevue/usetoast";
+
+import { useMyStore } from '@/stores/my'
+const my = useMyStore()
+
 const props = defineProps({
   nid: String,
   tags: Object,
@@ -21,17 +25,21 @@ const colors = ref([])
 
 if (Object.keys(props.tags).length > 0) {
   tids.value = props.tags.tids.split(',')
-  names.value = props.tags.names.split(',')
-  colors.value = props.tags.colors.split(',')
 }
+
+const getName = (id) => {
+  let obj = my.flatTags.data.find(o => o.id === id);
+  return {label: obj ? obj.label : '', color: obj ? obj.color : ''}
+}
+
 
 </script>
 
 <template>
   <span v-for="(tid, key) in tids" :key="nid + tid">
     <Button v-tooltip.right="'Supprimer'" removable @click="delTag(nid, tid)" class="removable">
-      <i class="pi pi-tag p-2" :style="'color:' + colors[key]"></i>
-      {{ names[key] }}
+      <i class="pi pi-tag p-2" :style="'color:' + getName(tid).color"></i>
+      {{ getName(tid).label }}
       <i class="pi pi-times-circle p-2 hide red"></i>
     </Button>
   </span>
