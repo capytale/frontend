@@ -9,15 +9,12 @@ const props = defineProps({
   tags: Object,
   required: true
 })
-my.getFlatTags()
-
-
-
 
 const header = ref("Modifier l'étiquette");
 const label = ref(props.slotProps.node.label);
 const wantSubTag = ref([]);
 const selectedTag = ref([])
+const newTag = ref(false)
 const editVisible = ref(false);
 const colorVisible = ref(false);
 const color = ref(props.slotProps.node.color);
@@ -39,6 +36,7 @@ const items = ref([
         label: 'Modifier ',
         icon: 'pi pi-cog',
         command: () => {
+          newTag.value = false;
           header.value = "Modifier l'étiquette";
           label.value = props.slotProps.node.label;
           wantSubTag.value = []
@@ -50,6 +48,7 @@ const items = ref([
         label: 'Ajouter une sous-étiquette',
         icon: 'pi pi-plus',
         command: () => {
+          newTag.value = true
           header.value = "Ajouter une sous-étiquette"
           label.value = ""
           wantSubTag.value = ['subTag']
@@ -59,8 +58,17 @@ const items = ref([
       },
       {
         label: 'Supprimer',
-        icon: 'pi pi-trash'
-      }
+        icon: 'pi pi-trash',
+        command: async () => {
+          try {
+            await my.deleteTag(props.slotProps.node.id)
+            toast.add({ severity: 'success', summary: 'Étiquette supprimée', life: 2000 });
+          }
+          catch (e) {
+            toast.add({ severity: 'error', summary: 'Échec de suppression : ', detail: `nid = ${props.slotProps.node.nid} - ${e}` });
+          }
+        }
+      },
     ]
   }
 ]
@@ -72,15 +80,21 @@ const toggle = (event) => {
 };
 
 const save = () => {
-  console.log("label: ", label)
-  console.log("wantSubTag: ", wantSubTag)
-  console.log("selectedTag: ", Object.keys(selectedTag.value)[0])
-  // props.slotProps.node.label = label.value
-  my.setTagLabel(props.slotProps.node.id, label.value)
+  // console.log("newTag: ", newTag.value)
+  // console.log("wantSubTag: ", wantSubTag.value)
+  // console.log("selectedTag: ", Object.keys(selectedTag.value)[0])
+  if (newTag.value) {
+    my.addTag(label.value, Object.keys(selectedTag.value)[0])
+  } else {
+    my.setTagLabel(props.slotProps.node.id, label.value)
+    if (wantSubTag.value.length > 0) {
+      my.setTagParent(props.slotProps.node.id, Object.keys(selectedTag.value)[0])
+    }
+  }
   editVisible.value = false;
 }
 const saveColor = () => {
-  my.setTagColor(props.slotProps.node.id, "#"+color.value)
+  my.setTagColor(props.slotProps.node.id, "#" + color.value)
   colorVisible.value = false;
 }
 

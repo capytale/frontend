@@ -9,8 +9,11 @@ import { FilterMatchMode } from 'primevue/api';
 const { data: user, pending: usrpnd, error: usrerr, status: usrstts } = await fetchCurrentUser()
 const isTeacher = user.value.roles.includes('teacher')
 
-const { data: activities, pending, error, status } = await fetchMyActivities()
-const { data: tags, pending: pnd, error: err, status: sts } = await fetchTags()
+import { useMyStore } from '@/stores/my'
+const my = useMyStore()
+my.getActivities()
+
+
 const selectedTags = ref(null)
 const selectedFolder = ref(null)
 const opTags = ref();
@@ -56,10 +59,9 @@ const handleDelete = function () {
     acceptLabel: 'Supprimer',
     acceptClass: 'p-button-danger',
     accept: () => {
-      // for (const el of selectedNid.value) {
-      //   console.log(el.nid)
-      // }
-      // const response = await my.deleteActivity(props.nid)
+      for (const el of selectedNid.value) {
+        my.deleteActivity(el.nid)
+      }
       const response = {}
       if (response.ok) {
         toast.add({ severity: 'success', summary: 'Suppression effectuée : ', life: 2000 });
@@ -86,17 +88,17 @@ const filters = ref({
 
     <template #content>
 
-      <div v-if="pending">
+      <div v-if="my.activities.pending">
         <p>Chargement des actvités...</p>
       </div>
-      <div v-else-if="status == 'error'">
+      <div v-else-if="my.activities.status == 'error'">
         <p>Impossible de charger les activités.</p>
       </div>
       <DataTable v-else v-model:filters="filters" v-model:selection="selectedNid" selectionMode="multiple"
-        :value="activities" dataKey="nid" sortField="changed" tableStyle="min-width: 50rem" :sortOrder="-1" paginator
-        :rows="20" :rowsPerPageOptions="[10, 20, 50, 100]" @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()"
-        @rowUnselectAll="onRowUnselectAll()" @rowSelectAll="onRowSelectAll()" :globalFilterFields="['title', 'changed']"
-        class="my-card">
+        :value="my.activities.data" dataKey="nid" sortField="changed" tableStyle="min-width: 50rem" :sortOrder="-1"
+        paginator :rows="20" :rowsPerPageOptions="[10, 20, 50, 100]" @rowSelect="onRowSelect()"
+        @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()" @rowSelectAll="onRowSelectAll()"
+        :globalFilterFields="['title', 'changed']" class="my-card">
 
         <template #header>
           <Toolbar>
@@ -113,7 +115,7 @@ const filters = ref({
                   @click="tagsToggle" />
                 <OverlayPanel ref="opTags">
                   <div class="flex flex-column gap-3 w-25rem">
-                    <Tree id="tags" v-model:selectionKeys="selectedTags" :value="tags" selectionMode="multiple"
+                    <Tree id="tags" v-model:selectionKeys="selectedTags" :value="my.tags.data" selectionMode="multiple"
                       class="w-full md:w-30rem">
                       <template #default="slotProps">
                         <i class="pi pi-tag" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
@@ -127,7 +129,7 @@ const filters = ref({
                   @click="foldersToggle" />
                 <OverlayPanel ref="opFolders">
                   <div class="flex flex-column gap-3 w-25rem">
-                    <Tree id="folders" v-model:selectionKeys="selectedFolder" :value="tags" selectionMode="single"
+                    <Tree id="folders" v-model:selectionKeys="selectedFolder" :value="my.tags.data" selectionMode="single"
                       class="w-full md:w-30rem">
                       <template #default="slotProps">
                         <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
@@ -162,7 +164,8 @@ const filters = ref({
           </template>
         </Column>
 
-        <Column v-if="isTeacher" field="title" header="Titre" style="width:50rem; max-width:50rem; overflow:hidden" sortable>
+        <Column v-if="isTeacher" field="title" header="Titre" style="width:50rem; max-width:50rem; overflow:hidden"
+          sortable>
           <template #body="p">
             <MyTableTitle :title="p.data.title" :nid="p.data.nid" :whoami="p.data.whoami" />
           </template>u
@@ -182,7 +185,7 @@ const filters = ref({
         <Column v-else field="evaluation" header="Évaluation" style="max-width:20rem">
           <template #body="p">
             <MyTableEvaluation :views_total="p.data.views_total" :boss="p.data.boss" :whoami="p.data.whoami"
-              :evalu="p.data.evaluation" :appre="p.data.appreciation" :isTeacher="isTeacher"/>
+              :evalu="p.data.evaluation" :appre="p.data.appreciation" :isTeacher="isTeacher" />
           </template>
         </Column>
 

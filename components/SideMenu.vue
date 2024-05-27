@@ -6,6 +6,7 @@ const code = useCodeStore()
 import { useMyStore } from '@/stores/my'
 const my = useMyStore()
 my.getTags()
+my.getFlatTags()
 </script>
 
 <template>
