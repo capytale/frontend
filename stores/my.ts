@@ -6,7 +6,7 @@ export const useMyStore = defineStore('my', {
   state: () => ({
     tags: {},
     flatTags: {},
-    data: [{}],
+    data: [],
     favorites: [],
     types: [],
   }),
@@ -17,7 +17,7 @@ export const useMyStore = defineStore('my', {
     async getFlatTags() {
       this.flatTags = await fetchFlatTags()
     },
-    setTagColor(id, color) {
+    setTagColor(id: number, color: string) {
       this.flatTags.data = this.flatTags.data.map(el => el.id == id ? {...el, color: color} : el);
       this.tags.data = unflatten(this.flatTags.data)
     },
