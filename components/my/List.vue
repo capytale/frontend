@@ -59,9 +59,10 @@ const handleDelete = function () {
     acceptLabel: 'Supprimer',
     acceptClass: 'p-button-danger',
     accept: () => {
-      for (const el of selectedNid.value) {
-        my.deleteActivity(el.nid)
-      }
+      // for (const el of selectedNid.value) {
+        // my.deleteActivity(el.nid)
+        my.deleteActivity(selectedNid.value)
+      // }
       const response = {}
       if (response.ok) {
         toast.add({ severity: 'success', summary: 'Suppression effectuée : ', life: 2000 });
@@ -74,16 +75,21 @@ const handleDelete = function () {
     }
   });
 }
-const handleMoveToFolder = function () {
+const handleMoveToFolderMultiple = function () {
   const folder = Object.keys(selectedFolder.value)[0]
   console.log("folder: ", folder)
   my.moveActivities(selectedNid.value, folder)
+}
+const handleAddTagMultiple = function () {
+  const tags = Object.keys(selectedTags.value)
+  console.log("tags: ", tags)
+  my.tagActivities(selectedNid.value, tags)
 }
 
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   title: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-  changed: { value: null, matchMode: FilterMatchMode.IN },
+  // changed: { value: null, matchMode: FilterMatchMode.IN },
 });
 </script>
 
@@ -127,7 +133,7 @@ const filters = ref({
                       </template>
                     </Tree>
                     <Button v-if="selectedTags && Object.keys(selectedTags).length" type="button" label="Étiqueter"
-                      class="w-full" />
+                      class="w-full" @click="handleAddTagMultiple"/>
                   </div>
                 </OverlayPanel>
               </div>
@@ -143,7 +149,7 @@ const filters = ref({
                       </template>
                     </Tree>
                     <Button v-if="selectedFolder && Object.keys(selectedFolder).length" type="button" label="Déplacer"
-                      class="w-full" @click="handleMoveToFolder" />
+                      class="w-full" @click="handleMoveToFolderMultiple" />
                   </div>
                 </OverlayPanel>
               </div>

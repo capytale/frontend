@@ -47,6 +47,14 @@ my.getFlatTags()
               <span class="">Mes activités</span>
             </a>
           </li>
+          <div class="p-tree p-component w-full md:w-30rem">
+            <div class="primary-nav">
+                <div class="left">
+                  Mes Étiquettes 
+                </div>
+                +
+              </div>            
+            </div>
   <div v-if="my.tags.pending">loading......</div>
           <Tree v-else id="folders" :value="my.tags.data" class="w-full md:w-30rem">
             <template #default="slotProps">

@@ -18,11 +18,12 @@ const newTag = ref(false)
 const editVisible = ref(false);
 const colorVisible = ref(false);
 const color = ref(props.slotProps.node.color);
+const authSave = ref(true);
 
 const menu = ref();
 const items = ref([
   {
-    label: "Pour cette étiquette" + props.slotProps.node.label,
+    label: "Pour cette étiquette: " + props.slotProps.node.label,
     items: [
 
       {
@@ -39,8 +40,8 @@ const items = ref([
           newTag.value = false;
           header.value = "Modifier l'étiquette";
           label.value = props.slotProps.node.label;
-          wantSubTag.value = []
-          selectedTag.value = {}
+          selectedTag.value = props.slotProps.node.parentid != 0 ? { [props.slotProps.node.parentid]: true } : {}
+          wantSubTag.value = props.slotProps.node.parentid != 0 ? ['subTag'] : []
           editVisible.value = true;
         }
       },
@@ -80,15 +81,14 @@ const toggle = (event) => {
 };
 
 const save = () => {
-  // console.log("newTag: ", newTag.value)
-  // console.log("wantSubTag: ", wantSubTag.value)
-  // console.log("selectedTag: ", Object.keys(selectedTag.value)[0])
   if (newTag.value) {
-    my.addTag(label.value, Object.keys(selectedTag.value)[0])
+    my.addTag(label.value, Object.keys(selectedTag.value)[0] || 0)
   } else {
     my.setTagLabel(props.slotProps.node.id, label.value)
-    if (wantSubTag.value.length > 0) {
+    if (wantSubTag.value.length > 0 && Object.keys(selectedTag.value).length == 1){
       my.setTagParent(props.slotProps.node.id, Object.keys(selectedTag.value)[0])
+    } else {
+      my.setTagParent(props.slotProps.node.id, 0)
     }
   }
   editVisible.value = false;
@@ -96,6 +96,43 @@ const save = () => {
 const saveColor = () => {
   my.setTagColor(props.slotProps.node.id, "#" + color.value)
   colorVisible.value = false;
+}
+
+const isSuccessor = (id, notMe) => {
+  if (id == notMe) {
+    return true
+  }
+  const current = my.flatTags.data.find(t => t.id == id)
+  if (current.parentid == 0 ) {
+    return current.id == notMe
+  }
+  const parent = my.flatTags.data.find(t => t.id == current.parentid)
+  return isSuccessor(parent.id, notMe)
+}
+
+
+const onNodeSelect =  (event) => {
+  wantSubTag.value = ['subTag']
+  console.log("authSave.value: ", authSave.value)
+
+  if (isSuccessor(event.key, props.slotProps.node.id) && wantSubTag.value.length > 0) {
+    authSave.value = false
+    console.log("authSave.value: ", authSave.value)
+  } else {
+    authSave.value = true
+    console.log("authSave.value: ", authSave.value)
+  }
+}
+const onNodeUnselect =  (event) => {
+  wantSubTag.value = []
+  authSave.value = true
+}
+const handleWant =  (event) => {
+  if (wantSubTag.value.length == 0 ){
+    console.log("wantSubTag.value: ", wantSubTag.value)
+    authSave.value = true
+    selectedTag.value = []
+  }
 }
 
 </script>
@@ -111,20 +148,23 @@ const saveColor = () => {
       <InputText v-model="label" id="label" class="flex-auto" autocomplete="off" />
     </div>
     <div class="flex align-items-center">
-      <Checkbox v-model="wantSubTag" inputId="checked" name="checked" value="subTag" />
+      <Checkbox v-model="wantSubTag" inputId="checked" name="checked" value="subTag" @change="handleWant(event)"/>
       <label for="checked" class="ml-2">Imbriquer l'étiquette sous : </label>
     </div>
     <div class="flex align-items-center gap-3 mb-5">
       <Tree id="folders" v-model:selectionKeys="selectedTag" :value="tags" selectionMode="single"
-        class="w-full md:w-30rem">
+        class="w-full md:w-30rem" @nodeSelect="onNodeSelect" @nodeUnselect="onNodeUnselect">
         <template #default="slotProps">
           <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
         </template>
       </Tree>
     </div>
-    <div class="flex justify-content-end gap-2">
+    <div cl:ass="flex justify-content-end gap-2">
       <Button type="button" label="Cancel" severity="secondary" @click="editVisible = false"></Button>
-      <Button type="button" label="Save" @click="save"></Button>
+      <Button v-if="authSave" type="button" label="Save" @click="save"></Button>
+      <Button v-else disabled type="button" label="Save" @click="save"></Button>
+      <div v-if="!authSave" class="info">Vous ne pouvez pas imbriquer une étiquette dans elle-même.</div>
+
     </div>
   </Dialog>
   <Dialog v-model:visible="colorVisible" modal :header="header" :style="{ width: '55rem' }">
@@ -142,4 +182,12 @@ const saveColor = () => {
   </Dialog>
 </template>
 
-<style scoped></style>
+<style >
+.info{
+  color: gray;
+  font-style: italic;
+}
+ul {
+  padding:0 0 0 1em;
+}
+</style>

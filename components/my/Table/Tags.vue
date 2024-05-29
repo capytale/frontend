@@ -12,20 +12,23 @@ const props = defineProps({
 
 const toast = useToast();
 const delTag = (nid, tid) => {
-  const index = tids.value.indexOf(tid);
-  tids.value.splice(index, 1);
+  // const index = tids.value.indexOf(tid);
+  // tids.value.splice(index, 1);
+  my.untagActivity(nid, tid)
   toast.add({ severity: 'success', summary: 'Tag supprimé', detail: `${nid}: ${tid}`, life: 2000 });
+  // TODO : Faire en backend 
 }
 
-const tids = ref([])
-
-if (Object.keys(props.tags).length > 0) {
-  tids.value = props.tags.tids.split(',')
-}
+const tids = computed(() => {
+  if (Object.keys(props.tags).length > 0) {
+    return props.tags.tids.split(',')
+  }
+  return []
+})
 
 const getName = (id) => {
   let obj = my.flatTags.data.find(o => o.id === id);
-  return {label: obj ? obj.label : '', color: obj ? obj.color : ''}
+  return { label: obj ? obj.label : '', color: obj ? obj.color : '' }
 }
 
 
@@ -44,11 +47,13 @@ const getName = (id) => {
 
 <style scoped>
 .hide {
-  visibility:hidden;
+  visibility: hidden;
 }
+
 .removable:hover .hide {
   visibility: visible;
 }
+
 .red {
   color: red;
 }
