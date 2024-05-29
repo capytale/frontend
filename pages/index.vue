@@ -20,7 +20,7 @@
       </Card>
     </div>
 
-    <CarouselEdu />
+     <CarouselEdu />
 </template>
 
 <script setup>

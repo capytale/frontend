@@ -11,9 +11,7 @@ export default defineNuxtConfig({
     cssLayerOrder: 'tailwind-base, primevue, tailwind-utilities'
   },
   css: [
-    //'primeflex/primeflex.css',
     'primeicons/primeicons.css',
-    '@fortawesome/fontawesome-svg-core/styles.css'
   ],
   nitro: {
     devProxy: {
