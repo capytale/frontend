@@ -1,17 +1,17 @@
 import { resolve } from 'path';
-
 const baseUrl = '/~';
 
 export default defineNuxtConfig({
   ssr: false,
   // devtools: { enabled: true },
-  modules: ['nuxt-primevue', '@pinia/nuxt', '@vueuse/nuxt', "@nuxtjs/tailwindcss"],
+  modules: ['nuxt-primevue', '@pinia/nuxt', '@vueuse/nuxt', "@nuxtjs/tailwindcss",],
   primevue: {
     usePrimeVue: true,
     cssLayerOrder: 'tailwind-base, primevue, tailwind-utilities'
   },
   css: [
     'primeicons/primeicons.css',
+    'assets/css/tailwind.css'
   ],
   nitro: {
     devProxy: {
