@@ -1,6 +1,4 @@
 <script setup>
-import { FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText } from '@fortawesome/vue-fontawesome'
-
 const props = defineProps({
   mode: String,
   tr_beg: String,
@@ -21,35 +19,35 @@ const explainMode = computed(() => {
     case 'N_X':
       return {
         title: "Non partagé avec la classe",
-        mainIcon: "fa-solid fa-lock",
+        mainIcon: 'pi pi-lock',
         color: "red"
       }
     case 'C_O':
       return {
         title: strPeriode + strC,
-        mainIcon: 'fa-solid fa-clock',
-        secondaryIcon: 'fa-solid fa-envelope',
+        mainIcon: 'pi pi-clock',
+        secondaryIcon: 'pi pi-envelope',
         color: "green"
       }
     case 'C_X':
       return {
         title: strPeriode + strC,
-        mainIcon: 'fa-solid fa-clock orange',
-        secondaryIcon: 'fa-solid fa-envelope orange',
+        mainIcon: 'pi pi-clock',
+        secondaryIcon: 'pi pi-envelope',
         color: "orange"
       }
     case 'L_O':
       return {
         title: strPeriode + strL,
-        mainIcon: 'fa-solid fa-clock',
-        secondaryIcon: 'fa-solid fa-lock',
+        mainIcon: 'pi pi-clock',
+        secondaryIcon: 'pi pi-lock',
         color: "green"
       }
     case 'L_X':
       return {
         title: strPeriode + strL,
-        mainIcon: 'fa-solid fa-clock',
-        secondaryIcon: 'fa-solid fa-lock red',
+        mainIcon: 'pi pi-clock',
+        secondaryIcon: 'pi pi-lock',
         color: "red"
       }
     default:
@@ -62,13 +60,11 @@ const explainMode = computed(() => {
   <span v-if="explainMode.title">
     <span v-tooltip="explainMode.title" type="text" placeholder="Right">
       <span v-if="explainMode.secondaryIcon" :class="explainMode.color">
-        <font-awesome-layers class="">
-          <font-awesome-icon :icon="explainMode.mainIcon" />
-          <font-awesome-icon :icon="explainMode.secondaryIcon" transform="shrink-4 down-4.2 right-10"/>
-        </font-awesome-layers>
+        <i :class="explainMode.mainIcon"></i>
+        <i :class="explainMode.secondaryIcon"></i>
       </span>
       <span v-else :class="explainMode.color">
-        <font-awesome-icon :icon="explainMode.mainIcon" />
+        <i :class="explainMode.mainIcon"></i>
       </span>
     </span>
   </span>
