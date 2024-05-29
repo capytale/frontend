@@ -12,7 +12,7 @@
       <Card v-for="(c, index) of cards" key="index">
       <template #content>
         <div class="flex flex-row align-center">
-          <Icon :name="c.icon" class="text-primary-500 text-2xl mr-4" />
+          <i :class="c.icon" class="mt-2 mr-2 text-gray-500" ></i>
           <div class="font-semibold">{{ c.title }}</div>
         </div>
         <div class="mt-2 text-gray-500" v-html="c.description"></div>
@@ -30,53 +30,63 @@ const cards = [
     title: "Commun numérique",
     description:
       "Un projet inter-académique soutenu par le ministère. \nDes partenariats avec des enseignants, l’Edtech, ou des associations.",
-    icon: "heroicons:user-group",
+    // icon: "heroicons:user-group",
+    icon: "pi pi-users",
   },
   {
     title: "Ressources éducatives libres",
     description:
       "Une bibliothèque de 4000 ressources pédagogiques sous licence Creative Commons By-SA",
-    icon: "i-heroicons-lock-open",
+    // icon: "i-heroicons-lock-open",
+    icon: "pi pi-lock-open",
   },
   {
     title: "Environnement standardisé",
     description:
       "Adapté aux besoins de l’enseignement secondaire sur les STIM (Sciences, Technologie, Ingénierie, Mathématiques)",
-    icon: "i-heroicons-academic-cap",
+    // icon: "i-heroicons-academic-cap",
+    icon: "pi pi-cog",
   },
   {
     title: "Tous les langages",
     description:
       "Adapté aux besoins de l’enseignement secondaire sur les STIM (Sciences, Technologie, Ingénierie, Mathématiques)",
-    icon: "i-heroicons-code-bracket",
+    // icon: "i-heroicons-code-bracket",
+    icon: "pi pi-code",
   },
   {
     title: "Fluidité pédagogique",
     description: "Conçu pour simplifier les échanges entre les enseignants et les élèves",
-    icon: "i-heroicons-arrows-right-left",
+    // icon: "i-heroicons-arrows-right-left",
+    icon: "pi pi-arrow-right-arrow-left",
   },
   {
     title: "Du collège aux CPGE",
     description:
       "De nombreux types d’activités adaptés à tous les élèves à partir du cycle 3.",
-    icon: "i-heroicons-arrow-up-right",
+    // icon: "i-heroicons-arrow-up-right",
+    icon: "pi pi-arrow-up-right",
   },
   {
     title: "Cadre institutionnel",
     description: "Entièrement hébergé sur sur une infrastructure académique",
-    icon: "i-heroicons-building-library",
+    // icon: "i-heroicons-building-library",
+    // icon: "pi pi-server",
   },
   {
     title: "En ligne sans installation",
     description:
       "Fonctionne simplement dans le navigateur de tout ordinateur, tablette ou téléphone.",
-    icon: "i-heroicons-globe-alt",
+    // icon: "i-heroicons-globe-alt",
+    icon: "pi pi-globe",
   },
   {
     title: "Adoption massive",
     description:
-      "2.5 millions d’activités <br> 400 000 utilisateurs <br> 150 000 visites par semaine",
-    icon: "i-heroicons-presentation-chart-bar",
+      "Accès via tous les ENT de France<br>Des centaines de milliers d'utilisateurs",
+    icon: "pi pi-users",
+    // icon: "i-heroicons-presentation-chart-bar",
+    icon: "pi pi-chart-line",
   },
 ];
 </script>

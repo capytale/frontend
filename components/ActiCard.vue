@@ -12,13 +12,11 @@ const myStore = useMyStore();
 const star = computed(() => {
   if (myStore.favorites.includes(props.activite.id)) {
     return {
-      icon: "heroicons:star-solid",
-      color: "text-yellow-400",
+      icon: "pi pi-star-fill text-yellow-400",
     };
   } else {
     return {
-      icon: "heroicons:star",
-      color: "",
+      icon: "pi pi-star",
     };
   }
 });
@@ -65,11 +63,7 @@ const goActi = (event, msg) => {
           {{ activite.name }} <sup v-if="activite.beta" class="text-red-500">beta</sup>
           {{ activite.score }}
         </div>
-        <Icon
-          @click="toggleFav()"
-          :name="star.icon"
-          :class="'mx-2 text-lg cursor-pointer starspin '+star.color"
-        ></Icon>
+        <i :class="'mx-2 text-lg cursor-pointer starspin '+star.icon" @click="toggleFav()"></i>
       </div>
     </template>
     <template #content>

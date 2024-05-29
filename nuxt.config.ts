@@ -4,8 +4,8 @@ const baseUrl = '/~';
 
 export default defineNuxtConfig({
   ssr: false,
-  devtools: { enabled: true },
-  modules: ['nuxt-primevue', '@pinia/nuxt', '@vueuse/nuxt', "@nuxtjs/tailwindcss", 'nuxt-icon'],
+  // devtools: { enabled: true },
+  modules: ['nuxt-primevue', '@pinia/nuxt', '@vueuse/nuxt', "@nuxtjs/tailwindcss"],
   primevue: {
     usePrimeVue: true,
     cssLayerOrder: 'tailwind-base, primevue, tailwind-utilities'
