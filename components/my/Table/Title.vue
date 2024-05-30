@@ -19,7 +19,7 @@ const editUrl = function (nid) {
 <template>
   <div class="group">
     <a :href="playerUrl(nid)" >{{ title }}</a>
-    <a v-if="whoami != 'ap'" :href="editUrl(nid)" class="px-2" v-tooltip="'Modifier les paramètres'" type="text" placeholder="Right" aria-label="Modifier les paramètres">
+    <a v-if="whoami != 'ap'" :href="editUrl(nid)" class="px-2" v-tooltip.top="{ value: 'Modifier les paramètres', showDelay: 400, hideDelay: 0 }" type="text" placeholder="Right" aria-label="Modifier les paramètres">
       <i class="pi pi-cog"></i>
     </a>
   </div>

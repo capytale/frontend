@@ -13,9 +13,9 @@ const nbViews = function () {
 </script>
 
 <template>
-  <Button v-if="views_total == 0" severity="secondary" rounded disabled>0 vue</Button>
+  <Button v-if="views_total == 0" severity="secondary" text disabled>0 vue</Button>
   <a v-else href="https://capytale2.ac-paris.fr/web/assignments/1760082">
-    <Button severity="secondary" size="large" rounded>{{ nbViews() }} </Button>
+    <Button severity="primary" size="large" v-tooltip.top="{ value: 'Voir les copies', showDelay: 400, hideDelay: 0 }" text>{{ nbViews() }} </Button>
   </a>
 </template>
 

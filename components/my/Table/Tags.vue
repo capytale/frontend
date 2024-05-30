@@ -15,7 +15,6 @@ const delTag = (nid, tid) => {
   // const index = tids.value.indexOf(tid);
   // tids.value.splice(index, 1);
   my.untagActivity(nid, tid)
-  toast.add({ severity: 'success', summary: 'Tag supprimé', detail: `${nid}: ${tid}`, life: 2000 });
   // TODO : Faire en backend 
 }
 
@@ -36,22 +35,33 @@ const getName = (id) => {
 
 <template>
   <span v-for="tid in tids" :key="nid + tid">
-    <Button v-if="getName(tid).label" v-tooltip.right="'Supprimer'" removable @click="delTag(nid, tid)" class="removable">
-      <i class="pi pi-tag p-2" :style="'color:' + getName(tid).color"></i>
+    <Button v-if="getName(tid).label" v-tooltip.top="{ value: 'Supprimer', showDelay: 400, hideDelay: 0 }" removable @click="delTag(nid, tid)" class="removable p-0" text>
+      <i class="pi pi-tag pr-2 normal" :style="'color:' + getName(tid).color"></i>
+      <i class="pi pi-times-circle pr-2 exeptionnal red"></i>
       {{ getName(tid).label }}
-      <i class="pi pi-times-circle p-2 hide red"></i>
     </Button>
   </span>
 </template>
 
 
 <style scoped>
-.hide {
-  visibility: hidden;
+.exeptionnal {
+  /* visibility: hidden; */
+  display: none;
+}
+.normal {
+  /* visibility: visible; */
+  display: inline;:width: ;
 }
 
-.removable:hover .hide {
-  visibility: visible;
+.removable:hover .exeptionnal {
+  /* visibility: visible; */
+  display: inline;
+}
+.removable:hover .normal {
+  /* visibility: hidden; */
+  display: none;
+
 }
 
 .red {
