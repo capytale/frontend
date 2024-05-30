@@ -60,8 +60,8 @@ const handleDelete = function () {
     acceptClass: 'p-button-danger',
     accept: () => {
       // for (const el of selectedNid.value) {
-        // my.deleteActivity(el.nid)
-        my.deleteActivity(selectedNid.value)
+      // my.deleteActivity(el.nid)
+      my.deleteActivity(selectedNid.value)
       // }
       const response = {}
       if (response.ok) {
@@ -133,7 +133,7 @@ const filters = ref({
                       </template>
                     </Tree>
                     <Button v-if="selectedTags && Object.keys(selectedTags).length" type="button" label="Étiqueter"
-                      class="w-full" @click="handleAddTagMultiple"/>
+                      class="w-full" @click="handleAddTagMultiple" />
                   </div>
                 </OverlayPanel>
               </div>
@@ -142,8 +142,8 @@ const filters = ref({
                   @click="foldersToggle" />
                 <OverlayPanel ref="opFolders">
                   <div class="gap-3 w-25rem">
-                    <Tree id="folder" v-model:selectionKeys="selectedFolder" :value="my.tags.data" selectionMode="single"
-                      class="w-full md:w-30rem scroll">
+                    <Tree id="folder" v-model:selectionKeys="selectedFolder" :value="my.tags.data"
+                      selectionMode="single" class="w-full md:w-30rem scroll">
                       <template #default="slotProps">
                         <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
                       </template>
@@ -210,9 +210,10 @@ const filters = ref({
           </template>
         </Column>
 
-        <Column v-if="isTeacher" field="code" header="Partage" style="min-width: 13rem">
+        <Column field="code" header="Partage" style="min-width: 13rem">
           <template #body="p">
-            <MyTableShare :code="p.data.code" :mode="p.data.mode" :tr_beg="p.data.tr_beg" :tr_end="p.data.tr_end" />
+            <MyTableShare :code="p.data.code" :mode="p.data.mode" :boss="p.data.boss" :whoami="p.data.whoami"
+              :wf="p.data.workflow" :isTeacher="isTeacher" :tr_beg="p.data.tr_beg" :tr_end="p.data.tr_end" />
           </template>
         </Column>
 

@@ -1,7 +1,12 @@
 <script setup>
+import { formatDateTime } from '~/utils/format';
 const props = defineProps({
   code: String,
   mode: String,
+  boss: String,
+  wf: String,
+  isTeacher: Boolean,
+  whoami: String,
   tr_beg: String,
   tr_end: String,
   required: true
@@ -43,7 +48,7 @@ const items = computed(() =>
 const label = computed(() => {
   const b = props.tr_beg
   const e = props.tr_end
-  const strPeriode = `Libre pour les élèves du ${b} au ${e}`
+  const strPeriode = `Libre pour les élèves du ${formatDateTime(b)} au ${formatDateTime(e)}`
   const strC = " et en lecture seule en dehors"
   const strL = " et non accessible en dehors"
 
@@ -51,45 +56,90 @@ const label = computed(() => {
     case 'N_O':
       return {
         code: props.code,
+        severity: "success"
       }
     case 'N_X':
       return {
         code: props.code,
-        title: "Non partagé avec la classe",
+        tooltipText: "Non partagé avec la classe",
         mainIcon: 'pi pi-lock',
-        color: "red"
+        color: "red",
+        severity: "danger"
       }
     case 'C_O':
       return {
         code: props.code,
-        title: strPeriode + strC,
+        tooltipText: strPeriode + strC,
         mainIcon: 'pi pi-clock',
         secondaryIcon: 'pi pi-envelope',
-        color: "green"
+        color: "green",
+        severity: "success"
       }
     case 'C_X':
       return {
         code: props.code,
-        title: strPeriode + strC,
+        tooltipText: strPeriode + strC,
         mainIcon: 'pi pi-clock',
         secondaryIcon: 'pi pi-envelope',
-        color: "orange"
+        color: "orange",
+        severity: "danger"
       }
     case 'L_O':
       return {
         code: props.code,
-        title: strPeriode + strL,
+        tooltipText: strPeriode + strL,
         mainIcon: 'pi pi-clock',
         secondaryIcon: 'pi pi-lock',
-        color: "green"
+        color: "green",
+        severity: "success"
       }
     case 'L_X':
       return {
         code: props.code,
-        title: strPeriode + strL,
+        tooltipText: strPeriode + strL,
         mainIcon: 'pi pi-clock',
         secondaryIcon: 'pi pi-lock',
-        color: "red"
+        color: "red",
+        severity: "danger"
+      }
+    default:
+      return {}
+  }
+})
+
+const wfStatus = computed(() => {
+  if (props.wf == '100' && props.mode.includes('X')) {
+    return {
+      label: 'Verrouillé',
+      icon: 'pi pi-lock',
+      color: "red"
+    }
+  }
+
+  switch (props.wf) {
+    case '0':
+      return {
+        label: 'Modifiable',
+        icon: 'pi pi-pencil',
+        color: "blue"
+      }
+    case '100':
+      return {
+        label: 'En cours',
+        icon: 'pi pi-pencil',
+        color: "blue"
+      }
+    case '200':
+      return {
+        label: 'Rendu',
+        icon: 'pi pi-envelope',
+        color: "orange"
+      }
+    case '300':
+      return {
+        label: 'Corrigé',
+        icon: 'pi pi-check-circle',
+        color: "green"
       }
     default:
       return {}
@@ -99,25 +149,33 @@ const label = computed(() => {
 </script>
 
 <template>
-  <div class="card flex justify-content-center mystyle">
-    <Button type="button" :label="label.code" @click="toggle" class="mystyle p-3" severity="primary"
-      aria-haspopup="true" aria-controls="overlay_menu" outlined>
-      <template #icon>
-        <i class="pi pi-angle-down m-2"></i>
-        <div :class="label.color">
-          <i :class="label.mainIcon + ' ml-2'" ></i>
-          <i :class="label.secondaryIcon + ' mr-2'"></i>
-        </div>
-        </template> 
-    </Button>
-    <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
-  </div>
+  <template v-if="whoami == 'cr' && isTeacher">
+    <div class="card flex justify-content-center mystyle"
+      v-tooltip.top="{ value: label.tooltipText, showDelay: 400, hideDelay: 0 }">
+      <Button type="button" :label="label.code" @click="toggle" class="mystyle p-3" :severity="label.severity"
+        aria-haspopup="true" aria-controls="overlay_menu" outlined>
+        <template #icon>
+          <i class="pi pi-angle-down m-2"></i>
+          <div :class="label.color">
+            <i :class="label.mainIcon + ' ml-2'"></i>
+            <i :class="label.secondaryIcon + ' mr-2'"></i>
+          </div>
+        </template>
+      </Button>
+      <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
+    </div>
 
 
-  <Dialog v-model:visible="visible" header="Accès à l'activité" modal
-    :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }" :style="{ width: '75%' }">
-    <MyTableQrcode :code="code" :url="url" />
-  </Dialog>
+    <Dialog v-model:visible="visible" header="Accès à l'activité" modal
+      :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }" :style="{ width: '75%' }">
+      <MyTableQrcode :code="code" :url="url" />
+    </Dialog>
+  </template>
+  <template v-else-if="whoami == 'cr' && !isTeacher"/>
+  <template v-else>
+    <i :class="wfStatus.icon + ' ml-2'" :style="'color: ' + wfStatus.color" v-tooltip.top="{ value: wfStatus.label, showDelay: 400, hideDelay: 0 }"></i>
+    {{ whoami == 'as' ? 'Associé par ' : 'Apprenant de ' }}{{ boss }}
+  </template>
 </template>
 
 
@@ -129,9 +187,11 @@ const label = computed(() => {
 .red {
   color: red;
 }
+
 .green {
   color: #4ade80
 }
+
 .mystyle {
   flex-direction: row-reverse;
   font-family: monospace;
