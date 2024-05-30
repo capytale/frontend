@@ -19,8 +19,5 @@ const nbViews = function () {
       <Button severity="primary" size="large" v-tooltip.top="{ value: 'Voir les copies', showDelay: 400, hideDelay: 0 }" text>{{ nbViews() }} </Button>
     </a>
   </template>
-  <template v-else>
-    <Button severity="secondary" text disabled>Activité personnelle</Button>
-    </template> 
 </template>
 

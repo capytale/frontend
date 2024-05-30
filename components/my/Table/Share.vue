@@ -157,8 +157,8 @@ const wfStatus = computed(() => {
         <template #icon>
           <i class="pi pi-angle-down m-2"></i>
           <div :class="label.color">
-            <i :class="label.mainIcon + ' ml-2'"></i>
-            <i :class="label.secondaryIcon + ' mr-2'"></i>
+            <i :class="label.mainIcon + ' ml-2'" style="font-size: 1.2rem"></i>
+            <i :class="label.secondaryIcon + ' mr-2'" style="font-size: 1.2rem"></i>
           </div>
         </template>
       </Button>
@@ -171,9 +171,10 @@ const wfStatus = computed(() => {
       <MyTableQrcode :code="code" :url="url" />
     </Dialog>
   </template>
-  <template v-else-if="whoami == 'cr' && !isTeacher"/>
+  <template v-else-if="whoami == 'cr' && !isTeacher" />
   <template v-else>
-    <i :class="wfStatus.icon + ' ml-2'" :style="'color: ' + wfStatus.color" v-tooltip.top="{ value: wfStatus.label, showDelay: 400, hideDelay: 0 }"></i>
+    <i :class="wfStatus.icon + ' ml-2'" :style="'font-size: 1.3rem; color: ' + wfStatus.color"
+      v-tooltip.top="{ value: wfStatus.label, showDelay: 400, hideDelay: 0 }"></i>
     {{ whoami == 'as' ? 'Associé par ' : 'Apprenant de ' }}{{ boss }}
   </template>
 </template>

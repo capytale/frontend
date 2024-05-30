@@ -35,9 +35,10 @@ const getName = (id) => {
 
 <template>
   <span v-for="tid in tids" :key="nid + tid">
-    <Button v-if="getName(tid).label" v-tooltip.top="{ value: 'Supprimer', showDelay: 400, hideDelay: 0 }" removable @click="delTag(nid, tid)" class="removable p-0" text>
-      <i class="pi pi-tag pr-2 normal" :style="'color:' + getName(tid).color"></i>
-      <i class="pi pi-times-circle pr-2 exeptionnal red"></i>
+    <Button v-if="getName(tid).label" v-tooltip.top="{ value: 'Supprimer', showDelay: 400, hideDelay: 0 }" removable
+      @click="delTag(nid, tid)" class="removable pr-1 mr-1" text>
+      <i class="pi pi-tag pr-1 normal" :style="'color:' + getName(tid).color"></i>
+      <i class="pi pi-times-circle pr-1 exeptionnal red"></i>
       {{ getName(tid).label }}
     </Button>
   </span>
@@ -49,15 +50,18 @@ const getName = (id) => {
   /* visibility: hidden; */
   display: none;
 }
+
 .normal {
   /* visibility: visible; */
-  display: inline;:width: ;
+  display: inline;
+  : width:;
 }
 
 .removable:hover .exeptionnal {
   /* visibility: visible; */
   display: inline;
 }
+
 .removable:hover .normal {
   /* visibility: hidden; */
   display: none;

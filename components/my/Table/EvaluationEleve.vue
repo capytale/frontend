@@ -13,12 +13,14 @@ const toggle = (event) => {
 </script>
 
 <template>
-  <Button v-if="evalu.length + appre.length > 0" label="Évaluation" severity="secondary" icon="pi pi-search" text
-    @click="toggle" class="p-0 evaluation" v-tooltip.top="{ value: 'Voir l\'évaluation de '+boss, showDelay: 400, hideDelay: 0 }"/>
+  <Button v-if="evalu.length + appre.length > 0" :label="evalu" severity="secondary" text
+    @click="toggle" class="p-0 evaluation" v-tooltip.top="{ value: 'Voir l\'évaluation de '+boss, showDelay: 400, hideDelay: 0 }">
+    <template #icon>
+           <i class="pi pi-search ml-2" style="font-size: 1.2rem"></i>
+        </template>
+  </Button>    
   <template v-else>
-    <div v-tooltip.top="{ value: 'Pas encore évalué', showDelay: 400, hideDelay: 0 }">
-      <Button label="Évaluation" severity="secondary" text disabled class="p-0 evaluation"/>
-    </div>
+    <span v-tooltip.top="{ value: 'Pas encore évalué', showDelay: 400, hideDelay: 0 }">...</span>
   </template>
 
   <Dialog v-model:visible="visible" :header="'Évalué par ' + boss" modal
@@ -34,6 +36,9 @@ const toggle = (event) => {
 
 <style>
 .evaluation .p-button-label {
-  font-size: smaller;
+  /* font-size: smaller; */
+}
+.evaluation {
+  flex-direction: row-reverse;
 }
 </style>
