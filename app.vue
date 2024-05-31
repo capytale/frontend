@@ -18,11 +18,12 @@ useHead({
 
 
 <template>
+  <ConfirmDialog></ConfirmDialog>
+  <Toast position="bottom-right" />
 
   <div :class="'appContainer ' + currentThemeClass">
     <Header></Header>
     <div class="flex bggray">
-    
       <SideMenu></SideMenu>
       <div :class="sideMenu.visible ? 'container mx-auto' : 'container sidemenu-inactive'">
         <div>
@@ -30,8 +31,6 @@ useHead({
         </div>
       </div>
     </div>
-  <Toast position="bottom-right" />
-
   </div>
 </template>
 

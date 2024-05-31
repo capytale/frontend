@@ -94,7 +94,6 @@ const filters = ref({
 </script>
 
 <template>
-  <ConfirmDialog></ConfirmDialog>
   <Card class="flex-1">
 
     <template #content>
