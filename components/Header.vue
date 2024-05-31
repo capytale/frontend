@@ -30,7 +30,7 @@ const themeIcon = () => {
         <Button @click="theme.toggle" :icon="themeIcon()" class="mr-2" outlined/>
         <div v-if = "user">
           <span class="px-2">{{ user.firstname }} {{ user.lastname }}</span>
-        <span class="px-2"><i class="pi pi-sign-out"></i></span>
+        <a href="/web/user/logout"><span class="px-2"><i class="pi pi-sign-out"></i></span></a>
         </div>
         <div v-else>
         <span class="px-2">Connexion <i class="pi pi-sign-in"></i></span>
