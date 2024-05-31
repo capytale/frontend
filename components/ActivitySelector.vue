@@ -26,7 +26,7 @@ const fuse = ref(
 
 const seuil = computed(() => {
   if (catChoice.value == "all" && matChoice.value == "all") return 0;
-  else return 0.5;
+  else return 0.7;
 });
 
 const cats = useCats();
