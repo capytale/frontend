@@ -1,5 +1,6 @@
 <script setup>
 const props = defineProps({
+  nid: String,
   boss: String,
   whoami: String,
   evalu: String,
@@ -12,6 +13,6 @@ const props = defineProps({
 
 <template>
   <MyTableEvaluationEleve v-if="whoami == 'ap' " :boss="boss" :whoami="whoami" :evalu="evalu" :appre="appre" />
-  <MyTableEvaluationProf v-else :views_total="views_total" :isTeacher="isTeacher" />
+  <MyTableEvaluationProf v-else :nid="nid" :views_total="views_total" :isTeacher="isTeacher" />
 </template>
 

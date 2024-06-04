@@ -21,6 +21,24 @@ export function fetchMyActivities() {
   )
 }
 
+let assignmentsCache: { property: object }
+// renvoie {data, pending, error, status}
+export function fetchAssignments(nid: string) {
+  return useAsyncData('assignKey'+nid, async () => {
+    if (online) {
+      return assignmentsCache = await httpClient.getJsonAsync<any>("/web/c-hdls/api/assignments/" + nid)
+    } else {
+      return assignmentsCache = myJsonData
+    }
+  },
+    {
+      getCachedData() {
+        return assignmentsCache
+      }
+    }
+  )
+}
+
 
 let myTagsCache
 export function fetchTags() {

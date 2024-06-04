@@ -6,6 +6,7 @@ export const useMyStore = defineStore('my', {
   state: () => ({
     activities: [],
     tags: {},
+    assignments: [],
     flatTags: {},
     favorites: [],
     types: [],
@@ -13,10 +14,13 @@ export const useMyStore = defineStore('my', {
   actions: {
     async getActivities() {
       this.activities = await fetchMyActivities()
-      // TODO : pas besoin de renvoyer un objet : la liste csv des tids suffit. 
+      // TODO : pas besoin de renvoyer un objet pour les tags : la liste csv des tids suffit. 
     },
     async getTags() {
       this.tags = await fetchTags()
+    },
+    async getAssignments(nid: string) {
+      this.assignments = await fetchAssignments(nid)
     },
     async getFlatTags() {
       this.flatTags = await fetchFlatTags()

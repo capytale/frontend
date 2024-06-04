@@ -192,7 +192,7 @@ const filters = ref({
 
         <Column v-if="isTeacher" field="evaluation" header="Évaluation" style="max-width:10rem">
           <template #body="p">
-            <MyTableEvaluation :views_total="p.data.views_total" :boss="p.data.boss" :whoami="p.data.whoami"
+            <MyTableEvaluation :nid="p.data.nid" :views_total="p.data.views_total" :boss="p.data.boss" :whoami="p.data.whoami"
               :evalu="p.data.evaluation" :appre="p.data.appreciation" :isTeacher="isTeacher" />
           </template>
         </Column>
