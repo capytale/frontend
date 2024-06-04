@@ -24,6 +24,7 @@ const foldersToggle = (event) => { opFolders.value.toggle(event); }
 const selectedNid = ref();
 const showToolbar = ref(false);
 const oneCheckbox = ref(false);
+
 const onRowSelect = function () {
   showToolbar.value = true
   oneCheckbox.value = selectedNid.value.length == 1
@@ -59,10 +60,7 @@ const handleDelete = function () {
     acceptLabel: 'Supprimer',
     acceptClass: 'p-button-danger',
     accept: () => {
-      // for (const el of selectedNid.value) {
-      // my.deleteActivity(el.nid)
       my.deleteActivity(selectedNid.value)
-      // }
       const response = {}
       if (response.ok) {
         toast.add({ severity: 'success', summary: 'Suppression effectuée : ', life: 2000 });

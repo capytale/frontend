@@ -50,9 +50,20 @@ export const useMyStore = defineStore('my', {
       this.tags.data = unflatten(this.flatTags.data)
       // TODO : Faire en backend 
     },
+    changeSaWf(sa_nid: string | Array, newWorkflow: string) {
+      // TODO : Faire en backend 
+      if (Array.isArray(sa_nid)) {
+        for (let o of sa_nid) {
+          this.assignments.data.tab = this.assignments.data.tab.map(el => el.sa_nid == o.sa_nid ? { ...el, workflow: newWorkflow } : el);
+        }
+      } else {
+        this.assignments.data.tab = this.assignments.data.tab.map(el => el.sa_nid == sa_nid ? { ...el, workflow: newWorkflow } : el);
+      }
+    },
+
     async deleteActivity(nid: string | Array) {
-        // TODO : Faire en backend 
-        if (Array.isArray(nid)) {
+      // TODO : Faire en backend 
+      if (Array.isArray(nid)) {
         for (let o of nid) {
           this.activities.data = this.activities.data.filter((item) => item.nid !== o.nid);
         }
