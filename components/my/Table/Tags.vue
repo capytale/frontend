@@ -30,17 +30,27 @@ const getName = (id) => {
   return { label: obj ? obj.label : '', color: obj ? obj.color : '' }
 }
 
+const toDelete = ref(false)
 
+const toggleDelete = () => {
+  toDelete.value = !toDelete.value
+}
 </script>
 
 <template>
   <span v-for="tid in tids" :key="nid + tid">
-    <Button v-if="getName(tid).label" v-tooltip.top="{ value: 'Supprimer', showDelay: 400, hideDelay: 0 }" removable
-      @click="delTag(nid, tid)" class="removable pr-1 mr-1" text>
-      <i class="pi pi-tag pr-1 normal" :style="'color:' + getName(tid).color"></i>
-      <i class="pi pi-times-circle pr-1 exeptionnal red"></i>
-      {{ getName(tid).label }}
+    <Button v-if="getName(tid).label" removable class="removable pr-2 mr-1" text @click="toggleDelete">
+      <template v-if="!toDelete">
+        <i class="pi pi-tag px-2 normal" :style="'color:' + getName(tid).color"></i>
+        <i class="pi pi-trash px-2 exeptionnal red" @click="delTag(nid, tid)"
+          v-tooltip.top="{ value: 'Supprimer', showDelay: 400, hideDelay: 0 }"></i>{{ getName(tid).label }}
+      </template>
+      <template v-else>
+        <i class="pi pi-trash px-2" :style="'color:' + getName(tid).color" @click="delTag(nid, tid)"
+          v-tooltip.top="{ value: 'Supprimer', showDelay: 400, hideDelay: 0 }"></i>{{ getName(tid).label }}
+      </template>
     </Button>
+
   </span>
 </template>
 
@@ -49,12 +59,12 @@ const getName = (id) => {
 .exeptionnal {
   /* visibility: hidden; */
   display: none;
+  cursor: pointer;
 }
 
 .normal {
   /* visibility: visible; */
   display: inline;
-  : width:;
 }
 
 .removable:hover .exeptionnal {
@@ -65,7 +75,13 @@ const getName = (id) => {
 .removable:hover .normal {
   /* visibility: hidden; */
   display: none;
+}
 
+.removable {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 3px;
+  display: inline-block;
 }
 
 .red {
