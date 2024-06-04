@@ -14,7 +14,7 @@ const toggle = (event) => {
 
 <template>
   <Button v-if="evalu.length + appre.length > 0" :label="evalu" severity="secondary" text
-    @click="toggle" class="p-0 evaluation" v-tooltip.top="{ value: 'Voir l\'évaluation de '+boss, showDelay: 400, hideDelay: 0 }">
+    @click="toggle" class="p-0 evaluation" v-tooltip.top="{ value: 'Voir l\'évaluation de '+boss, showDelay: 300, hideDelay: 0 }">
     <template #icon>
            <i class="pi pi-search ml-2" style="font-size: 1.2rem"></i>
         </template>

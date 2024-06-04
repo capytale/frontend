@@ -2,7 +2,6 @@
   <Card class="flex-1">
     <template #title>
       <h2 style="margin:0px">Créer une nouvelle activité
-        <a href="/activites"><i class="p-2 pi pi-plus-circle text-blue-500 text-3xl font-bold"></i></a>
       </h2>
     </template>
     <template #content>
