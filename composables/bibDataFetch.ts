@@ -6,7 +6,7 @@ let bibIndexingElementsCache
 export function fetchBibIndexingElements() {
   return useAsyncData('idxKey', async () => {
     if (online) {
-      bibIndexingElementsCache = await httpClient.getJsonAsync<any>("/web/c-ui/api/my-bib-form-indexing-elements")
+      bibIndexingElementsCache = await httpClient.getJsonAsync<any>("/web/c-hdls/api/my-bib-form-indexing-elements")
       bibIndexingElementsCache.themes = unflatten(bibIndexingElementsCache.themes)
       return bibIndexingElementsCache
     } else {

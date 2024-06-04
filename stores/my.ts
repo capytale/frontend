@@ -1,6 +1,6 @@
 import httpClient from '@capytale/activity.js/backend/capytale/http'
 
-const myActivitiesApiEp = "/web/c-ui/api/my-activities"
+const myActivitiesApiEp = "/web/c-hdls/api/my-activities"
 
 export const useMyStore = defineStore('my', {
   state: () => ({
