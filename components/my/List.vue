@@ -11,8 +11,11 @@ const isTeacher = user.value.roles.includes('teacher')
 
 import { useMyStore } from '@/stores/my'
 const my = useMyStore()
+
 my.getActivities()
 
+my.types = await useActivities();
+console.log(my.types);
 
 const selectedTags = ref(null)
 const selectedFolder = ref(null)
@@ -84,11 +87,24 @@ const handleAddTagMultiple = function () {
   my.tagActivities(selectedNid.value, tags)
 }
 
+const selectedType = ref();
+const types = ref([
+    { name: 'Codabloc', code: 'codabloc' },
+    { name: 'Console', code: 'console' },
+]);
+
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  title: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-  // changed: { value: null, matchMode: FilterMatchMode.IN },
+  title: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  type: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
+
+
+// affiche l'icône du type
+const typeIcon = (id) => {
+  const obj = my.types.find(o => o.id === id)
+  return obj ? obj.icon.path : ''
+}
 </script>
 
 <template>
@@ -106,7 +122,7 @@ const filters = ref({
         :value="my.activities.data" dataKey="nid" sortField="changed" tableStyle="min-width: 50rem" :sortOrder="-1"
         paginator :rows="20" :rowsPerPageOptions="[10, 20, 50, 100]" @rowSelect="onRowSelect()"
         @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()" @rowSelectAll="onRowSelectAll()"
-        :globalFilterFields="['title', 'changed']" class="my-card">
+        :globalFilterFields="['title', 'type']" class="my-card">
 
         <template #header>
           <Toolbar>
@@ -156,11 +172,30 @@ const filters = ref({
 
             <template #end>
               <div class="flex justify-content-end">
+                <Dropdown v-model="filters['type'].value" :options="my.types" filter optionLabel="name" optionValue="id"
+                  placeholder="Filter par type" class="w-full md:w-14rem" showClear>
+                  <template #value="slotProps">
+                    <div v-if="slotProps.value" class="flex align-items-center">
+                      <img :src="typeIcon(slotProps.value)" class="w-8 mr-3" />
+                    </div>
+                    <span v-else>
+                      {{ slotProps.placeholder }}
+                    </span>
+                  </template>
+                  <template #option="slotProps">
+                    <div class="flex align-items-center">
+                      <img :src="slotProps.option.icon.path" class="w-8 mr-3" />  
+                      <div>{{ slotProps.option.name }}</div>
+                    </div>
+                  </template>
+                </Dropdown>
+
+
                 <IconField iconPosition="left">
                   <InputIcon>
                     <i class="pi pi-search" />
                   </InputIcon>
-                  <InputText v-model="filters['global'].value" placeholder="Rechercher" />
+                  <InputText v-model="filters['title'].value" placeholder="Rechercher dans le titre" />
                 </IconField>
               </div>
             </template>
@@ -190,8 +225,8 @@ const filters = ref({
 
         <Column v-if="isTeacher" field="evaluation" header="Évaluation" style="max-width:10rem">
           <template #body="p">
-            <MyTableEvaluation :nid="p.data.nid" :views_total="p.data.views_total" :boss="p.data.boss" :whoami="p.data.whoami"
-              :evalu="p.data.evaluation" :appre="p.data.appreciation" :isTeacher="isTeacher" />
+            <MyTableEvaluation :nid="p.data.nid" :views_total="p.data.views_total" :boss="p.data.boss"
+              :whoami="p.data.whoami" :evalu="p.data.evaluation" :appre="p.data.appreciation" :isTeacher="isTeacher" />
           </template>
         </Column>
         <Column v-else field="evaluation" header="Évaluation" style="max-width:20rem">
