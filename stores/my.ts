@@ -10,8 +10,12 @@ export const useMyStore = defineStore('my', {
     flatTags: {},
     favorites: [],
     types: [],
+    bib: [],
   }),
   actions: {
+    async getBib() {
+      this.bib = await fetchBibData()
+    },
     async getActivities() {
       this.activities = await fetchMyActivities()
       // TODO : pas besoin de renvoyer un objet pour les tags : la liste csv des tids suffit. 
