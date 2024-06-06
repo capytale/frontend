@@ -1,13 +1,19 @@
 import { defineStore } from 'pinia'
 import { usePrimeVue } from 'primevue/config';
 
-// const primevue = usePrimeVue();
-
 export const useSideMenuStore = defineStore('sideMenu', {
   state: () => ({ visible: true }),
   actions: {
     toggle() {
       this.visible = !this.visible;
+    },
+  },
+})
+export const useActiveTagStore = defineStore('activeTag', {
+  state: () => ({ tid: null }),
+  actions: {
+    activate(tid) {
+      this.tid = tid;
     },
   },
 })

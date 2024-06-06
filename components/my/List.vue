@@ -87,24 +87,38 @@ const handleAddTagMultiple = function () {
   my.tagActivities(selectedNid.value, tags)
 }
 
-const selectedType = ref();
-const types = ref([
-    { name: 'Codabloc', code: 'codabloc' },
-    { name: 'Console', code: 'console' },
-]);
-
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   title: { value: null, matchMode: FilterMatchMode.CONTAINS },
   type: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
 
-
 // affiche l'icône du type
 const typeIcon = (id) => {
   const obj = my.types.find(o => o.id === id)
   return obj ? obj.icon.path : ''
 }
+
+const activeTag = useActiveTagStore()
+
+const getTagName = (tid) => {
+  const tag = my.flatTags.data.find(o => o.id === tid)
+  return tag ? tag.label : ''
+}
+
+const myactivities = computed(() => {
+  if (activeTag.tid) {
+    // console.log("------FILTRE: ", activeTag.tid)
+    return my.activities.data.filter(o => {
+      if (!o.tags.tids) return false
+      // console.log("o: ", o.code, o.tags.tids.split(','), activeTag.tid, o.tags.tids.split(',').includes(activeTag.tid) ? 'true' : 'false')
+      return o.tags.tids.split(',').includes(activeTag.tid)
+    })
+  }
+  return my.activities.data
+})
+
+
 </script>
 
 <template>
@@ -119,10 +133,10 @@ const typeIcon = (id) => {
         <p>Impossible de charger les activités.</p>
       </div>
       <DataTable v-else v-model:filters="filters" v-model:selection="selectedNid" selectionMode="multiple"
-        :value="my.activities.data" dataKey="nid" sortField="changed" tableStyle="min-width: 50rem" :sortOrder="-1"
-        paginator :rows="20" :rowsPerPageOptions="[10, 20, 50, 100]" @rowSelect="onRowSelect()"
-        @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()" @rowSelectAll="onRowSelectAll()"
-        :globalFilterFields="['title', 'type']" class="my-card">
+        :value="myactivities" dataKey="nid" sortField="changed" tableStyle="min-width: 50rem" :sortOrder="-1" paginator
+        :rows="20" :rowsPerPageOptions="[10, 20, 50, 100]" @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()"
+        @rowUnselectAll="onRowUnselectAll()" @rowSelectAll="onRowSelectAll()" :globalFilterFields="['title', 'type']"
+        class="my-card">
 
         <template #header>
           <Toolbar>
@@ -171,6 +185,15 @@ const typeIcon = (id) => {
             </template>
 
             <template #end>
+              <template v-if="activeTag.tid">
+                Filtre par étiquette : 
+                <Button removable class="removable pr-2 mr-1" text @click="activeTag.activate(null)"
+                  v-tooltip.top="{ value: 'Supprimer', showDelay: 400, hideDelay: 0 }">
+                  {{ getTagName(activeTag.tid) }}
+                  <i class="pi pi-times px-2" style="color:red"></i>
+                </Button>
+              </template>
+
               <div class="flex justify-content-end">
                 <Dropdown v-model="filters['type'].value" :options="my.types" filter optionLabel="name" optionValue="id"
                   placeholder="Filter par type" class="w-full md:w-14rem" showClear>
@@ -184,7 +207,7 @@ const typeIcon = (id) => {
                   </template>
                   <template #option="slotProps">
                     <div class="flex align-items-center">
-                      <img :src="slotProps.option.icon.path" class="w-8 mr-3" />  
+                      <img :src="slotProps.option.icon.path" class="w-8 mr-3" />
                       <div>{{ slotProps.option.name }}</div>
                     </div>
                   </template>
