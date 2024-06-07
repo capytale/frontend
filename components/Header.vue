@@ -22,7 +22,7 @@ const themeIcon = () => {
       </span>
       <div class="capytaleMenu">
         <NuxtLink v-if="user" to="/my"><span class="px-2">Mes activités</span></NuxtLink>
-        <span v-if="user"class="px-2">La bibliothèque</span>
+        <NuxtLink v-if="user" to="/bibliotheque"><span class="px-2">La bibliothèque</span></NuxtLink>
       </div>
       <div class="activityInfo">
       </div>

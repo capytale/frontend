@@ -2,16 +2,15 @@ import httpClient from '@capytale/activity.js/backend/capytale/http'
 import { online } from '@/constants'
 // import { myBibFormIndexingElements } from '@/mockup_data/my-bib-form-indexing-elements'
 
-let bibDataCache
+let bibDataCache: { property: object }
+// renvoie {data, pending, error, status}
 export function fetchBibData() {
   return useAsyncData('bibData', async () => {
     if (online) {
-      bibDataCache = await httpClient.getJsonAsync<any>("web//c-hdls/api/bib")
-      bibDataCache.themes = unflatten(bibDataCache.themes)
-      return bibDataCache
+      return bibDataCache = await httpClient.getJsonAsync<any>("/web/c-hdls/api/bib")
     } else {
-      myBibFormIndexingElements.themes = unflatten(myBibFormIndexingElements.themes)
-      return myBibFormIndexingElements
+      // myBibFormIndexingElements.themes = unflatten(myBibFormIndexingElements.themes)
+      return null
     }
   },
     {
@@ -21,4 +20,3 @@ export function fetchBibData() {
     }
   )
 }
-
