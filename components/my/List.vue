@@ -93,7 +93,7 @@ const filters = ref({
   type: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
 
-// affiche l'icône du type
+// affiche l'icône du type TODO : Déplacer dans utils
 const typeIcon = (id) => {
   const obj = my.types.find(o => o.id === id)
   return obj ? obj.icon.path : ''
