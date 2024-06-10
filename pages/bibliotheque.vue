@@ -2,6 +2,7 @@
 import { useMyStore } from '@/stores/my'
 import { FilterMatchMode } from 'primevue/api';
 import { useRoute } from 'vue-router';
+import Tag from 'primevue/tag';
 
 const my = useMyStore()
 
@@ -25,6 +26,17 @@ const typeIcon = (id) => {
   return obj ? obj.icon.path : ''
 }
 
+const sevLevel = ((lvl) => {
+  if (lvl < 10) return "primary"
+  if (lvl < 100) return "warning"
+  if (lvl >= 100) return "danger"
+})
+
+const decodeHtml = ((html) => {
+  var txt = document.createElement("textarea");
+  txt.innerHTML = html;
+  return txt.value;
+})
 
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -45,7 +57,7 @@ const filters = ref({
   <template v-else>
     <h1>Bibliothèque</h1>
 
-    <DataTable :value="my.bib.data" paginator :rows="20" v-model:filters="filters"
+    <DataTable :value="my.bib.data" paginator :rows="20" v-model:filters="filters" sortField="changed" :sortOrder="-1"
       :globalFilterFields="['title', 'abstract']" :rowsPerPageOptions="[10, 20, 50]" tableStyle="min-width: 50rem">
 
 
@@ -79,7 +91,7 @@ const filters = ref({
                   <i class="pi pi-search" />
                 </InputIcon>
                 <InputText v-model="filters['title', 'abstract', 'auteur'].value"
-                  placeholder="Rechercher dans le titre" />
+                  placeholder="Rechercher" v-tooltip.top="{ value: 'Recherche dans titre, description et auteur', showDelay: 300, hideDelay: 0 }"/>
               </IconField>
             </div>
           </template>
@@ -103,18 +115,28 @@ const filters = ref({
         </template>
       </Column>
 
-      <Column field="abstract" header="Description"></Column>
+      <Column field="abstract" header="Description">
+        <template #body="p">
+          {{ decodeHtml(p.data.abstract) }}
+        </template>
 
-      <!--       
+      </Column>
+
+
       <Column field="changed" header="Dernière modif." style="max-width:10rem" sortable>
         <template #body="p">
           <MyTableChanged :changed="p.data.changed" />
         </template>
-      </Column> -->
+      </Column>
 
-      <Column field="nb_clone" header="nb clone">
+      <Column field="nb_clone" header="nb clone" sortable>
         <template #body="p">
-          {{ p.data.nb_clone }}
+          <div v-if="p.data.nb_clone">
+            <Tag :value="p.data.nb_clone" :severity="sevLevel(p.data.nb_clone)"/>
+          </div>
+          <div v-else>
+            <Tag value="0" severity="secondary"/>
+          </div>
         </template>
       </Column>
 
