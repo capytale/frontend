@@ -15,7 +15,6 @@ export const useMyStore = defineStore('my', {
   actions: {
     async getBib() {
       this.bib = await fetchBibData()
-      console.log("thisbib", this.bib)
     },
     async getActivities() {
       this.activities = await fetchMyActivities()
