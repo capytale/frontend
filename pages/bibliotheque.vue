@@ -1,6 +1,7 @@
 <script setup>
 import { useMyStore } from '@/stores/my'
 import { useBibStore } from '@/stores/bib'
+import { useCommentsStore } from '@/stores/comments'
 import { FilterMatchMode } from 'primevue/api';
 import { useRoute } from 'vue-router';
 import Tag from 'primevue/tag';
@@ -8,6 +9,7 @@ import Tag from 'primevue/tag';
 
 const my = useMyStore()
 const bib = useBibStore()
+const comments = useCommentsStore()
 
 const products = ref(new Array(20));
 
@@ -17,6 +19,7 @@ console.log("location", route.query)
 
 
 bib.getBib()
+comments.getComments()
 my.types = await useActivities()
 
 const getType = ((id) => {
@@ -64,49 +67,50 @@ const filters = ref({
         <template v-if="bib.bib.data == null">
             <div class="card">
                 <DataTable :value="products" paginator :rows="20" v-model:filters="filters" sortField="changed"
-                :sortOrder="-1" :globalFilterFields="['title', 'abstract', 'auteur']" :rowsPerPageOptions="[10, 20, 50]"
-                tableStyle="min-width: 50rem">
+                    :sortOrder="-1" :globalFilterFields="['title', 'abstract', 'auteur']"
+                    :rowsPerPageOptions="[10, 20, 50]" tableStyle="min-width: 50rem">
 
-                <template #header>
-                    <Toolbar>
-                        <template #end>
+                    <template #header>
+                        <Toolbar>
+                            <template #end>
 
-                            <div class="flex justify-content-end">
-                                <Dropdown v-model="filters['type'].value" :options="my.types" filter optionLabel="name"
-                                    optionValue="id" placeholder="Filter par type" class="w-full md:w-14rem" showClear>
-                                    <template #value="slotProps">
-                                        <div v-if="slotProps.value" class="flex align-items-center">
-                                            <img :src="getType(slotProps.value).icon.path" class="w-8 mr-3" />
-                                        </div>
-                                        <span v-else>
-                                            {{ slotProps.placeholder }}
-                                        </span>
-                                    </template>
-                                    <template #option="slotProps">
-                                        <div class="flex align-items-center">
-                                            <img :src="slotProps.option.icon.path" class="w-8 mr-3" />
-                                            <div>{{ slotProps.option.name }}</div>
-                                        </div>
-                                    </template>
-                                </Dropdown>
+                                <div class="flex justify-content-end">
+                                    <Dropdown v-model="filters['type'].value" :options="my.types" filter
+                                        optionLabel="name" optionValue="id" placeholder="Filter par type"
+                                        class="w-full md:w-14rem" showClear>
+                                        <template #value="slotProps">
+                                            <div v-if="slotProps.value" class="flex align-items-center">
+                                                <img :src="getType(slotProps.value).icon.path" class="w-8 mr-3" />
+                                            </div>
+                                            <span v-else>
+                                                {{ slotProps.placeholder }}
+                                            </span>
+                                        </template>
+                                        <template #option="slotProps">
+                                            <div class="flex align-items-center">
+                                                <img :src="slotProps.option.icon.path" class="w-8 mr-3" />
+                                                <div>{{ slotProps.option.name }}</div>
+                                            </div>
+                                        </template>
+                                    </Dropdown>
 
 
-                                <IconField iconPosition="left">
-                                    <InputIcon>
-                                        <i class="pi pi-search" />
-                                    </InputIcon>
-                                    <InputText v-model="filters['global'].value" placeholder="Rechercher"
-                                        v-tooltip.top="{ value: 'Recherche dans titre, description et auteur', showDelay: 300, hideDelay: 0 }" />
-                                </IconField>
-                            </div>
-                        </template>
+                                    <IconField iconPosition="left">
+                                        <InputIcon>
+                                            <i class="pi pi-search" />
+                                        </InputIcon>
+                                        <InputText v-model="filters['global'].value" placeholder="Rechercher"
+                                            v-tooltip.top="{ value: 'Recherche dans titre, description et auteur', showDelay: 300, hideDelay: 0 }" />
+                                    </IconField>
+                                </div>
+                            </template>
 
-                    </Toolbar>
-                </template>
-                <Column field="icon" header="" style="width:5rem">
-                    <template #body>
-                        <Skeleton width="3rem" height="3rem"></Skeleton>
+                        </Toolbar>
                     </template>
+                    <Column field="icon" header="" style="width:5rem">
+                        <template #body>
+                            <Skeleton width="3rem" height="3rem"></Skeleton>
+                        </template>
                     </Column>
                     <Column field="title" header="Titre">
                         <template #body>
