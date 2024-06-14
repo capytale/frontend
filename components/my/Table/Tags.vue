@@ -2,7 +2,9 @@
 import { useToast } from "primevue/usetoast";
 
 import { useMyStore } from '@/stores/my'
+import { useTagsStore } from '@/stores/tags'
 const my = useMyStore()
+const tags = useTagsStore()
 
 const props = defineProps({
   nid: String,
@@ -26,7 +28,7 @@ const tids = computed(() => {
 })
 
 const getName = (id) => {
-  let obj = my.flatTags.data.find(o => o.id === id);
+  let obj = tags.flatTags.data.find(o => o.id === id);
   return { label: obj ? obj.label : '', color: obj ? obj.color : '' }
 }
 

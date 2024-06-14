@@ -1,11 +1,13 @@
 <script setup>
 import { useMyStore } from '@/stores/my'
+import { useBibStore } from '@/stores/bib'
 import { FilterMatchMode } from 'primevue/api';
 import { useRoute } from 'vue-router';
 import Tag from 'primevue/tag';
 // import Dialog from 'primevue/dialog';
 
 const my = useMyStore()
+const bib = useBibStore()
 
 
 const route = useRoute()
@@ -13,7 +15,7 @@ console.log("location", route.query)
 // TODO: faire en sorte que les recherces avancées génèrent une url copiable.
 
 
-my.getBib()
+bib.getBib()
 my.types = await useActivities()
 
 const getType = ((id) => {
@@ -49,16 +51,16 @@ const filters = ref({
 </script>
 
 <template>
-    <div v-if="my.bib.pending">
+    <div v-if="bib.bib == null">
         <p>Chargement des actvités...</p>
     </div>
-    <div v-else-if="my.bib.status == 'error'">
-        <p>Impossible de charger les activités.</p>
+    <div v-else-if="bib.bib.status == 'error'">
+        <p>Impossible de charger les activités.</p> {{ bib.bib.status }}
     </div>
     <template v-else>
         <h1>Bibliothèque</h1>
 
-        <DataTable :value="my.bib.data" paginator :rows="20" v-model:filters="filters" sortField="changed"
+        <DataTable :value="bib.bib.data" paginator :rows="20" v-model:filters="filters" sortField="changed"
             :sortOrder="-1" :globalFilterFields="['title', 'abstract', 'auteur']" :rowsPerPageOptions="[10, 20, 50]"
             tableStyle="min-width: 50rem">
 

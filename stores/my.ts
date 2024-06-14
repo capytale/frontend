@@ -4,17 +4,13 @@ const myActivitiesApiEp = "/web/c-hdls/api/my-activities"
 
 export const useMyStore = defineStore('my', {
   state: () => ({
-    //activities: [],
-    // tags: {},
     assignments: [],
-    // flatTags: {},
     favorites: [],
     types: [],
-    bib: [],
   }),
   actions: {
-    async getBib() {
-      this.bib = await fetchBibData()
+    async getAssignments(nid: string) {
+      this.assignments = await fetchAssignments(nid)
     },
     async getActivities() {
       this.activities = await fetchMyActivities()
