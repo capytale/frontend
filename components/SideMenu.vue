@@ -6,8 +6,9 @@ const code = useCodeStore()
 
 import { useMyStore } from '@/stores/my'
 const my = useMyStore()
-my.getTags()
-my.getFlatTags()
+const tags = useTagsStore()
+tags.getTags()
+tags.getFlatTags()
 
 const selectedKey = ref(null);
 
@@ -65,14 +66,14 @@ const onNodeUnselect = (node) => {
                 +
               </div>            
             </div>
-  <div v-if="my.tags.pending">loading......</div>
-          <Tree v-else id="folders" v-model:selectionKeys="selectedKey" selectionMode="single" :value="my.tags.data" class="w-full md:w-30rem" @nodeSelect="onNodeSelect" @nodeUnselect="onNodeUnselect">
+  <div v-if="tags.tags.pending">loading......</div>
+          <Tree v-else id="folders" v-model:selectionKeys="selectedKey" selectionMode="single" :value="tags.tags.data" class="w-full md:w-30rem" @nodeSelect="onNodeSelect" @nodeUnselect="onNodeUnselect">
             <template #default="slotProps">
               <div class="primary-nav">
                 <div class="left">
                   <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
                 </div>
-                <MyTagEdit :slotProps="slotProps" :tags="my.tags.data" />
+                <MyTagEdit :slotProps="slotProps" :tags="tags.tags.data" />
               </div>
             </template>
           </Tree>

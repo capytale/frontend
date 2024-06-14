@@ -1,8 +1,8 @@
 <script setup>
 import Dialog from 'primevue/dialog';
 import ColorPicker from 'primevue/colorpicker';
-import { useMyStore } from '@/stores/my'
 const my = useMyStore()
+const tags = useTagsStore()
 
 const props = defineProps({
   slotProps: Object,
@@ -62,7 +62,7 @@ const items = ref([
         icon: 'pi pi-trash',
         command: async () => {
           try {
-            await my.deleteTag(props.slotProps.node.id)
+            await tags.deleteTag(props.slotProps.node.id)
             toast.add({ severity: 'success', summary: 'Étiquette supprimée', life: 2000 });
           }
           catch (e) {
@@ -82,19 +82,19 @@ const toggle = (event) => {
 
 const save = () => {
   if (newTag.value) {
-    my.addTag(label.value, Object.keys(selectedTag.value)[0] || 0)
+    tags.addTag(label.value, Object.keys(selectedTag.value)[0] || 0)
   } else {
-    my.setTagLabel(props.slotProps.node.id, label.value)
+    tags.setTagLabel(props.slotProps.node.id, label.value)
     if (wantSubTag.value.length > 0 && Object.keys(selectedTag.value).length == 1){
-      my.setTagParent(props.slotProps.node.id, Object.keys(selectedTag.value)[0])
+      tags.setTagParent(props.slotProps.node.id, Object.keys(selectedTag.value)[0])
     } else {
-      my.setTagParent(props.slotProps.node.id, 0)
+      tags.setTagParent(props.slotProps.node.id, 0)
     }
   }
   editVisible.value = false;
 }
 const saveColor = () => {
-  my.setTagColor(props.slotProps.node.id, "#" + color.value)
+  tags.setTagColor(props.slotProps.node.id, "#" + color.value)
   colorVisible.value = false;
 }
 
@@ -102,11 +102,11 @@ const isSuccessor = (id, notMe) => {
   if (id == notMe) {
     return true
   }
-  const current = my.flatTags.data.find(t => t.id == id)
+  const current = tags.flatTags.data.find(t => t.id == id)
   if (current.parentid == 0 ) {
     return current.id == notMe
   }
-  const parent = my.flatTags.data.find(t => t.id == current.parentid)
+  const parent = tags.flatTags.data.find(t => t.id == current.parentid)
   return isSuccessor(parent.id, notMe)
 }
 

@@ -11,8 +11,10 @@ const isTeacher = user.value.roles.includes('teacher')
 
 import { useMyStore } from '@/stores/my'
 const my = useMyStore()
+const activites = useActivitiesStore()
+const tags = useTagsStore()
 
-my.getActivities()
+activites.getActivities()
 
 my.types = await useActivities();
 console.log(my.types);
@@ -79,12 +81,12 @@ const handleDelete = function () {
 const handleMoveToFolderMultiple = function () {
   const folder = Object.keys(selectedFolder.value)[0]
   console.log("folder: ", folder)
-  my.moveActivities(selectedNid.value, folder)
+  activites.moveActivities(selectedNid.value, folder)
 }
 const handleAddTagMultiple = function () {
   const tags = Object.keys(selectedTags.value)
   console.log("tags: ", tags)
-  my.tagActivities(selectedNid.value, tags)
+  activites.tagActivities(selectedNid.value, tags)
 }
 
 const filters = ref({
@@ -102,20 +104,20 @@ const typeIcon = (id) => {
 const activeTag = useActiveTagStore()
 
 const getTagName = (tid) => {
-  const tag = my.flatTags.data.find(o => o.id === tid)
+  const tag = tags.flatTags.data.find(o => o.id === tid)
   return tag ? tag.label : ''
 }
 
 const myactivities = computed(() => {
   if (activeTag.tid) {
     // console.log("------FILTRE: ", activeTag.tid)
-    return my.activities.data.filter(o => {
+    return activites.activities.data.filter(o => {
       if (!o.tags.tids) return false
       // console.log("o: ", o.code, o.tags.tids.split(','), activeTag.tid, o.tags.tids.split(',').includes(activeTag.tid) ? 'true' : 'false')
       return o.tags.tids.split(',').includes(activeTag.tid)
     })
   }
-  return my.activities.data
+  return activites.activities.data
 })
 
 
@@ -126,10 +128,10 @@ const myactivities = computed(() => {
 
     <template #content>
 
-      <div v-if="my.activities.pending">
+      <div v-if="activites.activities.pending">
         <p>Chargement des actvités...</p>
       </div>
-      <div v-else-if="my.activities.status == 'error'">
+      <div v-else-if="activites.activities.status == 'error'">
         <p>Impossible de charger les activités.</p>
       </div>
       <DataTable v-else v-model:filters="filters" v-model:selection="selectedNid" selectionMode="multiple"
@@ -153,7 +155,7 @@ const myactivities = computed(() => {
                   @click="tagsToggle" />
                 <OverlayPanel ref="opTags">
                   <div class="gap-3 w-25rem">
-                    <Tree id="tags" v-model:selectionKeys="selectedTags" :value="my.tags.data" selectionMode="multiple"
+                    <Tree id="tags" v-model:selectionKeys="selectedTags" :value="tags.tags.data" selectionMode="multiple"
                       class="w-full md:w-30rem scroll">
                       <template #default="slotProps">
                         <i class="pi pi-tag" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
@@ -169,7 +171,7 @@ const myactivities = computed(() => {
                   @click="foldersToggle" />
                 <OverlayPanel ref="opFolders">
                   <div class="gap-3 w-25rem">
-                    <Tree id="folder" v-model:selectionKeys="selectedFolder" :value="my.tags.data"
+                    <Tree id="folder" v-model:selectionKeys="selectedFolder" :value="tags.tags.data"
                       selectionMode="single" class="w-full md:w-30rem scroll">
                       <template #default="slotProps">
                         <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
