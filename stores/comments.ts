@@ -5,8 +5,8 @@ export const useCommentsStore = defineStore('comments', {
     comments: []
   }),
   actions: {
-    async getComments() {
-      this.comments = await httpClient.getJsonAsync<any>("/web/c-hdls/api/comments/36192")
+    async getComments(nid) {
+      this.comments = await httpClient.getJsonAsync<any>("/web/c-hdls/api/comments/" + nid)
     },
   },
 })
