@@ -36,44 +36,17 @@ const onNodeUnselect = (node) => {
             </a>
           </li>
           <li>
-            <a href="#" class="flex items-center p-2 space-x-3 rounded-md">
-              <i class="pi pi-play"></i>
-              <span @click="code.toggle">Jouer une activité</span>
-      e       </a>
-            <div v-if="code.visible" class="relative mt-2 rounded-md shadow-sm">
-              <input type="text" name="code" id="code"
-                class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                placeholder="a12b-345678">
-            </div>
+            <span class="flex items-center p-2 space-x-3 rounded-md">
+              <i class="pi pi-tags"></i>
+              <span class="">Étiquettes</span><i class="pi pi-plus"></i>
+            </span>
           </li>
-          <li>
-            <a href="#" class="flex items-center p-2 space-x-3 rounded-md">
-              <i class="pi pi-plus"></i>
-              <span class="">Créer une activité</span>
-            </a>
-          </li>
-          <li>
-            <a href="/ActiList" class="flex items-center p-2 space-x-3 rounded-md">
-              <i class="pi pi-folder-open"></i>
-              <span class="">Mes activités</span>
-            </a>
-          </li>
-          <div class="p-tree p-component w-full md:w-30rem">
-            <div class="primary-nav">
-                <div class="left">
-                  Mes Étiquettes 
-                </div>
-                +
-              </div>            
-            </div>
   <div v-if="tags.tags.pending">loading......</div>
           <Tree v-else id="folders" v-model:selectionKeys="selectedKey" selectionMode="single" :value="tags.tags.data" class="w-full md:w-30rem" @nodeSelect="onNodeSelect" @nodeUnselect="onNodeUnselect">
             <template #default="slotProps">
-              <div class="primary-nav">
-                <div class="left">
-                  <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
-                </div>
-                <MyTagEdit :slotProps="slotProps" :tags="tags.tags.data" />
+              <div class="primary-nav left centerize" >
+
+                <MyTagEdit :slotProps="slotProps" :tags="tags.tags.data" class="surprise"/>
               </div>
             </template>
           </Tree>
@@ -86,6 +59,7 @@ const onNodeUnselect = (node) => {
 </template>    
 
 <style scoped>
+
 .sidemenu {
   position: fixed;
   width: 300px;
@@ -110,7 +84,7 @@ const onNodeUnselect = (node) => {
   display: flex;
   list-style-type: none;
   padding: 0;
-  justify-content: flex-end;
+  /* justify-content: flex-end; */
   width: 150px;
 }
 
@@ -124,5 +98,8 @@ const onNodeUnselect = (node) => {
 
 .right {
   visibility: hidden;
+}
+.centerize {
+  align-items: center;
 }
 </style>

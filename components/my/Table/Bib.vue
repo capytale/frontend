@@ -40,9 +40,6 @@ const shareClass = props.shared == "0" ? " unshared " : " shared "
   color: var(--surface-400);
 }
 
-.p-tree-selectable {
-  background: var(--gray-100);
-}
 
 .p-dialog-content {
   background: var(--gray-100);

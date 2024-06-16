@@ -85,7 +85,7 @@ const save = () => {
     tags.addTag(label.value, Object.keys(selectedTag.value)[0] || 0)
   } else {
     tags.setTagLabel(props.slotProps.node.id, label.value)
-    if (wantSubTag.value.length > 0 && Object.keys(selectedTag.value).length == 1){
+    if (wantSubTag.value.length > 0 && Object.keys(selectedTag.value).length == 1) {
       tags.setTagParent(props.slotProps.node.id, Object.keys(selectedTag.value)[0])
     } else {
       tags.setTagParent(props.slotProps.node.id, 0)
@@ -103,7 +103,7 @@ const isSuccessor = (id, notMe) => {
     return true
   }
   const current = tags.flatTags.data.find(t => t.id == id)
-  if (current.parentid == 0 ) {
+  if (current.parentid == 0) {
     return current.id == notMe
   }
   const parent = tags.flatTags.data.find(t => t.id == current.parentid)
@@ -111,7 +111,7 @@ const isSuccessor = (id, notMe) => {
 }
 
 
-const onNodeSelect =  (event) => {
+const onNodeSelect = (event) => {
   wantSubTag.value = ['subTag']
   console.log("authSave.value: ", authSave.value)
 
@@ -123,12 +123,12 @@ const onNodeSelect =  (event) => {
     console.log("authSave.value: ", authSave.value)
   }
 }
-const onNodeUnselect =  (event) => {
+const onNodeUnselect = (event) => {
   wantSubTag.value = []
   authSave.value = true
 }
-const handleWant =  (event) => {
-  if (wantSubTag.value.length == 0 ){
+const handleWant = (event) => {
+  if (wantSubTag.value.length == 0) {
     console.log("wantSubTag.value: ", wantSubTag.value)
     authSave.value = true
     selectedTag.value = []
@@ -138,9 +138,11 @@ const handleWant =  (event) => {
 </script>
 
 <template>
-  <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" class="right" aria-haspopup="true"
-    aria-controls="overlay_menu" />
-  <Menu ref="menu" :model="items" :popup="true" />
+  <div>
+    <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
+    <i class="pi pi-cog surprise" @click.stop="toggle" ></i>
+  </div>
+  <Menu ref="menu" :model="items" :popup="true" /> 
 
   <Dialog v-model:visible="editVisible" modal :header="header" :style="{ width: '55rem' }">
     <div class="flex align-items-center gap-3 mb-3">
@@ -148,7 +150,7 @@ const handleWant =  (event) => {
       <InputText v-model="label" id="label" class="flex-auto" autocomplete="off" />
     </div>
     <div class="flex align-items-center">
-      <Checkbox v-model="wantSubTag" inputId="checked" name="checked" value="subTag" @change="handleWant(event)"/>
+      <Checkbox v-model="wantSubTag" inputId="checked" name="checked" value="subTag" @change="handleWant(event)" />
       <label for="checked" class="ml-2">Imbriquer l'étiquette sous : </label>
     </div>
     <div class="flex align-items-center gap-3 mb-5">
@@ -182,12 +184,45 @@ const handleWant =  (event) => {
   </Dialog>
 </template>
 
-<style >
-.info{
+<style>
+.p-tree-selectable {
+  background: var(--gray-100);
+}
+.p-tree {
+  padding: 0px;
+  border: none;
+}
+.p-tree .p-tree-container .p-treenode .p-treenode-content
+{
+  padding: 0.3em 0em 0.3em 0em;
+}
+.p-treenode-label
+{
+  padding: 0.3em 0em 0.3em 0em;
+  padding: 0
+}
+.p-treenode-label :hover 
+{
+  background: var(--surface-0);
+  border-radius: 0.3em;
+}
+
+.p-tree .p-tree-container .p-treenode .p-treenode-content .p-tree-toggler {
+  margin-right: 0.1em;
+  padding: 0.2rem;
+}
+.surprise {
+  display: none;
+}
+.p-treenode-label :hover  .surprise {
+  display: inline;
+}
+.info {
   color: gray;
   font-style: italic;
 }
-ul {
-  padding:0 0 0 1em;
+
+.p-tree ul {
+  padding: 0 0 0 0.7em;
 }
 </style>
