@@ -195,7 +195,9 @@ const filters = ref({
 
         <Column field="title" header="Titre">
           <template #body="p">
-            <a :href="p.data.player_url">{{ p.data.title }}</a>
+            <a :href="p.data.player_url" class="font-bold">{{ p.data.title }}</a>
+            <BibComments :nid="p.data.nid" />
+
           </template>
         </Column>
 
@@ -211,18 +213,11 @@ const filters = ref({
           </template>
         </Column>
 
-        <Column field="comm" header="comm">
-          <template #body="p">
-            <BibComments :nid="p.data.nid" />
-          </template>
-        </Column>
-
-
-        <Column field="changed" header="Dernière modif." style="max-width:10rem" sortable>
+        <!-- <Column field="changed" header="Dernière modif." style="max-width:10rem" sortable>
           <template #body="p">
             <MyTableChanged :changed="p.data.changed" />
           </template>
-        </Column>
+        </Column> -->
 
         <Column field="nb_clone" header="nb clone" sortable>
           <template #body="p">
