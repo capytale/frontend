@@ -190,6 +190,7 @@ const handleWant = (event) => {
 }
 .p-tree {
   padding: 0px;
+  padding-right:1em;
   border: none;
 }
 .p-tree .p-tree-container .p-treenode .p-treenode-content
