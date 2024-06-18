@@ -4,7 +4,7 @@ const baseUrl = '/~';
 export default defineNuxtConfig({
   ssr: false,
   // devtools: { enabled: true },
-  modules: ['nuxt-primevue', '@pinia/nuxt', '@vueuse/nuxt', "@nuxtjs/tailwindcss",],
+  modules: ['nuxt-primevue', '@pinia/nuxt', '@vueuse/nuxt', "@nuxtjs/tailwindcss", '@vesp/nuxt-fontawesome',],
   primevue: {
     usePrimeVue: true,
     cssLayerOrder: 'tailwind-base, primevue, tailwind-utilities'
@@ -13,6 +13,12 @@ export default defineNuxtConfig({
     'primeicons/primeicons.css',
     'assets/css/tailwind.css'
   ],
+  fontawesome: {
+    icons: {
+      solid: ['balance-scale', 'glasses', 'lightbulb', 'recycle', 'bullseye', 'spell-check'],
+      regular: ['user']
+    }
+  },
   nitro: {
     devProxy: {
       '/vanilla': { target: 'https://capytaledev.ac-paris.fr/vanilla', changeOrigin: false, secure: false },

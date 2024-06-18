@@ -10,5 +10,12 @@ export const useBibStore = defineStore('bib', {
     async getBib() {
       this.bib = await fetchBibData()
     },
+    async getComments(data) {
+      // console.log("getComments", data)
+      if (data.commentsRequested == null) {
+        data.commentsRequested = true
+        data.comments = await httpClient.getJsonAsync("/web/c-hdls/api/comments/" + data.nid)
+      }
+    }
   },
 })
