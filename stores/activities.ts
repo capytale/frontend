@@ -1,5 +1,6 @@
 import httpClient from '@capytale/activity.js/backend/capytale/http'
 
+// Definit le endpoint de l'API
 const myActivitiesApiEp = "/web/c-hdls/api/my-activities"
 
 export const useActivitiesStore = defineStore('activities', {

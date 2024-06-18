@@ -195,7 +195,7 @@ const filters = ref({
 
         <Column field="title" header="Titre">
           <template #body="p">
-            <a :href="p.data.player_url" class="font-bold">{{ p.data.title }}</a>
+            <a :href="p.data.player_url" class="font-bold">{{ p.data.title }}</a>++
             <BibComments :nid="p.data.nid" />
 
           </template>
