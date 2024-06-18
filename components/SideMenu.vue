@@ -46,7 +46,7 @@ const onNodeUnselect = (node) => {
             <template #default="slotProps">
               <div class="primary-nav left centerize" >
 
-                <MyTagEdit :slotProps="slotProps" :tags="tags.tags.data" class="surprise"/>
+                <MyTagEdit :slotProps="slotProps" :tags="tags.tags.data"/>
               </div>
             </template>
           </Tree>
