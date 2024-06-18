@@ -2,7 +2,6 @@
 import Dialog from 'primevue/dialog';
 import ColorPicker from 'primevue/colorpicker';
 const my = useMyStore()
-const tags = useTagsStore()
 
 const props = defineProps({
   slotProps: Object,
