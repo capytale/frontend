@@ -55,22 +55,48 @@ const wficon = ((wf) => {
     if (wf == 200) return { icon: "pi pi-envelope", color: "Orange" }
     if (wf == 300) return { icon: "pi pi-check-square", color: "green" }
 })
-
+const products = ref(new Array(8));
 </script>
 
 
 <template>
-    <div v-if="!my.assignments.data">
-        <p>Chargement des actvités...</p>
+    <div v-if="my.loadingAssignments">
+        <Card class="flex-2 my-10">
+            <template #title>
+                <Skeleton shape="circle" size="4rem" class="mr-2 my-2"></Skeleton> <Skeleton width="20rem" class="mb-2"></Skeleton>
+            </template>
+        </Card>
+        <DataTable :value="products">
+    <Column field="code" header="Code">
+        <template #body>
+            <Skeleton></Skeleton>
+        </template>
+    </Column>
+    <Column field="name" header="Name">
+        <template #body>
+            <Skeleton></Skeleton>
+        </template>
+    </Column>
+    <Column field="category" header="Category">
+        <template #body>
+            <Skeleton></Skeleton>
+        </template>
+    </Column>
+    <Column field="quantity" header="Quantity">
+        <template #body>
+            <Skeleton></Skeleton>
+        </template>
+    </Column>
+</DataTable>
     </div>
     <template v-else>
         <Card class="flex-2 my-10">
             <template #title>
-                <img :src="my.assignments.data.icon" alt="icon" class="w-16 h-16" /> {{ my.assignments.data.title }}
+                <img :src="my.assignments.icon" alt="icon" class="w-16 h-16" /> {{ my.assignments.title }}
             </template>
         </Card>
 
-        <DataTable :value="my.assignments.data.tab" tableStyle="min-width: 50rem" v-model:selection="selectedNid"
+        <DataTable :value="my.assignments.tab" tableStyle="min-width: 50rem" v-model:selection="selectedNid"
             selectionMode="multiple" @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()"
             @rowUnselectAll="onRowUnselectAll()" @rowSelectAll="onRowSelectAll()">
 
@@ -113,7 +139,7 @@ const wficon = ((wf) => {
 
             <Column field="workflow" header="Mode" style="max-width:10rem" sortable>
                 <template #body="p">
-                    <template v-if="my.assignments.data.is_in_time_range">
+                    <template v-if="my.assignments.is_in_time_range">
                         <Button @click="handleCycleWf(p.data.sa_nid, p.data.workflow)" text>
                             <i :class="wficon(p.data.workflow).icon"
                                 :style="{ color: wficon(p.data.workflow).color, 'font-size': '1.5rem' }"></i>

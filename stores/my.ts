@@ -7,10 +7,13 @@ export const useMyStore = defineStore('my', {
     assignments: [],
     favorites: [],
     types: [],
+    loadingAssignments: false,
   }),
   actions: {
     async getAssignments(nid: string) {
-      this.assignments = await fetchAssignments(nid)
+      this.loadingAssignments = true
+      this.assignments = await httpClient.getJsonAsync<any>("/web/c-hdls/api/assignments/" + nid)
+      this.loadingAssignments = false
     },
     async getActivities() {
       this.activities = await fetchMyActivities()
