@@ -26,7 +26,8 @@ const score = computed(() => {
     + parseInt(val.fon)
     + parseInt(val.per)
     + parseInt(val.uti), 0) / props.data.comments.length
-  return (5 * s / 11)
+  if (s < 0) return s
+  return Math.max(1, (5 * s / 11))
 })
 
 const nbComms = computed(() => {
@@ -55,7 +56,7 @@ const nbstars = computed(() => {
     </span>
     <span v-else class="flex">
       {{ scoreFixed }}
-      <Rating v-model="nbstars" :cancel="false" class="stars mx-2" />
+      <Rating v-model="nbstars" :cancel="false" readonly class="stars mx-2" />
     </span>
     ({{ nbComms }})
   </div>
