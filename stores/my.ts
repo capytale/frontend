@@ -20,13 +20,14 @@ export const useMyStore = defineStore('my', {
       // TODO : pas besoin de renvoyer un objet pour les tags : la liste csv des tids suffit. 
     },
     changeSaWf(sa_nid: string | Array, newWorkflow: string) {
+      console.log("changeSaWf", sa_nid, newWorkflow, this.assignments)
       // TODO : Faire en backend 
       if (Array.isArray(sa_nid)) {
         for (let o of sa_nid) {
-          this.assignments.data.tab = this.assignments.data.tab.map(el => el.sa_nid == o.sa_nid ? { ...el, workflow: newWorkflow } : el);
+          this.assignments.tab = this.assignments.tab.map(el => el.sa_nid == o.sa_nid ? { ...el, workflow: newWorkflow } : el);
         }
       } else {
-        this.assignments.data.tab = this.assignments.data.tab.map(el => el.sa_nid == sa_nid ? { ...el, workflow: newWorkflow } : el);
+        this.assignments.tab = this.assignments.tab.map(el => el.sa_nid == sa_nid ? { ...el, workflow: newWorkflow } : el);
       }
     },
   },
