@@ -6,7 +6,7 @@ export const useUserStore = defineStore('user', {
   }),
   actions: {
     async getUser() {
-      this.user = await fetchCurrentUser()
+      if (Object.keys(this.user).length == 0) this.user = await fetchCurrentUser()
 
     },
   },
