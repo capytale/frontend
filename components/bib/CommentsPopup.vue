@@ -47,7 +47,7 @@ const detailIconSize = "font-size: 1.5rem"
   {{ user.user.data.firstname }} {{ user.user.data.lastname }}
 
   <div v-if="!hasAlreadyCommented && !addComment">
-    <Button label="Ajouter un commentaire" @click="addComment = true" />
+    <Button label="Ajouter un commentaire" @click="addComment = true" class="my-6" />
   </div>
 
   <div v-if="addComment" class="flex flex-col">
@@ -89,7 +89,7 @@ const detailIconSize = "font-size: 1.5rem"
           v-tooltip.top="{ value: 'Les consignes pour le public cible (élève, enseignant) sont claires.', showDelay: 300, hideDelay: 0 }">
           <div><font-awesome icon="glasses" /><span class="mx-2">Clarté </span></div>
           <span class="space-rating">
-            <i :class="cla == -2 ? 'pi pi-thumbs-down mr-2 text-red-400' : 'pi pi-thumbs-down mr-2 text-gray-300'"
+            <i :class="cla == -2 ? 'pi pi-thumbs-down mr-2 text-red-400' : 'pi pi-thumbs-down mr-2 text-gray-300q'"
               v-tooltip.bottom="{ value: 'Insuffisant', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
               @click="cla = cla == -2 ? 0 : -2"></i>
             <i :class="cla == 1 ? 'pi pi-check mr-2 text-green-600' : 'pi pi-check mr-2 text-gray-300'"
@@ -138,7 +138,8 @@ const detailIconSize = "font-size: 1.5rem"
               v-tooltip.bottom="{ value: 'Insuffisant', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
               @click="per = per == -2 ? 0 : -2"></i>
             <i :class="per == 1 ? 'pi pi-check mr-2 text-green-600' : 'pi pi-check mr-2 text-gray-300'"
-              v-tooltip.bottom="{ value: 'Bien', showDelay: 300, hideDelay: 0 }" :style="detailIconSize" @click="per = per == 1 ? 0 : 1"></i>
+              v-tooltip.bottom="{ value: 'Bien', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
+              @click="per = per == 1 ? 0 : 1"></i>
             <i :class="per == 2 ? 'pi pi-thumbs-up mr-2 text-green-600' : 'pi pi-thumbs-up mr-2 text-gray-300'"
               v-tooltip.bottom="{ value: 'Très bien !', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
               @click="per = per == 2 ? 0 : 2"></i>
@@ -152,7 +153,8 @@ const detailIconSize = "font-size: 1.5rem"
               v-tooltip.bottom="{ value: 'Insuffisant', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
               @click="app = app == -2 ? 0 : -2"></i>
             <i :class="app == 1 ? 'pi pi-check mr-2 text-green-600' : 'pi pi-check mr-2 text-gray-300'"
-              v-tooltip.bottom="{ value: 'Bien', showDelay: 300, hideDelay: 0 }" :style="detailIconSize" @click="app = app == 1 ? 0 : 1"></i>
+              v-tooltip.bottom="{ value: 'Bien', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
+              @click="app = app == 1 ? 0 : 1"></i>
             <i :class="app == 2 ? 'pi pi-thumbs-up mr-2 text-green-600' : 'pi pi-thumbs-up mr-2 text-gray-300'"
               v-tooltip.bottom="{ value: 'Très bien !', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
               @click="app = app == 2 ? 0 : 2"></i>
@@ -170,12 +172,15 @@ const detailIconSize = "font-size: 1.5rem"
     <Button label="Poster" @click="addComment = false" :disabled="rating === null && !signalChecked" />
 
   </div>
-  <DataView :value="data.comments">
+
+
+  <div v-if="data.comments.length == 0">
+    <div class="text-center text-gray-400">Aucun commentaire</div>
+  </div>
+
+  <DataView v-else :value="data.comments">
     <template #list="slotProps">
       <div class="flex flex-col">
-
-
-
 
         <div v-for="(item, index) in slotProps.items" :key="index">
           <hr class="my-4" />
