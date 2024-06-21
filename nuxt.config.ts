@@ -15,8 +15,8 @@ export default defineNuxtConfig({
   ],
   fontawesome: {
     icons: {
-      solid: ['balance-scale', 'glasses', 'lightbulb', 'recycle', 'bullseye', 'spell-check'],
-      regular: ['user']
+      solid: ['balance-scale', 'glasses', 'lightbulb', 'recycle', 'bullseye', 'spell-check', 'medal', 'ban'],
+      // regular: ['thumbs-up', 'thumbs-down'],
     }
   },
   nitro: {

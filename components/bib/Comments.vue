@@ -61,7 +61,7 @@ const nbstars = computed(() => {
     ({{ nbComms }})
   </div>
   <Dialog v-model:visible="visible" maximizable modal :header="'Header ' + data.nid"
-    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" :style="{ width: '50%' }">
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" :style="{ width: '60%' }">
 
 
     <BibCommentsPopup :data="data" />
