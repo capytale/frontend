@@ -80,4 +80,11 @@ const nbstars = computed(() => {
   font-size: 1.5rem;
   color: #ccc;
 }
+
+.p-fieldset .p-fieldset-legend {
+  font-weight: 100;
+  font-size: small;
+  border: none;
+  background: none;
+}
 </style>

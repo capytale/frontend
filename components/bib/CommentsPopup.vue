@@ -50,127 +50,129 @@ const detailIconSize = "font-size: 1.5rem"
     <Button label="Ajouter un commentaire" @click="addComment = true" class="my-6" />
   </div>
 
-  <div v-if="addComment" class="flex flex-col">
-    <div class="box mt-5">
-      <Rating v-model="rating" :disabled="signalChecked">
-        <template #cancelicon>
-          <i class="pi pi-times text-gray-400 mr-6" style="font-size: 1.5rem"></i>
-        </template>
-        <template #onicon>
-          <i class="pi pi-star-fill text-yellow-400" style="font-size: 2.5rem"></i>
-        </template>
-        <template #officon>
-          <i class="pi pi-star text-gray-400" style="font-size: 2.5rem"></i>
-        </template>
-      </Rating>
-      <div>
-        <Checkbox v-model="signalChecked" inputId="signaler" :binary="true" @change="rating = null" />
-        <label for="signaler" class="ml-2">Demander la dépublication </label>
-        <i class="pi pi-info-circle" @click="info = true"></i>
-        <Dialog v-model:visible="info" modal header="Demander la dépublication" :style="{ width: '45rem' }">
-          <div class="my-6">
-            <p>Pour cette activité, vous estimez que le contenu :</p>
-            <ul>
-              <li>- Est inapproprié ou offensant</li>
-              <li>- Ne respecte des règles de la plateforme</li>
-              <li>- Est objectivement sans intérêt</li>
-            </ul>
-            <p>Merci détailler votre demande dans le champ commentaires.</p>
-            <p>Votre signalement sera étudié par le comité éditorial.</p>
+  <div v-if="addComment">
+    <div class="flex flex-col">
+      <div class="box mt-5">
+        <Rating v-model="rating" :disabled="signalChecked">
+          <template #cancelicon>
+            <i class="pi pi-times text-gray-400 mr-6" style="font-size: 1.5rem"></i>
+          </template>
+          <template #onicon>
+            <i class="pi pi-star-fill text-yellow-400" style="font-size: 2.5rem"></i>
+          </template>
+          <template #officon>
+            <i class="pi pi-star text-gray-400" style="font-size: 2.5rem"></i>
+          </template>
+        </Rating>
+        <div>
+          <Checkbox v-model="signalChecked" inputId="signaler" :binary="true" @change="rating = null" />
+          <label for="signaler" class="ml-2">Demander la dépublication </label>
+          <i class="pi pi-info-circle" @click="info = true"></i>
+          <Dialog v-model:visible="info" modal header="Demander la dépublication" :style="{ width: '45rem' }">
+            <div class="my-6">
+              <p>Pour cette activité, vous estimez que le contenu :</p>
+              <ul>
+                <li>- Est inapproprié ou offensant</li>
+                <li>- Ne respecte des règles de la plateforme</li>
+                <li>- Est objectivement sans intérêt</li>
+              </ul>
+              <p>Merci détailler votre demande dans le champ commentaires.</p>
+              <p>Votre signalement sera étudié par le comité éditorial.</p>
+            </div>
+            <Button type="button" label="J'ai compris" severity="secondary" @click="info = false"></Button>
+          </Dialog>
+        </div>
+      </div>
+
+      <Fieldset legend="Détails (optionnel)" collapsed :toggleable="true" class="mt-6">
+        <div class="flex">
+          <div class="manual-rating"
+            v-tooltip.top="{ value: 'Les consignes pour le public cible (élève, enseignant) sont claires.', showDelay: 300, hideDelay: 0 }">
+            <div><font-awesome icon="glasses" /><span class="mx-2">Clarté </span></div>
+            <span class="space-rating">
+              <i :class="cla == -2 ? 'pi pi-thumbs-down mr-2 text-red-400' : 'pi pi-thumbs-down mr-2 text-gray-300q'"
+                v-tooltip.bottom="{ value: 'Insuffisant', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
+                @click="cla = cla == -2 ? 0 : -2"></i>
+              <i :class="cla == 1 ? 'pi pi-check mr-2 text-green-600' : 'pi pi-check mr-2 text-gray-300'"
+                v-tooltip.bottom="{ value: 'Bien', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
+                @click="cla = cla == 1 ? 0 : 1"></i>
+              <i :class="cla == 2 ? 'pi pi-thumbs-up mr-2 text-green-600' : 'pi pi-thumbs-up mr-2 text-gray-300'"
+                v-tooltip.bottom="{ value: 'Très bien !', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
+                @click="cla = cla == 2 ? 0 : 2"></i>
+            </span>
           </div>
-          <Button type="button" label="J'ai compris" severity="secondary" @click="info = false"></Button>
-        </Dialog>
-      </div>
+          <div class="manual-rating"
+            v-tooltip.top="{ value: 'L’activité apporte des idées intéressantes pour traiter un thème ou elle permet de gagner du temps.', showDelay: 300, hideDelay: 0 }">
+            <div><font-awesome icon="lightbulb" /><span class="mx-2">Fond </span></div>
+            <span class="space-rating">
+              <i :class="fon == -2 ? 'pi pi-thumbs-down mr-2 text-red-400' : 'pi pi-thumbs-down mr-2 text-gray-300'"
+                v-tooltip.bottom="{ value: 'Insuffisant', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
+                @click="fon = fon == -2 ? 0 : -2"></i>
+              <i :class="fon == 1 ? 'pi pi-check mr-2 text-green-600' : 'pi pi-check mr-2 text-gray-300'"
+                v-tooltip.bottom="{ value: 'Bien', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
+                @click="fon = fon == 1 ? 0 : 1"></i>
+              <i :class="fon == 2 ? 'pi pi-thumbs-up mr-2 text-green-600' : 'pi pi-thumbs-up mr-2 text-gray-300'"
+                v-tooltip.bottom="{ value: 'Très bien !', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
+                @click="fon = fon == 2 ? 0 : 2"></i>
+            </span>
+          </div>
+          <div class="manual-rating"
+            v-tooltip.top="{ value: 'L’activité est utilisable en l’état ou presque.', showDelay: 300, hideDelay: 0 }">
+            <div><font-awesome icon="recycle" /><span class="mx-2">Utilisabilité </span></div>
+            <span class="space-rating">
+              <i :class="uti == -2 ? 'pi pi-thumbs-down mr-2 text-red-400' : 'pi pi-thumbs-down mr-2 text-gray-300'"
+                v-tooltip.bottom="{ value: 'Insuffisant', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
+                @click="uti = uti == -2 ? 0 : -2"></i>
+              <i :class="uti == 1 ? 'pi pi-check mr-2 text-green-600' : 'pi pi-check mr-2 text-gray-300'"
+                v-tooltip.bottom="{ value: 'Bien', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
+                @click="uti = uti == 1 ? 0 : 1"></i>
+              <i :class="uti == 2 ? 'pi pi-thumbs-up mr-2 text-green-600' : 'pi pi-thumbs-up mr-2 text-gray-300'"
+                v-tooltip.bottom="{ value: 'Très bien !', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
+                @click="uti = uti == 2 ? 0 : 2"></i>
+            </span>
+          </div>
+          <div class="manual-rating"
+            v-tooltip.top="{ value: 'Il y a adéquation entre le titre, les objectifs annoncés dans le descriptif de l’activité et le contenu de l’activité.', showDelay: 300, hideDelay: 0 }">
+            <div><font-awesome icon="bullseye" /><span class="mx-2">Pertinence </span></div>
+            <span class="space-rating">
+              <i :class="per == -2 ? 'pi pi-thumbs-down mr-2 text-red-400' : 'pi pi-thumbs-down mr-2 text-gray-300'"
+                v-tooltip.bottom="{ value: 'Insuffisant', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
+                @click="per = per == -2 ? 0 : -2"></i>
+              <i :class="per == 1 ? 'pi pi-check mr-2 text-green-600' : 'pi pi-check mr-2 text-gray-300'"
+                v-tooltip.bottom="{ value: 'Bien', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
+                @click="per = per == 1 ? 0 : 1"></i>
+              <i :class="per == 2 ? 'pi pi-thumbs-up mr-2 text-green-600' : 'pi pi-thumbs-up mr-2 text-gray-300'"
+                v-tooltip.bottom="{ value: 'Très bien !', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
+                @click="per = per == 2 ? 0 : 2"></i>
+            </span>
+          </div>
+          <div class="manual-rating"
+            v-tooltip.top="{ value: 'L’orthographe, la grammaire et la typographie sont de bonne qualité.', showDelay: 300, hideDelay: 0 }">
+            <div><font-awesome icon="spell-check" /><span class="mx-2">Apparence </span></div>
+            <span class="space-rating">
+              <i :class="app == -2 ? 'pi pi-thumbs-down mr-2 text-red-400' : 'pi pi-thumbs-down mr-2 text-gray-300'"
+                v-tooltip.bottom="{ value: 'Insuffisant', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
+                @click="app = app == -2 ? 0 : -2"></i>
+              <i :class="app == 1 ? 'pi pi-check mr-2 text-green-600' : 'pi pi-check mr-2 text-gray-300'"
+                v-tooltip.bottom="{ value: 'Bien', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
+                @click="app = app == 1 ? 0 : 1"></i>
+              <i :class="app == 2 ? 'pi pi-thumbs-up mr-2 text-green-600' : 'pi pi-thumbs-up mr-2 text-gray-300'"
+                v-tooltip.bottom="{ value: 'Très bien !', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
+                @click="app = app == 2 ? 0 : 2"></i>
+            </span>
+          </div>
+        </div>
+        <div>
+          {{ apprComite.sum }} pts <font-awesome :icon="apprComite.icon" :class="apprComite.class" /> {{ apprComite.avis
+          }}
+        </div>
+      </Fieldset>
+
+      <Textarea v-model="value" rows="5" style="width: 100%;" class="my-6" placeholder="Votre commentaire" />
+
+      
     </div>
-
-    <Fieldset legend="Détails (optionnel)" :toggleable="true" class="mt-6">
-      <div class="flex">
-        <div class="manual-rating"
-          v-tooltip.top="{ value: 'Les consignes pour le public cible (élève, enseignant) sont claires.', showDelay: 300, hideDelay: 0 }">
-          <div><font-awesome icon="glasses" /><span class="mx-2">Clarté </span></div>
-          <span class="space-rating">
-            <i :class="cla == -2 ? 'pi pi-thumbs-down mr-2 text-red-400' : 'pi pi-thumbs-down mr-2 text-gray-300q'"
-              v-tooltip.bottom="{ value: 'Insuffisant', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
-              @click="cla = cla == -2 ? 0 : -2"></i>
-            <i :class="cla == 1 ? 'pi pi-check mr-2 text-green-600' : 'pi pi-check mr-2 text-gray-300'"
-              v-tooltip.bottom="{ value: 'Bien', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
-              @click="cla = cla == 1 ? 0 : 1"></i>
-            <i :class="cla == 2 ? 'pi pi-thumbs-up mr-2 text-green-600' : 'pi pi-thumbs-up mr-2 text-gray-300'"
-              v-tooltip.bottom="{ value: 'Très bien !', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
-              @click="cla = cla == 2 ? 0 : 2"></i>
-          </span>
-        </div>
-        <div class="manual-rating"
-          v-tooltip.top="{ value: 'L’activité apporte des idées intéressantes pour traiter un thème ou elle permet de gagner du temps.', showDelay: 300, hideDelay: 0 }">
-          <div><font-awesome icon="lightbulb" /><span class="mx-2">Fond </span></div>
-          <span class="space-rating">
-            <i :class="fon == -2 ? 'pi pi-thumbs-down mr-2 text-red-400' : 'pi pi-thumbs-down mr-2 text-gray-300'"
-              v-tooltip.bottom="{ value: 'Insuffisant', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
-              @click="fon = fon == -2 ? 0 : -2"></i>
-            <i :class="fon == 1 ? 'pi pi-check mr-2 text-green-600' : 'pi pi-check mr-2 text-gray-300'"
-              v-tooltip.bottom="{ value: 'Bien', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
-              @click="fon = fon == 1 ? 0 : 1"></i>
-            <i :class="fon == 2 ? 'pi pi-thumbs-up mr-2 text-green-600' : 'pi pi-thumbs-up mr-2 text-gray-300'"
-              v-tooltip.bottom="{ value: 'Très bien !', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
-              @click="fon = fon == 2 ? 0 : 2"></i>
-          </span>
-        </div>
-        <div class="manual-rating"
-          v-tooltip.top="{ value: 'L’activité est utilisable en l’état ou presque.', showDelay: 300, hideDelay: 0 }">
-          <div><font-awesome icon="recycle" /><span class="mx-2">Utilisabilité </span></div>
-          <span class="space-rating">
-            <i :class="uti == -2 ? 'pi pi-thumbs-down mr-2 text-red-400' : 'pi pi-thumbs-down mr-2 text-gray-300'"
-              v-tooltip.bottom="{ value: 'Insuffisant', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
-              @click="uti = uti == -2 ? 0 : -2"></i>
-            <i :class="uti == 1 ? 'pi pi-check mr-2 text-green-600' : 'pi pi-check mr-2 text-gray-300'"
-              v-tooltip.bottom="{ value: 'Bien', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
-              @click="uti = uti == 1 ? 0 : 1"></i>
-            <i :class="uti == 2 ? 'pi pi-thumbs-up mr-2 text-green-600' : 'pi pi-thumbs-up mr-2 text-gray-300'"
-              v-tooltip.bottom="{ value: 'Très bien !', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
-              @click="uti = uti == 2 ? 0 : 2"></i>
-          </span>
-        </div>
-        <div class="manual-rating"
-          v-tooltip.top="{ value: 'Il y a adéquation entre le titre, les objectifs annoncés dans le descriptif de l’activité et le contenu de l’activité.', showDelay: 300, hideDelay: 0 }">
-          <div><font-awesome icon="bullseye" /><span class="mx-2">Pertinence </span></div>
-          <span class="space-rating">
-            <i :class="per == -2 ? 'pi pi-thumbs-down mr-2 text-red-400' : 'pi pi-thumbs-down mr-2 text-gray-300'"
-              v-tooltip.bottom="{ value: 'Insuffisant', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
-              @click="per = per == -2 ? 0 : -2"></i>
-            <i :class="per == 1 ? 'pi pi-check mr-2 text-green-600' : 'pi pi-check mr-2 text-gray-300'"
-              v-tooltip.bottom="{ value: 'Bien', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
-              @click="per = per == 1 ? 0 : 1"></i>
-            <i :class="per == 2 ? 'pi pi-thumbs-up mr-2 text-green-600' : 'pi pi-thumbs-up mr-2 text-gray-300'"
-              v-tooltip.bottom="{ value: 'Très bien !', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
-              @click="per = per == 2 ? 0 : 2"></i>
-          </span>
-        </div>
-        <div class="manual-rating"
-          v-tooltip.top="{ value: 'L’orthographe, la grammaire et la typographie sont de bonne qualité.', showDelay: 300, hideDelay: 0 }">
-          <div><font-awesome icon="spell-check" /><span class="mx-2">Apparence </span></div>
-          <span class="space-rating">
-            <i :class="app == -2 ? 'pi pi-thumbs-down mr-2 text-red-400' : 'pi pi-thumbs-down mr-2 text-gray-300'"
-              v-tooltip.bottom="{ value: 'Insuffisant', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
-              @click="app = app == -2 ? 0 : -2"></i>
-            <i :class="app == 1 ? 'pi pi-check mr-2 text-green-600' : 'pi pi-check mr-2 text-gray-300'"
-              v-tooltip.bottom="{ value: 'Bien', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
-              @click="app = app == 1 ? 0 : 1"></i>
-            <i :class="app == 2 ? 'pi pi-thumbs-up mr-2 text-green-600' : 'pi pi-thumbs-up mr-2 text-gray-300'"
-              v-tooltip.bottom="{ value: 'Très bien !', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
-              @click="app = app == 2 ? 0 : 2"></i>
-          </span>
-        </div>
-      </div>
-      <div>
-        {{ apprComite.sum }} pts <font-awesome :icon="apprComite.icon" :class="apprComite.class" /> {{ apprComite.avis
-        }}
-      </div>
-    </Fieldset>
-
-    <Textarea v-model="value" rows="5" style="width: 100%;" class="my-6" placeholder="Votre commentaire" />
-
-    <Button label="Poster" @click="addComment = false" :disabled="rating === null && !signalChecked" />
-
+    <Button label="Poster" @click="addComment = false" :disabled="rating === null && !signalChecked" class="mb-6" />
   </div>
 
 
