@@ -18,6 +18,11 @@ export const useActivitiesStore = defineStore('activities', {
       if (Array.isArray(nid)) {
         for (let o of nid) {
           this.activities.data = this.activities.data.filter((item) => item.nid !== o.nid);
+          // vvv ne marche pas : invalid json
+          return httpClient.postJsonAsync(
+            myActivitiesApiEp,
+            { action: "delete", nid }
+          );
         }
       } else if (typeof nid === "string") {
         this.activities.data = this.activities.data.filter((item) => item.nid !== nid);

@@ -64,13 +64,13 @@ const handleDelete = function () {
     rejectClass: 'p-button-secondary p-button-outlined',
     acceptLabel: 'Supprimer',
     acceptClass: 'p-button-danger',
-    accept: () => {
-      my.deleteActivity(selectedNid.value)
-      const response = {}
-      if (response.ok) {
+    accept: async () => {
+      try {
+        const response = await activites.deleteActivity(selectedNid.value)
         toast.add({ severity: 'success', summary: 'Suppression effectuée : ', life: 2000 });
-      } else {
-        toast.add({ severity: 'error', summary: 'Échec de la suppression : ', detail: "nid = " });
+      }
+      catch (e) {
+        toast.add({ severity: 'error', summary: 'Échec de la suppression : ', detail: `nid = ${selectedNid.value} - ${e}` });
       }
     },
     reject: () => {
@@ -155,8 +155,8 @@ const myactivities = computed(() => {
                   @click="tagsToggle" />
                 <OverlayPanel ref="opTags">
                   <div class="gap-3 w-25rem">
-                    <Tree id="tags" v-model:selectionKeys="selectedTags" :value="tags.tags.data" selectionMode="multiple"
-                      class="w-full md:w-30rem scroll">
+                    <Tree id="tags" v-model:selectionKeys="selectedTags" :value="tags.tags.data"
+                      selectionMode="multiple" class="w-full md:w-30rem scroll">
                       <template #default="slotProps">
                         <i class="pi pi-tag" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
                       </template>
@@ -188,7 +188,7 @@ const myactivities = computed(() => {
 
             <template #end>
               <template v-if="activeTag.tid">
-                Filtre par étiquette : 
+                Filtre par étiquette :
                 <Button removable class="removable pr-2 mr-1" text @click="activeTag.activate(null)"
                   v-tooltip.top="{ value: 'Supprimer', showDelay: 400, hideDelay: 0 }">
                   {{ getTagName(activeTag.tid) }}

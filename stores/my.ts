@@ -19,18 +19,6 @@ export const useMyStore = defineStore('my', {
       this.activities = await fetchMyActivities()
       // TODO : pas besoin de renvoyer un objet pour les tags : la liste csv des tids suffit. 
     },
-    async deleteActivity(nid: number) {
-      return httpClient.postJsonAsync(
-        myActivitiesApiEp,
-        { action: "delete", nid }
-      );
-    },
-    async cloneActivity(nid: number) {
-      return httpClient.postJsonAsync(
-        myActivitiesApiEp,
-        { action: "clone", nid }
-      );
-    },
     changeSaWf(sa_nid: string | Array, newWorkflow: string) {
       // TODO : Faire en backend 
       if (Array.isArray(sa_nid)) {

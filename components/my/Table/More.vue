@@ -1,11 +1,10 @@
 <script setup>
-import Tooltip from 'primevue/tooltip';
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
-import { useMyStore } from '@/stores/my';
-const confirm = useConfirm();
-const toast = useToast();
-const my = useMyStore();
+
+const activites = useActivitiesStore()
+activites.getActivities()
+
 const props = defineProps({
   nid: String,
   whoami: String,
@@ -13,6 +12,8 @@ const props = defineProps({
   required: true
 })
 
+const confirm = useConfirm();
+const toast = useToast();
 const menu = ref();
 const actItems = ref([
   {
@@ -24,7 +25,7 @@ const actItems = ref([
     icon: 'pi pi-clone',
     command: async () => {
       try {
-        const response = await my.cloneActivity(props.nid)
+        const response = await activites.cloneActivity(props.nid)
         toast.add({ severity: 'success', summary: 'Clonage réussi : ', life: 2000 });
       }
       catch (e) {
@@ -67,7 +68,7 @@ const commonItems = ref([
         acceptClass: 'p-button-danger',
         accept: async () => {
           try {
-            const response = await my.deleteActivity(props.nid)
+            const response = await activites.deleteActivity(props.nid)
             toast.add({ severity: 'success', summary: 'Suppression effectuée : ', life: 2000 });
           }
           catch (e) {
