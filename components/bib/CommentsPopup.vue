@@ -34,9 +34,20 @@ const initials = (nom, prenom) => {
 }
 
 const info = ref(false);
-const toggle = (event) => {
-  op.value.toggle(event);
-}
+
+const hasDetail = ((item) => {
+  return item.clr != 0 || item.fon != 0 || item.uti != 0 || item.per != 0 || item.app != 0
+})
+
+const icon = ((value) => {
+  if (value == -2) return "pi pi-thumbs-down text-red-400"
+  if (value == 1) return "pi pi-check text-green-600"
+  if (value == 2) return "pi pi-thumbs-up text-green-600"
+})
+const classFA = ((value) => {
+  if (value == 0) return "text-gray-300"
+  return "text-gray-500"
+})
 
 const detailIconSize = "font-size: 1.5rem"
 </script>
@@ -90,7 +101,7 @@ const detailIconSize = "font-size: 1.5rem"
             v-tooltip.top="{ value: 'Les consignes pour le public cible (élève, enseignant) sont claires.', showDelay: 300, hideDelay: 0 }">
             <div><font-awesome icon="glasses" /><span class="mx-2">Clarté </span></div>
             <span class="space-rating">
-              <i :class="cla == -2 ? 'pi pi-thumbs-down mr-2 text-red-400' : 'pi pi-thumbs-down mr-2 text-gray-300q'"
+              <i :class="cla == -2 ? 'pi pi-thumbs-down mr-2 text-red-400' : 'pi pi-thumbs-down mr-2 text-gray-300'"
                 v-tooltip.bottom="{ value: 'Insuffisant', showDelay: 300, hideDelay: 0 }" :style="detailIconSize"
                 @click="cla = cla == -2 ? 0 : -2"></i>
               <i :class="cla == 1 ? 'pi pi-check mr-2 text-green-600' : 'pi pi-check mr-2 text-gray-300'"
@@ -170,7 +181,7 @@ const detailIconSize = "font-size: 1.5rem"
 
       <Textarea v-model="value" rows="5" style="width: 100%;" class="my-6" placeholder="Votre commentaire" />
 
-      
+
     </div>
     <Button label="Poster" @click="addComment = false" :disabled="rating === null && !signalChecked" class="mb-6" />
   </div>
@@ -190,15 +201,46 @@ const detailIconSize = "font-size: 1.5rem"
             <Badge :value="initials(item.prenom, item.nom)" size="xlarge" severity="success"></Badge>
             {{ item.nom }} {{ item.prenom }}
             Il y a {{ timeElapsed(item.created * 1000) }}
-            <div>
-              <!-- <span>Ethique{{ item.eth }}</span> -->
-              <span>Clarté{{ item.clr }}</span>
-              <span>Fond{{ item.fon }}</span>
-              <span>Utilisabilité{{ item.uti }}</span>
-              <span>Pertinence{{ item.per }}</span>
-              <span>Apparence : {{ item.app }}</span>
+
+            <div class="box my-3">
+              <Rating v-model="rating" disabled :cancel="false">
+                <template #onicon>
+                  <i class="pi pi-star-fill text-yellow-400" style="font-size: 1.7rem"></i>
+                </template>
+                <template #officon>
+                  <i class="pi pi-star text-gray-400" style="font-size: 1.7rem"></i>
+                </template>
+              </Rating>
+              <div v-if="hasDetail(item)">
+                <span class="mr-6"
+                  v-tooltip.top="{ value: 'Les consignes pour le public cible (élève, enseignant) sont claires.', showDelay: 300, hideDelay: 0 }">
+                  <font-awesome icon="glasses" :class="'mr-2 ' + classFA(item.clr)" />
+                  <i :class="icon(item.clr)"></i>
+                </span>
+                <span class="mr-6"
+                  v-tooltip.top="{ value: 'L’activité apporte des idées intéressantes pour traiter un thème ou elle permet de gagner du temps.', showDelay: 300, hideDelay: 0 }">
+                  <font-awesome icon="lightbulb" :class="'mr-2 ' + classFA(item.fon)" />
+                  <i :class="icon(item.fon)"></i>
+                </span>
+                <span class="mr-6"
+                  v-tooltip.top="{ value: 'L’activité est utilisable en l’état ou presque.', showDelay: 300, hideDelay: 0 }">
+                  <font-awesome icon="recycle" :class="'mr-2 ' + classFA(item.uti)" />
+                  <i :class="icon(item.uti)"></i>
+                </span>
+                <span class="mr-6"
+                  v-tooltip.top="{ value: 'Il y a adéquation entre le titre, les objectifs annoncés dans le descriptif de l’activité et le contenu de l’activité.', showDelay: 300, hideDelay: 0 }">
+                  <font-awesome icon="bullseye" :class="'mr-2 ' + classFA(item.per)" />
+                  <i :class="icon(item.per)"></i>
+                </span>
+                <span class="mr-6"
+                  v-tooltip.top="{ value: 'L’orthographe, la grammaire et la typographie sont de bonne qualité.', showDelay: 300, hideDelay: 0 }">
+                  <font-awesome icon="spell-check" :class="'mr-2 ' + classFA(item.app)" />
+                  <i :class="icon(item.app)"></i>
+                </span>
+              </div>
             </div>
             <div>Commentaire : {{ item.subject }}</div>
+
           </div>
         </div>
       </div>
