@@ -65,13 +65,13 @@ const commonItems = ref([
         rejectClass: 'p-button-secondary p-button-outlined',
         acceptLabel: 'Supprimer',
         acceptClass: 'p-button-danger',
-        accept: () => {
-          my.deleteActivity(props.nid)
-          const response = {}
-          if (response.ok) {
+        accept: async () => {
+          try {
+            const response = await my.deleteActivity(props.nid)
             toast.add({ severity: 'success', summary: 'Suppression effectuée : ', life: 2000 });
-          } else {
-            toast.add({ severity: 'error', summary: 'Échec de la suppression : ', detail: "nid = " + props.nid });
+          }
+          catch (e) {
+            toast.add({ severity: 'error', summary: 'Échec de la suppression : ', detail: `nid = ${props.nid} - ${e}` });
           }
         },
         reject: () => {
@@ -97,7 +97,7 @@ const items = computed(() => {
   }
 })
 
-  const toggle = (event) => {
+const toggle = (event) => {
   menu.value.toggle(event);
 }
 </script>
