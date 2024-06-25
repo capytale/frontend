@@ -19,14 +19,14 @@ export const useActivitiesStore = defineStore('activities', {
         for (let o of nid) {
           this.activities.data = this.activities.data.filter((item) => item.nid !== o.nid);
           // vvv ne marche pas : invalid json
-          return httpClient.postJsonAsync(
+          await httpClient.postJsonAsync(
             myActivitiesApiEp,
             { action: "delete", nid }
           );
         }
       } else if (typeof nid === "string") {
         this.activities.data = this.activities.data.filter((item) => item.nid !== nid);
-        return httpClient.postJsonAsync(
+        await httpClient.postJsonAsync(
           myActivitiesApiEp,
           { action: "delete", nid }
         );
