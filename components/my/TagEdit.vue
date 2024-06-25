@@ -185,9 +185,7 @@ const handleWant = (event) => {
 </template>
 
 <style>
-.p-tree-selectable {
-  background: var(--gray-100);
-}
+
 .p-tree {
   padding: 0px;
   padding-right:1em;
@@ -204,7 +202,6 @@ const handleWant = (event) => {
 }
 .p-treenode-label :hover 
 {
-  background: var(--surface-0);
   border-radius: 0.3em;
 }
 

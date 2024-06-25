@@ -236,7 +236,7 @@ const myactivities = computed(() => {
           </template>
         </Column>
 
-        <Column v-if="isTeacher" field="title" header="Titre" style="width:50rem; max-width:50rem; overflow:hidden"
+        <Column v-if="isTeacher" field="title" header="Titre" style="min-width:20rem; max-width:30rem; overflow:hidden"
           sortable>
           <template #body="p">
             <MyTableTitle :title="p.data.title" :nid="p.data.nid" :whoami="p.data.whoami" />
@@ -248,7 +248,7 @@ const myactivities = computed(() => {
           </template>u
         </Column>
 
-        <Column v-if="isTeacher" field="evaluation" header="Évaluation" style="max-width:10rem">
+        <Column v-if="isTeacher" field="evaluation" header="Évaluation" style="max-width:12rem">
           <template #body="p">
             <MyTableEvaluation :nid="p.data.nid" :views_total="p.data.views_total" :boss="p.data.boss"
               :whoami="p.data.whoami" :evalu="p.data.evaluation" :appre="p.data.appreciation" :isTeacher="isTeacher" />
@@ -261,7 +261,7 @@ const myactivities = computed(() => {
           </template>
         </Column>
 
-        <Column field="changed" header="Dernière modif." style="max-width:10rem" sortable>
+        <Column field="changed" header="Modifié" style="min-width: 10rem; width:14rem" sortable>
           <template #body="p">
             <MyTableChanged :changed="p.data.changed" />
           </template>

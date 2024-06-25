@@ -72,6 +72,11 @@ const onNodeUnselect = (node) => {
   border-radius: 12px;
   padding: .5rem 1.5rem;
   box-shadow: 0 3px 5px #00000005, 0 0 2px #0000000d, 0 1px 4px #00000014;
+  background: var(--surface-0);
+}
+
+.dark-theme .sidemenu {
+  background: var(--surface-50);
 }
 
 .sidemenu-active {

@@ -53,16 +53,19 @@ body,
 
  .container {
    min-width:400px;
-   max-width:80%;
+   max-width: min(calc(100% - 2rem), 1600px);
  }
- .dark-theme .bggray {
- background: var(--gray-700);
- }
-
  .bggray {
- background: var(--gray-100);
+ background: var(--surface-100);
  }
 
+
+ .p-tree-selectable {
+  background: var(--surface-0);
+}
+.dark-theme .p-tree-selectable {
+  background: var(--surface-50);
+}
 
 .appContainer {
   height: 100%;
