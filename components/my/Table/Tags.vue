@@ -3,8 +3,10 @@ import { useToast } from "primevue/usetoast";
 
 import { useMyStore } from '@/stores/my'
 import { useTagsStore } from '@/stores/tags'
+
 const my = useMyStore()
 const tags = useTagsStore()
+const activites = useActivitiesStore()
 
 const props = defineProps({
   nid: String,
@@ -14,9 +16,7 @@ const props = defineProps({
 
 const toast = useToast();
 const delTag = (nid, tid) => {
-  // const index = tids.value.indexOf(tid);
-  // tids.value.splice(index, 1);
-  my.untagActivity(nid, tid)
+  activites.untagActivity(nid, tid)
   // TODO : Faire en backend 
 }
 
@@ -32,28 +32,22 @@ const getName = (id) => {
   return { label: obj ? obj.label : '', color: obj ? obj.color : '' }
 }
 
-const toDelete = ref(false)
-
-const toggleDelete = () => {
-  toDelete.value = !toDelete.value
+const handleclick = () => {
+  console.log('click')
 }
 </script>
 
 <template>
-  <span v-for="tid in tids" :key="nid + tid">
-    <Button v-if="getName(tid).label" removable class="removable pr-2 mr-1" text @click="toggleDelete">
-      <template v-if="!toDelete">
-        <i class="pi pi-tag px-2 normal" :style="'color:' + getName(tid).color"></i>
-        <i class="pi pi-trash px-2 exeptionnal red" @click="delTag(nid, tid)"
-          v-tooltip.top="{ value: 'Supprimer', showDelay: 400, hideDelay: 0 }"></i>{{ getName(tid).label }}
-      </template>
-      <template v-else>
-        <i class="pi pi-trash px-2" :style="'color:' + getName(tid).color" @click="delTag(nid, tid)"
-          v-tooltip.top="{ value: 'Supprimer', showDelay: 400, hideDelay: 0 }"></i>{{ getName(tid).label }}
-      </template>
-    </Button>
-
-  </span>
+  <div v-for="tid in tids" :key="nid + tid">
+    <span class="parent mr-1">
+      <Button v-if="getName(tid).label" removable class="pr-3" text @click="op = !op">
+        <i class="pi pi-tag px-2 normal" :style="'color:' + getName(tid).color"></i>{{ getName(tid).label }}
+      </Button>
+      <div class="poubelle">
+        <Button icon="pi pi-trash" severity="danger" @click="delTag(nid, tid)" outlined rounded />
+      </div>
+    </span>
+  </div>
 </template>
 
 
@@ -64,27 +58,22 @@ const toggleDelete = () => {
   cursor: pointer;
 }
 
-.normal {
-  /* visibility: visible; */
-  display: inline;
-}
-
-.removable:hover .exeptionnal {
-  /* visibility: visible; */
-  display: inline;
-}
-
-.removable:hover .normal {
-  /* visibility: hidden; */
+.poubelle {
   display: none;
+  position: absolute;
+  left: 100%;
+  bottom: 0;
+  z-index: 1;
 }
 
-.removable {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 3px;
-  display: inline-block;
+.parent{
+  position: relative;
 }
+
+.parent:hover .poubelle {
+  display: inline;
+}
+
 
 .red {
   color: red;
