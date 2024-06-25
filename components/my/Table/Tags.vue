@@ -1,6 +1,5 @@
 <script setup>
 import { useToast } from "primevue/usetoast";
-
 import { useMyStore } from '@/stores/my'
 import { useTagsStore } from '@/stores/tags'
 
@@ -31,10 +30,6 @@ const getName = (id) => {
   let obj = tags.flatTags.data.find(o => o.id === id);
   return { label: obj ? obj.label : '', color: obj ? obj.color : '' }
 }
-
-const handleclick = () => {
-  console.log('click')
-}
 </script>
 
 <template>
@@ -52,12 +47,6 @@ const handleclick = () => {
 
 
 <style scoped>
-.exeptionnal {
-  /* visibility: hidden; */
-  display: none;
-  cursor: pointer;
-}
-
 .poubelle {
   display: none;
   position: absolute;
@@ -65,17 +54,10 @@ const handleclick = () => {
   bottom: 0;
   z-index: 1;
 }
-
 .parent{
   position: relative;
 }
-
 .parent:hover .poubelle {
   display: inline;
-}
-
-
-.red {
-  color: red;
 }
 </style>

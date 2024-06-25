@@ -14,6 +14,7 @@ export const useActivitiesStore = defineStore('activities', {
     },
 
     async deleteActivity(nid: string | Array) {
+      console.log("deleteActivity", nid)
       // TODO : Faire en backend 
       if (Array.isArray(nid)) {
         for (let o of nid) {

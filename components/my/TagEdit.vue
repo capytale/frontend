@@ -2,6 +2,7 @@
 import Dialog from 'primevue/dialog';
 import ColorPicker from 'primevue/colorpicker';
 const my = useMyStore()
+const tagstore = useTagsStore()
 
 const props = defineProps({
   slotProps: Object,
@@ -61,7 +62,7 @@ const items = ref([
         icon: 'pi pi-trash',
         command: async () => {
           try {
-            await tags.deleteTag(props.slotProps.node.id)
+            await tagstore.deleteTag(props.slotProps.node.id)
             toast.add({ severity: 'success', summary: 'Étiquette supprimée', life: 2000 });
           }
           catch (e) {
@@ -81,19 +82,19 @@ const toggle = (event) => {
 
 const save = () => {
   if (newTag.value) {
-    tags.addTag(label.value, Object.keys(selectedTag.value)[0] || 0)
+    tagstore.addTag(label.value, Object.keys(selectedTag.value)[0] || 0)
   } else {
-    tags.setTagLabel(props.slotProps.node.id, label.value)
+    tagstore.setTagLabel(props.slotProps.node.id, label.value)
     if (wantSubTag.value.length > 0 && Object.keys(selectedTag.value).length == 1) {
-      tags.setTagParent(props.slotProps.node.id, Object.keys(selectedTag.value)[0])
+      tagstore.setTagParent(props.slotProps.node.id, Object.keys(selectedTag.value)[0])
     } else {
-      tags.setTagParent(props.slotProps.node.id, 0)
+      tagstore.setTagParent(props.slotProps.node.id, 0)
     }
   }
   editVisible.value = false;
 }
 const saveColor = () => {
-  tags.setTagColor(props.slotProps.node.id, "#" + color.value)
+  tagstore.setTagColor(props.slotProps.node.id, "#" + color.value)
   colorVisible.value = false;
 }
 
