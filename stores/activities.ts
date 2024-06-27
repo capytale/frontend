@@ -13,25 +13,15 @@ export const useActivitiesStore = defineStore('activities', {
       // TODO : pas besoin de renvoyer un objet pour les tags : la liste csv des tids suffit. 
     },
 
-    async deleteActivity(nid: string | Array) {
-      console.log("deleteActivity", nid)
-      // TODO : Faire en backend 
-      if (Array.isArray(nid)) {
-        for (let o of nid) {
-          this.activities.data = this.activities.data.filter((item) => item.nid !== o.nid);
-          // vvv ne marche pas : invalid json
-          await httpClient.postJsonAsync(
-            myActivitiesApiEp,
-            { action: "delete", nid }
-          );
-        }
-      } else if (typeof nid === "string") {
+    async deleteActivity(nids: Array) {
+      for (let nid of nids) {
+        console.log("deleteActivity", nid)
         this.activities.data = this.activities.data.filter((item) => item.nid !== nid);
-        await httpClient.postJsonAsync(
-          myActivitiesApiEp,
-          { action: "delete", nid }
-        );
       }
+      await httpClient.postJsonAsync(
+        myActivitiesApiEp,
+        { action: "delete", nids }
+      );
     },
     async cloneActivity(nid: number) {
       // TODO : Faire en backend 

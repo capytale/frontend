@@ -66,7 +66,7 @@ const handleDelete = function () {
     acceptClass: 'p-button-danger',
     accept: async () => {
       try {
-        await activites.deleteActivity(selectedNid.value)
+        await activites.deleteActivity([...selectedNid.value.map((o) => o.nid)])
         toast.add({ severity: 'success', summary: 'Suppression effectuée : ', life: 2000 });
       }
       catch (e) {

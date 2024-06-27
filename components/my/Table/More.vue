@@ -68,7 +68,7 @@ const commonItems = ref([
         acceptClass: 'p-button-danger',
         accept: async () => {
           try {
-            await activites.deleteActivity(props.nid)
+            await activites.deleteActivity([props.nid])
             toast.add({ severity: 'success', summary: 'Suppression effectuée : ', life: 2000 });
           }
           catch (e) {
