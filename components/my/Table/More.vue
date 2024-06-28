@@ -26,7 +26,7 @@ const actItems = ref([
     command: async () => {
       try {
         const response = await activites.cloneActivity(props.nid)
-        toast.add({ severity: 'success', summary: 'Clonage réussi : ', life: 2000 });
+        toast.add({ severity: 'success', summary: 'Clonage réussi : ', detail: `response = ${response}`, life: 200000 });
       }
       catch (e) {
         toast.add({ severity: 'error', summary: 'Échec du clonage : ', detail: `nid = ${props.nid} - ${e}` });
@@ -69,7 +69,7 @@ const commonItems = ref([
         accept: async () => {
           try {
             await activites.deleteActivity([props.nid])
-            toast.add({ severity: 'success', summary: 'Suppression effectuée : ', life: 2000 });
+            toast.add({ severity: 'success', summary: 'Suppression effectuée', life: 2000 });
           }
           catch (e) {
             toast.add({ severity: 'error', summary: 'Échec de la suppression : ', detail: `nid = ${props.nid} - ${e}` });

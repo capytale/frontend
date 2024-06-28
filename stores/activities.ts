@@ -24,10 +24,26 @@ export const useActivitiesStore = defineStore('activities', {
       );
     },
     async cloneActivity(nid: number) {
-      // TODO : Faire en backend 
-      return httpClient.postJsonAsync(
+      let response
+      try {
+        response = await httpClient.postGetJsonAsync(
+          myActivitiesApiEp,
+          { action: "clone", nid }
+        )
+      } catch (e) {
+        console.log("error", e)
+      }
+      console.log("nid, code, changed : ", response.nid, response.code, response.changed)
+      // opération sur le store pour ajouter le clone
+    },
+    async tagActivities(nids: any[], tags: any[]) {
+      for (let item of nids) {
+        console.log("tagActivity", item.nid, tags)
+        this.activities.data = this.activities.data.map(el => el.nid == item.nid ? { ...el, tags: { tids: el.tags.tids + "," + tags.join(",") } } : el);
+      }
+      await httpClient.postJsonAsync(
         myActivitiesApiEp,
-        { action: "clone", nid }
+        { action: "tag", nids, tags }
       );
     },
     async moveActivities(items: array, tid: number) {
@@ -35,13 +51,6 @@ export const useActivitiesStore = defineStore('activities', {
       for (let item of items) {
         console.log("moveActivity", item.nid, tid)
         this.activities.data = this.activities.data.map(el => el.nid == item.nid ? { ...el, tags: { tids: tid } } : el);
-      }
-    },
-    async tagActivities(items: array, tags: array) {
-      // TODO : Faire en backend 
-      for (let item of items) {
-        console.log("moveActivity", item.nid, tags)
-        this.activities.data = this.activities.data.map(el => el.nid == item.nid ? { ...el, tags: { tids: el.tags.tids + "," + tags.join(",") } } : el);
       }
     },
     async untagActivity(nid: number, tid: number) {

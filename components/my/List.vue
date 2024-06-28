@@ -67,7 +67,7 @@ const handleDelete = function () {
     accept: async () => {
       try {
         await activites.deleteActivity([...selectedNid.value.map((o) => o.nid)])
-        toast.add({ severity: 'success', summary: 'Suppression effectuée : ', life: 2000 });
+        toast.add({ severity: 'success', summary: 'Suppression effectuée', life: 2000 });
       }
       catch (e) {
         toast.add({ severity: 'error', summary: 'Échec de la suppression : ', detail: `nid = ${selectedNid.value} - ${e}` });
@@ -83,10 +83,10 @@ const handleMoveToFolderMultiple = function () {
   console.log("folder: ", folder)
   activites.moveActivities(selectedNid.value, folder)
 }
-const handleAddTagMultiple = function () {
+const handleAddTagMultiple = async () => {
   const tags = Object.keys(selectedTags.value)
   console.log("tags: ", tags)
-  activites.tagActivities(selectedNid.value, tags)
+  await activites.tagActivities(selectedNid.value, tags)
 }
 
 const filters = ref({
