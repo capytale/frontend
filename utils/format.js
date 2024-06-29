@@ -27,10 +27,15 @@ export function timeElapsed(ts) {
     var mois = Math.floor(jours / 30);
     var ans = Math.floor(mois / 12);
 
-    if (ans > 0) return ans + " ans"
+    if (ans > 1) return ans + " ans"
+    if (ans > 0) return ans + " an"
     if (mois > 0) return mois + " mois"
-    if (jours > 0) return jours + " jours"
-    if (heures > 0) return heures + " heures"
-    if (minutes > 0) return minutes + " minutes"
-    if (secondes > 0) return secondes + " secondes"
+    if (jours > 1) return jours + " jours"
+    if (jours > 0) return jours + " jour"
+    if (heures > 1) return heures + " heures"
+    if (heures > 0) return heures + " heure"
+    if (minutes > 1) return minutes + " minutes"
+    if (minutes > 0) return minutes + " minute"
+    if (secondes > 1) return secondes + " seconde"
+    return "1 seconde" 
 }

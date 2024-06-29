@@ -24,17 +24,39 @@ export const useActivitiesStore = defineStore('activities', {
       );
     },
     async cloneActivity(nid: number) {
-      let response
+      let r
       try {
-        response = await httpClient.postGetJsonAsync(
+        r = await httpClient.postGetJsonAsync(
           myActivitiesApiEp,
           { action: "clone", nid }
         )
       } catch (e) {
         console.log("error", e)
       }
-      console.log("nid, code, changed : ", response.nid, response.code, response.changed)
-      // opération sur le store pour ajouter le clone
+      console.log("le clone : ", r.actnodtype, r.changed, r.code, r.nid, r.title, r.type)
+      // On ajoute le clone au store
+      r.access_tr_mode = "none"
+      r.aid = r.nid
+      r.appreciation = ""
+      r.bib = `${r.nid}:0`
+      r.evaluation = ""
+      r.icon = "xxxxxxxxx"
+      r.last_access = `${r.changed}`
+      r.mode = "N_O"
+      r.own = 1
+      r.own_aid = r.nid
+      r.player = `/web/c-act/n/${r.nid}/play/create`
+      r.row_id = `row-${r.nid}`
+      r.sa = "0"
+      r.status_clonable = 1
+      r.status_shared = 0
+      r.status_web = 0
+      r.tags = []
+      r.views_hidden = 0
+      r.views_total = 0
+      r.whoami = "cr"
+      r.workflow = 0
+      this.activities.data.push(r)
     },
     async tagActivities(nids: any[], tags: any[]) {
       for (let item of nids) {

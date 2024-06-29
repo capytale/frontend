@@ -17,7 +17,7 @@ const tags = useTagsStore()
 activites.getActivities()
 
 my.types = await useActivities();
-console.log(my.types);
+// console.log(my.types);
 
 const selectedTags = ref(null)
 const selectedFolder = ref(null)
@@ -232,7 +232,7 @@ const myactivities = computed(() => {
 
         <Column field="type" header="Type" sortable>
           <template #body="p">
-            <MyTableType :icon="p.data.icon" :type="p.data.type" />
+            <MyTableType :icon="typeIcon(p.data.type)" :type="p.data.type" />
           </template>
         </Column>
 
