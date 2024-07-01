@@ -108,6 +108,19 @@ const dispOptions = [{
       <InputText v-model="search" class="mt-4" placeholder="Recherche..." />
     </template>
     </Card>
+    <div class="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 mb-16">
+      <Card v-for="(obj, cat, index) in myStore.typesTree">
+      <template #header><div class="text-center font-bold">{{ obj.title }}</div></template>
+      <template #content>
+      <div class="grid grid-cols-3 gap-4">
+        <img
+          :src="'https://capytale2.ac-paris.fr'.concat(myStore.types.find(el => el.id == acti).icon.path)" v-for="acti in obj.activities"
+          class="w-16"
+        />
+      </div>
+      </template>
+      </Card>
+    </div>
     <div class="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
       <ActiCard
         v-for="(item, index) of chosenCats
