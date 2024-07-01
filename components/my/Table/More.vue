@@ -111,6 +111,11 @@ const commonItems = ref([
     }
   }
 ]);
+
+
+watch(() => props.mode, (now,before) => console.log("now, before : ", now, before))
+
+
 const items = computed(() => {
   if (props.isTeacher) {
     if (props.whoami == 'ap') {

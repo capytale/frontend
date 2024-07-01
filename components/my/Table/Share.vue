@@ -149,7 +149,7 @@ const wfStatus = computed(() => {
 </script>
 
 <template>
-  <template v-if="whoami == 'cr' && isTeacher">
+  <template v-if="(whoami == 'cr' || whoami == 'as') && isTeacher">
     <div class="card flex justify-content-center mystyle"
       v-tooltip.top="{ value: label.tooltipText, showDelay: 400, hideDelay: 0 }">
       <Button type="button" :label="label.code" @click="toggle" class="mystyle p-3" :severity="label.severity"
@@ -165,13 +165,22 @@ const wfStatus = computed(() => {
       <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
     </div>
 
-
     <Dialog v-model:visible="visible" header="Accès à l'activité" modal
       :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }" :style="{ width: '75%' }">
       <MyTableQrcode :code="code" :url="url" />
     </Dialog>
+
+    <div v-if="whoami == 'as'" class="flex justify-content-center">
+    Associé par {{ boss }}
+    </div>
+
   </template>
-  <template v-else-if="whoami == 'cr' && !isTeacher" />
+  <template v-else-if="whoami == 'cr' && !isTeacher">
+     Perso
+  </template>
+  <template v-else-if="whoami == 'as' && !isTeacher">
+    Associé par {{ boss }}
+  </template>
   <template v-else>
     <i :class="wfStatus.icon + ' ml-2'" :style="'font-size: 1.3rem; color: ' + wfStatus.color"
       v-tooltip.top="{ value: wfStatus.label, showDelay: 400, hideDelay: 0 }"></i>
