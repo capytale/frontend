@@ -58,14 +58,17 @@ export const useActivitiesStore = defineStore('activities', {
       r.workflow = 0
       this.activities.data.push(r)
     },
-    async tagActivities(nids: any[], tags: any[]) {
-      for (let item of nids) {
-        console.log("tagActivity", item.nid, tags)
-        this.activities.data = this.activities.data.map(el => el.nid == item.nid ? { ...el, tags: { tids: el.tags.tids + "," + tags.join(",") } } : el);
+    async tagActivities(pxyNids: any[], tids: any[]) {
+      // const xunion = (a, b) => [...new Set([...a.split(","), ...b])].join(",");
+
+      for (let item of pxyNids) {
+        this.activities.data = this.activities.data.map(el => el.nid == item.nid ? { ...el, tags: { tids: el.tags.tids + "," + tids.join(",") } } : el);
+        // this.activities.data = this.activities.data.map(el => el.nid == item.nid ? { ...el, tags: { tids : xunion(el.tags.tids , tids) } } : el);
       }
+      let nids = [...pxyNids.map((o) => o.nid)];
       await httpClient.postJsonAsync(
         myActivitiesApiEp,
-        { action: "tag", nids, tags }
+        { action: "addTags", nids, tids }
       );
     },
     async moveActivities(items: array, tid: number) {
@@ -76,7 +79,6 @@ export const useActivitiesStore = defineStore('activities', {
       }
     },
     async untagActivity(nid: number, tid: number) {
-      // TODO : Faire en backend 
       let obj = this.activities.data.find(el => el.nid == nid);
       let arrayTids = obj.tags.tids.split(",");
       let index = arrayTids.indexOf(tid);
@@ -84,6 +86,10 @@ export const useActivitiesStore = defineStore('activities', {
         arrayTids.splice(index, 1);
       }
       this.activities.data = this.activities.data.map(el => el.nid == nid ? { ...el, tags: { tids: arrayTids.join(",") } } : el);
+      await httpClient.postJsonAsync(
+        myActivitiesApiEp,
+        { action: "untag", nid, tid }
+      );
     }
   },
 })

@@ -36,7 +36,7 @@ const onRowSelect = function () {
 }
 const onRowSelectAll = function () {
   showToolbar.value = true
-  oneCheckbox.value = local.data.length == 1
+  // oneCheckbox.value = local.data.length == 1
 }
 const onRowUnselectAll = function () {
   showToolbar.value = false
@@ -57,7 +57,7 @@ const confirm = useConfirm();
 const toast = useToast();
 const handleDelete = function () {
   confirm.require({
-    message: 'Vous vous apprêtez à supprimer DÉFINITIVEMENT.',
+    message: `Vous vous apprêtez à supprimer ${selectedNid.value.length} éléments DÉFINITIVEMENT.`,
     header: 'Confirmation',
     icon: 'pi pi-exclamation-triangle',
     rejectLabel: 'Annuler',
@@ -85,7 +85,6 @@ const handleMoveToFolderMultiple = function () {
 }
 const handleAddTagMultiple = async () => {
   const tags = Object.keys(selectedTags.value)
-  console.log("tags: ", tags)
   await activites.tagActivities(selectedNid.value, tags)
 }
 
