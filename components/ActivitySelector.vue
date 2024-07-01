@@ -115,13 +115,6 @@ const dispOptions = [{
           </SelectButton>
         </div>
       </div>
-      <div class="w-full">
-      <Button
-        class="mx-2"
-        v-for="el of ['web', 'python', 'robots', 'cartes', 'blocs']"
-        :label="el"
-      />
-      </div>
       <InputText v-model="search" class="mt-4" placeholder="Recherche..." />
     </template>
     </Card>
