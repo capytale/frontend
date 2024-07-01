@@ -37,7 +37,7 @@ const items = computed(() =>
       }
     },
     {
-      label: 'Afficher le QRCode de partage',
+      label: 'Afficher le QR Code de partage',
       icon: 'pi pi-qrcode',
       command: () => {
         visible.value = true;

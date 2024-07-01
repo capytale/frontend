@@ -78,10 +78,10 @@ const handleDelete = function () {
     }
   });
 }
-const handleMoveToFolderMultiple = function () {
+const handleMoveToFolderMultiple = async () => {
   const folder = Object.keys(selectedFolder.value)[0]
   console.log("folder: ", folder)
-  activites.moveActivities(selectedNid.value, folder)
+  await activites.moveActivities(selectedNid.value, folder)
 }
 const handleAddTagMultiple = async () => {
   const tags = Object.keys(selectedTags.value)

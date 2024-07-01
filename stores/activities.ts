@@ -60,7 +60,6 @@ export const useActivitiesStore = defineStore('activities', {
     },
     async tagActivities(pxyNids: any[], tids: any[]) {
       // const xunion = (a, b) => [...new Set([...a.split(","), ...b])].join(",");
-
       for (let item of pxyNids) {
         this.activities.data = this.activities.data.map(el => el.nid == item.nid ? { ...el, tags: { tids: el.tags.tids + "," + tids.join(",") } } : el);
         // this.activities.data = this.activities.data.map(el => el.nid == item.nid ? { ...el, tags: { tids : xunion(el.tags.tids , tids) } } : el);
@@ -71,12 +70,16 @@ export const useActivitiesStore = defineStore('activities', {
         { action: "addTags", nids, tids }
       );
     },
-    async moveActivities(items: array, tid: number) {
-      // TODO : Faire en backend 
-      for (let item of items) {
+    async moveActivities(pxyNids: array, tid: number) {
+      for (let item of pxyNids) {
         console.log("moveActivity", item.nid, tid)
         this.activities.data = this.activities.data.map(el => el.nid == item.nid ? { ...el, tags: { tids: tid } } : el);
       }
+      let nids = [...pxyNids.map((o) => o.nid)];
+      await httpClient.postJsonAsync(
+        myActivitiesApiEp,
+        { action: "moveFolder", nids, tid }
+      );
     },
     async untagActivity(nid: number, tid: number) {
       let obj = this.activities.data.find(el => el.nid == nid);
