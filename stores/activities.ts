@@ -23,6 +23,7 @@ export const useActivitiesStore = defineStore('activities', {
         { action: "delete", nids }
       );
     },
+
     async cloneActivity(nid: number) {
       let r
       try {
@@ -58,6 +59,23 @@ export const useActivitiesStore = defineStore('activities', {
       r.workflow = 0
       this.activities.data.push(r)
     },
+
+    async lockMode(nid: number) {
+      this.activities.data = this.activities.data.map(el => el.nid == nid ? { ...el, mode: "N_X" } : el);
+      await httpClient.postJsonAsync(
+        myActivitiesApiEp,
+        { action: "lockMode", nid }
+      );
+    },
+
+    async unlockMode(nid: number) {
+      this.activities.data = this.activities.data.map(el => el.nid == nid ? { ...el, mode: "N_O" } : el);
+      await httpClient.postJsonAsync(
+        myActivitiesApiEp,
+        { action: "unlockMode", nid }
+      );
+    },
+
     async tagActivities(pxyNids: any[], tids: any[]) {
       // const xunion = (a, b) => [...new Set([...a.split(","), ...b])].join(",");
       for (let item of pxyNids) {
@@ -70,6 +88,7 @@ export const useActivitiesStore = defineStore('activities', {
         { action: "addTags", nids, tids }
       );
     },
+
     async moveActivities(pxyNids: array, tid: number) {
       for (let item of pxyNids) {
         console.log("moveActivity", item.nid, tid)
@@ -81,6 +100,7 @@ export const useActivitiesStore = defineStore('activities', {
         { action: "moveFolder", nids, tid }
       );
     },
+
     async untagActivity(nid: number, tid: number) {
       let obj = this.activities.data.find(el => el.nid == nid);
       let arrayTids = obj.tags.tids.split(",");

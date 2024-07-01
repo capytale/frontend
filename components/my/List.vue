@@ -287,7 +287,7 @@ const myactivities = computed(() => {
 
         <Column field="more" header="">
           <template #body="p">
-            <MyTableMore :nid="p.data.nid" :whoami="p.data.whoami" :isTeacher="isTeacher" />
+            <MyTableMore :nid="p.data.nid"  :mode="p.data.mode" :whoami="p.data.whoami" :isTeacher="isTeacher" />
           </template>
         </Column>
 

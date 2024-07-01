@@ -7,6 +7,7 @@ activites.getActivities()
 
 const props = defineProps({
   nid: String,
+  mode: String,
   whoami: String,
   isTeacher: Boolean,
   required: true
@@ -34,16 +35,44 @@ const actItems = ref([
     }
   }
 ])
-const actTeacherItems = ref([
+const actMoodleItem = ref([
   {
     label: 'Copier l\'URL d\'intégration dans Moodle',
     icon: 'pi pi-link'
   },
-  {
-    label: 'Bloquer la distribution',
-    icon: 'pi pi-lock'
-  }
 ])
+
+const actClonableItem = ref([])
+if (props.mode.includes('_X')) {
+  actClonableItem.value = [{
+      label: 'Débloquer la distribution',
+      icon: 'pi pi-lock-open',
+      command: async () => {
+      try {
+        const response = await activites.unlockMode(props.nid)
+        toast.add({ severity: 'success', summary: 'Distribution débloquée', life: 2000 });
+      }
+      catch (e) {
+        toast.add({ severity: 'error', summary: 'Échec du débloquage de la distribution de l\'activité : ', detail: `nid = ${props.nid} - ${e}` });
+      }
+    }
+    }]
+} else {
+  actClonableItem.value = [{
+      label: 'Bloquer la distribution',
+      icon: 'pi pi-lock',
+      command: async () => {
+      try {
+        const response = await activites.lockMode(props.nid)
+        toast.add({ severity: 'success', summary: 'Distribution bloquée', life: 2000 });
+      }
+      catch (e) {
+        toast.add({ severity: 'error', summary: 'Échec du bloquage de la distribution de l\'activité : ', detail: `nid = ${props.nid} - ${e}` });
+      }
+    }
+    }]
+}
+
 const commonItems = ref([
   {
     label: 'Télécharger',
@@ -87,7 +116,7 @@ const items = computed(() => {
     if (props.whoami == 'ap') {
       return commonItems.value
     } else {
-      return [...actItems.value, ...actTeacherItems.value, ...commonItems.value]
+      return [...actItems.value, ...actMoodleItem.value, ...actClonableItem.value, ...commonItems.value]
     }
   } else {
     if (props.whoami == 'ap') {
