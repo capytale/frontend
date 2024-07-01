@@ -2,7 +2,6 @@
 import TypeApi from "@capytale/activity.js/backend/capytale/activityType";
 const props = defineProps({
   activite: Object,
-  disp: String,
 });
 import { useToast } from "primevue/usetoast";
 
@@ -51,7 +50,6 @@ const goActi = (event, msg) => {
   <Card
     class="cursor-pointer hover:shadow-md"
     @click="(event) => goActi(event, 'coucou')"
-    v-if="disp == 'desc'"
   >
     <template #title>
       <div class="flex flex-row justify-between items-center w-full">
@@ -69,19 +67,6 @@ const goActi = (event, msg) => {
     <template #content>
       <div class="text-sm">{{ activite.description }}</div>
     </template>
-  </Card>
-
-  <Card
-    class="cursor-pointer hover:shadow-md"
-    @click="(event) => goActi(event, 'coucou')"
-    v-else
-  >
-  <template #content>
-    <img :src="'https://capytale2.ac-paris.fr'.concat(activite.icon.path)" class="w-16" />
-    <div class="text-sm">
-      {{ activite.name.replace("Robot", "").replace("Carte", "").replace("Pi ", "") }}
-    </div>
-  </template>
   </Card>
 </template>
 

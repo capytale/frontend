@@ -69,12 +69,7 @@ watch(myStore.types, () => {
   });
 });
 
-const itemRefs = ref([]);
-const dispActivities = ref("desc");
-const dispV = (v) => {
-  if (dispActivities.value == v) return "solid";
-  else return "ghost";
-};
+const itemRefs = ref([]);;
 
 const cols = [
   {
@@ -108,48 +103,20 @@ const dispOptions = [{
         <div class="flex flex-row gap-4">
           <Dropdown v-model="catChoice" :options="cats" option-label="label" option-value="value" :ui="inputstyle" />
           <Dropdown v-model="matChoice" :options="mats" option-label="label" option-value="value" :ui="inputstyle" />
-          <SelectButton :options="dispOptions" v-model="dispActivities" option-value="value">
-            <template #option="slotProps">
-              <i class="pi" :class="'pi-' + slotProps.option.icon" />
-            </template>
-          </SelectButton>
         </div>
       </div>
       <InputText v-model="search" class="mt-4" placeholder="Recherche..." />
     </template>
     </Card>
-    <div
-      v-if="['desc', 'icons'].includes(dispActivities)"
-      :class="
-        dispActivities == 'desc'
-          ? 'grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4'
-          : dispActivities == 'icons'
-          ? 'grid lg:grid-cols-10 sm:grid-cols-6 grid-cols-3 gap-1'
-          : ''
-      "
-    >
+    <div class="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
       <ActiCard
         v-for="(item, index) of chosenCats
           .filter((a) => a.score > seuil)
           .sort((a, b) => b.score - a.score)"
         :key="index"
         :activite="item"
-        :disp="dispActivities"
       ></ActiCard>
     </div>
-
-    <DataTable
-      v-else
-      :value="chosenCats.filter((a) => a.score > seuil).sort((a, b) => b.score - a.score)"
-      @row-click="console.log($event)"
-    >
-    <Column header="">
-      <template #body="slotProps">
-        <img :src="`https://capytale2.ac-paris.fr${slotProps.data.icon.path}`" class="w-16" />
-      </template>
-    </Column>
-    <Column field="name" header="name" />
-    </DataTable>
 </template>
 
 <style>
