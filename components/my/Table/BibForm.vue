@@ -1,6 +1,7 @@
 <script setup>
 import { useConfirm } from "primevue/useconfirm";
 const confirm = useConfirm();
+const activites = useActivitiesStore()
 
 const props = defineProps({
   nid: String,
@@ -11,7 +12,7 @@ const share = ref(false);
 const web = ref(false);
 const selectedThemes = ref(null)
 
-const { data:idxEls, pending, error, status } = await fetchBibIndexingElements()
+const { data: idxEls, pending, error, status } = await fetchBibIndexingElements()
 
 const selectedModules = ref();
 const filteredModules = ref();
@@ -31,7 +32,7 @@ const search = (event) => {
 const selectedEnseignements = ref([]);
 const selectedNiveaux = ref([]);
 
-const postBibForm = () => {
+const postBibForm = async () => {
   // visible.value = false
   if (resume.value.length < 20) {
     confirm.require({
@@ -78,16 +79,16 @@ const postBibForm = () => {
       selThemes.push(a[x][0])
     }
   }
-  // for (const prop in selThemes) { console.log(`${prop}: ${selThemes[prop].checked}`) }
 
-  console.log('Share', share.value);
-  console.log('Web: ', web.value);
-  console.log('Résumé: ', resume.value);
-  console.log('Enseignements: ', selEnseignements);
-  console.log('Niveaux:', selNiveaux);
-  console.log('Modules: ', selModules);
-  console.log('Themes: ', selThemes)
-
+  await activites.bibIndexActivity(props.nid,
+    share.value, 
+    web.value, 
+    resume.value,
+    selEnseignements,
+    selNiveaux,
+    selModules,
+    selThemes
+  )
 }
 
 </script>

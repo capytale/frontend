@@ -80,7 +80,7 @@ const handleDelete = function () {
 }
 const handleMoveToFolderMultiple = async () => {
   const folder = Object.keys(selectedFolder.value)[0]
-  console.log("folder: ", folder)
+  // console.log("folder: ", folder)
   await activites.moveActivities(selectedNid.value, folder)
 }
 const handleAddTagMultiple = async () => {

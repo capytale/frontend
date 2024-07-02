@@ -15,7 +15,7 @@ export const useActivitiesStore = defineStore('activities', {
 
     async deleteActivity(nids: Array) {
       for (let nid of nids) {
-        console.log("deleteActivity", nid)
+        // console.log("deleteActivity", nid)
         this.activities.data = this.activities.data.filter((item) => item.nid !== nid);
       }
       await httpClient.postJsonAsync(
@@ -34,14 +34,13 @@ export const useActivitiesStore = defineStore('activities', {
       } catch (e) {
         console.log("error", e)
       }
-      console.log("le clone : ", r.actnodtype, r.changed, r.code, r.nid, r.title, r.type)
+      // console.log("le clone : ", r.changed, r.code, r.nid, r.title, r.type)
       // On ajoute le clone au store
       r.access_tr_mode = "none"
       r.aid = r.nid
       r.appreciation = ""
       r.bib = `${r.nid}:0`
       r.evaluation = ""
-      r.icon = "xxxxxxxxx"
       r.last_access = `${r.changed}`
       r.mode = "N_O"
       r.own = 1
@@ -50,13 +49,13 @@ export const useActivitiesStore = defineStore('activities', {
       r.row_id = `row-${r.nid}`
       r.sa = "0"
       r.status_clonable = 1
-      r.status_shared = 0
-      r.status_web = 0
+      r.status_shared = "0"
+      r.status_web = "0"
       r.tags = []
       r.views_hidden = 0
       r.views_total = 0
       r.whoami = "cr"
-      r.workflow = 0
+      r.workflow = "0"
       this.activities.data.push(r)
     },
 
@@ -91,7 +90,7 @@ export const useActivitiesStore = defineStore('activities', {
 
     async moveActivities(pxyNids: array, tid: number) {
       for (let item of pxyNids) {
-        console.log("moveActivity", item.nid, tid)
+        // console.log("moveActivity", item.nid, tid)
         this.activities.data = this.activities.data.map(el => el.nid == item.nid ? { ...el, tags: { tids: tid } } : el);
       }
       let nids = [...pxyNids.map((o) => o.nid)];
@@ -113,7 +112,25 @@ export const useActivitiesStore = defineStore('activities', {
         myActivitiesApiEp,
         { action: "untag", nid, tid }
       );
-    }
+    },
+
+    async bibIndexActivity( nid: number, 
+      share: number, 
+      web: number,
+      resume: string,
+      selEnseignements: any[],
+      selNiveaux: any[],
+      selModules: any[],
+      selThemes: any[],
+    ) {
+      const indexElements = {nid, share, web, resume, selEnseignements, selNiveaux, selModules, selThemes}
+      console.log("bibIndexActivity : ", indexElements)
+      await httpClient.postJsonAsync(
+        myActivitiesApiEp,
+        { action: "bibIndex", indexElements }
+      );
+    },
+
   },
 })
 
