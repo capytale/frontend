@@ -110,7 +110,7 @@ const dispOptions = [{
       <InputText v-model="search" class="mt-4" placeholder="Recherche..." />
     </template>
     </Card>
-    <div class="flex mb-16">
+    <div class="grid grid-cols-4 gap-4 mb-4">
       <Card v-for="(obj, cat, index) in myStore.groups">
       <template #header><div class="text-center font-bold">{{ obj.title }}</div></template>
       <template #content>
