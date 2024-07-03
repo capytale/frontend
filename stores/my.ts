@@ -1,23 +1,15 @@
 import httpClient from '@capytale/activity.js/backend/capytale/http'
 
 const myActivitiesApiEp = "/web/c-hdls/api/my-activities"
+import TypeApi, { ActivityType } from '@capytale/activity.js/backend/capytale/activityType'
+
 
 export const useMyStore = defineStore('my', {
   state: () => ({
     assignments: [],
     favorites: [],
     types: [],
-    loadingAssignments: false,
-    typesTree: {
-      "cartes": {
-        "title": "Cartes électroniques",
-        "activities": ['lti.vs.microbit', 'lti.vs.arduino', 'lti.vs.esp32', 'lti.vs.galaxia', 'lti.vs.l476'],
-      },
-      "robots": {
-        "title": "Robots",
-        "activities": ['lti.vs.mbot', 'lti.vs.cyberpi', 'lti.vs.eliobot', 'lti.vs.thymio'],
-      }
-    },
+    groups: {},
   }),
   actions: {
     async getAssignments(nid: string) {

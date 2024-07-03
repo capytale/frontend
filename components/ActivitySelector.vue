@@ -11,6 +11,8 @@ const myStore = useMyStore();
 myStore.favorites = await TypeApi.getFavorites();
 
 myStore.types = await useActivities();
+myStore.groups = await TypeApi.getGroups();
+console.log(myStore.groups);
 
 console.log(myStore.types);
 
@@ -108,8 +110,8 @@ const dispOptions = [{
       <InputText v-model="search" class="mt-4" placeholder="Recherche..." />
     </template>
     </Card>
-    <div class="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 mb-16">
-      <Card v-for="(obj, cat, index) in myStore.typesTree">
+    <div class="flex mb-16">
+      <Card v-for="(obj, cat, index) in myStore.groups">
       <template #header><div class="text-center font-bold">{{ obj.title }}</div></template>
       <template #content>
       <div class="grid grid-cols-3 gap-4">
