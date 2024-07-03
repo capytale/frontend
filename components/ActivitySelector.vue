@@ -114,10 +114,10 @@ const dispOptions = [{
       <Card v-for="(obj, cat, index) in myStore.groups">
       <template #header><div class="text-center font-bold">{{ obj.title }}</div></template>
       <template #content>
-      <div class="grid grid-cols-3 gap-4">
+      <div class="flex">
         <img
           :src="myStore.types.find(el => el.id == acti).icon.path" v-for="acti in obj.activities"
-          class="w-16"
+          class="w-12"
         />
       </div>
       </template>
