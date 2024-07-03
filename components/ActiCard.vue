@@ -42,7 +42,7 @@ const goActi = (event, msg) => {
   //   });
   // }
   if (!['svg', 'path'].includes(event.target.tagName))
-    window.location.href = "/web/node/add/activity?type=" + props.activite.id;
+    window.location.href = `/web/node/add/${props.activite.bundle}?type=${props.activite.id}`;
 };
 </script>
 
