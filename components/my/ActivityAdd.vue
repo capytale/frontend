@@ -7,7 +7,7 @@
     <template #content>
       <div class="overscroll-x-auto">
       <a v-for="el of myStore.types.filter(el => myStore.favorites.includes(el.id))" :key="el.id" :href="'/web/node/add/activity?type=' + el.id" v-tooltip.bottom="el.name" class="hover:shadow-md">
-          <img :src="'https://capytale2.ac-paris.fr'.concat(el.icon.path)" class="w-16 inline" />
+          <img :src="el.icon.path" class="w-16 inline" />
           <div class="text-sm" v-if="false">
             {{ el.name.replace("Robot", "").replace("Carte", "").replace("Pi ", "") }}
           </div>

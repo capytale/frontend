@@ -54,7 +54,7 @@ const goActi = (event, msg) => {
     <template #title>
       <div class="flex flex-row justify-between items-center w-full">
         <img
-          :src="'https://capytale2.ac-paris.fr'.concat(activite.icon.path)"
+          :src="activite.icon.path"
           class="w-16"
         />
         <div class="text-lg font-semibold ml-2 grow">

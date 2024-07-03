@@ -114,7 +114,7 @@ const dispOptions = [{
       <template #content>
       <div class="grid grid-cols-3 gap-4">
         <img
-          :src="'https://capytale2.ac-paris.fr'.concat(myStore.types.find(el => el.id == acti).icon.path)" v-for="acti in obj.activities"
+          :src="myStore.types.find(el => el.id == acti).icon.path" v-for="acti in obj.activities"
           class="w-16"
         />
       </div>

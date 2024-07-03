@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-row items-center justify-around">
-      <img src="https://capytale2.ac-paris.fr/logo.svg" class="w-40 mr-4 rounded-lg" />
+      <img :src="'/logo.svg'" class="w-40 mr-4 rounded-lg" />
       <div>
         <h1 class="text-4xl font-bold">Capytale</h1>
         <h2 class="text-2xl font-semibold">
