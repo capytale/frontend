@@ -1,6 +1,6 @@
 import httpClient from '@capytale/activity.js/backend/capytale/http'
 
-const myActivitiesApiEp = "/web/c-hdls/api/my-activities"
+const privateTagsApiEp = "/web/c-hdls/api/private-tags"
 
 export const useTagsStore = defineStore('tags', {
   state: () => ({
@@ -14,20 +14,34 @@ export const useTagsStore = defineStore('tags', {
     async getFlatTags() {
       this.flatTags = await fetchFlatTags()
     },
+    async createTag(label, parentId) {
+      let r
+      try {
+        r = await httpClient.postGetJsonAsync(
+          privateTagsApiEp,
+          { action: "create", tagValues: label, parentId }
+        )
+      } catch (e) {
+        console.log("error", e)
+      }
+      // TODO : utiliser ce que revoir r pour ajouter le tag au store sans utiliser le random
+
+      this.flatTags.data = [...this.flatTags.data, { id: Math.random() * (999999999 - 99999999) + 99999999, color: "#FF0000", key: "122233322", label, parentid: parentId }]
+      this.tags.data = unflatten(this.flatTags.data)
+    },
+    async destroyTag(tid) {
+      // TODO : Faire en backend pour récupérer l'id
+      this.flatTags.data = this.flatTags.data.filter((item) => item.id !== tid);
+      this.tags.data = unflatten(this.flatTags.data)
+      await httpClient.postJsonAsync(
+        privateTagsApiEp,
+        { action: "destroy", tid }
+      );
+    },
     setTagColor(id: number, color: string) {
       this.flatTags.data = this.flatTags.data.map(el => el.id == id ? { ...el, color: color } : el);
       this.tags.data = unflatten(this.flatTags.data)
       // TODO : Faire en backend 
-    },
-    async deleteTag(id) {
-      // TODO : Faire en backend pour récupérer l'id
-      this.flatTags.data = this.flatTags.data.filter((item) => item.id !== id);
-      this.tags.data = unflatten(this.flatTags.data)
-    },
-    addTag(label, parentId) {
-      // TODO : Faire en backend pour récupérer l'id
-      this.flatTags.data = [...this.flatTags.data, { id: Math.random() * (999999999 - 99999999) + 99999999, color: "#FF0000", key: "122233322", label, parentid: parentId }]
-      this.tags.data = unflatten(this.flatTags.data)
     },
     setTagLabel(id, label) {
       this.flatTags.data = this.flatTags.data.map(el => el.id == id ? { ...el, label: label } : el);

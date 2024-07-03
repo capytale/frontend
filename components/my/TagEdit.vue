@@ -62,7 +62,7 @@ const items = ref([
         icon: 'pi pi-trash',
         command: async () => {
           try {
-            await tagstore.deleteTag(props.slotProps.node.id)
+            await tagstore.destroyTag(props.slotProps.node.id)
             toast.add({ severity: 'success', summary: 'Étiquette supprimée', life: 2000 });
           }
           catch (e) {
@@ -82,7 +82,7 @@ const toggle = (event) => {
 
 const save = () => {
   if (newTag.value) {
-    tagstore.addTag(label.value, Object.keys(selectedTag.value)[0] || 0)
+    tagstore.createTag(label.value, Object.keys(selectedTag.value)[0] || 0)
   } else {
     tagstore.setTagLabel(props.slotProps.node.id, label.value)
     if (wantSubTag.value.length > 0 && Object.keys(selectedTag.value).length == 1) {

@@ -42,36 +42,38 @@ const actMoodleItem = ref([
   },
 ])
 
-const actClonableItem = ref([])
-if (props.mode.includes('_X')) {
-  actClonableItem.value = [{
+// const actClonableItem = ref([])
+const actClonableItem = computed(() => {
+  if (props.mode.includes('_X')) {
+    return [{
       label: 'Débloquer la distribution',
       icon: 'pi pi-lock-open',
       command: async () => {
-      try {
-        const response = await activites.unlockMode(props.nid)
-        toast.add({ severity: 'success', summary: 'Distribution débloquée', life: 2000 });
+        try {
+          const response = await activites.unlockMode(props.nid)
+          toast.add({ severity: 'success', summary: 'Distribution débloquée', life: 2000 });
+        }
+        catch (e) {
+          toast.add({ severity: 'error', summary: 'Échec du débloquage de la distribution de l\'activité : ', detail: `nid = ${props.nid} - ${e}` });
+        }
       }
-      catch (e) {
-        toast.add({ severity: 'error', summary: 'Échec du débloquage de la distribution de l\'activité : ', detail: `nid = ${props.nid} - ${e}` });
-      }
-    }
     }]
-} else {
-  actClonableItem.value = [{
+  } else {
+    return [{
       label: 'Bloquer la distribution',
       icon: 'pi pi-lock',
       command: async () => {
-      try {
-        const response = await activites.lockMode(props.nid)
-        toast.add({ severity: 'success', summary: 'Distribution bloquée', life: 2000 });
+        try {
+          const response = await activites.lockMode(props.nid)
+          toast.add({ severity: 'success', summary: 'Distribution bloquée', life: 2000 });
+        }
+        catch (e) {
+          toast.add({ severity: 'error', summary: 'Échec du bloquage de la distribution de l\'activité : ', detail: `nid = ${props.nid} - ${e}` });
+        }
       }
-      catch (e) {
-        toast.add({ severity: 'error', summary: 'Échec du bloquage de la distribution de l\'activité : ', detail: `nid = ${props.nid} - ${e}` });
-      }
-    }
     }]
-}
+  }
+})
 
 const commonItems = ref([
   {
@@ -113,7 +115,7 @@ const commonItems = ref([
 ]);
 
 
-watch(() => props.mode, (now,before) => console.log("now, before : ", now, before))
+watch(() => props.mode, (now, before) => console.log("now, before : ", now, before))
 
 
 const items = computed(() => {

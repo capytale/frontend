@@ -11,6 +11,15 @@ tags.getTags()
 tags.getFlatTags()
 
 const selectedKey = ref(null);
+const createTagVisible = ref(false);
+const label = ref('');
+const wantSubTag = ref([]);
+const selectedTag = ref([])
+
+const save = () => {
+  tags.createTag(label.value, Object.keys(selectedTag.value)[0] || 0)
+    createTagVisible.value = false;
+}
 
 const onNodeSelect = (node) => {
   activeTag.activate(node.key)
@@ -36,17 +45,28 @@ const onNodeUnselect = (node) => {
             </a>
           </li>
           <li>
-            <span class="flex items-center p-2 space-x-3 rounded-md">
+            <span class="flex items-center px-2 py-4 space-x-3 rounded-md">
               <i class="pi pi-tags"></i>
-              <span class="">Étiquettes</span><i class="pi pi-plus"></i>
+              <span class="parent mr-1">
+                <span class="">Étiquettes</span>
+                <div class="novalorise">
+                  <Button icon="pi pi-plus" severity="secondary" outlined
+                    rounded />
+                </div>
+                <div class="valorise">
+                  <Button icon="pi pi-plus" severity="info" @click="createTagVisible = true" 
+                    rounded />
+                </div>
+              </span>
             </span>
           </li>
-  <div v-if="tags.tags.pending">loading......</div>
-          <Tree v-else id="folders" v-model:selectionKeys="selectedKey" selectionMode="single" :value="tags.tags.data" class="w-full md:w-30rem" @nodeSelect="onNodeSelect" @nodeUnselect="onNodeUnselect">
+          <div v-if="tags.tags.pending">loading......</div>
+          <Tree v-else id="folders" v-model:selectionKeys="selectedKey" selectionMode="single" :value="tags.tags.data"
+            class="w-full md:w-30rem" @nodeSelect="onNodeSelect" @nodeUnselect="onNodeUnselect">
             <template #default="slotProps">
-              <div class="primary-nav left centerize" >
+              <div class="primary-nav left centerize">
 
-                <MyTagEdit :slotProps="slotProps" :tags="tags.tags.data"/>
+                <MyTagEdit :slotProps="slotProps" :tags="tags.tags.data" />
               </div>
             </template>
           </Tree>
@@ -55,11 +75,33 @@ const onNodeUnselect = (node) => {
     </div>
   </div>
 
+  <Dialog v-model:visible="createTagVisible" modal header="Créer une nouvelle étiquette" :style="{ width: '55rem' }">
+    <div class="flex align-items-center gap-3 mb-3">
+      <label for="label" class="font-semibold w-6rem">Nom de l'étiquette</label>
+      <InputText v-model="label" id="label" class="flex-auto" autocomplete="off" />
+    </div>
+    <div class="flex align-items-center">
+      <Checkbox v-model="wantSubTag" inputId="checked" name="checked" value="subTag" @change="handleWant(event)" />
+      <label for="checked" class="ml-2">Imbriquer l'étiquette sous : </label>
+    </div>
+    <div class="flex align-items-center gap-3 mb-5">
+      <Tree id="folders" v-model:selectionKeys="selectedTag" :value="tags.tags.data" selectionMode="single"
+        class="w-full md:w-30rem" @nodeSelect="onNodeSelect" @nodeUnselect="onNodeUnselect">
+        <template #default="slotProps">
+          <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
+        </template>
+      </Tree>
+    </div>
+    <div cl:ass="flex justify-content-end gap-2">
+      <Button type="button" label="Cancel" severity="secondary" @click="createTagVisible = false"></Button>
+      <Button type="button" label="Save" @click="save"></Button>
 
-</template>    
+    </div>
+  </Dialog>
+
+</template>
 
 <style scoped>
-
 .sidemenu {
   position: fixed;
   width: 300px;
@@ -104,7 +146,38 @@ const onNodeUnselect = (node) => {
 .right {
   visibility: hidden;
 }
+
 .centerize {
   align-items: center;
+}
+
+
+.novalorise {
+  display: inline;
+  position: absolute;
+  left: 120%;
+  bottom: -50%;
+  z-index: 1;
+}
+
+
+.valorise {
+  display: none;
+  position: absolute;
+  left: 120%;
+  bottom: -50%;
+  z-index: 1;
+}
+
+.parent {
+  position: relative;
+}
+
+.parent:hover .novalorise {
+  display: none;
+}
+
+.parent:hover .valorise {
+  display: inline;
 }
 </style>
