@@ -15,18 +15,17 @@ export const useTagsStore = defineStore('tags', {
       this.flatTags = await fetchFlatTags()
     },
     async createTag(label, parentId) {
-      let r
+      let newTid
       try {
-        r = await httpClient.postGetJsonAsync(
+        newTid = await httpClient.postGetJsonAsync(
           privateTagsApiEp,
           { action: "create", tagValues: label, parentId }
         )
       } catch (e) {
         console.log("error", e)
       }
-      // TODO : utiliser ce que revoir r pour ajouter le tag au store sans utiliser le random
-
-      this.flatTags.data = [...this.flatTags.data, { id: Math.random() * (999999999 - 99999999) + 99999999, color: "#FF0000", key: "122233322", label, parentid: parentId }]
+      console.log("newTid: ", newTid)
+      this.flatTags.data = [...this.flatTags.data, { id: newTid, color: "#FF0000", key: newTid, label, parentid: parentId }]
       this.tags.data = unflatten(this.flatTags.data)
     },
     async destroyTag(tid) {
@@ -38,18 +37,24 @@ export const useTagsStore = defineStore('tags', {
         { action: "destroy", tid }
       );
     },
-    setTagColor(id: number, color: string) {
-      this.flatTags.data = this.flatTags.data.map(el => el.id == id ? { ...el, color: color } : el);
+    async setTagColor(tid: number, color: string) {
+      this.flatTags.data = this.flatTags.data.map(el => el.id == tid ? { ...el, color: color } : el);
       this.tags.data = unflatten(this.flatTags.data)
-      // TODO : Faire en backend 
+      await httpClient.postJsonAsync(
+        privateTagsApiEp,
+        { action: "setColor", tid, color }
+      );
     },
-    setTagLabel(id, label) {
-      this.flatTags.data = this.flatTags.data.map(el => el.id == id ? { ...el, label: label } : el);
+    async setTagLabel(tid, label) {
+      this.flatTags.data = this.flatTags.data.map(el => el.id == tid ? { ...el, label: label } : el);
       this.tags.data = unflatten(this.flatTags.data)
-      // TODO : Faire en backend 
+      await httpClient.postJsonAsync(
+        privateTagsApiEp,
+        { action: "rename", tid, label }
+      );
     },
-    setTagParent(id, parentId) {
-      this.flatTags.data = this.flatTags.data.map(el => el.id == id ? { ...el, parentid: parentId } : el);
+    setTagParent(tid, parentId) {
+      this.flatTags.data = this.flatTags.data.map(el => el.id == tid ? { ...el, parentid: parentId } : el);
       this.tags.data = unflatten(this.flatTags.data)
       // TODO : Faire en backend 
     },

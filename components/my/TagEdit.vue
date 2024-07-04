@@ -4,6 +4,8 @@ import ColorPicker from 'primevue/colorpicker';
 const my = useMyStore()
 const tagstore = useTagsStore()
 
+const toast = useToast();
+
 const props = defineProps({
   slotProps: Object,
   tags: Object,
