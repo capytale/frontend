@@ -1,5 +1,10 @@
 <script setup>
 const value = ref(null);
+
+// pour le backend, voir capytaleUI/codeForm réclamé par un postGetJsonAsync 
+// revoyer le playerURl de activityBunch 
+// pour faire un window.location.href ici et rediriger vers le player
+
 </script>
 
 
@@ -22,4 +27,3 @@ const value = ref(null);
     </template>
   </Card>
 </template>
-
