@@ -18,7 +18,7 @@ const selectedTag = ref([])
 
 const save = () => {
   tags.createTag(label.value, Object.keys(selectedTag.value)[0] || 0)
-    createTagVisible.value = false;
+  createTagVisible.value = false;
 }
 
 const onNodeSelect = (node) => {
@@ -33,44 +33,29 @@ const onNodeUnselect = (node) => {
   <div :class="sideMenu.visible ? 'sidemenu sidemenu-active' : 'sidemenu'"
     class="flex flex-col duration-300 shadow gap-4">
     <div class="space-y-3 p-3">
-      <div class="flex items-center justify-between">
-        <h2 class="text-xl font-bold ">Dashboard</h2>
-      </div>
       <div class="flex-1">
-        <ul class="pt-2 pb-4 space-y-1">
-          <li>
-            <a href="/" class="flex items-center p-2 space-x-3 rounded-md">
-              <i class="pi pi-home"></i>
-              <span class="">Accueil</span>
-            </a>
-          </li>
-          <li>
-            <span class="flex items-center px-2 py-4 space-x-3 rounded-md">
-              <i class="pi pi-tags"></i>
-              <span class="parent mr-1">
-                <span class="">Étiquettes</span>
-                <div class="novalorise">
-                  <Button icon="pi pi-plus" severity="secondary" outlined
-                    rounded />
-                </div>
-                <div class="valorise">
-                  <Button icon="pi pi-plus" severity="info" @click="createTagVisible = true" 
-                    rounded />
-                </div>
-              </span>
-            </span>
-          </li>
-          <div v-if="tags.tags.pending">loading......</div>
-          <Tree v-else id="folders" v-model:selectionKeys="selectedKey" selectionMode="single" :value="tags.tags.data"
-            class="w-full md:w-30rem" @nodeSelect="onNodeSelect" @nodeUnselect="onNodeUnselect">
-            <template #default="slotProps">
-              <div class="primary-nav left centerize">
+        <span class="flex items-center px-2 py-4 space-x-3 rounded-md">
+          <i class="pi pi-tags"></i>
+          <span class="parent mr-1">
+            <span class="">Étiquettes</span>
+            <div class="novalorise">
+              <Button icon="pi pi-plus" severity="secondary" outlined rounded />
+            </div>
+            <div class="valorise">
+              <Button icon="pi pi-plus" severity="info" @click="createTagVisible = true" rounded />
+            </div>
+          </span>
+        </span>
+        <div v-if="tags.tags.pending">loading......</div>
+        <Tree v-else id="folders" v-model:selectionKeys="selectedKey" selectionMode="single" :value="tags.tags.data"
+          class="w-full md:w-30rem" @nodeSelect="onNodeSelect" @nodeUnselect="onNodeUnselect">
+          <template #default="slotProps">
+            <div class="primary-nav left centerize">
 
-                <MyTagEdit :slotProps="slotProps" :tags="tags.tags.data" />
-              </div>
-            </template>
-          </Tree>
-        </ul>
+              <MyTagEdit :slotProps="slotProps" :tags="tags.tags.data" />
+            </div>
+          </template>
+        </Tree>
       </div>
     </div>
   </div>
@@ -112,7 +97,7 @@ const onNodeUnselect = (node) => {
   left: 2rem;
   transition: transform .2s, left .2s;
   border-radius: 12px;
-  padding: .5rem 1.5rem;
+  padding: .5rem;
   box-shadow: 0 3px 5px #00000005, 0 0 2px #0000000d, 0 1px 4px #00000014;
   background: var(--surface-0);
 }

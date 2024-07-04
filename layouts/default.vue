@@ -21,22 +21,15 @@ useHead({
   <div :class="'appContainer ' + currentThemeClass">
     <Header></Header>
     <div class="flex bggray">
-      <SideMenu></SideMenu>
-      <div :class="sideMenu.visible ? 'container mx-auto' : 'container sidemenu-inactive'">
-        <div>
+
+        <div class="container  mx-auto">
           <slot />
         </div>
-      </div>
     </div>
   </div>
 </template>
 
 <style>
-.sidemenu-inactive {
-  margin-left: 300px;
-  padding-left: 4rem;
-}
-
 .pousse {
   margin-left: 0;
   transition: margin-left .2s;

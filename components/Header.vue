@@ -13,12 +13,12 @@ const themeIcon = () => {
 </script>
 <template>
   <div class="navbar">
-    <span class="text-2xl text-gray-100 p-2">
+    <span v-if="$route.name == 'my'" class="text-2xl text-gray-100 p-2">
         <button v-if="user" @click="sideMenu.toggle"><i class="pi pi-bars"></i> </button>
       </span>
     <div class="navbarContainer">
       <span class="navbarLogo">
-        <NuxtLink href="/"> CAPYTALE </NuxtLink>
+        <NuxtLink href="/"> CAPYTALE </NuxtLink>    
       </span>
       <div class="capytaleMenu">
         <NuxtLink v-if="user" to="/my"><span class="px-2">Mes activités</span></NuxtLink>
