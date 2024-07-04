@@ -30,16 +30,16 @@ const onNodeUnselect = (node) => {
 </script>
 
 <template>
-  <div :class="sideMenu.visible ? 'sidemenu sidemenu-active' : 'sidemenu'"
-    class="flex flex-col duration-300 shadow gap-4">
     <div class="space-y-3 p-3">
       <div class="flex-1">
         <span class="flex items-center px-2 py-4 space-x-3 rounded-md">
+          <i v-if="sideMenu.visible" class="pi pi-lock"  @click="sideMenu.toggle"></i>
+          <i v-else class="pi pi-lock-open"  @click="sideMenu.toggle"></i>
           <i class="pi pi-tags"></i>
           <span class="parent mr-1">
             <span class="">Étiquettes</span>
             <div class="novalorise">
-              <Button icon="pi pi-plus" severity="secondary" outlined rounded />
+              <Button icon="pi pi-plus" severity="secondary" outlined rounded  size="small"/>
             </div>
             <div class="valorise">
               <Button icon="pi pi-plus" severity="info" @click="createTagVisible = true" rounded />
@@ -58,7 +58,6 @@ const onNodeUnselect = (node) => {
         </Tree>
       </div>
     </div>
-  </div>
 
   <Dialog v-model:visible="createTagVisible" modal header="Créer une nouvelle étiquette" :style="{ width: '55rem' }">
     <div class="flex align-items-center gap-3 mb-3">

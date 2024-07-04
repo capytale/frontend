@@ -2,10 +2,13 @@ import { defineStore } from 'pinia'
 import { usePrimeVue } from 'primevue/config';
 
 export const useSideMenuStore = defineStore('sideMenu', {
-  state: () => ({ visible: true }),
+  state: () => ({ visible: true, hover: false }),
   actions: {
     toggle() {
       this.visible = !this.visible;
+    },
+    toggleHover() {
+      this.hover = !this.hover;
     },
   },
 })
