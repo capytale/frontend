@@ -139,7 +139,7 @@ const handleWant = (event) => {
 
 <template>
   <div>
-    <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
+    <i class="pi pi-tag" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
     <i class="pi pi-cog surprise" @click.stop="toggle" ></i>
   </div>
   <Menu ref="menu" :model="items" :popup="true" /> 

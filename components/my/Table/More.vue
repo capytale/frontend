@@ -53,7 +53,7 @@ const actClonableItem = computed(() => {
           const response = await activites.unlockMode(props.nid)
           toast.add({ severity: 'success', summary: 'Distribution débloquée', life: 2000 });
         }
-        catch (e) {
+        catch (e) { 
           toast.add({ severity: 'error', summary: 'Échec du débloquage de la distribution de l\'activité : ', detail: `nid = ${props.nid} - ${e}` });
         }
       }
