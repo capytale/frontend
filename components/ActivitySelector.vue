@@ -111,10 +111,10 @@ const dispOptions = [{
     </template>
     </Card>
     <div class="grid grid-cols-4 gap-4 mb-4">
-      <Card v-for="(obj, cat, index) in myStore.groups">
+      <Card v-for="(obj, cat, index) in myStore.groups" class="hover:ring-capycolor-400 hover:ring-2 hover:cursor-pointer">
       <template #header><div class="text-center font-bold">{{ obj.title }}</div></template>
       <template #content>
-      <div class="flex">
+      <div class="flex flex-wrap">
         <img
           :src="myStore.types.find(el => el.id == acti).icon.path" v-for="acti in obj.activities"
           class="w-12"
@@ -123,7 +123,7 @@ const dispOptions = [{
       </template>
       </Card>
     </div>
-    <div class="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
+    <div class="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4" v-if="false">
       <ActiCard
         v-for="(item, index) of chosenCats
           .filter((a) => a.score > seuil)
