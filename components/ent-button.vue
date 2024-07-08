@@ -44,7 +44,7 @@ const toggle = (event) => {
     <a href="/web/user/logout"><span class="px-2"><i class="pi pi-sign-out"></i></span></a>
   </div>
   <div class="flex flex-row items-stretch" v-else>
-    <Button @click="toggle" icon="pi pi-sign-in" class="mr-2" outlined />
+    <Button @click="toggle" icon="pi pi-sign-in" label="Connexion" class="mr-2" />
     <OverlayPanel ref="popENT">
       <InputText v-model="searchENT" class="m-2 w-full" :autofocus="true" />
         <div
