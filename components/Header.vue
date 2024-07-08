@@ -27,6 +27,7 @@ const themeIcon = () => {
       <div class="activityInfo">
       </div>
       <div class="activityMenu">
+        <EntButton />
         <Button @click="theme.toggle" :icon="themeIcon()" class="mr-2" outlined/>
         <div v-if = "user">
           <span class="px-2">{{ user.firstname }} {{ user.lastname }}</span>
