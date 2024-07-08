@@ -36,7 +36,7 @@ const mats = useMats();
 
 const catChoice = ref("all");
 const matChoice = ref("all");
-const search = ref();
+const search = ref("");
 
 const searchComp = computed(() => {
   if (search.value) return search.value.split(" ");
@@ -95,6 +95,14 @@ const dispOptions = [{
   value: 'list'
 }]
 
+const dialogActi = ref(false);
+const dialogGroup = ref("blocs");
+const dispGroups = computed(() => {
+  return myStore.actiSelView == 'groups' && 
+          search.value.length == 0 && 
+          catChoice.value == 'all' && 
+          matChoice.value == 'all';
+});
 </script>
 
 <template>
@@ -110,8 +118,8 @@ const dispOptions = [{
       <InputText v-model="search" class="mt-4" placeholder="Recherche..." />
     </template>
     </Card>
-    <div class="grid grid-cols-4 gap-4 mb-4">
-      <Card v-for="(obj, cat, index) in myStore.groups" class="hover:ring-capycolor-400 hover:ring-2 hover:cursor-pointer">
+    <div class="grid lg:grid-cols-4 sm:grid-cols-3 gap-4 mb-4" v-if="dispGroups">
+      <Card v-for="(obj, cat, index) in myStore.groups" class="hover:ring-capycolor-400 hover:ring-2 hover:cursor-pointer" @click="dialogActi = true; dialogGroup=cat">
       <template #header><div class="text-center font-bold">{{ obj.title }}</div></template>
       <template #content>
       <div class="flex flex-wrap">
@@ -123,7 +131,15 @@ const dispOptions = [{
       </template>
       </Card>
     </div>
-    <div class="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4" v-if="false">
+    <Dialog v-model:visible="dialogActi" modal dismissableMask>
+      <template #header>
+        <div class="text-lg font-bold">Choix des activités</div>
+      </template>
+      <div class="flex flex-col gap-4">
+        <ActiCard v-for="acti in myStore.types.filter(el => myStore.groups[dialogGroup].activities.includes(el.id))" :activite="acti" />
+      </div>
+    </Dialog>
+    <div class="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4" v-if="!dispGroups">
       <ActiCard
         v-for="(item, index) of chosenCats
           .filter((a) => a.score > seuil)

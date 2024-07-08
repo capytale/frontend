@@ -10,6 +10,7 @@ export const useMyStore = defineStore('my', {
     favorites: [],
     types: [],
     groups: {},
+    actiSelView: "groups",
   }),
   actions: {
     async getAssignments(nid: string) {
