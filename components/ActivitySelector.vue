@@ -108,7 +108,7 @@ const dispGroups = computed(() => {
 <template>
     <Card class="mb-4 rounded-t-none">
     <template #content>
-      <div class="flex flex-row justify-between">
+      <div class="flex flex-row justify-between flex-wrap">
         <div class="text-lg font-bold">Créer une nouvelle activité</div>
         <div class="flex flex-row gap-4">
           <Dropdown v-model="catChoice" :options="cats" option-label="label" option-value="value" :ui="inputstyle" />
@@ -120,7 +120,7 @@ const dispGroups = computed(() => {
     </Card>
     <div class="grid lg:grid-cols-4 sm:grid-cols-3 gap-4 mb-4" v-if="dispGroups">
       <Card v-for="(obj, cat, index) in myStore.groups" class="hover:ring-capycolor-400 hover:ring-2 hover:cursor-pointer" @click="dialogActi = true; dialogGroup=cat">
-      <template #header><div class="text-center font-bold">{{ obj.title }}</div></template>
+      <template #header><div class="text-center font-bold pt-3">{{ obj.title }}</div></template>
       <template #content>
       <div class="flex flex-wrap">
         <img
