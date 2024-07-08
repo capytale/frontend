@@ -1,7 +1,7 @@
 <script setup>
 import { useMyStore } from '@/stores/my'
 import { useBibStore } from '@/stores/bib'
-import { FilterMatchMode } from 'primevue/api';
+import { FilterMatchMode } from '@primevue/core/api';
 import { useRoute } from 'vue-router';
 import Tag from 'primevue/tag';
 // import Dialog from 'primevue/dialog';
@@ -72,7 +72,7 @@ const filters = ref({
               <template #end>
 
                 <div class="flex justify-content-end">
-                  <Dropdown v-model="filters['type'].value" :options="my.types" filter optionLabel="name"
+                  <Select v-model="filters['type'].value" :options="my.types" filter optionLabel="name"
                     optionValue="id" placeholder="Filter par type" class="w-full md:w-14rem" showClear>
                     <template #value="slotProps">
                       <div v-if="slotProps.value" class="flex align-items-center">
@@ -88,7 +88,7 @@ const filters = ref({
                         <div>{{ slotProps.option.name }}</div>
                       </div>
                     </template>
-                  </Dropdown>
+                  </Select>
 
 
                   <IconField iconPosition="left">
@@ -151,7 +151,7 @@ const filters = ref({
             <template #end>
 
               <div class="flex justify-content-end">
-                <Dropdown v-model="filters['type'].value" :options="my.types" filter optionLabel="name" optionValue="id"
+                <Select v-model="filters['type'].value" :options="my.types" filter optionLabel="name" optionValue="id"
                   placeholder="Filter par type" class="w-full md:w-14rem" showClear>
                   <template #value="slotProps">
                     <div v-if="slotProps.value" class="flex align-items-center">
@@ -167,7 +167,7 @@ const filters = ref({
                       <div>{{ slotProps.option.name }}</div>
                     </div>
                   </template>
-                </Dropdown>
+                </Select>
 
 
                 <IconField iconPosition="left">

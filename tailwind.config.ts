@@ -1,4 +1,5 @@
 module.exports = {
+  darkmode: 'class',
     theme: {
       extend: {
         colors: {

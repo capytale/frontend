@@ -1,10 +1,5 @@
 <script setup>
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import Card from 'primevue/card';
-import { useConfirm } from "primevue/useconfirm";
-import { useToast } from "primevue/usetoast";
-import { FilterMatchMode } from 'primevue/api';
+import { FilterMatchMode } from '@primevue/core/api';
 
 const { data: user, pending: usrpnd, error: usrerr, status: usrstts } = await fetchCurrentUser()
 const isTeacher = user.value.roles.includes('teacher')
@@ -152,7 +147,7 @@ const myactivities = computed(() => {
               <div class="card flex justify-content-center">
                 <Button v-tooltip.bottom="'Étiqueter'" icon="pi pi-tags" class="mr-2" severity="secondary"
                   @click="tagsToggle" />
-                <OverlayPanel ref="opTags">
+                <Popover ref="opTags">
                   <div class="gap-3 w-25rem">
                     <Tree id="tags" v-model:selectionKeys="selectedTags" :value="tags.tags.data"
                       selectionMode="multiple" class="w-full md:w-30rem scroll">
@@ -163,12 +158,12 @@ const myactivities = computed(() => {
                     <Button v-if="selectedTags && Object.keys(selectedTags).length" type="button" label="Étiqueter"
                       class="w-full" @click="handleAddTagMultiple" />
                   </div>
-                </OverlayPanel>
+                </Popover>
               </div>
               <div class="card flex justify-content-center">
                 <Button v-tooltip.bottom="'Déplacer'" icon="pi pi-folder-open" class="mr-2" severity="secondary"
                   @click="foldersToggle" />
-                <OverlayPanel ref="opFolders">
+                <Popover ref="opFolders">
                   <div class="gap-3 w-25rem">
                     <Tree id="folder" v-model:selectionKeys="selectedFolder" :value="tags.tags.data"
                       selectionMode="single" class="w-full md:w-30rem scroll">
@@ -179,7 +174,7 @@ const myactivities = computed(() => {
                     <Button v-if="selectedFolder && Object.keys(selectedFolder).length" type="button" label="Déplacer"
                       class="w-full" @click="handleMoveToFolderMultiple" />
                   </div>
-                </OverlayPanel>
+                </Popover>
               </div>
               <Button v-tooltip.bottom="'Télécharger'" icon="pi pi-download" class="mr-2" severity="secondary" />
               <Button v-tooltip.bottom="'CSV'" icon="pi pi-file-excel" class="mr-2" severity="secondary" />
@@ -196,7 +191,7 @@ const myactivities = computed(() => {
               </template>
 
               <div class="flex justify-content-end">
-                <Dropdown v-model="filters['type'].value" :options="my.types" filter optionLabel="name" optionValue="id"
+                <Select v-model="filters['type'].value" :options="my.types" filter optionLabel="name" optionValue="id"
                   placeholder="Filter par type" class="w-full md:w-14rem" showClear>
                   <template #value="slotProps">
                     <div v-if="slotProps.value" class="flex align-items-center">
@@ -212,7 +207,7 @@ const myactivities = computed(() => {
                       <div>{{ slotProps.option.name }}</div>
                     </div>
                   </template>
-                </Dropdown>
+                </Select>
 
 
                 <IconField iconPosition="left">

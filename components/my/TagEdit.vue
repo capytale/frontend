@@ -1,6 +1,4 @@
 <script setup>
-import Dialog from 'primevue/dialog';
-import ColorPicker from 'primevue/colorpicker';
 const my = useMyStore()
 const tagstore = useTagsStore()
 

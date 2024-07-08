@@ -2,10 +2,6 @@
 const theme = useThemeStore()
 const sideMenu = useSideMenuStore()
 
-const currentThemeClass = computed(() => {
-  return theme.current + "-theme"
-})
-
 useHead({
   htmlAttrs: {
     lang: 'fr',
@@ -18,9 +14,9 @@ useHead({
   <ConfirmDialog></ConfirmDialog>
   <Toast position="bottom-right" />
 
-  <div :class="'appContainer ' + currentThemeClass">
+  <div class="appContainer">
     <Header></Header>
-    <div class="flex bggray">
+    <div class="flex">
 
         <div class="container  mx-auto">
           <slot />
@@ -48,17 +44,17 @@ body,
 }
 
 .bggray {
-  background: var(--surface-100);
+  background: var(--p-surface-100);
 }
 
 
-.p-tree-selectable {
-  background: var(--surface-0);
+/* .p-tree-selectable {
+  background: var(--p-surface-0);
 }
 
-.dark-theme .p-tree-selectable {
-  background: var(--surface-50);
-}
+.dark .p-tree-selectable {
+  background: var(--p-surface-50);
+} */
 
 .appContainer {
   height: 100%;
@@ -71,7 +67,7 @@ body,
   }
 }
 
-.dark-theme .p-card {
+.dark .p-card {
   border: 1px solid var(--gray-600);
 }
 

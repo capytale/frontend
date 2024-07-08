@@ -111,8 +111,8 @@ const dispGroups = computed(() => {
       <div class="flex flex-row justify-between flex-wrap">
         <div class="text-lg font-bold">Créer une nouvelle activité</div>
         <div class="flex flex-row gap-4">
-          <Dropdown v-model="catChoice" :options="cats" option-label="label" option-value="value" :ui="inputstyle" />
-          <Dropdown v-model="matChoice" :options="mats" option-label="label" option-value="value" :ui="inputstyle" />
+          <Select v-model="catChoice" :options="cats" option-label="label" option-value="value" :ui="inputstyle" />
+          <Select v-model="matChoice" :options="mats" option-label="label" option-value="value" :ui="inputstyle" />
         </div>
       </div>
       <InputText v-model="search" class="mt-4" placeholder="Recherche..." />

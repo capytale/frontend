@@ -3,12 +3,17 @@ import { useSideMenuStore } from '@/stores/ui'
 const sideMenu = useSideMenuStore()
 const theme = useThemeStore()
 
+const colorMode = useColorMode()
+
 const { data: user, pending, error, status } = await fetchCurrentUser()
 
 const themeIcon = () => {
-  return theme.current === 'light' ? 'pi pi-moon' : 'pi pi-sun';
+  return colorMode.preference === 'light' ? 'pi pi-moon' : 'pi pi-sun';
 }
 
+const toggleColorMode = () => {
+  colorMode.preference = colorMode.preference === 'light' ? 'dark' : 'light';
+}
 
 </script>
 <template>
@@ -27,7 +32,7 @@ const themeIcon = () => {
       <div class="activityInfo">
       </div>
       <div class="activityMenu">
-        <Button @click="theme.toggle" :icon="themeIcon()" class="mr-2" outlined/>
+        <Button @click="toggleColorMode" :icon="themeIcon()" class="mr-2" outlined/>
         <EntButton />
       </div>
     </div>
@@ -38,23 +43,23 @@ const themeIcon = () => {
 .navbar {
   --navbar-text-color: rgba(255, 255, 255, 0.95);
 
-  /* .dark-theme) & { */
-  .dark-theme & {
+  /* .dark) & { */
+  .dark & {
     --navbar-text-color: var(--text-color);
   }
 
   height: 60px;
-  background-color: var(--surface-800);
+  background-color: var(--p-surface-800);
   display: flex;
   align-items: center;
   color: var(--navbar-text-color);
   overflow: hidden;
   color-scheme: dark;
 
-  /* .dark-theme) & { */
-  .dark-theme & {
-    background-color: var(--surface-50);
-  }
+  /* .dark) & { */
+  /*.dark & {
+    background-color: var(--p-surface-50);
+  }*/
 
   & .p-button-outlined,
   & .p-button-text {
@@ -65,11 +70,11 @@ const themeIcon = () => {
     border-color: var(--navbar-text-color);
   }
 
-  .light-theme & .p-button.p-button-secondary:enabled:focus {
+  .light & .p-button.p-button-secondary:enabled:focus {
     box-shadow: 0 0 0 2px #1c2127, 0 0 0 4px rgba(255, 255, 255, 0.7), 0 1px 2px 0 rgba(0, 0, 0, 0);
   }
 
-  .light-theme & .p-button.p-button-warning:enabled:focus {
+  .light & .p-button.p-button-warning:enabled:focus {
     box-shadow: 0 0 0 2px #1c2127, 0 0 0 4px rgba(249, 115, 22, 0.7), 0 1px 2px 0 rgba(0, 0, 0, 0);
   }
 }
@@ -166,7 +171,7 @@ const themeIcon = () => {
   justify-content: center;
   align-items: center;
 }
-
+/*TODO : ces classes sont-elles utilisées ? */
 .sidebarRadioButtons {
   display: flex;
   flex-direction: column;

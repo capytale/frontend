@@ -1,6 +1,6 @@
 <script setup>
 import Dialog from 'primevue/dialog'
-import { PrimeIcons as PI } from 'primevue/api'
+import { PrimeIcons as PI } from '@primevue/core/api'
 import { ref } from "vue";
 
 const visible = ref(false);
@@ -37,7 +37,7 @@ const shareClass = props.shared == "0" ? " unshared " : " shared "
 }
 
 .unshared {
-  color: var(--surface-400);
+  color: var(--p-surface400);
 }
 
 

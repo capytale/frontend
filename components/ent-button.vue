@@ -45,7 +45,7 @@ const toggle = (event) => {
   </div>
   <div class="flex flex-row items-stretch" v-else>
     <Button @click="toggle" icon="pi pi-sign-in" label="Connexion" class="mr-2" />
-    <OverlayPanel ref="popENT">
+    <Popover ref="popENT">
       <InputText v-model="searchENT" class="m-2 w-full" :autofocus="true" />
         <div
           class="grid grid-cols-1 sm:grid-cols-2 p-4 overflow-auto"
@@ -62,6 +62,6 @@ const toggle = (event) => {
               <span>{{ link.name }} {{ link.region ? '('+link.region+')' : '' }}</span>
           </a>
         </div>
-    </OverlayPanel>
+    </Popover>
   </div>
 </template>

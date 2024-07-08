@@ -1,13 +1,30 @@
 import { resolve } from 'path';
+import Lara from '@primevue/themes/aura';
 const baseUrl = '/~';
 
 export default defineNuxtConfig({
   ssr: false,
   // devtools: { enabled: true },
-  modules: ['nuxt-primevue', '@pinia/nuxt', '@vueuse/nuxt', "@nuxtjs/tailwindcss", '@vesp/nuxt-fontawesome',],
+  modules: ['@primevue/nuxt-module', '@nuxtjs/color-mode', '@pinia/nuxt', '@vueuse/nuxt', "@nuxtjs/tailwindcss", '@vesp/nuxt-fontawesome'],
+  colorMode: {
+    classSuffix: '',
+    preference: 'light', // default value of $colorMode.preference
+  },
   primevue: {
     usePrimeVue: true,
-    cssLayerOrder: 'tailwind-base, primevue, tailwind-utilities'
+    options: {
+      theme: {
+        cssLayer: {
+          name: 'primevue',
+          order: 'tailwind-base, primevue, tailwind-utilities'
+        },
+        preset: Lara,
+        options: {
+          darkModeSelector: '.dark',
+        }
+      }
+
+    },
   },
   css: [
     'primeicons/primeicons.css',
@@ -34,15 +51,15 @@ export default defineNuxtConfig({
   },
   app: {
     baseURL: baseUrl,
-    head: {
-      link: [
-        {
-          id: 'theme-link',
-          rel: 'stylesheet',
-          href: baseUrl + 'themes/lara-light-blue/theme.css'
-          //href: '/' + 'themes/lara-light-blue/theme.css'
-        }
-      ]
-    }
+    // head: {
+    //   link: [
+    //     {
+    //       id: 'theme-link',
+    //       rel: 'stylesheet',
+    //       href: baseUrl + 'themes/lara-light-blue/theme.css'
+    //       //href: '/' + 'themes/lara-light-blue/theme.css'
+    //     }
+    //   ]
+    // }
   }
 })
