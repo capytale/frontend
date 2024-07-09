@@ -191,28 +191,28 @@ const handleWant = (event) => {
   padding-right:1em;
   border: none;
 }
-.p-tree .p-tree-container .p-treenode .p-treenode-content
+.p-tree .p-tree-container .p-tree-node .p-tree-node-content
 {
   padding: 0.3em 0em 0.3em 0em;
 }
-.p-treenode-label
+.p-tree-node-label
 {
   padding: 0.3em 0em 0.3em 0em;
   padding: 0
 }
-.p-treenode-label :hover 
+.p-tree-node-label :hover 
 {
   border-radius: 0.3em;
 }
 
-.p-tree .p-tree-container .p-treenode .p-treenode-content .p-tree-toggler {
+.p-tree .p-tree-container .p-tree-node .p-tree-node-content .p-tree-toggler {
   margin-right: 0.1em;
   padding: 0.2rem;
 }
 .surprise {
   display: none;
 }
-.p-treenode-label :hover  .surprise {
+.p-tree-node-label :hover  .surprise {
   display: inline;
 }
 .info {

@@ -17,11 +17,20 @@ const editUrl = function (nid) {
 </script>
 
 <template>
-  <div class="group">
+  <div class="group parent">
     <a :href="playerUrl(nid)" >{{ title }}</a>
-    <a v-if="whoami != 'ap'" :href="editUrl(nid)" class="px-2" v-tooltip.top="{ value: 'Modifier les paramètres', showDelay: 400, hideDelay: 0 }" type="text" placeholder="Right" aria-label="Modifier les paramètres">
+    <a v-if="whoami != 'ap'" :href="editUrl(nid)" class="px-2 cog" v-tooltip.top="{ value: 'Modifier les paramètres', showDelay: 400, hideDelay: 0 }" aria-label="Modifier les paramètres">
       <i class="pi pi-cog"></i>
     </a>
   </div>
 </template>
 
+
+<style scoped>
+.cog {
+  display: none;
+}
+.parent:hover .cog {
+  display: inline;
+}
+</style>
