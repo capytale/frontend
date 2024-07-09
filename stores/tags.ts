@@ -37,14 +37,6 @@ export const useTagsStore = defineStore('tags', {
         { action: "destroy", tid }
       );
     },
-    async setTagColor(tid: number, color: string) {
-      this.flatTags.data = this.flatTags.data.map(el => el.id == tid ? { ...el, color: color } : el);
-      this.tags.data = unflatten(this.flatTags.data)
-      await httpClient.postJsonAsync(
-        privateTagsApiEp,
-        { action: "setColor", tid, color }
-      );
-    },
     async setTagLabel(tid, label) {
       this.flatTags.data = this.flatTags.data.map(el => el.id == tid ? { ...el, label: label } : el);
       this.tags.data = unflatten(this.flatTags.data)
@@ -53,10 +45,21 @@ export const useTagsStore = defineStore('tags', {
         { action: "rename", tid, label }
       );
     },
-    setTagParent(tid, parentId) {
+    async setTagParent(tid, parentId) {
       this.flatTags.data = this.flatTags.data.map(el => el.id == tid ? { ...el, parentid: parentId } : el);
       this.tags.data = unflatten(this.flatTags.data)
-      // TODO : Faire en backend 
+      await httpClient.postJsonAsync(
+        privateTagsApiEp,
+        { action: "setParent", tid, parentId }
+      );
+    },
+    async setTagColor(tid: number, color: string) {
+      this.flatTags.data = this.flatTags.data.map(el => el.id == tid ? { ...el, color: color } : el);
+      this.tags.data = unflatten(this.flatTags.data)
+      await httpClient.postJsonAsync(
+        privateTagsApiEp,
+        { action: "setColor", tid, color }
+      );
     },
   },
 })

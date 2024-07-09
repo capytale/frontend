@@ -1,4 +1,7 @@
 <script setup>
+import { useToast } from "primevue/usetoast";
+const toast = useToast();
+
 import { formatDateTime } from '~/utils/format';
 const props = defineProps({
   code: String,
