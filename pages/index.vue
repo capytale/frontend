@@ -36,27 +36,27 @@ const cards = [
   {
     title: "Ressources éducatives libres",
     description:
-      "Une bibliothèque de 4000 ressources pédagogiques sous licence Creative Commons By-SA",
+      "Une bibliothèque collaborative offrant des milliers de ressources pédagogiques sous licence Creative Commons By-SA.",
     // icon: "i-heroicons-lock-open",
     icon: "pi pi-lock-open",
   },
   {
     title: "Environnement standardisé",
     description:
-      "Adapté aux besoins de l’enseignement secondaire sur les STIM (Sciences, Technologie, Ingénierie, Mathématiques)",
+    "Adapté aux besoins de l’enseignement secondaire sur les STIAM (Sciences, Technologie, Ingénierie, Arts et Mathématiques).",
     // icon: "i-heroicons-academic-cap",
     icon: "pi pi-cog",
   },
   {
     title: "Tous les langages",
     description:
-      "Adapté aux besoins de l’enseignement secondaire sur les STIM (Sciences, Technologie, Ingénierie, Mathématiques)",
+      "Programmation par blocs (Scratch), en Python, SQL, OCaml, HTML, CSS, JavaScript, ...",
     // icon: "i-heroicons-code-bracket",
     icon: "pi pi-code",
   },
   {
     title: "Fluidité pédagogique",
-    description: "Conçu pour simplifier les échanges entre les enseignants et les élèves",
+    description: "Conçu pour simplifier les échanges entre les enseignants et les élèves.",
     // icon: "i-heroicons-arrows-right-left",
     icon: "pi pi-arrow-right-arrow-left",
   },
@@ -69,9 +69,9 @@ const cards = [
   },
   {
     title: "Cadre institutionnel",
-    description: "Entièrement hébergé sur sur une infrastructure académique",
+    description: "Entièrement hébergé sur sur une infrastructure académique et respectueux du RGPD.",
     // icon: "i-heroicons-building-library",
-    // icon: "pi pi-server",
+    icon: "pi pi-server",
   },
   {
     title: "En ligne sans installation",
@@ -83,7 +83,7 @@ const cards = [
   {
     title: "Adoption massive",
     description:
-      "Accès via tous les ENT de France<br>Des centaines de milliers d'utilisateurs",
+      "Accès via tous les ENT de France<br>Des centaines de milliers d'utilisateurs.",
     icon: "pi pi-users",
     // icon: "i-heroicons-presentation-chart-bar",
     icon: "pi pi-chart-line",

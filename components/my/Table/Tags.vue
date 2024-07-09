@@ -35,7 +35,7 @@ const getName = (id) => {
 <template>
   <div v-for="tid in tids" :key="nid + tid">
     <span class="parent mr-1">
-      <Button v-if="getName(tid).label" removable class="pr-3" text @click="op = !op">
+      <Button v-if="getName(tid).label" removable class="pr-3 small-button" text @click="op = !op">
         <i class="pi pi-tag px-2 normal" :style="'color:' + getName(tid).color"></i>{{ getName(tid).label }}
       </Button>
       <div class="poubelle">
@@ -59,5 +59,8 @@ const getName = (id) => {
 }
 .parent:hover .poubelle {
   display: inline;
+}
+.small-button {
+  padding: 0;
 }
 </style>

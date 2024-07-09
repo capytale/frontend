@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import Lara from '@primevue/themes/aura';
+import Lara from '@primevue/themes/lara';
 const baseUrl = '/~';
 
 export default defineNuxtConfig({

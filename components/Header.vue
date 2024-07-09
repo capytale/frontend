@@ -1,10 +1,5 @@
 <script setup>
-import { useSideMenuStore } from '@/stores/ui'
-const sideMenu = useSideMenuStore()
-const theme = useThemeStore()
-
 const colorMode = useColorMode()
-
 const { data: user, pending, error, status } = await fetchCurrentUser()
 
 const themeIcon = () => {
@@ -18,12 +13,9 @@ const toggleColorMode = () => {
 </script>
 <template>
   <div class="navbar">
-    <span v-if="$route.name == 'my'" class="text-2xl text-gray-100 p-2">
-        <button v-if="user" @click="sideMenu.toggle"><i class="pi pi-bars"></i> </button>
-      </span>
     <div class="navbarContainer">
       <span class="navbarLogo">
-        <NuxtLink href="/"> CAPYTALE </NuxtLink>    
+        <NuxtLink href="/"> CAPYTALE </NuxtLink>
       </span>
       <div class="capytaleMenu">
         <NuxtLink v-if="user" to="/my"><span class="px-2">Mes activités</span></NuxtLink>
@@ -32,7 +24,7 @@ const toggleColorMode = () => {
       <div class="activityInfo">
       </div>
       <div class="activityMenu">
-        <Button @click="toggleColorMode" :icon="themeIcon()" class="mr-2" outlined/>
+        <Button @click="toggleColorMode" :icon="themeIcon()" class="mr-2" outlined />
         <EntButton />
       </div>
     </div>
@@ -171,6 +163,7 @@ const toggleColorMode = () => {
   justify-content: center;
   align-items: center;
 }
+
 /*TODO : ces classes sont-elles utilisées ? */
 .sidebarRadioButtons {
   display: flex;
