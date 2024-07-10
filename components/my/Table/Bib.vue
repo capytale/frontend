@@ -6,6 +6,7 @@ import { ref } from "vue";
 const visible = ref(false);
 const props = defineProps({
   nid: String,
+  title: String,
   shared: String,
   web: String,
 })
@@ -19,7 +20,7 @@ const shareClass = props.shared == "0" ? " unshared " : " shared "
   </button>
 
 
-  <Dialog v-model:visible="visible" header="Partage dans la bibliothèque" modal
+  <Dialog v-model:visible="visible" :header="props.title" modal
     :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }" :style="{ width: '75%' }">
     <MyTableBibForm :nid="nid"/>
   </Dialog>

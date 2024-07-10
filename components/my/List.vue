@@ -270,7 +270,7 @@ const myactivities = computed(() => {
 
         <Column v-if="isTeacher" field="bib" header="Bib." style="">
           <template #body="p">
-            <MyTableBib :nid="p.data.nid" :shared="p.data.status_shared" :web="p.data.status_web" />
+            <MyTableBib :nid="p.data.nid" :title="p.data.title" :shared="p.data.status_shared" :web="p.data.status_web" />
           </template>
         </Column>
 

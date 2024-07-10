@@ -94,7 +94,7 @@ const postBibForm = async () => {
 </script>
 
 <template>
-  <span class="p-text-secondary block mb-5">Titre de la ressource {{ nid }}</span>
+  <!-- <span class="p-text-secondary block mb-5">{{title}} {{ nid }}</span> -->
   <Checkbox v-model="share" id="share" :binary="true" class="mr-4" @change="web = false" />
   <label for="share" class="font-semibold w-6rem">Publier dans la bibliothèque ENTRE ENSEIGNANTS</label>
   <div class="details">
@@ -109,7 +109,7 @@ const postBibForm = async () => {
       utilisateur de Capytale, y compris les élèves.
     </div>
   </div>
-  <label for="description" class="font-semibold w-6rem">Résumé</label>
+  <label for="description" class="font-semibold w-6rem">Résumé (50 caractères minimum))</label>
   <Textarea id="resume" v-model="resume" autoResize rows="5" class="w-full" />
 
   <div v-if="pending">
