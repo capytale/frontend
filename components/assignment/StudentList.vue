@@ -111,10 +111,10 @@ const products = ref(new Array(8));
 
             <template #header>
                 <Toolbar>
-                    <template #start v-if="!showToolbar">
-                        <h2 style="margin:0px"> Copies des élèves</h2>
-                    </template>
-                    <template #start v-else>
+                    <!-- <template #start v-if="!showToolbar">
+                        <h2 style="margin:0px"> </h2>
+                    </template> -->
+                    <template #start v-if="showToolbar">
                         <Button v-tooltip.bottom="'En cours'" @click="handleChangeWf(100)" icon="pi pi-pencil"
                             class="mr-2 blue" />
                         <Button v-tooltip.bottom="'Rendu'" @click="handleChangeWf(200)" icon="pi pi-envelope"

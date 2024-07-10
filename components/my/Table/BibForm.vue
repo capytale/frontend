@@ -69,12 +69,12 @@ const postBibForm = async () => {
     });
     return
   }
-  const selModules = JSON.stringify(selectedModules.value)
-  // const selThemes = selectedThemes.value ? Object.entries(selectedThemes.value).filter(([k, v]) => v.checked) : []
+  
+  const selModules = selectedModules.value ? JSON.stringify(selectedModules.value.map((x) => x.tid)) : "[]"
+
   let selThemes = []
   if (selectedThemes.value) {
     const a = Object.entries(selectedThemes.value).filter(([k, v]) => v.checked)
-    // console.log(a)
     for (const x in a) {
       selThemes.push(a[x][0])
     }
@@ -87,7 +87,7 @@ const postBibForm = async () => {
     selEnseignements,
     selNiveaux,
     selModules,
-    selThemes
+    JSON.stringify(selThemes)
   )
 }
 
