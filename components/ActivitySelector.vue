@@ -108,14 +108,14 @@ const dispGroups = computed(() => {
 <template>
     <Card class="mb-4 rounded-t-none">
     <template #content>
-      <div class="flex flex-row justify-between flex-wrap">
-        <div class="text-lg font-bold">Créer une nouvelle activité</div>
+      <div class="flex flex-row justify-between flex-wrap activites-header">
+        <div class="text-xl font-bold">Créer une nouvelle activité</div>
+          <InputText v-model="search" class="" placeholder="Recherche..." />
         <div class="flex flex-row gap-4">
           <Select v-model="catChoice" :options="cats" option-label="label" option-value="value" :ui="inputstyle" />
-          <Select v-model="matChoice" :options="mats" option-label="label" option-value="value" :ui="inputstyle" />
+          <!-- <Select v-model="matChoice" :options="mats" option-label="label" option-value="value" :ui="inputstyle" /> -->
         </div>
       </div>
-      <InputText v-model="search" class="mt-4" placeholder="Recherche..." />
     </template>
     </Card>
     <div class="grid lg:grid-cols-4 sm:grid-cols-3 gap-4 mb-4" v-if="dispGroups">
@@ -133,7 +133,7 @@ const dispGroups = computed(() => {
     </div>
     <Dialog v-model:visible="dialogActi" modal dismissableMask>
       <template #header>
-        <div class="text-lg font-bold">Choix des activités</div>
+        <div class="text-lg font-bold">Catégorie {{ myStore.groups[dialogGroup].title }} : Choix des activités </div>
       </template>
       <div class="flex flex-col gap-4">
         <ActiCard v-for="acti in myStore.types.filter(el => myStore.groups[dialogGroup].activities.includes(el.id))" :activite="acti" />
@@ -173,5 +173,9 @@ const dispGroups = computed(() => {
 
 .p-row-even:hover, .p-row-odd:hover {
   background-color: #f5f5f5;
+}
+
+.activites-header {
+  align-items: center;
 }
 </style>

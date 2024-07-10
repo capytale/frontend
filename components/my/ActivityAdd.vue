@@ -5,14 +5,22 @@
       </h2>
     </template>
     <template #content>
-      <div class="overscroll-x-auto">
-      <a v-for="el of myStore.types.filter(el => myStore.favorites.includes(el.id))" :key="el.id" :href="'/web/node/add/activity?type=' + el.id" v-tooltip.bottom="el.name" class="hover:shadow-md">
-          <img :src="el.icon.path" class="w-16 inline" />
-          <div class="text-sm" v-if="false">
-            {{ el.name.replace("Robot", "").replace("Carte", "").replace("Pi ", "") }}
-          </div>
-      </a>
-        <a href="/activites" v-tooltip.bottom="'Autre'"><i class="p-2 pi pi-plus-circle text-blue-500 text-3xl font-bold"></i></a>
+      <div class="overscroll-x-auto myflex">
+        <fieldset>
+          <legend class="text-lg">Mes activités favorites</legend>
+          <a v-for="el of myStore.types.filter(el => myStore.favorites.includes(el.id))" :key="el.id"
+            :href="'/web/node/add/activity?type=' + el.id" v-tooltip.bottom="el.name" class="hover:shadow-md">
+            <img :src="el.icon.path" class="w-16 inline" />
+            <div class="text-sm" v-if="false">
+              {{ el.name.replace("Robot", "").replace("Carte", "").replace("Pi ", "") }}
+            </div>
+          </a>
+        </fieldset>
+        <fieldset>
+          <legend class="text-lg">Voir tout</legend>
+          <a href="/activites" v-tooltip.bottom="'Autre'"><i
+              class="p-2 pi pi-plus-circle text-blue-500 text-3xl font-bold"></i></a>
+        </fieldset>
       </div>
     </template>
   </Card>
@@ -25,3 +33,17 @@ const myStore = useMyStore();
 myStore.favorites = await TypeApi.getFavorites(true);
 myStore.types = await useActivities()
 </script>
+
+<style scoped>
+.myflex {
+  display: flex;
+  gap: 1em;
+  align-items: center;
+}
+
+fieldset {
+  border: 1px solid #000;
+  padding: 1em;
+  border-radius: 5px;
+}
+</style>
