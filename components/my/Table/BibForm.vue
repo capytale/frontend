@@ -47,12 +47,13 @@ watch(
           return idxEls.value.modules.filter((item) => item.tid == x.target_id)[0]
         })
       }
-      const defaultValues = c.themes.map((x) => x.target_id)
-      const keys = generateKeysByIds(idxEls.value.themes , defaultValues);
+      const fetchedThemes = c.themes.map((x) => x.target_id)
+      const keys = generateKeysByIds(idxEls.value.themes , fetchedThemes);
       selectedThemes.value = keys
     }
   })
 
+  // cf. https://github.com/primefaces/primevue/issues/3837
   function generateKeysByIds(data, ids) {
   const output = {};
 
