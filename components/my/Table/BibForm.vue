@@ -45,7 +45,7 @@ const postBibForm = async () => {
     });
     return
   }
-  const selEnseignements = JSON.stringify(selectedEnseignements.value)
+
   if (selectedEnseignements.value.length == 0) {
     confirm.require({
       message: 'Merci d\'indiquer au moins un enseignement.',
@@ -57,7 +57,6 @@ const postBibForm = async () => {
     });
     return
   }
-  const selNiveaux = JSON.stringify(selectedNiveaux.value)
   if (selectedNiveaux.value.length == 0) {
     confirm.require({
       message: 'Merci d\'indiquer au moins un niveau.',
@@ -70,7 +69,7 @@ const postBibForm = async () => {
     return
   }
   
-  const selModules = selectedModules.value ? JSON.stringify(selectedModules.value.map((x) => x.tid)) : "[]"
+  const selModules = selectedModules.value ? selectedModules.value.map((x) => x.tid) : "[]"
 
   let selThemes = []
   if (selectedThemes.value) {
@@ -84,10 +83,10 @@ const postBibForm = async () => {
     share.value, 
     web.value, 
     resume.value,
-    selEnseignements,
-    selNiveaux,
+    selectedEnseignements.value,
+    selectedNiveaux.value,
     selModules,
-    JSON.stringify(selThemes)
+    selThemes
   )
 }
 
