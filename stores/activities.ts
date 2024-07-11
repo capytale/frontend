@@ -12,6 +12,12 @@ export const useActivitiesStore = defineStore('activities', {
       this.activities = await fetchMyActivities()
       // TODO : pas besoin de renvoyer un objet pour les tags : la liste csv des tids suffit. 
     },
+    async getMetadata(nid) {
+      // console.log("getMetadata", nid)
+      // console.log("this.activities : ", this.activities.data[0])
+      const metadata = await httpClient.getJsonAsync("/web/c-hdls/api/metadata/" + nid)
+      this.activities.data = this.activities.data.map(el => el.nid == nid ? { ...el, ...metadata } : el);
+    },
 
     async deleteActivity(nids: Array) {
       for (let nid of nids) {

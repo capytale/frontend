@@ -6,16 +6,52 @@ const activites = useActivitiesStore()
 const props = defineProps({
   nid: String,
 })
+activites.getMetadata(props.nid)
 
-const resume = ref('')
-const share = ref(false);
-const web = ref(false);
-const selectedThemes = ref(null)
+
+// const current = activites.activities.data.filter((item) => item.nid == props.nid)
+// console.log('abstr : ', current)
+
+const currentKey = computed(() => {
+  const iterator = activites.activities.data.keys();
+  for (const key of iterator) {
+    if (activites.activities.data[key].nid == props.nid) {
+      return key
+    }
+  }
+})
+
+const resume = ref(activites.activities.data[currentKey.value].abstract)
+const share = ref(activites.activities.data[currentKey.value].status_shared == 1);
+const web = ref(activites.activities.data[currentKey.value].status_web == 1);
+
+const selectedEnseignements = ref()
+const selectedNiveaux = ref()
+const selectedModules = ref()
 
 const { data: idxEls, pending, error, status } = await fetchBibIndexingElements()
-
-const selectedModules = ref();
 const filteredModules = ref();
+
+watch(() => activites.activities.data[currentKey.value], () => {
+  const c = activites.activities.data[currentKey.value]
+  if (c) {
+    selectedEnseignements.value = c.enseignements.map((x) => x.value)
+    selectedNiveaux.value = c.niveaux.map((x) => x.value)
+    if (c.modules[0].target_id == 0) {
+      selectedModules.value = []
+    } else {
+      selectedModules.value = c.modules.map((x) => {
+        return idxEls.value.modules.filter((item) => item.tid == x.target_id)[0]
+      })
+    }
+    console.log('selectedModules : ', selectedModules.value)
+  }
+})
+
+const selectedThemes = ref();
+
+
+
 
 const search = (event) => {
   setTimeout(() => {
@@ -29,8 +65,6 @@ const search = (event) => {
   }, 250);
 }
 
-const selectedEnseignements = ref([]);
-const selectedNiveaux = ref([]);
 
 const postBibForm = async () => {
   // visible.value = false
@@ -68,7 +102,8 @@ const postBibForm = async () => {
     });
     return
   }
-  
+  console.log('selectedModules : ', selectedModules.value)
+
   const selModules = selectedModules.value ? selectedModules.value.map((x) => x.tid) : "[]"
 
   let selThemes = []
@@ -80,8 +115,8 @@ const postBibForm = async () => {
   }
 
   await activites.bibIndexActivity(props.nid,
-    share.value, 
-    web.value, 
+    share.value,
+    web.value,
     resume.value,
     selectedEnseignements.value,
     selectedNiveaux.value,
