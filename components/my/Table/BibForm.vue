@@ -28,27 +28,58 @@ const web = ref(activites.activities.data[currentKey.value].status_web == 1);
 const selectedEnseignements = ref()
 const selectedNiveaux = ref()
 const selectedModules = ref()
+const selectedThemes = ref();
 
 const { data: idxEls, pending, error, status } = await fetchBibIndexingElements()
 const filteredModules = ref();
 
-watch(() => activites.activities.data[currentKey.value], () => {
-  const c = activites.activities.data[currentKey.value]
-  if (c) {
-    selectedEnseignements.value = c.enseignements.map((x) => x.value)
-    selectedNiveaux.value = c.niveaux.map((x) => x.value)
-    if (c.modules[0].target_id == 0) {
-      selectedModules.value = []
-    } else {
-      selectedModules.value = c.modules.map((x) => {
-        return idxEls.value.modules.filter((item) => item.tid == x.target_id)[0]
-      })
+watch(
+  () => activites.activities.data[currentKey.value],
+  () => {
+    const c = activites.activities.data[currentKey.value]
+    if (c) {
+      selectedEnseignements.value = c.enseignements.map((x) => x.value)
+      selectedNiveaux.value = c.niveaux.map((x) => x.value)
+      if (c.modules[0].target_id == 0) {
+        selectedModules.value = []
+      } else {
+        selectedModules.value = c.modules.map((x) => {
+          return idxEls.value.modules.filter((item) => item.tid == x.target_id)[0]
+        })
+      }
+      const defaultValues = c.themes.map((x) => x.target_id)
+      const keys = generateKeysByIds(idxEls.value.themes , defaultValues);
+      selectedThemes.value = keys
     }
-    console.log('selectedModules : ', selectedModules.value)
-  }
-})
+  })
 
-const selectedThemes = ref();
+  function generateKeysByIds(data, ids) {
+  const output = {};
+
+  function traverse(items, prefix) {
+    items.forEach((item) => {
+      const key = item.key;
+
+      const checked = ids.includes(item.id);
+      const partialChecked = item.children && item.children.some((child) => ids.includes(child.id));
+
+      if (checked || partialChecked) {
+        output[key] = {
+          checked: checked,
+          partialChecked: partialChecked,
+        };
+      }
+
+      if (item.children && item.children.length > 0) {
+        traverse(item.children, key);
+      }
+    });
+  }
+
+  traverse(data, "");
+
+  return output;
+}
 
 
 
@@ -107,6 +138,7 @@ const postBibForm = async () => {
   const selModules = selectedModules.value ? selectedModules.value.map((x) => x.tid) : "[]"
 
   let selThemes = []
+  console.log('selectedThemes : ', selectedThemes.value)
   if (selectedThemes.value) {
     const a = Object.entries(selectedThemes.value).filter(([k, v]) => v.checked)
     for (const x in a) {
