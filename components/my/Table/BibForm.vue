@@ -219,7 +219,7 @@ const postBibForm = async () => {
   </div>
   <div class="flex justify-content-end gap-2" style="position: absolute; height:2em; bottom: 0;">
     <Button type="button" label="Cancel" severity="secondary" @click="$emit('closeBibForm')"></Button>
-    <Button type="button" label="Save" @click="() => {$emit('closeBibForm'); postBibForm}"></Button>
+    <Button type="button" label="Save" @click="() => {postBibForm(); $emit('closeBibForm')}"></Button>
   </div>
 </template>
 
