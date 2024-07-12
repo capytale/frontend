@@ -268,9 +268,9 @@ const myactivities = computed(() => {
           </template>
         </Column>
 
-        <Column v-if="isTeacher" field="bib" header="Bib." style="">
+        <Column v-if="isTeacher" field="bib" header="Bib." style="min-width: 5rem">
           <template #body="p">
-            <MyTableBib :nid="p.data.nid" :title="p.data.title" :shared="p.data.status_shared" :web="p.data.status_web" />
+            <MyTableBib :nid="p.data.nid" :title="p.data.title" :shared="p.data.status_shared" :web="p.data.status_web" :whoami="p.data.whoami"/>
           </template>
         </Column>
 

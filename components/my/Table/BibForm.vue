@@ -21,9 +21,9 @@ const currentKey = computed(() => {
   }
 })
 
-const resume = ref(activites.activities.data[currentKey.value].abstract)
 const share = ref(activites.activities.data[currentKey.value].status_shared == 1);
 const web = ref(activites.activities.data[currentKey.value].status_web == 1);
+const resume = ref(activites.activities.data[currentKey.value].abstract)
 
 const selectedEnseignements = ref()
 const selectedNiveaux = ref()
@@ -38,9 +38,12 @@ watch(
   () => {
     const c = activites.activities.data[currentKey.value]
     if (c) {
+      share.value = c.status_shared == 1
+      web.value = c.status_web == 1
+      resume.value = c.abstract
       selectedEnseignements.value = c.enseignements.map((x) => x.value)
       selectedNiveaux.value = c.niveaux.map((x) => x.value)
-      if (c.modules[0].target_id == 0) {
+      if (c.modules.length == 0 || c.modules[0].target_id == 0) {
         selectedModules.value = []
       } else {
         selectedModules.value = c.modules.map((x) => {
@@ -99,8 +102,7 @@ const search = (event) => {
 
 
 const postBibForm = async () => {
-  // visible.value = false
-  if (resume.value.length < 20) {
+  if (share.value == 1 && (resume.value == null || resume.value.length < 20)) {
     confirm.require({
       message: 'Merci de saisir un résumé de 50 caractères au minimum.',
       header: 'Attention',
@@ -112,7 +114,7 @@ const postBibForm = async () => {
     return
   }
 
-  if (selectedEnseignements.value.length == 0) {
+  if (share.value == 1 && selectedEnseignements.value.length == 0) {
     confirm.require({
       message: 'Merci d\'indiquer au moins un enseignement.',
       header: 'Attention',
@@ -123,7 +125,7 @@ const postBibForm = async () => {
     });
     return
   }
-  if (selectedNiveaux.value.length == 0) {
+  if (share.value == 1 && selectedNiveaux.value.length == 0) {
     confirm.require({
       message: 'Merci d\'indiquer au moins un niveau.',
       header: 'Attention',
@@ -147,6 +149,9 @@ const postBibForm = async () => {
     }
   }
 
+  activites.activities.data[currentKey.value].status_shared = share.value ? "1" : "0"
+  activites.activities.data[currentKey.value].status_web = web.value ? "1" : "0"
+
   await activites.bibIndexActivity(props.nid,
     share.value,
     web.value,
@@ -156,6 +161,7 @@ const postBibForm = async () => {
     selModules,
     selThemes
   )
+
 }
 
 </script>
@@ -212,8 +218,8 @@ const postBibForm = async () => {
     </div>
   </div>
   <div class="flex justify-content-end gap-2" style="position: absolute; height:2em; bottom: 0;">
-    <Button type="button" label="Cancel" severity="secondary" @click="visible = false"></Button>
-    <Button type="button" label="Save" @click="postBibForm"></Button>
+    <Button type="button" label="Cancel" severity="secondary" @click="$emit('closeBibForm')"></Button>
+    <Button type="button" label="Save" @click="() => {$emit('closeBibForm'); postBibForm}"></Button>
   </div>
 </template>
 

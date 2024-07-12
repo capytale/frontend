@@ -9,20 +9,25 @@ const props = defineProps({
   title: String,
   shared: String,
   web: String,
+  whoami: String,
 })
 const shareClass = props.shared == "0" ? " unshared " : " shared "
+
 </script>
 
 <template>
-  <button @click="visible = true">
-    <i v-if="web == '1'" :class="PI.GLOBE + ' globe'" />
-    <i :class="PI.SHARE_ALT + shareClass" />
-  </button>
+  <div v-if="whoami != 'ap' ">
+    <button @click="visible = true">
+      <i v-if="shared == '1' && web == '1'" :class="PI.GLOBE + shareClass + ' globe'" />
+      <i v-else-if="shared == '1' && web == '0'" :class="PI.CLONE + shareClass + ' globe'" />
+      <i :class="PI.SHARE_ALT + shareClass" />
+    </button>
+  </div>
 
 
-  <Dialog v-model:visible="visible" :header="props.title" modal
-    :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }" :style="{ width: '75%' }">
-    <MyTableBibForm :nid="nid"/>
+  <Dialog v-model:visible="visible" :header="props.title" modal :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } } "
+    :style="{ width: '75%' }">
+    <MyTableBibForm :nid="nid"  @closeBibForm="visible = false"/>
   </Dialog>
 </template>
 
@@ -49,8 +54,7 @@ const shareClass = props.shared == "0" ? " unshared " : " shared "
 .globe {
   /* font-size: 0.5em; */
   position: relative;
-  bottom: 1.1em;
+  bottom: 0.9em;
   left: 0.5em;
-  color: green;
 }
 </style>
