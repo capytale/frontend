@@ -82,10 +82,11 @@ export const useActivitiesStore = defineStore('activities', {
     },
 
     async tagActivities(pxyNids: any[], tids: any[]) {
-      // const xunion = (a, b) => [...new Set([...a.split(","), ...b])].join(",");
+      const xunion = (a, b) => [...new Set([...a.split(","), ...b])].join(",");
       for (let item of pxyNids) {
-        this.activities.data = this.activities.data.map(el => el.nid == item.nid ? { ...el, tags: { tids: el.tags.tids + "," + tids.join(",") } } : el);
-        // this.activities.data = this.activities.data.map(el => el.nid == item.nid ? { ...el, tags: { tids : xunion(el.tags.tids , tids) } } : el);
+        // this.activities.data = this.activities.data.map(el => el.nid == item.nid ? { ...el, tags: { tids: el.tags.tids + "," + tids.join(",") } } : el);
+        this.activities.data = this.activities.data.map(el =>
+          el.nid == item.nid ? { ...el, tags: { tids : xunion(el.tags.tids , tids) } } : el);
       }
       let nids = [...pxyNids.map((o) => o.nid)];
       await httpClient.postJsonAsync(
