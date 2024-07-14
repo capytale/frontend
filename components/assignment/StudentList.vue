@@ -72,24 +72,34 @@ const products = ref(new Array(8));
             </template>
         </Card>
         <DataTable :value="products">
-    <Column field="code" header="Code">
+    <Column field="code" header="Dernière modif.">
         <template #body>
-            <Skeleton></Skeleton>
+            <Skeleton width="10rem" ></Skeleton>
         </template>
     </Column>
-    <Column field="name" header="Name">
+    <Column field="name" header="Élève">
         <template #body>
-            <Skeleton></Skeleton>
+            <Skeleton width="10rem" ></Skeleton>
         </template>
     </Column>
-    <Column field="category" header="Category">
+    <Column field="category" header="Classe">
         <template #body>
-            <Skeleton></Skeleton>
+            <Skeleton width="7rem" ></Skeleton>
         </template>
     </Column>
-    <Column field="quantity" header="Quantity">
+    <Column field="quantity" header="Mode">
         <template #body>
-            <Skeleton></Skeleton>
+            <Skeleton width="4rem" ></Skeleton>
+        </template>
+    </Column>
+    <Column field="quantity" header="Appréciation">
+        <template #body>
+            <Skeleton width="10rem" height="4rem"></Skeleton>
+        </template>
+    </Column>
+    <Column field="quantity" header="Évaluation">
+        <template #body>
+            <Skeleton width="10rem" height="4rem"></Skeleton>
         </template>
     </Column>
 </DataTable>
