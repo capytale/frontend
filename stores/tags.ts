@@ -32,8 +32,11 @@ export const useTagsStore = defineStore('tags', {
       return this.flatTags.data.some(el => el.parentid == tid)
     },
     async destroyTag(tid) {
-      this.flatTags.data = this.flatTags.data.filter((item) => item.id !== tid);
-      this.tags.data = unflatten(this.flatTags.data)
+      const filterData = (data, id) => data.filter(o => {
+        if (o.children) o.children = filterData(o.children, id);
+        return o.id != id
+      })
+      this.flatTags.data = filterData(this.flatTags.data, tid)
       await httpClient.postJsonAsync(
         privateTagsApiEp,
         { action: "destroy", tid }
