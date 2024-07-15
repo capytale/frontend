@@ -3,6 +3,7 @@ const my = useMyStore()
 const tagstore = useTagsStore()
 
 const toast = useToast();
+const confirm = useConfirm();
 
 const props = defineProps({
   slotProps: Object,
@@ -61,12 +62,34 @@ const items = ref([
         label: 'Supprimer',
         icon: 'pi pi-trash',
         command: async () => {
-          try {
-            await tagstore.destroyTag(props.slotProps.node.id)
-            toast.add({ severity: 'success', summary: 'Étiquette supprimée', life: 2000 });
-          }
-          catch (e) {
-            toast.add({ severity: 'error', summary: 'Échec de suppression : ', detail: `nid = ${props.slotProps.node.nid} - ${e}` });
+          const hasChildren = await tagstore.hasChildren(props.slotProps.node.id)
+          if (hasChildren) {
+            confirm.require({
+              message: 'La suppression de cette étiquette supprimera toutes les étiquettes enfants. Cette action est irréversible.',
+              header: 'Confirmation',
+              icon: 'pi pi-exclamation-triangle',
+              rejectLabel: 'Annuler',
+              rejectClass: 'p-button-secondary p-button-outlined',
+              acceptLabel: 'Supprimer',
+              acceptClass: 'p-button-danger',
+              accept: async () => {
+                try {
+                  await tagstore.destroyTag(props.slotProps.node.id)
+                  toast.add({ severity: 'success', summary: 'Étiquettes supprimées', life: 2000 });
+                }
+                catch (e) {
+                  toast.add({ severity: 'error', summary: 'Échec de suppression : ', detail: `nid = ${props.slotProps.node.nid} - ${e}` });
+                }
+              }
+            })
+          } else {
+            try {
+              await tagstore.destroyTag(props.slotProps.node.id)
+              toast.add({ severity: 'success', summary: 'Étiquette supprimée', life: 2000 });
+            }
+            catch (e) {
+              toast.add({ severity: 'error', summary: 'Échec de suppression : ', detail: `nid = ${props.slotProps.node.nid} - ${e}` });
+            }
           }
         }
       },
@@ -140,9 +163,9 @@ const handleWant = (event) => {
 <template>
   <div>
     <i class="pi pi-tag" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
-    <i class="pi pi-cog surprise" @click.stop="toggle" ></i>
+    <i class="pi pi-cog surprise" @click.stop="toggle"></i>
   </div>
-  <Menu ref="menu" :model="items" :popup="true" /> 
+  <Menu ref="menu" :model="items" :popup="true" />
 
   <Dialog v-model:visible="editVisible" modal :header="header" :style="{ width: '55rem' }">
     <div class="flex align-items-center gap-3 mb-3">
@@ -185,23 +208,22 @@ const handleWant = (event) => {
 </template>
 
 <style>
-
 .p-tree {
   padding: 0px;
-  padding-right:1em;
+  padding-right: 1em;
   border: none;
 }
-.p-tree .p-tree-container .p-tree-node .p-tree-node-content
-{
+
+.p-tree .p-tree-container .p-tree-node .p-tree-node-content {
   padding: 0.3em 0em 0.3em 0em;
 }
-.p-tree-node-label
-{
+
+.p-tree-node-label {
   padding: 0.3em 0em 0.3em 0em;
   padding: 0
 }
-.p-tree-node-label :hover 
-{
+
+.p-tree-node-label :hover {
   border-radius: 0.3em;
 }
 
@@ -209,12 +231,15 @@ const handleWant = (event) => {
   margin-right: 0.1em;
   padding: 0.2rem;
 }
+
 .surprise {
   display: none;
 }
-.p-tree-node-label :hover  .surprise {
+
+.p-tree-node-label :hover .surprise {
   display: inline;
 }
+
 .info {
   color: gray;
   font-style: italic;

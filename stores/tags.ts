@@ -28,8 +28,10 @@ export const useTagsStore = defineStore('tags', {
       this.flatTags.data = [...this.flatTags.data, { id: newTid, color: "#FF0000", key: newTid, label, parentid: parentId }]
       this.tags.data = unflatten(this.flatTags.data)
     },
+    async hasChildren(tid) {
+      return this.flatTags.data.some(el => el.parentid == tid)
+    },
     async destroyTag(tid) {
-      // TODO : Faire en backend pour récupérer l'id
       this.flatTags.data = this.flatTags.data.filter((item) => item.id !== tid);
       this.tags.data = unflatten(this.flatTags.data)
       await httpClient.postJsonAsync(
