@@ -6,6 +6,7 @@ const my = useMyStore()
 
 const props = defineProps({
   nid: String,
+  views_total: Number,
   required: true
 })
 
@@ -60,7 +61,7 @@ const wficon = ((wf) => {
     if (wf == 200) return { icon: "pi pi-envelope", color: "Orange" }
     if (wf == 300) return { icon: "pi pi-check-square", color: "green" }
 })
-const products = ref(new Array(8));
+const nbFake = ref(new Array(props.views_total));
 </script>
 
 
@@ -71,7 +72,7 @@ const products = ref(new Array(8));
                 <Skeleton shape="circle" size="4rem" class="mr-2 my-2"></Skeleton> <Skeleton width="20rem" class="mb-2"></Skeleton>
             </template>
         </Card>
-        <DataTable :value="products">
+        <DataTable :value="nbFake">
     <Column field="code" header="Dernière modif.">
         <template #body>
             <Skeleton width="10rem" ></Skeleton>

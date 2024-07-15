@@ -29,7 +29,7 @@ const nbViews = function () {
     <Button v-else @click="visible = true" severity="primary" size="large" v-tooltip.top="{ value: 'Voir les copies', showDelay: 400, hideDelay: 0 }"
     text>{{ nbViews() }} </Button>
     <Dialog v-model:visible="visible" maximizable modal header="&nbsp;" :style="{ width: '90%' }">
-      <AssignmentStudentList :nid="props.nid" />
+      <AssignmentStudentList :nid="props.nid" :views_total="props.views_total"/>
     </Dialog>
 
   </template>
