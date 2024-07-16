@@ -51,7 +51,8 @@ const getName = (id) => {
   display: none;
   position: absolute;
   left: 100%;
-  bottom: 0;
+  bottom: -30%;
+  padding-left:0.5rem;
   z-index: 1;
 }
 .parent{
