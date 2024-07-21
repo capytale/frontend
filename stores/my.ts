@@ -1,5 +1,6 @@
 import httpClient from '@capytale/activity.js/backend/capytale/http'
 
+// Definit le endpoint de l'API
 const myActivitiesApiEp = "/web/c-hdls/api/my-activities"
 import TypeApi, { ActivityType } from '@capytale/activity.js/backend/capytale/activityType'
 
@@ -21,6 +22,20 @@ export const useMyStore = defineStore('my', {
     async getActivities() {
       this.activities = await fetchMyActivities()
       // TODO : pas besoin de renvoyer un objet pour les tags : la liste csv des tids suffit. 
+    },
+    async saveAppr(nid, appr: any) {
+      console.log("saveAppr", nid, appr._rawValue)
+      await httpClient.postJsonAsync(
+        myActivitiesApiEp,
+        { action: "saveAppr", nid, appr: appr._rawValue }
+      );
+    },
+    async saveEval(nid, evalu: any) {
+      console.log("saveEval", nid, evalu)
+      await httpClient.postJsonAsync(
+        myActivitiesApiEp,
+        { action: "saveEval", nid, evalu: evalu._rawValue }
+      );
     },
     changeSaWf(sa_nid: string | Array, newWorkflow: string) {
       // TODO : Faire en backend 

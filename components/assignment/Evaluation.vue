@@ -3,6 +3,8 @@ import { richContentToPlainText } from '~/utils/sanitization';
 import { useToast } from "primevue/usetoast";
 const toast = useToast();
 
+const my = useMyStore()
+
 const props = defineProps({
     data: Object,
     required: true
@@ -11,8 +13,13 @@ const props = defineProps({
 const value = ref(richContentToPlainText(props.data.evaluation))
 
 const save = () => {
-    console.log("klklkl", value)
-    toast.add({ severity: 'success', summary: 'Enregistré', life: 1000 });
+  my.saveEval(props.data.sa_nid, value)
+  const response = { ok: true} // TODO 
+  if (response.ok) {
+    toast.add({ severity: 'success', summary: 'Évaluation enregistrée', life: 2000 });
+  } else {
+    toast.add({ severity: 'error', summary: 'Échec enregistrelent de l\'évaluation : ', detail: "nid = " });
+  }
 }
 </script>
 
