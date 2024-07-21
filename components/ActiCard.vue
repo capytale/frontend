@@ -59,7 +59,6 @@ const goActi = (event, msg) => {
         />
         <div class="text-lg font-semibold ml-2 grow">
           {{ activite.name }} <sup v-if="activite.beta" class="text-red-500">beta</sup>
-          {{ activite.score }}
         </div>
         <i :class="'mx-2 text-lg cursor-pointer starspin '+star.icon" @click="toggleFav()"></i>
       </div>

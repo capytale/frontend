@@ -27,7 +27,7 @@ const fuse = ref(
 );
 
 const seuil = computed(() => {
-  if (catChoice.value == "all" && matChoice.value == "all") return 0;
+  if (catChoice.value == "all" && matChoice.value == "all" && search.value.length == 0) return 0;
   else return 0.7;
 });
 
