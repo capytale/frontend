@@ -32,7 +32,7 @@ const toggleFav = async () => {
 };
 
 const goActi = (event, msg) => {
-  console.log(event.target.tagName);
+  // console.log(event.target.tagName);
   // if (!event.target.classList.contains("starspin")) {
   //   appState.value.creaActiPanel = true;
   //   appState.value.newActiPanel = false;
@@ -41,7 +41,7 @@ const goActi = (event, msg) => {
   //     title: props.activite.fullName,
   //   });
   // }
-  if (!['svg', 'path'].includes(event.target.tagName))
+  if (!['i'].includes(event.target.tagName.toLowerCase()))
     window.location.href = `/web/node/add/${props.activite.bundle}?type=${props.activite.id}`;
 };
 </script>
