@@ -84,6 +84,7 @@ export const useActivitiesStore = defineStore('activities', {
     async tagActivities(pxyNids: any[], tids: any[]) {
       const xunion = (a, b) => [...new Set([...a.split(","), ...b])].join(",");
       for (let item of pxyNids) {
+        // ne gère pas les doublons
         // this.activities.data = this.activities.data.map(el =>
         // el.nid == item.nid ? { ...el, tags: { tids: el.tags.tids + "," + tids.join(",") } } : el);
         this.activities.data = this.activities.data.map(el =>

@@ -208,6 +208,6 @@ const wfStatus = computed(() => {
 .mystyle {
   flex-direction: row-reverse;
   font-family: monospace;
-  width: 17rem
+  width: 19rem
 }
 </style>
