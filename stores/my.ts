@@ -37,15 +37,23 @@ export const useMyStore = defineStore('my', {
         { action: "saveEval", nid, evalu: evalu._rawValue }
       );
     },
-    changeSaWf(sa_nid: string | Array, newWorkflow: string) {
-      // TODO : Faire en backend 
+    async changeSaWf(sa_nid: string | Array, newWorkflow: string) {
+      console.log("saveSaWf0", sa_nid, newWorkflow)
+      let nids
       if (Array.isArray(sa_nid)) {
+        nids = [...sa_nid.map((o) => o.sa_nid)]
         for (let o of sa_nid) {
           this.assignments.tab = this.assignments.tab.map(el => el.sa_nid == o.sa_nid ? { ...el, workflow: newWorkflow } : el);
         }
       } else {
+        nids = sa_nid.split()
         this.assignments.tab = this.assignments.tab.map(el => el.sa_nid == sa_nid ? { ...el, workflow: newWorkflow } : el);
       }
+      console.log("saveSaWf", nids, newWorkflow)
+      await httpClient.postJsonAsync(
+        myActivitiesApiEp,
+        { action: "saveSaWf", nids, newWorkflow }
+      );
     },
   },
 })

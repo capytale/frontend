@@ -30,16 +30,21 @@ const onRowUnselect = function () {
 
 const handleChangeWf = ((wf) => {
   my.changeSaWf(selectedNid.value, wf)
-  const response = {}
+  const response = { ok: true } // TODO
   if (response.ok) {
-    toast.add({ severity: 'success', summary: 'Suppression effectuée : ', life: 2000 });
+    toast.add({ severity: 'success', summary: 'Changement(s) effectué(s) : ', life: 2000 });
   } else {
-    toast.add({ severity: 'error', summary: 'Échec de la suppression : ', detail: "nid = " });
+    toast.add({ severity: 'error', summary: 'Échec : ', detail: "nid = " });
   }
   selectedNid.value = []
   showToolbar.value = false
 })
 
+const wficon = ((wf) => {
+  if (wf == 100) return { icon: "pi pi-pencil", color: "blue", tt: "En cours" }
+  if (wf == 200) return { icon: "pi pi-envelope", color: "Orange", tt: "Rendu" }
+  if (wf == 300) return { icon: "pi pi-check-square", color: "green", tt: "Corrigé" }
+})
 const nextOne = ((wf) => {
   if (wf == 300) return { icon: "pi pi-pencil", color: "blue", wf: 100, tt: "En cours" }
   if (wf == 100) return { icon: "pi pi-envelope", color: "Orange", wf: 200, tt: "Rendu" }
@@ -48,33 +53,12 @@ const nextOne = ((wf) => {
 const nextTwo = ((wf) => {
   if (wf == 200) return { icon: "pi pi-pencil", color: "blue", wf: 100, tt: "En cours" }
   if (wf == 300) return { icon: "pi pi-envelope", color: "Orange", wf: 200, tt: "Rendu" }
-  if (wf == 100) return { icon: "pi pi-check-square", color: "green", wf: 300, tt: "Corrigé"}
+  if (wf == 100) return { icon: "pi pi-check-square", color: "green", wf: 300, tt: "Corrigé" }
 })
 const chWf = ((sa_nid, wf) => {
   my.changeSaWf(sa_nid, wf)
 })
 
-const handleCycleWf = ((sa_nid, wf) => {
-  selectedNid.value = []
-  showToolbar.value = false
-  if (wf == 100) my.changeSaWf(sa_nid, 200)
-  if (wf == 200) my.changeSaWf(sa_nid, 300)
-  if (wf == 300) my.changeSaWf(sa_nid, 100)
-  const response = {}
-  if (response.ok) {
-    toast.add({ severity: 'success', summary: 'Suppression effectuée : ', life: 2000 });
-  } else {
-    // toast.add({ severity: 'error', summary: 'Échec de la suppression : ', detail: "nid = " });
-  }
-  selectedNid.value = []
-  showToolbar.value = false
-})
-
-const wficon = ((wf) => {
-  if (wf == 100) return { icon: "pi pi-pencil", color: "blue", tt: "En cours"}
-  if (wf == 200) return { icon: "pi pi-envelope", color: "Orange", tt: "Rendu" }
-  if (wf == 300) return { icon: "pi pi-check-square", color: "green", tt: "Corrigé"}
-})
 const nbFake = ref(new Array(props.views_total));
 </script>
 
@@ -172,8 +156,7 @@ const nbFake = ref(new Array(props.views_total));
       <Column field="workflow" header="Mode" style="max-width:10rem" sortable>
         <template #body="p">
           <span class="parent mr-1">
-            <Button @click="handleCycleWf(p.data.sa_nid, p.data.workflow)" text
-              v-tooltip.top="{ value: wficon(p.data.workflow).tt, showDelay: 300, hideDelay: 0 }">
+            <Button text v-tooltip.top="{ value: wficon(p.data.workflow).tt, showDelay: 300, hideDelay: 0 }">
               <i v-if="!my.assignments.is_in_time_range" class="pi pi-lock pr-1"
                 style="color: red; font-size: 1.5rem;"></i>
               <i :class="wficon(p.data.workflow).icon"
