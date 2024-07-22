@@ -15,8 +15,9 @@ const route = useRoute()
 console.log("location", route.query)
 // TODO: faire en sorte que les recherces avancées génèrent une url copiable.
 
-
-bib.getBib()
+if (bib.bib == null || bib.bib.status != 'pending') {
+  bib.getBib()
+}
 my.types = await useActivities()
 
 const getType = ((id) => {
@@ -72,8 +73,8 @@ const filters = ref({
               <template #end>
 
                 <div class="flex justify-content-end">
-                  <Select v-model="filters['type'].value" :options="my.types" filter optionLabel="name"
-                    optionValue="id" placeholder="Filter par type" class="w-full md:w-14rem" showClear>
+                  <Select v-model="filters['type'].value" :options="my.types" filter optionLabel="name" optionValue="id"
+                    placeholder="Filter par type" class="w-full md:w-14rem" showClear>
                     <template #value="slotProps">
                       <div v-if="slotProps.value" class="flex align-items-center">
                         <img :src="getType(slotProps.value).icon.path" class="w-8 mr-3" />
@@ -142,8 +143,8 @@ const filters = ref({
       </div>
     </template>
     <template v-else>
-      <DataTable :value="bib.bib.data" paginator :rows="20" v-model:filters="filters" sortField="changed"
-        :sortOrder="-1" :globalFilterFields="['title', 'abstract', 'auteur']" :rowsPerPageOptions="[10, 20, 50]"
+      <DataTable :value="bib.bib.data" paginator :rows="20" v-model:filters="filters" sortField="changed" :sortOrder="-1"
+        :globalFilterFields="['title', 'abstract', 'auteur']" :rowsPerPageOptions="[10, 20, 50]"
         tableStyle="min-width: 50rem">
 
         <template #header>

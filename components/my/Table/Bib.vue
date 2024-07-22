@@ -11,12 +11,14 @@ const props = defineProps({
   web: String,
   whoami: String,
 })
-const shareClass = props.shared == "0" ? " unshared " : " shared "
+const shareClass = computed(() => {
+  return props.shared == "0" ? " unshared " : " shared "
+})
 
 </script>
 
 <template>
-  <div v-if="whoami != 'ap' ">
+  <div v-if="whoami != 'ap'">
     <button @click="visible = true">
       <i v-if="shared == '1' && web == '1'" :class="PI.GLOBE + shareClass + ' globe'" />
       <i v-else-if="shared == '1' && web == '0'" :class="PI.CLONE + shareClass + ' globe'" />
@@ -25,9 +27,9 @@ const shareClass = props.shared == "0" ? " unshared " : " shared "
   </div>
 
 
-  <Dialog v-model:visible="visible" :header="props.title" modal :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } } "
+  <Dialog v-model:visible="visible" :header="props.title" modal :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }"
     :style="{ width: '75%' }">
-    <MyTableBibForm :nid="nid"  @closeBibForm="visible = false"/>
+    <MyTableBibForm :nid="nid" @closeBibForm="visible = false" />
   </Dialog>
 </template>
 

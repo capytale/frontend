@@ -1,13 +1,17 @@
 <script setup>
 import { useConfirm } from "primevue/useconfirm";
+import { useBibStore } from '@/stores/bib'
 const confirm = useConfirm();
 const activites = useActivitiesStore()
+
+const bib = useBibStore()
 
 const props = defineProps({
   nid: String,
 })
 activites.getMetadata(props.nid)
 
+const emit = defineEmits(['closeBibForm'])
 
 // const current = activites.activities.data.filter((item) => item.nid == props.nid)
 // console.log('abstr : ', current)
@@ -51,13 +55,13 @@ watch(
         })
       }
       const fetchedThemes = c.themes.map((x) => x.target_id)
-      const keys = generateKeysByIds(idxEls.value.themes , fetchedThemes);
+      const keys = generateKeysByIds(idxEls.value.themes, fetchedThemes);
       selectedThemes.value = keys
     }
   })
 
-  // cf. https://github.com/primefaces/primevue/issues/3837
-  function generateKeysByIds(data, ids) {
+// cf. https://github.com/primefaces/primevue/issues/3837
+function generateKeysByIds(data, ids) {
   const output = {};
 
   function traverse(items, prefix) {
@@ -136,12 +140,12 @@ const postBibForm = async () => {
     });
     return
   }
-  console.log('selectedModules : ', selectedModules.value)
+  // console.log('selectedModules : ', selectedModules.value)
 
   const selModules = selectedModules.value ? selectedModules.value.map((x) => x.tid) : "[]"
 
   let selThemes = []
-  console.log('selectedThemes : ', selectedThemes.value)
+  // console.log('selectedThemes : ', selectedThemes.value)
   if (selectedThemes.value) {
     const a = Object.entries(selectedThemes.value).filter(([k, v]) => v.checked)
     for (const x in a) {
@@ -162,6 +166,7 @@ const postBibForm = async () => {
     selThemes
   )
 
+  bib.bib.refresh() // TODO : on doit pouvoir faire plus léger en ne récupérant que ce qui a été ajouté ou supprimé
 }
 
 </script>
@@ -219,7 +224,7 @@ const postBibForm = async () => {
   </div>
   <div class="flex justify-content-end gap-2" style="position: absolute; height:2em; bottom: 0;">
     <Button type="button" label="Cancel" severity="secondary" @click="$emit('closeBibForm')"></Button>
-    <Button type="button" label="Save" @click="() => {postBibForm(); $emit('closeBibForm')}"></Button>
+    <Button type="button" label="Save" @click="() => { postBibForm(); $emit('closeBibForm') }"></Button>
   </div>
 </template>
 
