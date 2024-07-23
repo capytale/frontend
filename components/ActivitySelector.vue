@@ -1,6 +1,5 @@
 <script setup>
 import Fuse from "fuse.js";
-import TypeApi from "@capytale/activity.js/backend/capytale/activityType";
 
 const inputstyle = {
   base:
@@ -8,13 +7,10 @@ const inputstyle = {
 };
 
 const myStore = useMyStore();
-myStore.favorites = await TypeApi.getFavorites();
 
-myStore.types = await useActivities();
-myStore.groups = await TypeApi.getGroups();
-console.log(myStore.groups);
-
-console.log(myStore.types);
+await myStore.getTypes();
+await myStore.getGroups();
+await myStore.getFavorites();
 
 const fuse = ref(
   new Fuse(myStore.types, {
@@ -103,6 +99,7 @@ const dispGroups = computed(() => {
           catChoice.value == 'all' && 
           matChoice.value == 'all';
 });
+const test = ref('')
 </script>
 
 <template>
@@ -119,7 +116,20 @@ const dispGroups = computed(() => {
     </template>
     </Card>
     <div class="grid lg:grid-cols-4 sm:grid-cols-3 gap-4 mb-4" v-if="dispGroups">
-      <Card v-for="(obj, cat, index) in myStore.groups" class="hover:ring-capycolor-400 hover:ring-2 hover:cursor-pointer" @click="dialogActi = true; dialogGroup=cat">
+      <Card>
+        <template #header><div class="text-center font-bold pt-3">Favoris</div></template>
+        <template #content>
+          <div class="flex flex-wrap">
+          <a v-for="acti in myStore.favorites" :key="acti" :href="'/web/node/add/activity?type=' + acti" @mouseover="test = acti" @mouseleave="test = ''">
+            <img
+              :src="myStore.types.find(el => el.id == acti).icon.path" v-tooltip.bottom="acti" 
+              class="w-12 transition-opacity duration-[400ms]" :class="test != '' && test != acti ? 'opacity-20' : ''"
+            />
+          </a>
+          </div>
+        </template>
+      </Card>
+      <Card v-for="(obj, cat, index) in myStore.groupsAvecFav" class="hover:ring-capycolor-400 hover:ring-2 hover:cursor-pointer" @click="dialogActi = true; dialogGroup=cat">
       <template #header><div class="text-center font-bold pt-3">{{ obj.title }}</div></template>
       <template #content>
       <div class="flex flex-wrap">
@@ -133,10 +143,10 @@ const dispGroups = computed(() => {
     </div>
     <Dialog v-model:visible="dialogActi" modal dismissableMask class="md:w-4/6">
       <template #header>
-        <div class="text-lg font-bold">Catégorie {{ myStore.groups[dialogGroup].title }} : Choix des activités </div>
+        <div class="text-lg font-bold">Catégorie {{ myStore.groupsAvecFav[dialogGroup].title }} : Choix des activités </div>
       </template>
       <div class="grid grid-cols-2 gap-4">
-        <ActiCard v-for="acti in myStore.types.filter(el => myStore.groups[dialogGroup].activities.includes(el.id))" :activite="acti" />
+        <ActiCard v-for="acti in myStore.types.filter(el => myStore.groupsAvecFav[dialogGroup].activities.includes(el.id))" :activite="acti" />
       </div>
     </Dialog>
     <div class="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4" v-if="!dispGroups">
