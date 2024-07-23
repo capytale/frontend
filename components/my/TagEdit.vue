@@ -157,12 +157,23 @@ const handleWant = (event) => {
     selectedTag.value = []
   }
 }
+const corbeilleTid = () => {
+  return props.tags.find(o => o.label === 'Corbeille').id
+}
+// console.log("corbeille !!!", corbeilleTid())
+
 
 </script>
 
 <template>
   <div>
-    <i class="pi pi-tag" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
+    <template v-if="slotProps.node.id == corbeilleTid()">
+      <i class="pi pi-trash" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
+
+    </template>
+    <template v-else>
+      <i class="pi pi-tag" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
+    </template>
     <i class="pi pi-cog surprise" @click.stop="toggle"></i>
   </div>
   <Menu ref="menu" :model="items" :popup="true" />

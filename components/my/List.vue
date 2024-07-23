@@ -114,6 +114,7 @@ const myactivities = computed(() => {
       return o.tags.tids.split(',').includes(activeTag.tid)
     })
   } else { // no tag selected : show all activities except those in the trash
+    if (!activites.activities.data) return []
     return activites.activities.data.filter(o => {
       if (!o.tags.tids) return true
       return !o.tags.tids.split(',').includes(corbeilleTid())
