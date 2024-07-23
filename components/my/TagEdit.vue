@@ -98,8 +98,8 @@ const items = ref([
 ]
 )
 const toggle = (event) => {
-  console.log("event: ", event)
-  console.log("menu: ", menu)
+  // console.log("event: ", event)
+  // console.log("menu: ", menu)
   menu.value.toggle(event);
 };
 
@@ -136,14 +136,14 @@ const isSuccessor = (id, notMe) => {
 
 const onNodeSelect = (event) => {
   wantSubTag.value = ['subTag']
-  console.log("authSave.value: ", authSave.value)
+  // console.log("authSave.value: ", authSave.value)
 
   if (isSuccessor(event.key, props.slotProps.node.id) && wantSubTag.value.length > 0) {
     authSave.value = false
-    console.log("authSave.value: ", authSave.value)
+    // console.log("authSave.value: ", authSave.value)
   } else {
     authSave.value = true
-    console.log("authSave.value: ", authSave.value)
+    // console.log("authSave.value: ", authSave.value)
   }
 }
 const onNodeUnselect = (event) => {
@@ -152,7 +152,7 @@ const onNodeUnselect = (event) => {
 }
 const handleWant = (event) => {
   if (wantSubTag.value.length == 0) {
-    console.log("wantSubTag.value: ", wantSubTag.value)
+    // console.log("wantSubTag.value: ", wantSubTag.value)
     authSave.value = true
     selectedTag.value = []
   }

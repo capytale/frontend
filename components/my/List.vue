@@ -102,16 +102,23 @@ const getTagName = (tid) => {
   return tag ? tag.label : ''
 }
 
+const corbeilleTid = () => {
+  return tags.tags.data.find(o => o.label === 'Corbeille').id
+}
+
 const myactivities = computed(() => {
-  if (activeTag.tid) {
-    // console.log("------FILTRE: ", activeTag.tid)
+  if (activeTag.tid) { // user has selected a tag
     return activites.activities.data.filter(o => {
       if (!o.tags.tids) return false
       // console.log("o: ", o.code, o.tags.tids.split(','), activeTag.tid, o.tags.tids.split(',').includes(activeTag.tid) ? 'true' : 'false')
       return o.tags.tids.split(',').includes(activeTag.tid)
     })
+  } else { // no tag selected : show all activities except those in the trash
+    return activites.activities.data.filter(o => {
+      if (!o.tags.tids) return true
+      return !o.tags.tids.split(',').includes(corbeilleTid())
+    })
   }
-  return activites.activities.data
 })
 
 
@@ -149,8 +156,8 @@ const myactivities = computed(() => {
                   @click="tagsToggle" />
                 <Popover ref="opTags">
                   <div class="gap-3 w-25rem">
-                    <Tree id="tags" v-model:selectionKeys="selectedTags" :value="tags.tags.data"
-                      selectionMode="multiple" class="w-full md:w-30rem scroll">
+                    <Tree id="tags" v-model:selectionKeys="selectedTags" :value="tags.tags.data" selectionMode="multiple"
+                      class="w-full md:w-30rem scroll">
                       <template #default="slotProps">
                         <i class="pi pi-tag" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
                       </template>
@@ -270,7 +277,8 @@ const myactivities = computed(() => {
 
         <Column v-if="isTeacher" field="bib" header="Bib." style="min-width: 5rem">
           <template #body="p">
-            <MyTableBib :nid="p.data.nid" :title="p.data.title" :shared="p.data.status_shared" :web="p.data.status_web" :whoami="p.data.whoami"/>
+            <MyTableBib :nid="p.data.nid" :title="p.data.title" :shared="p.data.status_shared" :web="p.data.status_web"
+              :whoami="p.data.whoami" />
           </template>
         </Column>
 
@@ -282,7 +290,7 @@ const myactivities = computed(() => {
 
         <Column field="more" header="">
           <template #body="p">
-            <MyTableMore :nid="p.data.nid"  :mode="p.data.mode" :whoami="p.data.whoami" :isTeacher="isTeacher" />
+            <MyTableMore :nid="p.data.nid" :mode="p.data.mode" :whoami="p.data.whoami" :isTeacher="isTeacher" />
           </template>
         </Column>
 
