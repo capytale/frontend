@@ -15,6 +15,18 @@ export const useMyStore = defineStore('my', {
     groups: {} as ActivityGroups,
     actiSelView: "groups",
   }),
+  getters: {
+    groupsAvecFav(state) {
+      return {
+        favorites: {
+          title: "Favoris",
+          activities: state.favorites
+        },
+
+        ...state.groups
+      }
+    }
+  },
   actions: {
     async getAssignments(nid: string) {
       this.loadingAssignments = true
