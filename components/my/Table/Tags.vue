@@ -39,7 +39,7 @@ const getName = (id) => {
         <i class="pi pi-tag px-2 normal" :style="'color:' + getName(tid).color"></i>{{ getName(tid).label }}
       </Button>
       <div class="poubelle">
-        <Button icon="pi pi-trash" severity="danger" @click="delTag(nid, tid)" outlined rounded />
+        <Button icon="pi pi-times" severity="danger" @click="delTag(nid, tid)" outlined rounded />
       </div>
     </span>
   </div>
