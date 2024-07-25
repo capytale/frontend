@@ -30,34 +30,36 @@ const onNodeUnselect = (node) => {
 </script>
 
 <template>
-    <div class="space-y-3 p-3">
-      <div class="flex-1">
-        <span class="flex items-center px-2 py-4 space-x-3 rounded-md">
-          <i v-if="sideMenu.visible" class="pi pi-lock"  @click="sideMenu.visible = false" v-tooltip.right="{ value: 'Des-épingler le menu', showDelay: 300, hideDelay: 0 }"></i>
-          <i v-else class="pi pi-lock-open"  @click="sideMenu.visible = true" v-tooltip.right="{ value: 'Épingler le menu', showDelay: 300, hideDelay: 0 }"></i>
-          <!-- <i class="pi pi-tags"></i> -->
-          <span class="parent mr-1">
-            <span class="">Étiquettes</span>
-            <div class="novalorise">
-              <Button icon="pi pi-plus" severity="secondary" outlined rounded  size="small"/>
-            </div>
-            <div class="valorise">
-              <Button icon="pi pi-plus" severity="info" @click="createTagVisible = true" rounded />
-            </div>
-          </span>
+  <div class="space-y-3 p-3">
+    <div class="flex-1">
+      <span class="flex items-center px-2 py-4 space-x-3 rounded-md">
+        <i v-if="sideMenu.visible" class="pi pi-lock highlight" @click="sideMenu.visible = false"
+          v-tooltip.right="{ value: 'Des-épingler le menu', showDelay: 300, hideDelay: 0 }"></i>
+        <i v-else class="pi pi-lock-open highlight" @click="sideMenu.visible = true"
+          v-tooltip.right="{ value: 'Épingler le menu', showDelay: 300, hideDelay: 0 }"></i>
+        <!-- <i class="pi pi-tags"></i> -->
+        <span class="parent mr-1">
+          <span class="">Étiquettes</span>
+          <div class="novalorise">
+            <Button icon="pi pi-plus" severity="secondary" outlined rounded size="small" />
+          </div>
+          <div class="valorise">
+            <Button icon="pi pi-plus" severity="info" @click="createTagVisible = true" rounded />
+          </div>
         </span>
-        <div v-if="tags.tags.pending">loading......</div>
-        <Tree v-else id="folders" v-model:selectionKeys="selectedKey" selectionMode="single" :value="tags.tags.data"
-          class="w-full md:w-30rem" @nodeSelect="onNodeSelect" @nodeUnselect="onNodeUnselect">
-          <template #default="slotProps">
-            <div class="primary-nav left centerize">
+      </span>
+      <div v-if="tags.tags.pending">loading......</div>
+      <Tree v-else id="folders" v-model:selectionKeys="selectedKey" selectionMode="single" :value="tags.tags.data"
+        class="w-full md:w-30rem" @nodeSelect="onNodeSelect" @nodeUnselect="onNodeUnselect">
+        <template #default="slotProps">
+          <div class="primary-nav left centerize">
 
-              <MyTagEdit :slotProps="slotProps" :tags="tags.tags.data" />
-            </div>
-          </template>
-        </Tree>
-      </div>
+            <MyTagEdit :slotProps="slotProps" :tags="tags.tags.data" />
+          </div>
+        </template>
+      </Tree>
     </div>
+  </div>
 
   <Dialog v-model:visible="createTagVisible" modal header="Créer une nouvelle étiquette" :style="{ width: '55rem' }">
     <div class="flex align-items-center gap-3 mb-3">
@@ -82,7 +84,6 @@ const onNodeUnselect = (node) => {
 
     </div>
   </Dialog>
-
 </template>
 
 <style scoped>
@@ -164,4 +165,16 @@ const onNodeUnselect = (node) => {
 .parent:hover .valorise {
   display: inline;
 }
+
+.highlight {
+  cursor: pointer;
+  padding: 0.7em;
+  border-radius: 2em;
+  border: 1px solid #ccc;
+} 
+.highlight:hover {
+  cursor: pointer;
+  padding: 0.7em;
+  border: 1px solid #aaa;
+} 
 </style>

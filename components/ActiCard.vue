@@ -2,9 +2,9 @@
 const props = defineProps({
   activite: Object,
 });
-import { useToast } from "primevue/usetoast";
+// import { useToast } from "primevue/usetoast";
+// const toast = useToast();
 
-const toast = useToast();
 const myStore = useMyStore();
 
 const star = computed(() => {

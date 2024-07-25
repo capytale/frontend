@@ -116,26 +116,26 @@ const test = ref('')
     </template>
     </Card>
     <div class="grid lg:grid-cols-4 sm:grid-cols-3 gap-4 mb-4" v-if="dispGroups">
-      <Card>
-        <template #header><div class="text-center font-bold pt-3">Favoris</div></template>
-        <template #content>
-          <div class="flex flex-wrap">
-          <a v-for="acti in myStore.favorites" :key="acti" :href="'/web/node/add/activity?type=' + acti" @mouseover="test = acti" @mouseleave="test = ''">
-            <img
-              :src="myStore.types.find(el => el.id == acti).icon.path" v-tooltip.bottom="acti" 
-              class="w-12 transition-opacity duration-[400ms]" :class="test != '' && test != acti ? 'opacity-20' : ''"
-            />
-          </a>
-          </div>
-        </template>
-      </Card>
+      <!-- <Card> -->
+      <!--   <template #header><div class="text-center font-bold pt-3">Favoris</div></template> -->
+      <!--   <template #content> -->
+      <!--     <div class="flex flex-wrap"> -->
+      <!--     <a v-for="acti in myStore.favorites" :key="acti" :href="'/web/node/add/activity?type=' + acti" @mouseover="test = acti" @mouseleave="test = ''"> -->
+      <!--       <img -->
+      <!--         :src="myStore.types.find(el => el.id == acti).icon.path" v-tooltip.bottom="acti"  -->
+      <!--         class="w-12 transition-opacity duration-[400ms]" :class="test != '' && test != acti ? 'opacity-20' : ''" -->
+      <!--       /> -->
+      <!--     </a> -->
+      <!--     </div> -->
+      <!--   </template> -->
+      <!-- </Card> -->
       <Card v-for="(obj, cat, index) in myStore.groupsAvecFav" class="hover:ring-capycolor-400 hover:ring-2 hover:cursor-pointer" @click="dialogActi = true; dialogGroup=cat">
       <template #header><div class="text-center font-bold pt-3">{{ obj.title }}</div></template>
       <template #content>
       <div class="flex flex-wrap">
         <img
           :src="myStore.types.find(el => el.id == acti).icon.path" v-for="acti in obj.activities"
-          class="w-12"
+          class="w-12 m-1"
         />
       </div>
       </template>
