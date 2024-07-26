@@ -1,14 +1,55 @@
-"isTeacher"
-"p.data.icon"
-"p.data.nid"
-"p.data.title"
-"p.data.boss"
-"p.data.changed"
-"p.data.code"
-"p.data.mode"
-"p.data.status_shared"
-"p.data.status_web"
-"p.data.tags"
-"p.data.type"
-"p.data.views_total"
-"p.data.whoami"
+Type.vue 
+=====
+  icon: String,
+  type: String,
+
+titre
+=====
+  title: String,
+  nid: String,
+  whoami: String,
+
+Evaluation.vue
+----
+  nid: String,
+  boss: String,
+  whoami: String,
+  evalu: String,
+  appre: String,
+  isTeacher: Boolean,
+  views_total: Number,
+
+Changed.vue
+---
+  changed: String,
+
+Share.vue
+----
+  code: String,
+  mode: String,
+  boss: String,
+  wf: String,
+  isTeacher: Boolean,
+  whoami: String,
+  tr_beg: String,
+  tr_end: String,
+
+Bib.vue
+---
+  nid: String,
+  title: String,
+  shared: String,
+  web: String,
+  whoami: String,
+
+Tags.vue
+=====
+  nid: String,
+  tags: Object,
+
+More.vue
+----
+  nid: String,
+  mode: String,
+  whoami: String,
+  isTeacher: Boolean,
