@@ -89,12 +89,6 @@ const filters = ref({
   type: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
 
-// affiche l'icône du type TODO : Déplacer dans utils
-const typeIcon = (id) => {
-  const obj = my.types.find(o => o.id === id)
-  return obj ? obj.icon.path : ''
-}
-
 const activeTag = useActiveTagStore()
 
 const getTagName = (tid) => {
@@ -109,19 +103,22 @@ const corbeilleTid = () => {
 const myactivities = computed(() => {
   if (activeTag.tid) { // user has selected a tag
     return activites.activities.data.filter(o => {
-      if (!o.tags.tids) return false
-      // console.log("o: ", o.code, o.tags.tids.split(','), activeTag.tid, o.tags.tids.split(',').includes(activeTag.tid) ? 'true' : 'false')
-      return o.tags.tids.split(',').includes(activeTag.tid)
+      if (!o.tags) return false
+      for (let tag of o.tags) {
+        if (tag.target_id === activeTag.tid) return true
+      }
     })
   } else { // no tag selected : show all activities except those in the trash
     if (!activites.activities.data) return []
     return activites.activities.data.filter(o => {
-      if (!o.tags.tids) return true
-      return !o.tags.tids.split(',').includes(corbeilleTid())
+      if (!o.tags) return true
+      for (let tag of o.tags) {
+        if (tag.target_id === corbeilleTid()) return false
+      }
+      return true
     })
   }
 })
-
 
 </script>
 
@@ -234,64 +231,61 @@ const myactivities = computed(() => {
 
         <Column field="type" header="Type" sortable>
           <template #body="p">
-            <MyTableType :icon="typeIcon(p.data.type)" :type="p.data.type" />
+            <MyTableType :data="p.data" />
           </template>
         </Column>
 
         <Column v-if="isTeacher" field="title" header="Titre" style="min-width:20rem; max-width:30rem; overflow:hidden"
           sortable>
           <template #body="p">
-            <MyTableTitle :title="p.data.title" :nid="p.data.nid" :whoami="p.data.whoami" />
-          </template>u
-        </Column>
-        <Column v-else field="title" header="Titre" style="width:40rem; max-width:40rem; overflow:hidden" sortable>
-          <template #body="p">
-            <MyTableTitle :title="p.data.title" :nid="p.data.nid" :whoami="p.data.whoami" />
-          </template>u
+            <MyTableTitle :data="p.data" />
+          </template>
         </Column>
 
         <Column v-if="isTeacher" field="evaluation" header="Évaluation" style="max-width:12rem">
           <template #body="p">
-            <MyTableEvaluation :nid="p.data.nid" :views_total="p.data.views_total" :boss="p.data.boss"
+            <!-- <MyTableEvaluation :nid="p.data.nid" :views_total="p.data.views_total" :boss="p.data.boss"
               :whoami="p.data.whoami" :evalu="p.data.evaluation" :appre="p.data.appreciation" :isTeacher="isTeacher" />
+            -->
           </template>
         </Column>
         <Column v-else field="evaluation" header="Évaluation" style="max-width:20rem">
           <template #body="p">
-            <MyTableEvaluation :views_total="p.data.views_total" :boss="p.data.boss" :whoami="p.data.whoami"
-              :evalu="p.data.evaluation" :appre="p.data.appreciation" :isTeacher="isTeacher" />
+            <!-- <MyTableEvaluation :views_total="p.data.views_total" :boss="p.data.boss" :whoami="p.data.whoami"
+              :evalu="p.data.evaluation" :appre="p.data.appreciation" :isTeacher="isTeacher" /> -->
           </template>
         </Column>
 
         <Column field="changed" header="Modifié" style="min-width: 10rem; width:14rem" sortable>
           <template #body="p">
-            <MyTableChanged :changed="p.data.changed" />
+            <!-- <MyTableChanged :changed="p.data.changed" /> -->
           </template>
         </Column>
 
         <Column field="code" header="Partage" style="min-width: 13rem">
           <template #body="p">
-            <MyTableShare :code="p.data.code" :mode="p.data.mode" :boss="p.data.boss" :whoami="p.data.whoami"
-              :wf="p.data.workflow" :isTeacher="isTeacher" :tr_beg="p.data.tr_beg" :tr_end="p.data.tr_end" />
+            <!-- <MyTableShare :code="p.data.code" :mode="p.data.mode" :boss="p.data.boss" :whoami="p.data.whoami"
+              :wf="p.data.workflow" :isTeacher="isTeacher" :tr_beg="p.data.tr_beg" :tr_end="p.data.tr_end" /> -->
           </template>
         </Column>
 
         <Column v-if="isTeacher" field="bib" header="Bib." style="min-width: 5rem">
           <template #body="p">
-            <MyTableBib :nid="p.data.nid" :title="p.data.title" :shared="p.data.status_shared" :web="p.data.status_web"
-              :whoami="p.data.whoami" />
+            <!-- <MyTableBib :nid="p.data.nid" :title="p.data.title" :shared="p.data.status_shared" :web="p.data.status_web"
+            :whoami="p.data.whoami" /> -->
           </template>
         </Column>
 
         <Column field="tags" header="Étiquettes" style="">
           <template #body="p">
-            <MyTableTags :nid="p.data.nid" :tags="p.data.tags" />
+            {{ p.data.tags }}
+            <!-- <MyTableTags :nid="p.data.nid" :tags="p.data.tags" /> -->
           </template>
         </Column>
 
         <Column field="more" header="">
           <template #body="p">
-            <MyTableMore :nid="p.data.nid" :mode="p.data.mode" :whoami="p.data.whoami" :isTeacher="isTeacher" />
+            <!-- <MyTableMore :nid="p.data.nid" :mode="p.data.mode" :whoami="p.data.whoami" :isTeacher="isTeacher" /> -->
           </template>
         </Column>
 

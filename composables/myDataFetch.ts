@@ -8,7 +8,7 @@ let myActivitiesCache: { property: object }
 export function fetchMyActivities() {
   return useAsyncData('activKey', async () => {
     if (online) {
-      return myActivitiesCache = await httpClient.getJsonAsync<any>("/web/my_json_data")
+      return myActivitiesCache = await httpClient.getJsonAsync<any>("/web/c-hdls/api/all-activities")
     } else {
       return myActivitiesCache = myJsonData
     }

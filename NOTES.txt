@@ -9,6 +9,11 @@ titre
   nid: String,
   whoami: String,
 
+Tags.vue
+=====
+  nid: String,
+  tags: Object,
+
 Evaluation.vue
 ----
   nid: String,
@@ -41,11 +46,6 @@ Bib.vue
   shared: String,
   web: String,
   whoami: String,
-
-Tags.vue
-=====
-  nid: String,
-  tags: Object,
 
 More.vue
 ----

@@ -1,14 +1,19 @@
 <script setup>
 import Tooltip from 'primevue/tooltip';
 
+const my = useMyStore()
+const typeIcon = (id) => {
+  const obj = my.types.find(o => o.id === id)
+  return obj ? obj.icon.path : ''
+}
+
 const props = defineProps({
-  icon: String,
-  type: String,
-  required: true
+  data: Object,
 })
 </script>
 
 <template>
-  <img :src="icon" class="w-12" v-tooltip.top="{ value: type, showDelay: 400, hideDelay: 0 }" type="text" placeholder="Right" :alt="'Activité' + type">
+  <img :src="typeIcon(props.data.type)" class="w-12" v-tooltip.top="{ value: props.data.type, showDelay: 400, hideDelay: 0 }" 
+    type="text" placeholder="Right" :alt="'Activité' + props.data.type">
 </template>
 

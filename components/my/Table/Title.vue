@@ -1,25 +1,23 @@
 <script setup>
 const props = defineProps({
-  title: String,
-  nid: String,
-  whoami: String,
-  required: true
+  data: Object,
 })
 
 const playerUrl = function (nid) {
-  const mode = props.whoami == 'ap' ? 'assignment' : 'create'
-  return `/web/c-act/n/${nid}/play/${mode}`
+  const mode = props.data.isSa ? 'assignment' : 'create'
+  return `/web/c-act/n/${props.data.nid}/play/${mode}`
 }
 const editUrl = function (nid) {
-  return `/web/node/${nid}/edit`
+  return `/web/node/${props.data.nid}/edit`
 }
 
 </script>
 
 <template>
   <div class="group parent">
-    <a :href="playerUrl(nid)" >{{ title }}</a>
-    <a v-if="whoami != 'ap'" :href="editUrl(nid)" class="px-2 cog" v-tooltip.top="{ value: 'Modifier les paramètres', showDelay: 400, hideDelay: 0 }" aria-label="Modifier les paramètres">
+    <a :href="playerUrl(data.nid)" >{{ data.title }}</a>
+    <a v-if="!props.data.isSa" :href="editUrl(nid)" class="px-2 cog" v-tooltip.top="{ value: 'Modifier les paramètres', showDelay: 400, hideDelay: 0 }"
+      aria-label="Modifier les paramètres">
       <i class="pi pi-cog"></i>
     </a>
   </div>
