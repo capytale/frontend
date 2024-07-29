@@ -10,6 +10,7 @@ const typeIcon = (id) => {
 const props = defineProps({
   data: Object,
 })
+
 </script>
 
 <template>

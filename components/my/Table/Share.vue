@@ -1,18 +1,17 @@
 <script setup>
 import { useToast } from "primevue/usetoast";
 const toast = useToast();
-
 import { formatDateTime } from '~/utils/format';
 const props = defineProps({
-  code: String,
-  mode: String,
-  boss: String,
-  wf: String,
-  isTeacher: Boolean,
-  whoami: String,
-  tr_beg: String,
-  tr_end: String,
-  required: true
+  data: Object,
+})
+
+const activites = useActivitiesStore()
+await activites.getAllDetails(props.data.nid)
+
+const current = computed (() => {
+  const obj = activites.activities.data.find(o => o.nid === props.data.nid)
+  return obj
 })
 
 const visible = ref(false);
@@ -20,15 +19,15 @@ const menu = ref();
 const toggle = (event) => {
   menu.value.toggle(event);
 };
-const url = `https://np.ac-capytale.fr/web/c/${props.code}`
+const url = `https://np.ac-capytale.fr/web/c/${current.code}`
 const items = computed(() =>
   [
     {
       label: 'Copier le code partage avec la classe',
       icon: 'pi pi-copy',
       command: () => {
-        navigator.clipboard.writeText(props.code);
-        toast.add({ severity: 'success', summary: 'Copié !', detail: props.code, life: 2000 });
+        navigator.clipboard.writeText(my.code);
+        toast.add({ severity: 'success', summary: 'Copié !', detail: current.code, life: 2000 });
       }
     },
     {
@@ -152,43 +151,50 @@ const wfStatus = computed(() => {
 </script>
 
 <template>
-  <template v-if="(whoami == 'cr' || whoami == 'as') && isTeacher">
-    <div class="card flex justify-content-center mystyle"
-      v-tooltip.top="{ value: label.tooltipText, showDelay: 400, hideDelay: 0 }">
-      <Button type="button" :label="label.code" @click="toggle" class="mystyle p-3" :severity="label.severity"
-        aria-haspopup="true" aria-controls="overlay_menu" outlined>
-        <template #icon>
-          <i class="pi pi-angle-down m-2"></i>
-          <div :class="label.color">
-            <i :class="label.mainIcon + ' ml-2'" style="font-size: 1.2rem"></i>
-            <i :class="label.secondaryIcon + ' mr-2'" style="font-size: 1.2rem"></i>
-          </div>
-        </template>
-      </Button>
-      <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
-    </div>
+  <div v-if="current.code">
+    +{{ current.code }}+
+  </div>
+  <div v-else>
+    -+{{ current.code }}+-
+  </div>
 
-    <Dialog v-model:visible="visible" header="Accès à l'activité" modal
-      :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }" :style="{ width: '75%' }">
-      <MyTableQrcode :code="code" :url="url" />
-    </Dialog>
+  <!-- <template v-if="(whoami == 'cr' || whoami == 'as') && isTeacher"> -->
+  <!--   <div class="card flex justify-content-center mystyle" -->
+  <!--     v-tooltip.top="{ value: label.tooltipText, showDelay: 400, hideDelay: 0 }"> -->
+  <!--     <Button type="button" :label="label.code" @click="toggle" class="mystyle p-3" :severity="label.severity" -->
+  <!--       aria-haspopup="true" aria-controls="overlay_menu" outlined> -->
+  <!--       <template #icon> -->
+  <!--         <i class="pi pi-angle-down m-2"></i> -->
+  <!--         <div :class="label.color"> -->
+  <!--           <i :class="label.mainIcon + ' ml-2'" style="font-size: 1.2rem"></i> -->
+  <!--           <i :class="label.secondaryIcon + ' mr-2'" style="font-size: 1.2rem"></i> -->
+  <!--         </div> -->
+  <!--       </template> -->
+  <!--     </Button> -->
+  <!--     <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" /> -->
+  <!--   </div> -->
 
-    <div v-if="whoami == 'as'" class="flex justify-content-center">
-    Associé par {{ boss }}
-    </div>
+  <!--   <Dialog v-model:visible="visible" header="Accès à l'activité" modal -->
+  <!--     :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }" :style="{ width: '75%' }"> -->
+  <!--     <MyTableQrcode :code="code" :url="url" /> -->
+  <!--   </Dialog> -->
 
-  </template>
-  <template v-else-if="whoami == 'cr' && !isTeacher">
-     Perso
-  </template>
-  <template v-else-if="whoami == 'as' && !isTeacher">
-    Associé par {{ boss }}
-  </template>
-  <template v-else>
-    <i :class="wfStatus.icon + ' ml-2'" :style="'font-size: 1.3rem; color: ' + wfStatus.color"
-      v-tooltip.top="{ value: wfStatus.label, showDelay: 400, hideDelay: 0 }"></i>
-    {{ whoami == 'as' ? 'Associé par ' : 'Apprenant de ' }}{{ boss }}
-  </template>
+  <!--   <div v-if="whoami == 'as'" class="flex justify-content-center"> -->
+  <!--   Associé par {{ boss }} -->
+  <!--   </div> -->
+
+  <!-- </template> -->
+  <!-- <template v-else-if="whoami == 'cr' && !isTeacher"> -->
+  <!--    Perso -->
+  <!-- </template> -->
+  <!-- <template v-else-if="whoami == 'as' && !isTeacher"> -->
+  <!--   Associé par {{ boss }} -->
+  <!-- </template> -->
+  <!-- <template v-else> -->
+  <!--   <i :class="wfStatus.icon + ' ml-2'" :style="'font-size: 1.3rem; color: ' + wfStatus.color" -->
+  <!--     v-tooltip.top="{ value: wfStatus.label, showDelay: 400, hideDelay: 0 }"></i> -->
+  <!--   {{ whoami == 'as' ? 'Associé par ' : 'Apprenant de ' }}{{ boss }} -->
+  <!-- </template> -->
 </template>
 
 

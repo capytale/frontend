@@ -19,6 +19,13 @@ export const useActivitiesStore = defineStore('activities', {
       this.activities.data = this.activities.data.map(el => el.nid == nid ? { ...el, ...metadata } : el);
     },
 
+    async getAllDetails(nid) {
+      // console.log("getMetadata", nid)
+      // console.log("this.activities : ", this.activities.data[0])
+      const details = await httpClient.getJsonAsync("/web/c-hdls/api/all-details/" + nid)
+      this.activities.data = this.activities.data.map(el => el.nid == nid ? { ...el, ...details } : el);
+    },
+
     async deleteActivity(nids: Array) {
       for (let nid of nids) {
         // console.log("deleteActivity", nid)
