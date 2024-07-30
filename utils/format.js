@@ -39,3 +39,9 @@ export function timeElapsed(ts) {
     if (secondes > 1) return secondes + " seconde"
     return "1 seconde" 
 }
+
+// Renvoie l'url de icône correspondant au type id
+export const typeIcon = (id, my) => {
+  const obj = my.types.find(o => o.id === id)
+  return obj ? obj.icon.path : ''
+}

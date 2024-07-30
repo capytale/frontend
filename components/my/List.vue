@@ -1,5 +1,6 @@
 <script setup>
 import { FilterMatchMode } from '@primevue/core/api';
+import { typeIcon } from '~/utils/format';
 
 const { data: user, pending: usrpnd, error: usrerr, status: usrstts } = await fetchCurrentUser()
 const isTeacher = user.value.roles.includes('teacher')
@@ -12,7 +13,6 @@ const tags = useTagsStore()
 activites.getActivities()
 
 my.types = await useActivities();
-// console.log(my.types);
 
 const selectedTags = ref(null)
 const selectedFolder = ref(null)
@@ -46,11 +46,6 @@ const handleEdit = function () {
   const nid = selectedNid.value[0].nid
   const url = `/web/node/${nid}/edit`
   window.location.href = url
-}
-
-const typeIcon = (id) => {
-  const obj = my.types.find(o => o.id === id)
-  return obj ? obj.icon.path : ''
 }
 
 const confirm = useConfirm();
@@ -205,7 +200,7 @@ const myactivities = computed(() => {
                   placeholder="Filter par type" class="w-full md:w-14rem" showClear>
                   <template #value="slotProps">
                     <div v-if="slotProps.value" class="flex align-items-center">
-                      <img :src="typeIcon(slotProps.value)" class="w-8 mr-3" />
+                      <img :src="typeIcon(slotProps.value, my)" class="w-8 mr-3" />
                       {{ slotProps.value }}
                     </div>
                     <span v-else>
