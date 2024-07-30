@@ -7,32 +7,30 @@ const props = defineProps({
   isTeacher: Boolean,
 })
 
+const visible = ref(false);
+const menu = ref();
+const toggle = (event) => { menu.value.toggle(event); };
 const activites = useActivitiesStore()
+
 const label = ref()
 const items = ref()
-
+const wfStatus = ref()
 
 const curr = computed(() => {
   const obj = activites.activities.data.find(o => o.nid === props.data.nid)
   if (!obj.code) {
     activites.getAllDetails(props.data.nid).then(obj => {
-      label.value = lbl(obj)
-      items.value = itms(obj)
       return obj
     })
   }
-  label.value = lbl(obj)
-  items.value = itms(obj)
+  label.value = labelGetter(obj)
+  items.value = itemsGetter(obj)
+  wfStatus.value = wfStatusGetter(obj)
   return obj
 })
 
-const visible = ref(false);
-const menu = ref();
-const toggle = (event) => {
-  menu.value.toggle(event);
-};
 const url = `https://np.ac-capytale.fr/web/c/${curr.code}`
-const itms = ((obj) =>
+const itemsGetter = ((obj) =>
   [
     {
       label: 'Copier le code partage avec la classe',
@@ -59,7 +57,7 @@ const itms = ((obj) =>
     }
   ])
 
-const lbl = ((obj) => {
+const labelGetter = ((obj) => {
   const b = obj.tr_beg
   const e = obj.tr_end
   const strPeriode = `Libre pour les élèves du ${formatDateTime(b)} au ${formatDateTime(e)}`
@@ -123,8 +121,8 @@ const lbl = ((obj) => {
   }
 })
 
-const wfStatus = computed(() => {
-  if (curr.wf == '100' && curr.mode.includes('X')) {
+const wfStatusGetter = ((obj) => {
+  if (obj.wf == '100' && obj.mode.includes('X')) {
     return {
       label: 'Verrouillé',
       icon: 'pi pi-lock',
@@ -132,7 +130,7 @@ const wfStatus = computed(() => {
     }
   }
 
-  switch (curr.wf) {
+  switch (obj.wf) {
     case '0':
       return {
         label: 'Modifiable',
