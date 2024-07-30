@@ -7,10 +7,12 @@ const props = defineProps({
 })
 
 const activites = useActivitiesStore()
-await activites.getAllDetails(props.data.nid)
 
-const current = computed (() => {
+const curr = computed (() => {
   const obj = activites.activities.data.find(o => o.nid === props.data.nid)
+  if (!obj.code) {
+    activites.getAllDetails(props.data.nid).then(obj => { return obj })
+  }
   return obj
 })
 
@@ -19,7 +21,7 @@ const menu = ref();
 const toggle = (event) => {
   menu.value.toggle(event);
 };
-const url = `https://np.ac-capytale.fr/web/c/${current.code}`
+const url = `https://np.ac-capytale.fr/web/c/${curr.code}`
 const items = computed(() =>
   [
     {
@@ -27,7 +29,7 @@ const items = computed(() =>
       icon: 'pi pi-copy',
       command: () => {
         navigator.clipboard.writeText(my.code);
-        toast.add({ severity: 'success', summary: 'Copié !', detail: current.code, life: 2000 });
+        toast.add({ severity: 'success', summary: 'Copié !', detail: curr.code, life: 2000 });
       }
     },
     {
@@ -150,12 +152,13 @@ const wfStatus = computed(() => {
 
 </script>
 
-<template>
-  <div v-if="current.code">
-    +{{ current.code }}+
+<template> 
+
+  <div v-if="!curr.code"> 
+    <i class="pi pi-spin pi-spinner"></i>
   </div>
-  <div v-else>
-    -+{{ current.code }}+-
+  <div v-else> 
+    {{ curr.code }} 
   </div>
 
   <!-- <template v-if="(whoami == 'cr' || whoami == 'as') && isTeacher"> -->
