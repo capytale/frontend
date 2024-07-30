@@ -273,6 +273,7 @@ const myactivities = computed(() => {
 
         <Column v-if="isTeacher" field="bib" header="Bib." style="min-width: 5rem">
           <template #body="p">
+            <MyTableBib :data="p.data" />
             <!-- <MyTableBib :nid="p.data.nid" :title="p.data.title" :shared="p.data.status_shared" :web="p.data.status_web"
             :whoami="p.data.whoami" /> -->
           </template>
