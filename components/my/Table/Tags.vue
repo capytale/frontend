@@ -1,30 +1,16 @@
 <script setup>
-import { useToast } from "primevue/usetoast";
-import { useMyStore } from '@/stores/my'
 import { useTagsStore } from '@/stores/tags'
 
-const my = useMyStore()
 const tags = useTagsStore()
 const activites = useActivitiesStore()
 
 const props = defineProps({
-  nid: String,
-  tags: Object,
-  required: true
+  data: Object,
 })
 
-const toast = useToast();
 const delTag = (nid, tid) => {
   activites.untagActivity(nid, tid)
-  // TODO : Faire en backend 
 }
-
-const tids = computed(() => {
-  if (Object.keys(props.tags).length > 0) {
-    return props.tags.tids.split(',')
-  }
-  return []
-})
 
 const getName = (id) => {
   let obj = tags.flatTags.data.find(o => o.id === id);
@@ -33,13 +19,14 @@ const getName = (id) => {
 </script>
 
 <template>
-  <div v-for="tid in tids" :key="nid + tid">
+  <div v-for="tag in props.data.tags" :key="props.data.nid + tag.target_id">
+    <!-- {{ tag.target_id }} {{ props.data.nid }} -->
     <span class="parent mr-1">
-      <Button v-if="getName(tid).label" removable class="pr-3 small-button" text @click="op = !op">
-        <i class="pi pi-tag px-2 normal" :style="'color:' + getName(tid).color"></i>{{ getName(tid).label }}
+      <Button v-if="getName(tag.target_id).label" removable class="pr-3 small-button" text @click="op = !op">
+        <i class="pi pi-tag px-2 normal" :style="'color:' + getName(tag.target_id).color"></i>{{ getName(tag.target_id).label }}
       </Button>
       <div class="poubelle">
-        <Button icon="pi pi-times" severity="danger" @click="delTag(nid, tid)" outlined rounded />
+        <Button icon="pi pi-times" severity="danger" @click="delTag(props.data.nid, tag.target_id)" outlined rounded />
       </div>
     </span>
   </div>

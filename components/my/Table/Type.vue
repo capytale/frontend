@@ -1,5 +1,4 @@
 <script setup>
-import Tooltip from 'primevue/tooltip';
 
 const my = useMyStore()
 const typeIcon = (id) => {

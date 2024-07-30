@@ -48,6 +48,11 @@ const handleEdit = function () {
   window.location.href = url
 }
 
+const typeIcon = (id) => {
+  const obj = my.types.find(o => o.id === id)
+  return obj ? obj.icon.path : ''
+}
+
 const confirm = useConfirm();
 const toast = useToast();
 const handleDelete = function () {
@@ -135,7 +140,7 @@ const myactivities = computed(() => {
       </div>
       <DataTable v-else v-model:filters="filters" v-model:selection="selectedNid" selectionMode="multiple"
         :value="myactivities" dataKey="nid" sortField="changed" tableStyle="min-width: 50rem" :sortOrder="-1" paginator
-        :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]" @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()"
+        :rows="10" :rowsPerPageOptions="[10, 20, 50]" @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()"
         @rowUnselectAll="onRowUnselectAll()" @rowSelectAll="onRowSelectAll()" :globalFilterFields="['title', 'type']"
         class="my-card">
 
@@ -201,6 +206,7 @@ const myactivities = computed(() => {
                   <template #value="slotProps">
                     <div v-if="slotProps.value" class="flex align-items-center">
                       <img :src="typeIcon(slotProps.value)" class="w-8 mr-3" />
+                      {{ slotProps.value }}
                     </div>
                     <span v-else>
                       {{ slotProps.placeholder }}
@@ -279,8 +285,8 @@ const myactivities = computed(() => {
 
         <Column field="tags" header="Étiquettes" style="">
           <template #body="p">
-            {{ p.data.tags }}
-            <!-- <MyTableTags :nid="p.data.nid" :tags="p.data.tags" /> -->
+            <!-- {{ p.data.tags }} -->
+            <MyTableTags :data="p.data" />
           </template>
         </Column>
 

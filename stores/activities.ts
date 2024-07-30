@@ -89,13 +89,12 @@ export const useActivitiesStore = defineStore('activities', {
     },
 
     async tagActivities(pxyNids: any[], tids: any[]) {
-      const xunion = (a, b) => [...new Set([...a.split(","), ...b])].join(",");
+      const xunion = (a, b) => [...new Set([...a, ...b])];
       for (let item of pxyNids) {
-        // ne gère pas les doublons
-        // this.activities.data = this.activities.data.map(el =>
-        // el.nid == item.nid ? { ...el, tags: { tids: el.tags.tids + "," + tids.join(",") } } : el);
-        this.activities.data = this.activities.data.map(el =>
-          el.nid == item.nid ? { ...el, tags: { tids : xunion(el.tags.tids ? el.tags.tids : "" , tids) } } : el);
+        const wellFormedTids = tids.map(el => { return { target_id: el } })
+        this.activities.data = this.activities.data.map(el => {
+          return el.nid == item.nid ? { ...el, tags: xunion(el.tags ? el.tags : [], wellFormedTids) } : el
+        });
       }
       let nids = [...pxyNids.map((o) => o.nid)];
       await httpClient.postJsonAsync(
@@ -106,8 +105,7 @@ export const useActivitiesStore = defineStore('activities', {
 
     async moveActivities(pxyNids: array, tid: number) {
       for (let item of pxyNids) {
-        // console.log("moveActivity", item.nid, tid)
-        this.activities.data = this.activities.data.map(el => el.nid == item.nid ? { ...el, tags: { tids: tid } } : el);
+        this.activities.data = this.activities.data.map(el => el.nid == item.nid ? { ...el, tags: [{ target_id: tid }] } : el);
       }
       let nids = [...pxyNids.map((o) => o.nid)];
       await httpClient.postJsonAsync(
@@ -118,20 +116,17 @@ export const useActivitiesStore = defineStore('activities', {
 
     async untagActivity(nid: number, tid: number) {
       let obj = this.activities.data.find(el => el.nid == nid);
-      let arrayTids = obj.tags.tids.split(",");
-      let index = arrayTids.indexOf(tid);
-      if (index > -1) {
-        arrayTids.splice(index, 1);
-      }
-      this.activities.data = this.activities.data.map(el => el.nid == nid ? { ...el, tags: { tids: arrayTids.join(",") } } : el);
+      let arrayTids = obj.tags;
+      arrayTids = arrayTids.filter(item => item.target_id !== tid);
+      this.activities.data = this.activities.data.map(el => el.nid == nid ? { ...el, tags: arrayTids } : el);
       await httpClient.postJsonAsync(
         myActivitiesApiEp,
         { action: "untag", nid, tid }
       );
     },
 
-    async bibIndexActivity( nid: number, 
-      share: number, 
+    async bibIndexActivity(nid: number,
+      share: number,
       web: number,
       resume: string,
       selEnseignements: any[],
@@ -139,7 +134,7 @@ export const useActivitiesStore = defineStore('activities', {
       selModules: any[],
       selThemes: any[],
     ) {
-      const indexElements = {nid, share, web, resume, selEnseignements, selNiveaux, selModules, selThemes}
+      const indexElements = { nid, share, web, resume, selEnseignements, selNiveaux, selModules, selThemes }
       console.log("bibIndexActivity : ", indexElements)
       await httpClient.postJsonAsync(
         myActivitiesApiEp,
