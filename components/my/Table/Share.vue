@@ -4,15 +4,25 @@ const toast = useToast();
 import { formatDateTime } from '~/utils/format';
 const props = defineProps({
   data: Object,
+  isTeacher: Boolean,
 })
 
 const activites = useActivitiesStore()
+const label = ref()
+const items = ref()
 
-const curr = computed (() => {
+
+const curr = computed(() => {
   const obj = activites.activities.data.find(o => o.nid === props.data.nid)
   if (!obj.code) {
-    activites.getAllDetails(props.data.nid).then(obj => { return obj })
+    activites.getAllDetails(props.data.nid).then(obj => {
+      label.value = lbl(obj)
+      items.value = itms(obj)
+      return obj
+    })
   }
+  label.value = lbl(obj)
+  items.value = itms(obj)
   return obj
 })
 
@@ -22,14 +32,14 @@ const toggle = (event) => {
   menu.value.toggle(event);
 };
 const url = `https://np.ac-capytale.fr/web/c/${curr.code}`
-const items = computed(() =>
+const itms = ((obj) =>
   [
     {
       label: 'Copier le code partage avec la classe',
       icon: 'pi pi-copy',
       command: () => {
-        navigator.clipboard.writeText(my.code);
-        toast.add({ severity: 'success', summary: 'Copié !', detail: curr.code, life: 2000 });
+        navigator.clipboard.writeText(obj.code);
+        toast.add({ severity: 'success', summary: 'Copié !', detail: obj.code, life: 2000 });
       }
     },
     {
@@ -49,22 +59,22 @@ const items = computed(() =>
     }
   ])
 
-const label = computed(() => {
-  const b = props.tr_beg
-  const e = props.tr_end
+const lbl = ((obj) => {
+  const b = obj.tr_beg
+  const e = obj.tr_end
   const strPeriode = `Libre pour les élèves du ${formatDateTime(b)} au ${formatDateTime(e)}`
   const strC = " et en lecture seule en dehors"
   const strL = " et non accessible en dehors"
 
-  switch (props.mode) {
+  switch (obj.mode) {
     case 'N_O':
       return {
-        code: props.code,
+        code: obj.code,
         severity: "success"
       }
     case 'N_X':
       return {
-        code: props.code,
+        code: obj.code,
         tooltipText: "Non partagé avec la classe",
         mainIcon: 'pi pi-lock',
         color: "red",
@@ -72,7 +82,7 @@ const label = computed(() => {
       }
     case 'C_O':
       return {
-        code: props.code,
+        code: obj.code,
         tooltipText: strPeriode + strC,
         mainIcon: 'pi pi-clock',
         secondaryIcon: 'pi pi-envelope',
@@ -81,7 +91,7 @@ const label = computed(() => {
       }
     case 'C_X':
       return {
-        code: props.code,
+        code: obj.code,
         tooltipText: strPeriode + strC,
         mainIcon: 'pi pi-clock',
         secondaryIcon: 'pi pi-envelope',
@@ -90,7 +100,7 @@ const label = computed(() => {
       }
     case 'L_O':
       return {
-        code: props.code,
+        code: obj.code,
         tooltipText: strPeriode + strL,
         mainIcon: 'pi pi-clock',
         secondaryIcon: 'pi pi-lock',
@@ -99,7 +109,7 @@ const label = computed(() => {
       }
     case 'L_X':
       return {
-        code: props.code,
+        code: obj.code,
         tooltipText: strPeriode + strL,
         mainIcon: 'pi pi-clock',
         secondaryIcon: 'pi pi-lock',
@@ -107,12 +117,14 @@ const label = computed(() => {
         severity: "danger"
       }
     default:
-      return {}
+      return {
+        code: "Pas encore là"
+      }
   }
 })
 
 const wfStatus = computed(() => {
-  if (props.wf == '100' && props.mode.includes('X')) {
+  if (curr.wf == '100' && curr.mode.includes('X')) {
     return {
       label: 'Verrouillé',
       icon: 'pi pi-lock',
@@ -120,7 +132,7 @@ const wfStatus = computed(() => {
     }
   }
 
-  switch (props.wf) {
+  switch (curr.wf) {
     case '0':
       return {
         label: 'Modifiable',
@@ -152,52 +164,50 @@ const wfStatus = computed(() => {
 
 </script>
 
-<template> 
-
-  <div v-if="!curr.code"> 
+<template>
+  <div v-if="!curr.code">
     <i class="pi pi-spin pi-spinner"></i>
   </div>
-  <div v-else> 
-    {{ curr.code }} 
+  <div v-else>
+
+    <template v-if="(curr.whoami == 'cr' || curr.whoami == 'as') && isTeacher">
+      <div class="card flex justify-content-center mystyle"
+        v-tooltip.top="{ value: label.tooltipText, showDelay: 400, hideDelay: 0 }">
+        <Button type="button" :label="label.code" @click="toggle" class="mystyle p-3" :severity="label.severity"
+          aria-haspopup="true" aria-controls="overlay_menu" outlined>
+          <template #icon>
+            <i class="pi pi-angle-down m-2"></i>
+            <div :class="label.color">
+              <i :class="label.mainIcon + ' ml-2'" style="font-size: 1.2rem"></i>
+              <i :class="label.secondaryIcon + ' mr-2'" style="font-size: 1.2rem"></i>
+            </div>
+          </template>
+        </Button>
+        <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
+      </div>
+
+      <Dialog v-model:visible="visible" header="Accès à l'activité" modal
+        :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }" :style="{ width: '75%' }">
+        <MyTableQrcode :code="curr.code" :url="url" />
+      </Dialog>
+
+      <div v-if="curr.whoami == 'as'" class="flex justify-content-center">
+        Associé par {{ curr.boss }}
+      </div>
+
+    </template>
+    <template v-else-if="curr.whoami == 'cr' && !isTeacher">
+      Perso
+    </template>
+    <template v-else-if="curr.whoami == 'as' && !isTeacher">
+      Associé par {{ curr.boss }}
+    </template>
+    <template v-else>
+      <i :class="wfStatus.icon + ' ml-2'" :style="'font-size: 1.3rem; color: ' + wfStatus.color"
+        v-tooltip.top="{ value: wfStatus.label, showDelay: 400, hideDelay: 0 }"></i>
+      {{ curr.whoami == 'as' ? 'Associé par ' : 'Apprenant de ' }}{{ curr.boss }}
+    </template>
   </div>
-
-  <!-- <template v-if="(whoami == 'cr' || whoami == 'as') && isTeacher"> -->
-  <!--   <div class="card flex justify-content-center mystyle" -->
-  <!--     v-tooltip.top="{ value: label.tooltipText, showDelay: 400, hideDelay: 0 }"> -->
-  <!--     <Button type="button" :label="label.code" @click="toggle" class="mystyle p-3" :severity="label.severity" -->
-  <!--       aria-haspopup="true" aria-controls="overlay_menu" outlined> -->
-  <!--       <template #icon> -->
-  <!--         <i class="pi pi-angle-down m-2"></i> -->
-  <!--         <div :class="label.color"> -->
-  <!--           <i :class="label.mainIcon + ' ml-2'" style="font-size: 1.2rem"></i> -->
-  <!--           <i :class="label.secondaryIcon + ' mr-2'" style="font-size: 1.2rem"></i> -->
-  <!--         </div> -->
-  <!--       </template> -->
-  <!--     </Button> -->
-  <!--     <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" /> -->
-  <!--   </div> -->
-
-  <!--   <Dialog v-model:visible="visible" header="Accès à l'activité" modal -->
-  <!--     :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }" :style="{ width: '75%' }"> -->
-  <!--     <MyTableQrcode :code="code" :url="url" /> -->
-  <!--   </Dialog> -->
-
-  <!--   <div v-if="whoami == 'as'" class="flex justify-content-center"> -->
-  <!--   Associé par {{ boss }} -->
-  <!--   </div> -->
-
-  <!-- </template> -->
-  <!-- <template v-else-if="whoami == 'cr' && !isTeacher"> -->
-  <!--    Perso -->
-  <!-- </template> -->
-  <!-- <template v-else-if="whoami == 'as' && !isTeacher"> -->
-  <!--   Associé par {{ boss }} -->
-  <!-- </template> -->
-  <!-- <template v-else> -->
-  <!--   <i :class="wfStatus.icon + ' ml-2'" :style="'font-size: 1.3rem; color: ' + wfStatus.color" -->
-  <!--     v-tooltip.top="{ value: wfStatus.label, showDelay: 400, hideDelay: 0 }"></i> -->
-  <!--   {{ whoami == 'as' ? 'Associé par ' : 'Apprenant de ' }}{{ boss }} -->
-  <!-- </template> -->
 </template>
 
 

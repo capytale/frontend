@@ -16,7 +16,7 @@ const editUrl = function (nid) {
 <template>
   <div class="group parent">
     <a :href="playerUrl(data.nid)" >{{ data.title }}</a>
-    <a v-if="!props.data.isSa" :href="editUrl(nid)" class="px-2 cog" v-tooltip.top="{ value: 'Modifier les paramètres', showDelay: 400, hideDelay: 0 }"
+    <a v-if="!props.data.isSa" :href="editUrl(data.nid)" class="px-2 cog" v-tooltip.top="{ value: 'Modifier les paramètres', showDelay: 400, hideDelay: 0 }"
       aria-label="Modifier les paramètres">
       <i class="pi pi-cog"></i>
     </a>

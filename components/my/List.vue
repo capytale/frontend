@@ -264,7 +264,7 @@ const myactivities = computed(() => {
 
         <Column field="code" header="Partage" style="min-width: 13rem">
           <template #body="p">
-            <MyTableShare :data="p.data" />
+            <MyTableShare :data="p.data" :isTeacher="isTeacher"/>
             <!-- <MyTableShare :code="p.data.code" :mode="p.data.mode" :boss="p.data.boss" :whoami="p.data.whoami"
               :wf="p.data.workflow" :isTeacher="isTeacher" :tr_beg="p.data.tr_beg" :tr_end="p.data.tr_end" /> -->
           </template>
