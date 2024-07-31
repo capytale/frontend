@@ -29,9 +29,9 @@ const curr = computed(() => {
   return obj
 })
 
-const url = `https://np.ac-capytale.fr/web/c/${curr.code}`
-const itemsGetter = ((obj) =>
-  [
+const itemsGetter = ((obj) => {
+  const url = `https://np.ac-capytale.fr/web/c/${obj.code}`
+  return [
     {
       label: 'Copier le code partage avec la classe',
       icon: 'pi pi-copy',
@@ -55,7 +55,8 @@ const itemsGetter = ((obj) =>
         visible.value = true;
       }
     }
-  ])
+  ]
+})
 
 const labelGetter = ((obj) => {
   const b = obj.tr_beg
