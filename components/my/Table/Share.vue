@@ -18,7 +18,7 @@ const wfStatus = ref()
 
 const curr = computed(() => {
   const obj = activites.activities.data.find(o => o.nid === props.data.nid)
-  if (!obj.code) {
+  if (!obj.extra) {
     activites.getAllDetails(props.data.nid).then(obj => {
       return obj
     })
@@ -164,7 +164,7 @@ const wfStatusGetter = ((obj) => {
 </script>
 
 <template>
-  <div v-if="!curr.code">
+  <div v-if="!curr.extra">
     <i class="pi pi-spin pi-spinner"></i>
   </div>
   <div v-else>
