@@ -31,12 +31,6 @@ const typeIcon = (id) => {
   return obj ? obj.icon.path : ''
 }
 
-const sevLevel = ((lvl) => {
-  if (lvl < 10) return "primary"
-  if (lvl < 100) return "warning"
-  if (lvl >= 100) return "danger"
-})
-
 const decodeHtml = ((html) => {
   var txt = document.createElement("textarea");
   txt.innerHTML = html;
@@ -50,6 +44,10 @@ const filters = ref({
   auteur: { value: null, matchMode: FilterMatchMode.CONTAINS },
   type: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
+
+const playerUrl = function (nid) {
+  return `/web/c-act/n/${nid}/play/view`
+}
 </script>
 
 <template>
@@ -196,8 +194,9 @@ const filters = ref({
 
         <Column field="title" header="Titre">
           <template #body="p">
-            <a :href="p.data.player_url" class="font-bold">{{ p.data.title }}</a>
-            <BibComments :data="p.data" />
+            <BibViewActivity :data="p.data" />
+            <!-- <a :href="playerUrl(p.data.nid)" class="font-bold">{{ p.data.title }}</a> -->
+            <!-- <BibComments :data="p.data" /> -->
 
           </template>
         </Column>
@@ -208,26 +207,15 @@ const filters = ref({
           </template>
         </Column>
 
-        <Column field="nid" header="">
+        <Column field="nb_clone" header="nb clone" sortable>
           <template #body="p">
-            <BibViewActivity :nid="p.data.nid" />
+            {{ p.data.nb_clone }}
           </template>
         </Column>
 
-        <!-- <Column field="changed" header="Dernière modif." style="max-width:10rem" sortable>
+        <Column field="changed" header="Dernière modif." style="max-width:10rem" sortable>
           <template #body="p">
             <MyTableChanged :changed="p.data.changed" />
-          </template>
-        </Column> -->
-
-        <Column field="nb_clone" header="nb clone" sortable>
-          <template #body="p">
-            <div v-if="p.data.nb_clone">
-              <Tag :value="p.data.nb_clone" :severity="sevLevel(p.data.nb_clone)" />
-            </div>
-            <div v-else>
-              <Tag value="0" severity="secondary" />
-            </div>
           </template>
         </Column>
 
