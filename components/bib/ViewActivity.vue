@@ -7,7 +7,6 @@ const visible = ref(false);
 const url = computed(() => {
     return `/web/c-act/n/${props.data.nid}/play/view`
 })
-
 </script>
 
 <template>
