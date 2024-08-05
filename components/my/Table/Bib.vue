@@ -13,7 +13,7 @@ const shareClass = ref()
 const activites = useActivitiesStore()
 const curr = computed(() => {
   const obj = activites.activities.data.find(o => o.nid === props.data.nid)
-  if (!obj.extra) {
+  if (!obj.code) {
     activites.getAllDetails(props.data.nid).then(obj => {
       return obj
     })
@@ -29,7 +29,7 @@ const shareClassGetter = ((obj) => {
 </script>
 
 <template>
-  <div v-if="!curr.extra">
+  <div v-if="!curr.code">
     <i class="pi pi-spin pi-spinner"></i>
   </div>
   <div v-else>
