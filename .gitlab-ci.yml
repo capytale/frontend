@@ -9,7 +9,7 @@ build:
     - npm run generate
   artifacts:
     paths:
-      - dist/
+      - .output/public/
 
 deploy:
   stage: deploy
