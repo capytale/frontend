@@ -8,19 +8,10 @@ const props = defineProps({
   data: Object,
 })
 
-const shareClass = ref()
-
 const activites = useActivitiesStore()
-const curr = computed(() => {
-  const obj = activites.activities.data.find(o => o.nid === props.data.nid)
-  if (!obj.code) {
-    activites.getAllDetails(props.data.nid).then(obj => {
-      return obj
-    })
-  }
-  shareClass.value = shareClassGetter(obj)
-  return obj
-})
+activites.getAllDetails(props.data)
+
+const shareClass = computed(() => shareClassGetter(props.data))
 
 const shareClassGetter = ((obj) => {
   return obj.status_shared == "0" ? " unshared " : " shared "
@@ -29,14 +20,14 @@ const shareClassGetter = ((obj) => {
 </script>
 
 <template>
-  <div v-if="!curr.code">
+  <div v-if="!props.data.extra">
     <i class="pi pi-spin pi-spinner"></i>
   </div>
   <div v-else>
-    <div v-if="curr.whoami != 'ap'">
+    <div v-if="props.data.whoami != 'ap'">
       <button @click="visible = true">
-        <i v-if="curr.status_shared == '1' && curr.status_web == '1'" :class="PI.GLOBE + shareClass + ' globe'" />
-        <i v-else-if="curr.status_shared == '1' && curr.status_web == '0'" :class="PI.CLONE + shareClass + ' globe'" />
+        <i v-if="props.data.status_shared == '1' && props.data.status_web == '1'" :class="PI.GLOBE + shareClass + ' globe'" />
+        <i v-else-if="props.data.status_shared == '1' && props.data.status_web == '0'" :class="PI.CLONE + shareClass + ' globe'" />
         <i :class="PI.SHARE_ALT + shareClass" />
       </button>
     </div>
@@ -44,7 +35,7 @@ const shareClassGetter = ((obj) => {
 
     <Dialog v-model:visible="visible" :header="props.title" modal :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }"
       :style="{ width: '75%' }">
-      <MyTableBibForm :nid="curr.nid" @closeBibForm="visible = false" />
+      <MyTableBibForm :nid="props.data.nid" @closeBibForm="visible = false" />
     </Dialog>
   </div>
 </template>

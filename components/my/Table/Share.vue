@@ -12,22 +12,11 @@ const menu = ref();
 const toggle = (event) => { menu.value.toggle(event); };
 const activites = useActivitiesStore()
 
-const label = ref()
-const items = ref()
-const wfStatus = ref()
+activites.getAllDetails(props.data)
 
-const curr = computed(() => {
-  const obj = activites.activities.data.find(o => o.nid === props.data.nid)
-  if (!obj.code) {
-    activites.getAllDetails(props.data.nid).then(obj => {
-      return obj
-    })
-  }
-  label.value = labelGetter(obj)
-  items.value = itemsGetter(obj)
-  wfStatus.value = wfStatusGetter(obj)
-  return obj
-})
+const label = computed(() => labelGetter(props.data))
+const items = computed(() => itemsGetter(props.data))
+const wfStatus = computed(() => wfStatusGetter(props.data))
 
 const itemsGetter = ((obj) => {
   const url = `https://np.ac-capytale.fr/web/c/${obj.code}`
@@ -164,12 +153,12 @@ const wfStatusGetter = ((obj) => {
 </script>
 
 <template>
-  <div v-if="!curr.code">
+  <div v-if="!props.data.extra">
     <i class="pi pi-spin pi-spinner"></i>
   </div>
   <div v-else>
 
-    <template v-if="(curr.whoami == 'cr' || curr.whoami == 'as') && isTeacher">
+    <template v-if="(props.data.whoami == 'cr' || props.data.whoami == 'as') && isTeacher">
       <div class="card flex justify-content-center mystyle"
         v-tooltip.top="{ value: label.tooltipText, showDelay: 400, hideDelay: 0 }">
         <Button type="button" :label="label.code" @click="toggle" class="mystyle p-3" :severity="label.severity"
@@ -187,24 +176,24 @@ const wfStatusGetter = ((obj) => {
 
       <Dialog v-model:visible="visible" header="Accès à l'activité" modal
         :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }" :style="{ width: '75%' }">
-        <MyTableQrcode :code="curr.code" :url="url" />
+        <MyTableQrcode :code="props.data.code" :url="url" />
       </Dialog>
 
-      <div v-if="curr.whoami == 'as'" class="flex justify-content-center">
-        Associé par {{ curr.boss }}
+      <div v-if="props.data.whoami == 'as'" class="flex justify-content-center">
+        Associé par {{ props.data.boss }}
       </div>
 
     </template>
-    <template v-else-if="curr.whoami == 'cr' && !isTeacher">
+    <template v-else-if="props.data.whoami == 'cr' && !isTeacher">
       Perso
     </template>
-    <template v-else-if="curr.whoami == 'as' && !isTeacher">
-      Associé par {{ curr.boss }}
+    <template v-else-if="props.data.whoami == 'as' && !isTeacher">
+      Associé par {{ props.data.boss }}
     </template>
     <template v-else>
       <i :class="wfStatus.icon + ' ml-2'" :style="'font-size: 1.3rem; color: ' + wfStatus.color"
         v-tooltip.top="{ value: wfStatus.label, showDelay: 400, hideDelay: 0 }"></i>
-      {{ curr.whoami == 'as' ? 'Associé par ' : 'Apprenant de ' }}{{ curr.boss }}
+      {{ props.data.whoami == 'as' ? 'Associé par ' : 'Apprenant de ' }}{{ props.data.boss }}
     </template>
   </div>
 </template>

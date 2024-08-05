@@ -19,11 +19,13 @@ export const useActivitiesStore = defineStore('activities', {
       this.activities.data = this.activities.data.map(el => el.nid == nid ? { ...el, ...metadata } : el);
     },
 
-    async getAllDetails(nid) {
-      // console.log("getMetadata", nid)
-      // console.log("this.activities : ", this.activities.data[0])
-      const details = await httpClient.getJsonAsync("/web/c-hdls/api/all-details/" + nid)
-      this.activities.data = this.activities.data.map(el => el.nid == nid ? { ...el, ...details } : el);
+    getAllDetails(activity: any) {
+      if (activity.detailsRequested) return;
+      activity.detailsRequested = true;
+      httpClient.getJsonAsync("/web/c-hdls/api/all-details/" + activity.nid).then((details: any) => {
+        for (const key in details) activity[key] = details[key]
+        activity.extra = true
+      })
     },
 
     async deleteActivity(nids: Array) {
