@@ -1,0 +1,37 @@
+build:
+  cache:
+    paths:
+      - node_modules/
+  stage: build
+  image: node:18
+  script:
+    - npm install
+    - npm run generate
+  artifacts:
+    paths:
+      - dist/
+
+deploy:
+  stage: deploy
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+      variables:
+        REMOTE: "gitdeploy@capytaledev.in.ac-paris.fr"
+    - if: '$CI_COMMIT_BRANCH == "preprod"'
+      variables:
+        REMOTE: "gitdeploy@capytalepreprod.ac-paris.fr"
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      variables:
+        REMOTE: "gitdeploy@capytale2.ac-paris.fr"
+  image: tjaisson/rsync
+  script:
+    - mkdir -p ~/.ssh/
+    - mv $SSH_PRIVATE_KEY ~/.ssh/id_rsa
+    - chmod a-r-w-x,u+r ~/.ssh/id_rsa
+    - mv $SSH_CONFIG ~/.ssh/config
+    - chmod a-r-w-x,u+r ~/.ssh/config
+    - FOLDER="/home/gitdeploy"
+    - TARGET="vue-frontend"
+    - URL="${REMOTE}:${FOLDER}/${TARGET}"
+    - rsync -avzP --delete dist/ "${URL}/"
+
