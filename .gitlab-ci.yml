@@ -33,5 +33,5 @@ deploy:
     - FOLDER="/home/gitdeploy"
     - TARGET="vue-frontend"
     - URL="${REMOTE}:${FOLDER}/${TARGET}"
-    - rsync -avzP --delete dist/ "${URL}/"
+    - rsync -avzP --delete .output/public/ "${URL}/"
 
