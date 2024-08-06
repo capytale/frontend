@@ -19,14 +19,14 @@ const getName = (id) => {
 </script>
 
 <template>
-  <div v-for="tag in props.data.tags" :key="props.data.nid + tag.target_id">
-    <!-- {{ tag.target_id }} {{ props.data.nid }} -->
+  <div v-for="tag in props.data.tags" :key="props.data.nid + tag">
+    <!-- {{ tag }} {{ props.data.nid }} -->
     <span class="parent mr-1">
-      <Button v-if="getName(tag.target_id).label" removable class="pr-3 small-button" text @click="op = !op">
-        <i class="pi pi-tag px-2 normal" :style="'color:' + getName(tag.target_id).color"></i>{{ getName(tag.target_id).label }}
+      <Button v-if="getName(tag).label" removable class="pr-3 small-button" text @click="op = !op">
+        <i class="pi pi-tag px-2 normal" :style="'color:' + getName(tag).color"></i>{{ getName(tag).label }}
       </Button>
       <div class="poubelle">
-        <Button icon="pi pi-times" severity="danger" @click="delTag(props.data.nid, tag.target_id)" outlined rounded />
+        <Button icon="pi pi-times" severity="danger" @click="delTag(props.data.nid, tag)" outlined rounded />
       </div>
     </span>
   </div>

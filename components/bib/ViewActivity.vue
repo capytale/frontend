@@ -22,7 +22,7 @@ const url = computed(() => {
 <style scoped>
 .clickable {
   cursor: pointer;
-  color: blue;
+  color: var(--p-sky-900);
   text-decoration: underline;
 }
 </style>

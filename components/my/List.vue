@@ -105,7 +105,7 @@ const myactivities = computed(() => {
     return activites.activities.data.filter(o => {
       if (!o.tags) return false
       for (let tag of o.tags) {
-        if (tag.target_id === activeTag.tid) return true
+        if (tag === activeTag.tid) return true
       }
     })
   } else { // no tag selected : show all activities except those in the trash
@@ -113,7 +113,7 @@ const myactivities = computed(() => {
     return activites.activities.data.filter(o => {
       if (!o.tags) return true
       for (let tag of o.tags) {
-        if (tag.target_id === corbeilleTid()) return false
+        if (tag === corbeilleTid()) return false
       }
       return true
     })

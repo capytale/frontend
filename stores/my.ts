@@ -33,10 +33,6 @@ export const useMyStore = defineStore('my', {
       this.assignments = await httpClient.getJsonAsync<any>("/web/c-hdls/api/assignments/" + nid)
       this.loadingAssignments = false
     },
-    async getActivities() {
-      this.activities = await fetchMyActivities()
-      // TODO : pas besoin de renvoyer un objet pour les tags : la liste csv des tids suffit. 
-    },
     async getTypes() {
       this.types = await TypeApi.getList()
     },

@@ -41,7 +41,7 @@ const visible = ref(false);
 }
 .clickable {
   cursor: pointer;
-  color: blue;
+  color: var(--p-sky-900);
   text-decoration: underline;
 }
 </style>
