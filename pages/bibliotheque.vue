@@ -58,8 +58,6 @@ const playerUrl = function (nid) {
     <p>Impossible de charger les activités.</p> {{ bib.bib.status }}
   </div>
   <template v-else>
-    <h1>Bibliothèque</h1>
-
     <template v-if="bib.bib.data == null">
       <div class="card">
         <DataTable :value="products" paginator :rows="20" v-model:filters="filters" sortField="changed" :sortOrder="-1"
