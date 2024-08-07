@@ -213,7 +213,7 @@ const playerUrl = function (nid) {
 
         <Column field="changed" header="Dernière modif." style="max-width:10rem" sortable>
           <template #body="p">
-            <MyTableChanged :changed="p.data.changed" />
+            <MyTableChanged :data="p.data" />
           </template>
         </Column>
 
