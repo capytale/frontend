@@ -36,7 +36,7 @@ export function timeElapsed(ts) {
     if (heures > 0) return heures + " heure"
     if (minutes > 1) return minutes + " minutes"
     if (minutes > 0) return minutes + " minute"
-    if (secondes > 1) return secondes + " seconde"
+    if (secondes > 1) return secondes + " secondes"
     return "1 seconde" 
 }
 
