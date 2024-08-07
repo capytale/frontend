@@ -3,20 +3,18 @@ const props = defineProps({
   data: Object,
 })
 
-const playerUrl = function (nid) {
+const playerUrl = computed(() => {
   const mode = props.data.isSa ? 'assignment' : 'create'
   return `/web/c-act/n/${props.data.nid}/play/${mode}`
-}
-const editUrl = function (nid) {
-  return `/web/node/${props.data.nid}/edit`
-}
+})
+const editUrl = computed(() => `/web/c-hdls/node/${props.data.nid}/edit`)
 
 const visible = ref(false);
 </script>
 
 <template>
   <div class="group parent">
-    <a :href="playerUrl(data.nid)" class="clickable">{{ data.title }}</a>
+    <a :href="playerUrl" class="clickable">{{ data.title }}</a>
     
     <Button v-if="!props.data.isSa" class="pi pi-cog px-2 cog" @click="visible = true"
       v-tooltip.top="{ value: 'Modifier les paramètres', showDelay: 400, hideDelay: 0 }"
@@ -24,7 +22,7 @@ const visible = ref(false);
     <Dialog v-model:visible="visible" maximizable modal :header="'&nbsp;'" style="width: 80%; height: 80vh"
       :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
       <iframe id="inlineFrameExample" title="Modification des paramètres de l'activité"
-        style="overflow:hidden;height:90vh;width:100%" height="100%" width="100%" :src=editUrl(data.nid)>
+        style="overflow:hidden;height:90vh;width:100%" height="100%" width="100%" :src="editUrl">
       </iframe>
     </Dialog>
   </div>
