@@ -1,18 +1,12 @@
 <script setup>
 const props = defineProps({
-  nid: String,
-  boss: String,
-  whoami: String,
-  evalu: String,
-  appre: String,
+  data: Object,
   isTeacher: Boolean,
-  views_total: Number,
-  required: true
 })
 </script>
 
 <template>
-  <MyTableEvaluationEleve v-if="whoami == 'ap' " :boss="boss" :whoami="whoami" :evalu="evalu" :appre="appre" />
-  <MyTableEvaluationProf v-else :nid="nid" :views_total="views_total" :isTeacher="isTeacher" />
+  <MyTableEvaluationEleve v-if="data.isSa" :data="props.data" />
+  <MyTableEvaluationProf v-else :data="props.data" :isTeacher="isTeacher" />
 </template>
 

@@ -245,21 +245,18 @@ const myactivities = computed(() => {
 
         <Column v-if="isTeacher" field="evaluation" header="Évaluation" style="max-width:12rem">
           <template #body="p">
-            <!-- <MyTableEvaluation :nid="p.data.nid" :views_total="p.data.views_total" :boss="p.data.boss"
-              :whoami="p.data.whoami" :evalu="p.data.evaluation" :appre="p.data.appreciation" :isTeacher="isTeacher" />
-            -->
+            <MyTableEvaluation :data="p.data" :isTeacher="isTeacher" />
           </template>
         </Column>
         <Column v-else field="evaluation" header="Évaluation" style="max-width:20rem">
           <template #body="p">
-            <!-- <MyTableEvaluation :views_total="p.data.views_total" :boss="p.data.boss" :whoami="p.data.whoami"
-              :evalu="p.data.evaluation" :appre="p.data.appreciation" :isTeacher="isTeacher" /> -->
+            <MyTableEvaluation :data="p.data" />
           </template>
         </Column>
 
         <Column field="changed" header="Modifié" style="min-width: 10rem; width:14rem" sortable>
           <template #body="p">
-            <!-- <MyTableChanged :changed="p.data.changed" /> -->
+            <MyTableChanged :data="p.data" />
           </template>
         </Column>
 
