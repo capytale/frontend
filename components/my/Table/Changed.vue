@@ -5,8 +5,8 @@ const props = defineProps({
   data: Object,
 })
 
-const activites = useActivitiesStore()
-activites.getAllDetails(props.data)
+// const activites = useActivitiesStore()
+// activites.getAllDetails(props.data)
 
 const computedChanged = computed(() => {
   if (!props.data.extra) return props.data.changed 

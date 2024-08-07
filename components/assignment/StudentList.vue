@@ -6,7 +6,7 @@ const my = useMyStore()
 
 const props = defineProps({
   nid: String,
-  views_total: Number,
+  viewsTotal: Number,
   required: true
 })
 
@@ -59,7 +59,7 @@ const chWf = ((sa_nid, wf) => {
   my.changeSaWf(sa_nid, wf)
 })
 
-const nbFake = ref(new Array(props.views_total));
+const nbFake = ref(new Array(props.viewsTotal));
 </script>
 
 
@@ -105,15 +105,11 @@ const nbFake = ref(new Array(props.views_total));
     </DataTable>
   </div>
   <template v-else>
-    <!-- <Card class="flex-2 my-10">
-            <template #title> -->
     <div class="myflex my-10">
       <span><img :src="my.assignments.icon" alt="icon" class="w-16 h-16" /> </span>
       <span class="activity-title">{{ my.assignments.title }}</span>
 
     </div>
-    <!-- </template>
-        </Card> -->
 
     <DataTable :value="my.assignments.tab" tableStyle="min-width: 50rem" v-model:selection="selectedNid"
       selectionMode="multiple" @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()"
@@ -121,9 +117,6 @@ const nbFake = ref(new Array(props.views_total));
 
       <template #header>
         <Toolbar>
-          <!-- <template #start v-if="!showToolbar">
-                        <h2 style="margin:0px"> </h2>
-                    </template> -->
           <template #start v-if="showToolbar">
             <Button v-tooltip.bottom="'En cours'" @click="handleChangeWf(100)" icon="pi pi-pencil" class="mr-2 blue" />
             <Button v-tooltip.bottom="'Rendu'" @click="handleChangeWf(200)" icon="pi pi-envelope" class="mr-2 orange" />
@@ -141,7 +134,7 @@ const nbFake = ref(new Array(props.views_total));
 
       <Column field="changed" header="Dernière modif." style="max-width:10rem" sortable>
         <template #body="p">
-          <MyTableChanged :changed="p.data.changed" />
+          <MyTableChanged :data="p.data" />
         </template>
       </Column>
 

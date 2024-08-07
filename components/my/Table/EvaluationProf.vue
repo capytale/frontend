@@ -21,7 +21,7 @@ const nbViews = computed(() => {
     <Button v-else @click="visible = true" severity="primary" size="large"
       v-tooltip.top="{ value: 'Voir les copies', showDelay: 400, hideDelay: 0 }" text>{{ nbViews }} </Button>
     <Dialog v-model:visible="visible" maximizable modal header="&nbsp;" :style="{ width: '90%' }">
-      <AssignmentStudentList :nid="props.nid" :data.viewsTotal="props.data.viewsTotal" />
+      <AssignmentStudentList :nid="props.data.nid" :viewsTotal="parseInt(data.viewsTotal)" />
     </Dialog>
   </div>
 </template>
