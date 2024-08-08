@@ -66,6 +66,9 @@ const playerUrl = function (nid) {
 
           <template #header>
             <Toolbar>
+              <template #start>
+                <div class="titre">Bibliothèque entre enseignants</div>
+              </template>
               <template #end>
 
                 <div class="flex justify-content-end">
@@ -145,6 +148,11 @@ const playerUrl = function (nid) {
 
         <template #header>
           <Toolbar>
+            <template #start>
+              <div class="titre">Bibliothèque entre enseignants
+              {{ bib.bib.data.length }} activités
+              </div>
+            </template>
             <template #end>
 
               <div class="flex justify-content-end">
@@ -229,3 +237,10 @@ const playerUrl = function (nid) {
     </template>
   </template>
 </template>
+
+<style scoped>
+.titre {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+</style>
