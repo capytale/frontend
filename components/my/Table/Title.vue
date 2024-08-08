@@ -7,7 +7,6 @@ const playerUrl = computed(() => {
   const mode = props.data.isSa ? 'assignment' : 'create'
   return `/web/c-act/n/${props.data.nid}/play/${mode}`
 })
-const editUrl = computed(() => `/web/c-hdls/node/${props.data.nid}/edit`)
 
 const visible = ref(false);
 </script>
@@ -21,9 +20,7 @@ const visible = ref(false);
       aria-label="Modifier les paramètres" text />
     <Dialog v-model:visible="visible" maximizable modal :header="'&nbsp;'" style="width: 80%; height: 80vh"
       :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-      <iframe id="inlineFrameExample" title="Modification des paramètres de l'activité"
-        style="overflow:hidden;height:90vh;width:100%" height="100%" width="100%" :src="editUrl">
-      </iframe>
+      <MyActivityEdit :data="props.data" @close="visible = false" />
     </Dialog>
   </div>
 </template>
