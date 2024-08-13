@@ -213,6 +213,18 @@ const playerUrl = function (nid) {
           </template>
         </Column>
 
+        <Column field="abstract" header="Niveau(x)">
+          <template #body="p">
+            {{ p.data.niveau }}
+          </template>
+        </Column>
+
+        <Column field="abstract" header="Enseignement(s)">
+          <template #body="p">
+            {{ p.data.enseignement }}
+          </template>
+        </Column>
+
         <Column field="nb_clone" header="nb clone" sortable>
           <template #body="p">
             {{ p.data.nb_clone }}
