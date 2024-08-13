@@ -36,6 +36,9 @@ const decodeHtml = ((html) => {
   return txt.value;
 })
 
+const advancedSearch = ref(false)
+const list_niveaux = ref(['2e', 'cycle3', 'cycle2'])
+const list_enseignements = ref(['doc', 'snt', 'nsi'])
 const filters = ref()
 
 const initFilters = () => {
@@ -75,8 +78,9 @@ const clearFilter = () => {
   <template v-else>
     <div class="card">
 
-      <DataTable v-model:filters="filters" :value="bib.bib.data" paginator :rows="10" dataKey="id" filterDisplay="menu"
-        sortField="changed" :sortOrder="-1" :globalFilterFields="['title', 'abstract', 'auteur']">
+      <DataTable v-model:filters="filters" :value="bib.bib.data" paginator :rows="10" dataKey="id"
+        :filterDisplay='advancedSearch ? "row" : ""' sortField="changed" :sortOrder="-1"
+        :globalFilterFields="['title', 'abstract', 'auteur']">
         <template #header>
           <Toolbar>
             <template #start>
@@ -86,7 +90,7 @@ const clearFilter = () => {
 
               <div class="flex justify-content-end">
                 <Select v-model="filters['type'].value" :options="my.types" filter optionLabel="name" optionValue="id"
-                  placeholder="Filter par type" class="w-full md:w-14rem" showClear>
+                  placeholder="Filtrer par type" class="w-full md:w-14rem max-w-64" showClear>
                   <template #value="slotProps">
                     <div v-if="slotProps.value" class="flex align-items-center">
                       <img :src="getType(slotProps.value).icon.path" class="w-8 mr-3" />
@@ -112,12 +116,21 @@ const clearFilter = () => {
                   <InputText v-model="filters['global'].value" placeholder="Rechercher"
                     v-tooltip.top="{ value: 'Recherche dans titre, description et auteur', showDelay: 100, hideDelay: 300 }" />
                 </IconField>
+
+                <div class="flex items-center rech-avancee">
+                <Checkbox v-model="advancedSearch" :binary="true" />
+                  <label for="ingredient1" class="ml-2">Recherche avancée</label>
+                </div>
+
+
+
               </div>
             </template>
 
           </Toolbar>
           <div class="flex justify-end clear">
-            <div v-if="filters['title'].value || filters['abstract'].value || filters['niveau'].value || filters['enseignement'].value || filters['auteur'].value">
+            <div
+              v-if="filters['title'].value || filters['abstract'].value || filters['niveau'].value || filters['enseignement'].value || filters['auteur'].value">
               <Button type="button" icon="pi pi-filter-slash" label="Clear" outlined @click="clearFilter()" />
             </div>
           </div>
@@ -148,21 +161,36 @@ const clearFilter = () => {
             <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Rechercher" />
           </template>
         </Column>
-        <Column field="niveau" header="Niveau(x)">
+        <Column field="niveau" header="Niveau" :showFilterMenu="false">
           <template #body="p">
             {{ p.data.niveau }}
           </template>
           <template #filter="{ filterModel, filterCallback }">
-            <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Rechercher" />
+            <!-- <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Rechercher" class="smallsearch" /> -->
+
+            <Select v-model="filterModel.value" @change="filterCallback()" :options="list_niveaux" placeholder="Choisir"
+              style="min-width: 8rem" :showClear="true">
+              <template #option="slotProps">
+                {{ slotProps.option }}
+              </template>
+            </Select>
           </template>
         </Column>
 
-        <Column field="enseignement" header="Enseignement(s)">
+        <Column field="enseignement" header="Enseignement" :showFilterMenu="false">
           <template #body="p">
             {{ p.data.enseignement }}
           </template>
           <template #filter="{ filterModel, filterCallback }">
-            <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Rechercher" />
+            <!-- <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Rechercher" class="smallsearch" /> -->
+
+            <Select v-model="filterModel.value" @change="filterCallback()" :options="list_enseignements"
+              placeholder="Choisir" style="min-width: 8rem" :showClear="true">
+              <template #option="slotProps">
+                {{ slotProps.option }}
+              </template>
+            </Select>
+
           </template>
         </Column>
 
@@ -183,7 +211,8 @@ const clearFilter = () => {
             {{ p.data.auteur }}
           </template>
           <template #filter="{ filterModel, filterCallback }">
-            <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Rechercher" />
+            <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Rechercher"
+              class="smallsearch" />
           </template>
         </Column>
         <!-- <Column field="name" header="Name" style="min-width: 12rem"> -->
@@ -459,5 +488,13 @@ const clearFilter = () => {
 
 .clear {
   padding-top: 1em;
+}
+
+.smallsearch {
+  width: 9rem;
+}
+.rech-avancee {
+  padding-left:2em;
+  width: 20rem;
 }
 </style>
