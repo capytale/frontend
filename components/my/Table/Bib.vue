@@ -23,7 +23,7 @@ const shareClassGetter = ((obj) => {
   <div v-if="!props.data.extra">
     <i class="pi pi-spin pi-spinner"></i>
   </div>
-  <div v-else>
+  <div v-else class="bib">
     <div v-if="props.data.whoami != 'ap'">
       <button @click="visible = true">
         <i v-if="props.data.status_shared == '1' && props.data.status_web == '1'" :class="PI.GLOBE + shareClass + ' globe'" />
@@ -40,24 +40,15 @@ const shareClassGetter = ((obj) => {
   </div>
 </template>
 
-<style>
+<style scoped>
 .shared {
   color: green;
   font-weight: bold;
   font-size: 1.3rem
 }
 
-.p-dialog .p-dialog-header {
-  background: var(--gray-200);
-}
-
 .unshared {
   color: var(--p-surface400);
-}
-
-
-.p-dialog-content {
-  background: var(--gray-100);
 }
 
 .globe {
@@ -66,4 +57,18 @@ const shareClassGetter = ((obj) => {
   bottom: 0.9em;
   left: 0.5em;
 }
+
+.bib {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* .p-dialog .p-dialog-header { */
+/*   background: var(--gray-200); */
+/* } */
+/* .p-dialog-content { */
+/*   background: var(--gray-100); */
+/* } */
+
 </style>
