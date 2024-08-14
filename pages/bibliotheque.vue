@@ -33,8 +33,31 @@ const decodeHtml = ((html) => {
 })
 
 const advancedSearch = ref(false)
-const list_niveaux = ref(['2e', 'cycle3', 'cycle2'])
-const list_enseignements = ref(['doc', 'snt', 'nsi'])
+const xunion = (a, b) => [...new Set([...a, ...b])];
+const list_niveaux = (() => {
+  let set = []
+  for (let item in bib.bib.data) {
+    let a = String(bib.bib.data[item].niveau).split(', ')
+    if (a[0] != "null") set = xunion(set, a)
+  }
+  console.log("set", set)
+  return set
+})
+const list_enseignements = (() => {
+  let set = []
+  for (let item in bib.bib.data) {
+    let a = String(bib.bib.data[item].enseignement).split(', ')
+    if (a[0] != "null") set = xunion(set, a)
+  }
+  console.log("set", set)
+  return set
+})
+
+
+const spacing = ((str) => {
+  return str.split(',').join(', ')
+})
+
 const filters = ref()
 
 const initFilters = () => {
@@ -90,49 +113,45 @@ const clearFilter = () => {
             </template>
           </Toolbar>
         </template>
-        <Column field="icon" header="" style="width:5rem">
+        <Column header="" style="width:5rem">
           <template #body>
             <Skeleton width="3rem" height="3rem"></Skeleton>
           </template>
         </Column>
-        <Column field="title" header="Titre">
+        <Column header="Titre">
           <template #body>
             <Skeleton width="10rem" class="mb-2"></Skeleton>
           </template>
         </Column>
-        <Column field="abstract" header="Description">
+        <Column header="Description">
           <template #body>
             <Skeleton width="40rem" height="4rem"></Skeleton>
           </template>
         </Column>
-        <Column field="abstract" header="Niveau">
+        <Column header="Niveau">
           <template #body>
-            <Skeleton width="10rem" height="5rem"></Skeleton>
+            <Skeleton width="5rem"></Skeleton>
           </template>
         </Column>
-        <Column field="abstract" header="Enseignement">
+        <Column header="Enseignement">
           <template #body>
-            <Skeleton width="10rem" height="4rem"></Skeleton>
+            <Skeleton width="10rem"></Skeleton>
           </template>
         </Column>
-        <Column field="nid" header="nb clone">
+        <Column header="nb clone">
           <template #body>
-            <Skeleton width="4rem" height="2rem"></Skeleton>
+            <Skeleton width="4rem"></Skeleton>
           </template>
         </Column>
-        <Column field="changed" header="Dernière modif." style="max-width:10rem" sortable>
+        <Column header="Dernière modif." style="max-width:10rem" sortable>
           <template #body>
             <Skeleton width="5rem" class="mb-2"></Skeleton>
           </template>
         </Column>
-        <Column field="nb_clone" header="nb clone" sortable>
-          <template #body>
-            <Skeleton size="2rem" class="mr-2"></Skeleton>
-          </template>
-        </Column>
-        <Column field="auteur" header="Auteur">
+        <Column header="Auteur">
           <template #body>
             <Skeleton width="5rem" class="mb-2"></Skeleton>
+            <Skeleton width="7rem" class="mb-2"></Skeleton>
           </template>
         </Column>
       </DataTable>
@@ -143,13 +162,15 @@ const clearFilter = () => {
     <template v-else>
       <div class="card">
 
-        <DataTable v-model:filters="filters" :value="bib.bib.data" paginator :rows="10" dataKey="id"
-          :filterDisplay='advancedSearch ? "row" : ""' sortField="changed" :sortOrder="-1"
-          :globalFilterFields="['title', 'abstract', 'auteur']">
+        <DataTable v-model:filters="filters" :value="bib.bib.data" paginator :rows="10"
+          :rowsPerPageOptions="[5, 10, 20, 50]" dataKey="id" :filterDisplay='advancedSearch ? "row" : ""'
+          sortField="changed" :sortOrder="-1" :globalFilterFields="['title', 'abstract', 'auteur']">
           <template #header>
             <Toolbar>
               <template #start>
-                <div class="titre">Bibliothèque entre enseignants</div>
+                <div class="titre">Bibliothèque entre enseignants
+                             ({{ bib.bib.data.length }} activités)
+                </div>
               </template>
               <template #end>
 
@@ -209,8 +230,8 @@ const clearFilter = () => {
           <Column field="title" header="Titre">
             <template #body="p">
               <BibViewActivity :data="p.data" />
-  <!--         <!-- <a :href="playerUrl(p.data.nid)" class="font-bold">{{ p.data.title }}</a> --> -->
-  <!--         <!-- <BibComments :data="p.data" /> --> -->
+              <!--         <!-- <a :href="playerUrl(p.data.nid)" class="font-bold">{{ p.data.title }}</a> -->
+              <!--         <!-- <BibComments :data="p.data" /> -->
             </template>
             <template #filter="{ filterModel, filterCallback }">
               <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Rechercher" />
@@ -228,10 +249,11 @@ const clearFilter = () => {
           <Column field="niveau" header="Niveau" :showFilterMenu="false">
             <template #body="p">
               {{ p.data.niveau }}
+              <!-- ** {{ spacing(p.data.niveau) }} -->
             </template>
             <template #filter="{ filterModel, filterCallback }">
-              <Select v-model="filterModel.value" @change="filterCallback()" :options="list_niveaux" placeholder="Choisir"
-                style="min-width: 8rem" :showClear="true">
+              <Select v-model="filterModel.value" @change="filterCallback()" :options="list_niveaux()"
+                placeholder="Choisir" style="min-width: 8rem" :showClear="false">
                 <template #option="slotProps">
                   {{ slotProps.option }}
                 </template>
@@ -242,10 +264,11 @@ const clearFilter = () => {
           <Column field="enseignement" header="Enseignement" :showFilterMenu="false">
             <template #body="p">
               {{ p.data.enseignement }}
+              <!-- ** {{ spacing(p.data.enseignement) }} -->
             </template>
             <template #filter="{ filterModel, filterCallback }">
-              <Select v-model="filterModel.value" @change="filterCallback()" :options="list_enseignements"
-                placeholder="Choisir" style="min-width: 8rem" :showClear="true">
+              <Select v-model="filterModel.value" @change="filterCallback()" :options="list_enseignements()"
+                placeholder="Choisir" style="min-width: 8rem" :showClear="false">
                 <template #option="slotProps">
                   {{ slotProps.option }}
                 </template>
@@ -292,7 +315,7 @@ const clearFilter = () => {
 }
 
 .smallsearch {
-  width: 9rem;
+  max-width: 9rem;
 }
 
 .rech-avancee {

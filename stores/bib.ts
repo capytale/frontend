@@ -1,6 +1,6 @@
 import httpClient from '@capytale/activity.js/backend/capytale/http'
 
-const myActivitiesApiEp = "/web/c-hdls/api/my-activities"
+// const myActivitiesApiEp = "/web/c-hdls/api/my-activities"
 
 export const useBibStore = defineStore('bib', {
   state: () => ({
@@ -16,6 +16,6 @@ export const useBibStore = defineStore('bib', {
         data.commentsRequested = true
         data.comments = await httpClient.getJsonAsync("/web/c-hdls/api/comments/" + data.nid)
       }
-    }
+    },
   },
 })
