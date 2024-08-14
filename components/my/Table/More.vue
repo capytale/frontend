@@ -6,11 +6,8 @@ const activites = useActivitiesStore()
 activites.getActivities()
 
 const props = defineProps({
-  nid: String,
-  mode: String,
-  whoami: String,
+  data: Object,
   isTeacher: Boolean,
-  required: true
 })
 
 const confirm = useConfirm();
@@ -26,11 +23,11 @@ const actItems = ref([
     icon: 'pi pi-clone',
     command: async () => {
       try {
-        const response = await activites.cloneActivity(props.nid)
+        const response = await activites.cloneActivity(props.data.nid)
         toast.add({ severity: 'success', summary: 'Clonage réussi ', life: 2000 });
       }
       catch (e) {
-        toast.add({ severity: 'error', summary: 'Échec du clonage : ', detail: `nid = ${props.nid} - ${e}` });
+        toast.add({ severity: 'error', summary: 'Échec du clonage : ', detail: `nid = ${props.data.nid} - ${e}` });
       }
     }
   }
@@ -42,19 +39,20 @@ const actMoodleItem = ref([
   },
 ])
 
-// const actClonableItem = ref([])
 const actClonableItem = computed(() => {
-  if (props.mode.includes('_X')) {
+  if (!props.data.mode) 
+    return [{ label: 'OUPSSS', }]
+  if (props.data.mode.includes('_X')) {
     return [{
       label: 'Débloquer la distribution',
       icon: 'pi pi-lock-open',
       command: async () => {
         try {
-          const response = await activites.unlockMode(props.nid)
+          const response = await activites.unlockMode(props.data.nid)
           toast.add({ severity: 'success', summary: 'Distribution débloquée', life: 2000 });
         }
         catch (e) { 
-          toast.add({ severity: 'error', summary: 'Échec du débloquage de la distribution de l\'activité : ', detail: `nid = ${props.nid} - ${e}` });
+          toast.add({ severity: 'error', summary: 'Échec du débloquage de la distribution de l\'activité : ', detail: `nid = ${props.data.nid} - ${e}` });
         }
       }
     }]
@@ -64,11 +62,11 @@ const actClonableItem = computed(() => {
       icon: 'pi pi-lock',
       command: async () => {
         try {
-          const response = await activites.lockMode(props.nid)
+          const response = await activites.lockMode(props.data.nid)
           toast.add({ severity: 'success', summary: 'Distribution bloquée', life: 2000 });
         }
         catch (e) {
-          toast.add({ severity: 'error', summary: 'Échec du bloquage de la distribution de l\'activité : ', detail: `nid = ${props.nid} - ${e}` });
+          toast.add({ severity: 'error', summary: 'Échec du bloquage de la distribution de l\'activité : ', detail: `nid = ${props.data.nid} - ${e}` });
         }
       }
     }]
@@ -99,11 +97,11 @@ const commonItems = ref([
         acceptClass: 'p-button-danger',
         accept: async () => {
           try {
-            await activites.deleteActivity([props.nid])
+            await activites.deleteActivity([props.data.nid])
             toast.add({ severity: 'success', summary: 'Suppression effectuée', life: 2000 });
           }
           catch (e) {
-            toast.add({ severity: 'error', summary: 'Échec de la suppression : ', detail: `nid = ${props.nid} - ${e}` });
+            toast.add({ severity: 'error', summary: 'Échec de la suppression : ', detail: `nid = ${props.data.nid} - ${e}` });
           }
         },
         reject: () => {
@@ -115,18 +113,18 @@ const commonItems = ref([
 ]);
 
 
-watch(() => props.mode, (now, before) => console.log("now, before : ", now, before))
+watch(() => props.data.mode, (now, before) => console.log("now, before : ", now, before))
 
 
 const items = computed(() => {
   if (props.isTeacher) {
-    if (props.whoami == 'ap') {
+    if (props.data.whoami == 'ap') {
       return commonItems.value
     } else {
       return [...actItems.value, ...actMoodleItem.value, ...actClonableItem.value, ...commonItems.value]
     }
   } else {
-    if (props.whoami == 'ap') {
+    if (props.data.whoami == 'ap') {
       return commonItems.value
     } else {
       return [...actItems.value, ...commonItems.value]
