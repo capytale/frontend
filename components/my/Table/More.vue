@@ -10,13 +10,18 @@ const props = defineProps({
   isTeacher: Boolean,
 })
 
+const visible = ref(false);
+
 const confirm = useConfirm();
 const toast = useToast();
 const menu = ref();
 const actItems = ref([
   {
     label: 'Paramètres',
-    icon: 'pi pi-cog'
+    icon: 'pi pi-cog',
+    command: () => {
+      visible.value = true
+    }
   },
   {
     label: 'Cloner',
@@ -140,10 +145,14 @@ const toggle = (event) => {
 <template>
   <div class="card flex justify-content-center">
     <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" severity="secondary" link aria-haspopup="true"
-      v-tooltip.top="{ value: 'Plus', showDelay: 300, hideDelay: 100 }"
-      aria-controls="overlay_menu" />
+      v-tooltip.top="{ value: 'Plus', showDelay: 300, hideDelay: 100 }" aria-controls="overlay_menu" />
     <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
   </div>
+
+  <Dialog v-model:visible="visible" maximizable modal :header="'&nbsp;'" style="width: 80%; height: 80vh"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <MyActivityEdit :data="props.data" @close="visible = false" />
+  </Dialog>
 </template>
 
 <style scoped>
