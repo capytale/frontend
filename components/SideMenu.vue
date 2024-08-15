@@ -1,5 +1,6 @@
 <script setup>
 import { useSideMenuStore } from '@/stores/ui'
+import Popover from 'primevue/popover';
 const sideMenu = useSideMenuStore()
 const activeTag = useActiveTagStore()
 const code = useCodeStore()
@@ -27,6 +28,49 @@ const onNodeSelect = (node) => {
 const onNodeUnselect = (node) => {
   activeTag.activate(null)
 };
+
+
+
+
+const nodes = ref(null);
+const expandedKeys = ref({});
+const expandAll = () => {
+  for (let node of tags.tags.data) {
+    expandNode(node);
+  }
+
+  expandedKeys.value = { ...expandedKeys.value };
+};
+
+const collapseAll = () => {
+  expandedKeys.value = {};
+};
+
+const expandNode = (node) => {
+  if (node.children && node.children.length) {
+    expandedKeys.value[node.key] = true;
+
+    for (let child of node.children) {
+      expandNode(child);
+    }
+  }
+};
+
+const handleSwitch = () => {
+  if (checked.value === true) {
+    expandAll();
+  } else {
+    collapseAll()
+  }
+};
+
+const visible = ref(false);
+const checked = ref(false);
+const strictSearch = ref(false);
+const op = ref();
+const toggle = (event) => {
+  op.value.toggle(event);
+}
 </script>
 
 <template>
@@ -39,25 +83,50 @@ const onNodeUnselect = (node) => {
           v-tooltip.right="{ value: 'Épingler le menu', showDelay: 300, hideDelay: 0 }"></i>
         <!-- <i class="pi pi-tags"></i> -->
         <span class="parent mr-1">
-          <span class="">Étiquettes</span>
+          <span class="text-3xl font-bold">Étiquettes</span>
           <div class="novalorise">
             <Button icon="pi pi-plus" severity="secondary" outlined rounded size="small" />
           </div>
           <div class="valorise">
             <Button icon="pi pi-plus" severity="info" @click="createTagVisible = true" rounded />
           </div>
+              <Button type="button" icon="pi pi-info-circle" text @click="visible=true" />
         </span>
       </span>
       <div v-if="tags.tags.pending">loading......</div>
-      <Tree v-else id="folders" v-model:selectionKeys="selectedKey" selectionMode="single" :value="tags.tags.data"
-        class="w-full md:w-30rem" @nodeSelect="onNodeSelect" @nodeUnselect="onNodeUnselect">
-        <template #default="slotProps">
-          <div class="primary-nav left centerize">
-
-            <MyTagEdit :slotProps="slotProps" :tags="tags.tags.data" />
+      <template v-else>
+        <div class="flex flex-wrap gap-2">
+          <div class="flex items-center rech-avancee">
+          <ToggleSwitch v-model="checked" @change="handleSwitch" inputId="deplier"/>
+            <label for="deplier" class="ml-2 text-gray-400">Rechercher</label>
           </div>
-        </template>
-      </Tree>
+          <div v-if="checked" class="flex items-center rech-avancee">
+            <Checkbox v-model="strictSearch" :binary="true" inputId="rech"/>
+            <label for="rech" class="ml-2">Recherche stricte
+              <Button type="button" icon="pi pi-info-circle" text @click="toggle" />
+            </label>
+            <Popover ref="op">
+              <p>
+                En mode normal, les descendants sont conservés dès lors que la requête correspond à une étiquette.
+              </p>
+              <p>
+                En mode strict, lorsque la requête correspond à une étiquette, le filtrage se poursuit sur tous les
+                descendants.
+              </p>
+            </Popover>
+          </div>
+        </div>
+        <Tree id="folders" v-model:expandedKeys="expandedKeys" v-model:selectionKeys="selectedKey" selectionMode="single"
+          :value="tags.tags.data" class="w-full md:w-30rem" @nodeSelect="onNodeSelect" @nodeUnselect="onNodeUnselect"
+          :filter="checked" :filterMode="strictSearch ? 'strict' : 'lenient'">
+          <template #default="slotProps">
+            <div class="primary-nav left centerize">
+
+              <MyTagEdit :slotProps="slotProps" :tags="tags.tags.data" />
+            </div>
+          </template>
+        </Tree>
+      </template>
     </div>
   </div>
 
@@ -83,6 +152,13 @@ const onNodeUnselect = (node) => {
       <Button type="button" label="Save" @click="save"></Button>
 
     </div>
+  </Dialog>
+
+
+  <Dialog v-model:visible="visible" modal header="Aide" :style="{ width: '60%' }">
+        <iframe id="inlineFrame" title="Inline Frame" style="overflow:hidden;height:90vh;width:100%"
+            height="100%" width="100%" src="https://capytale2.ac-paris.fr/wiki/doku.php?id=etiquetter_et_d%C3%A9placer">
+        </iframe>
   </Dialog>
 </template>
 
@@ -141,7 +217,7 @@ const onNodeUnselect = (node) => {
   display: inline;
   position: absolute;
   left: 120%;
-  bottom: -50%;
+  /* bottom: -50%; */
   z-index: 1;
 }
 
@@ -150,7 +226,7 @@ const onNodeUnselect = (node) => {
   display: none;
   position: absolute;
   left: 120%;
-  bottom: -50%;
+  /* bottom: -50%; */
   z-index: 1;
 }
 
@@ -171,10 +247,16 @@ const onNodeUnselect = (node) => {
   padding: 0.7em;
   border-radius: 2em;
   border: 1px solid #ccc;
-} 
+}
+
 .highlight:hover {
   cursor: pointer;
   padding: 0.7em;
   border: 1px solid #aaa;
-} 
+}
+
+.rech-avancee {
+  padding-left: 0.5em;
+  width: 20rem;
+}
 </style>

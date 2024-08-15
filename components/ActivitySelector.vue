@@ -106,7 +106,7 @@ const test = ref('')
     <Card class="mb-4 rounded-t-none">
     <template #content>
       <div class="flex flex-row justify-between flex-wrap activites-header">
-        <div class="text-xl font-bold">Créer une nouvelle activité</div>
+        <div class="text-3xl font-bold">Créer une nouvelle activité</div>
           <InputText v-model="search" class="" placeholder="Recherche..." />
         <div class="flex flex-row gap-4">
           <Select v-model="catChoice" :options="cats" option-label="label" option-value="value" :ui="inputstyle" />

@@ -117,9 +117,7 @@ const commonItems = ref([
   }
 ]);
 
-
-watch(() => props.data.mode, (now, before) => console.log("now, before : ", now, before))
-
+// watch(() => props.data.mode, (now, before) => console.log("now, before : ", now, before))
 
 const items = computed(() => {
   if (props.isTeacher) {
