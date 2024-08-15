@@ -40,7 +40,7 @@ const actMoodleItem = ref([
 ])
 
 const actClonableItem = computed(() => {
-  if (!props.data.mode) 
+  if (!props.data.mode)
     return [{ label: 'OUPSSS', }]
   if (props.data.mode.includes('_X')) {
     return [{
@@ -51,7 +51,7 @@ const actClonableItem = computed(() => {
           const response = await activites.unlockMode(props.data.nid)
           toast.add({ severity: 'success', summary: 'Distribution débloquée', life: 2000 });
         }
-        catch (e) { 
+        catch (e) {
           toast.add({ severity: 'error', summary: 'Échec du débloquage de la distribution de l\'activité : ', detail: `nid = ${props.data.nid} - ${e}` });
         }
       }
@@ -140,6 +140,7 @@ const toggle = (event) => {
 <template>
   <div class="card flex justify-content-center">
     <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" severity="secondary" link aria-haspopup="true"
+      v-tooltip.top="{ value: 'Plus', showDelay: 300, hideDelay: 100 }"
       aria-controls="overlay_menu" />
     <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
   </div>

@@ -26,9 +26,20 @@ const shareClassGetter = ((obj) => {
   <div v-else class="bib">
     <div v-if="props.data.whoami != 'ap'">
       <button @click="visible = true">
-        <i v-if="props.data.status_shared == '1' && props.data.status_web == '1'" :class="PI.GLOBE + shareClass + ' globe'" />
-        <i v-else-if="props.data.status_shared == '1' && props.data.status_web == '0'" :class="PI.CLONE + shareClass + ' globe'" />
-        <i :class="PI.SHARE_ALT + shareClass" />
+        <div v-if="props.data.status_shared == '1' && props.data.status_web == '1'"
+            v-tooltip.top="{ value: 'Partagé avec tous. Cliquez pour paramétrer', showDelay: 300, hideDelay: 100 }" >
+          <i :class="PI.GLOBE + shareClass + ' globe'" />
+          <i :class="PI.SHARE_ALT + shareClass" />
+        </div>
+        <div v-else-if="props.data.status_shared == '1' && props.data.status_web == '0'"
+            v-tooltip.top="{ value: 'Partagé entre enseignants. Cliquez pour paramétrer', showDelay: 300, hideDelay: 100 }" >
+          <i :class="PI.CLONE + shareClass + ' globe'" />
+          <i :class="PI.SHARE_ALT + shareClass" />
+        </div>
+        <div v-else>
+          <i :class="PI.SHARE_ALT + shareClass"
+            v-tooltip.top="{ value: 'Cliquez pour partager', showDelay: 300, hideDelay: 100 }" />
+        </div>
       </button>
     </div>
 
@@ -70,5 +81,4 @@ const shareClassGetter = ((obj) => {
 /* .p-dialog-content { */
 /*   background: var(--gray-100); */
 /* } */
-
 </style>
