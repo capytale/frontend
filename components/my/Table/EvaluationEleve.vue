@@ -31,11 +31,7 @@ const toggle = (event) => {
   </Dialog>
 </template>
 
-<style>
-.evaluation .p-button-label {
-  /* font-size: smaller; */
-}
-
+<style scoped>
 .evaluation {
   flex-direction: row-reverse;
 }

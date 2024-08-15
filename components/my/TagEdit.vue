@@ -218,45 +218,15 @@ const corbeilleTid = () => {
   </Dialog>
 </template>
 
-<style>
-.p-tree {
-  padding: 0px;
-  padding-right: 1em;
-  border: none;
-}
-
-.p-tree .p-tree-container .p-tree-node .p-tree-node-content {
-  padding: 0.3em 0em 0.3em 0em;
-}
-
-.p-tree-node-label {
-  padding: 0.3em 0em 0.3em 0em;
-  padding: 0
-}
-
-.p-tree-node-label :hover {
-  border-radius: 0.3em;
-}
-
-.p-tree .p-tree-container .p-tree-node .p-tree-node-content .p-tree-toggler {
-  margin-right: 0.1em;
-  padding: 0.2rem;
-}
+<style scoped>
+/* Additionnal CSS in default.vue */
 
 .surprise {
   display: none;
 }
 
-.p-tree-node-label :hover .surprise {
-  display: inline;
-}
-
 .info {
   color: gray;
   font-style: italic;
-}
-
-.p-tree ul {
-  padding: 0 0 0 0.7em;
 }
 </style>

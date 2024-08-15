@@ -42,14 +42,6 @@ const { data: user, pending, error, status } = await fetchCurrentUser()
 
 </template>
 
-<style>
-.sidemenu-inactive {
-  margin-left: 200px;
-  padding-left: 4rem;
-}
-
-.fixed {
-  position: fixed;
-  z-index: 1000;
-}
+<style scoped>
+/* Additionnal CSS in default.vue */
 </style>

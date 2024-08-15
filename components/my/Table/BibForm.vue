@@ -229,7 +229,7 @@ const postBibForm = async () => {
 </template>
 
 
-<style>
+<style scoped>
 .with-padding {
   margin-left: -1.5em;
 }

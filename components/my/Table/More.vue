@@ -145,7 +145,7 @@ const toggle = (event) => {
   </div>
 </template>
 
-<style>
+<style scoped>
 .redImportant .p-menuitem-text,
 .redImportant .p-menuitem-icon {
   color: var(--danger-color) !important;

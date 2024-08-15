@@ -70,21 +70,6 @@ const nbstars = computed(() => {
   </Dialog>
 </template>
 
-<style>
-.p-rating .p-rating-item.p-rating-item-active .p-rating-icon {
-  font-size: 1.5rem;
-  color: #ffd90088;
-}
-
-.p-rating .p-rating-item .p-rating-icon {
-  font-size: 1.5rem;
-  color: #ccc;
-}
-
-.p-fieldset .p-fieldset-legend {
-  font-weight: 100;
-  font-size: small;
-  border: none;
-  background: none;
-}
+<style scoped>
+/* Additionnal CSS in default.vue */
 </style>

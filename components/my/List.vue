@@ -294,14 +294,6 @@ const myactivities = computed(() => {
   </Card>
 </template>
 
-
-<style>
-.p-datatable-hoverable-rows .p-selectable-row {
-  cursor: default;
-}
-
-.scroll {
-  height: 50%;
-  overflow: scroll;
-}
+<style scoped>
+/* Additionnal CSS in default.vue */
 </style>

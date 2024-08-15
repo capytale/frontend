@@ -26,11 +26,6 @@ useHead({
 </template>
 
 <style>
-.pousse {
-  margin-left: 0;
-  transition: margin-left .2s;
-}
-
 html,
 body,
 #__nuxt {
@@ -43,18 +38,6 @@ body,
   max-width: min(calc(100% - 2rem), 1600px);
 }
 
-.bggray {
-  background: var(--p-surface-100);
-}
-
-
-/* .p-tree-selectable {
-  background: var(--p-surface-0);
-}
-
-.dark .p-tree-selectable {
-  background: var(--p-surface-50);
-} */
 
 .appContainer {
   height: 100%;
@@ -82,4 +65,112 @@ body,
 .p-tag {
   font-size: 1rem;
 }
+.bggray {
+  background: var(--p-surface-100);
+}
+
+/*   List.vue   */
+/* ↓↓↓↓↓↓↓↓↓↓↓↓ */
+.p-datatable-hoverable-rows .p-selectable-row {
+  cursor: default;
+}
+
+.scroll {
+  height: 50%;
+  overflow: scroll;
+}
+/* ↑↑↑↑↑↑↑↑↑↑↑↑ */
+/*   List.vue   */
+
+.p-inputicon {
+  top: 38%;
+}
+
+/*    My.vue    */
+/* ↓↓↓↓↓↓↓↓↓↓↓↓ */
+.sidemenu-inactive {
+  margin-left: 200px;
+  padding-left: 4rem;
+}
+
+.fixed {
+  position: fixed;
+  z-index: 1000;
+}
+/* ↑↑↑↑↑↑↑↑↑↑↑↑ */
+/*    My.vue    */
+
+/* Comments.vue */
+/* ↓↓↓↓↓↓↓↓↓↓↓↓ */
+.p-rating .p-rating-item.p-rating-item-active .p-rating-icon {
+  font-size: 1.5rem;
+  color: #ffd90088;
+}
+
+.p-rating .p-rating-item .p-rating-icon {
+  font-size: 1.5rem;
+  color: #ccc;
+}
+
+.p-fieldset .p-fieldset-legend {
+  font-weight: 100;
+  font-size: small;
+  border: none;
+  background: none;
+}
+/* ↑↑↑↑↑↑↑↑↑↑↑↑ */
+/* Comments.vue */
+
+
+/* TagEdit.vue  */
+/* ↓↓↓↓↓↓↓↓↓↓↓↓ */
+.p-tree {
+  padding: 0px;
+  padding-right: 1em;
+  border: none;
+}
+
+.p-tree .p-tree-container .p-tree-node .p-tree-node-content {
+  padding: 0.3em 0em 0.3em 0em;
+}
+
+.p-tree-node-label {
+  padding: 0.3em 0em 0.3em 0em;
+  padding: 0
+}
+
+.p-tree-node-label :hover {
+  border-radius: 0.3em;
+}
+
+.p-tree .p-tree-container .p-tree-node .p-tree-node-content .p-tree-toggler {
+  margin-right: 0.1em;
+  padding: 0.2rem;
+}
+
+.p-tree-node-label :hover .surprise {
+  display: inline;
+}
+
+.p-tree ul {
+  padding: 0 0 0 0.7em;
+}
+/* ↑↑↑↑↑↑↑↑↑↑↑↑ */
+/* TagEdit.vue  */
+
+
+/*
+.pousse {
+  margin-left: 0;
+  transition: margin-left .2s;
+}
+
+.p-tree-selectable {
+  background: var(--p-surface-0);
+}
+
+.dark .p-tree-selectable {
+  background: var(--p-surface-50);
+}
+*/
 </style>
