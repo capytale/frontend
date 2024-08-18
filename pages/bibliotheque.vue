@@ -209,7 +209,7 @@ const clearFilter = () => {
                   </div>
 
                   <Button
-                    v-if="filters['title'].value || filters['abstract'].value || filters['niveau'].value || filters['enseignement'].value || filters['auteur'].value"
+                    v-if="filters['type'].value || filters['global'].value || filters['title'].value || filters['abstract'].value || filters['niveau'].value || filters['enseignement'].value || filters['auteur'].value"
                     type="button" icon="pi pi-filter-slash" label="Clear" outlined severity="danger"
                     @click="clearFilter()" />
                   <Button v-else type="button" icon="pi pi-filter-slash" label="Clear" outlined severity="secondary"
