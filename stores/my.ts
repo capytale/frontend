@@ -2,6 +2,7 @@ import httpClient from '@capytale/activity.js/backend/capytale/http'
 
 // Definit le endpoint de l'API
 const myActivitiesApiEp = "/web/c-hdls/api/my-activities"
+const assignmentsApiEp = "/web/c-hdls/api/assignments"
 import TypeApi from '@capytale/activity.js/backend/capytale/activityType'
 import type { ActivityType, ActivityGroups } from "@capytale/activity.js/activity/activityType/activityType";
 
@@ -74,11 +75,21 @@ export const useMyStore = defineStore('my', {
         nids = sa_nid.split()
         this.assignments.tab = this.assignments.tab.map(el => el.sa_nid == sa_nid ? { ...el, workflow: newWorkflow } : el);
       }
-      console.log("saveSaWf", nids, newWorkflow)
+      // console.log("saveSaWf", nids, newWorkflow)
       await httpClient.postJsonAsync(
         myActivitiesApiEp,
         { action: "saveSaWf", nids, newWorkflow }
       );
     },
+    async unHide(sa_nid: number, corbeilleTid: number) {
+      this.assignments.tab = this.assignments.tab.map(el => el.sa_nid == sa_nid ? { ...el, tags: [] } : el);
+      console.log("unHide", sa_nid, corbeilleTid)
+      await httpClient.postJsonAsync(
+        assignmentsAPiEp,
+        { action: "unHide", sa_nid, corbeilleTid }
+      );
+    },
+
+
   },
 })

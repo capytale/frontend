@@ -60,6 +60,7 @@ const chWf = ((sa_nid, wf) => {
 })
 
 const nbFake = ref(new Array(props.viewsTotal));
+
 </script>
 
 
@@ -135,6 +136,12 @@ const nbFake = ref(new Array(props.viewsTotal));
       <Column field="changed" header="Dernière modif." style="max-width:10rem" sortable>
         <template #body="p">
           <MyTableChanged :data="p.data" />
+        </template>
+      </Column>
+
+      <Column field="tags" header="Tags" style="max-width:10rem" sortable>
+        <template #body="p">
+          <AssignmentShowHide :data="p.data" />
         </template>
       </Column>
 
