@@ -139,11 +139,11 @@ const nbFake = ref(new Array(props.viewsTotal));
         </template>
       </Column>
 
-      <Column field="tags" header="Tags" style="max-width:10rem" sortable>
-        <template #body="p">
-          <AssignmentShowHide :data="p.data" />
-        </template>
-      </Column>
+      <!-- <Column field="tags" header="Tags" style="max-width:10rem" sortable> -->
+      <!--   <template #body="p"> -->
+      <!--     <AssignmentShowHide :data="p.data" /> -->
+      <!--   </template> -->
+      <!-- </Column> -->
 
       <Column field="nom" header="Élève" style="max-width:10rem" sortable>
         <template #body="p">
