@@ -21,8 +21,14 @@ const codeForm = async () => {
   return
 }
 
+const focus = ref(false)
 const clear = () => {
   invalid.value = false
+  focus.value = true
+}
+
+const out = () => {
+  focus.value = false
 }
 
 </script>
@@ -37,10 +43,10 @@ const clear = () => {
 
       <div class="flex flex-col gap-2">
         <Message v-if="invalid" severity="error" closable @close="clear">{{ message }}</Message>
-        <label v-else for="code" class="mt-6">Saisir le code</label>
+        <label v-if="focus" for="code" class="mt-6">Saisir le code</label>
         <div class="flex flex-wrap align-items-center gap-2">
           <InputText id="code" v-model="value" aria-describedby="code-help" placeholder="a12b-345678" :invalid="invalid"
-            @focus="clear" />
+            @focus="clear" @blur="out" />
           <Button type="submit" label="Go !" @click="codeForm" />
         </div>
       </div>

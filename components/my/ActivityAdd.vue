@@ -6,7 +6,10 @@
     </template>
     <template #content>
       <div class="overscroll-x-auto myflex">
-        <fieldset>
+        <template v-if="myStore.favorites.length === 0">
+          <!-- <div class="text-center">Aucune activité favorite</div> -->
+        </template>
+        <fieldset v-else>
           <legend class="text-lg">Mes activités favorites <i class="pi pi-star-fill text-yellow-400"></i> </legend>
           <a v-for="el of myStore.types.filter(el => myStore.favorites.includes(el.id))" :key="el.id"
             :href="'/web/node/add/activity?type=' + el.id" v-tooltip.bottom="el.name" class="hover:shadow-md">
@@ -17,8 +20,8 @@
           </a>
         </fieldset>
         <NuxtLink to="/activites" class="hover:shadow-md acti-button">
-            <Button type="submit" label="Voir tout" />
-          </NuxtLink>
+          <Button type="submit" label="Voir tout" />
+        </NuxtLink>
       </div>
     </template>
   </Card>
@@ -46,6 +49,7 @@ fieldset {
   /* position: relative; */
   /* top: -10px; */
 }
+
 .acti-button {
   position: relative;
   top: 2px;
