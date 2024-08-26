@@ -1,5 +1,15 @@
 import { resolve } from 'path';
 import Lara from '@primevue/themes/lara';
+import { definePreset } from '@primevue/themes';
+
+const capyPreset = definePreset(Lara, {
+  components: {
+    card: {
+      shadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)',
+    }
+  }
+});
+
 const baseUrl = '/~';
 
 export default defineNuxtConfig({
@@ -21,7 +31,7 @@ export default defineNuxtConfig({
           name: 'primevue',
           order: 'tailwind-base, primevue, tailwind-utilities'
         },
-        preset: Lara,
+        preset: capyPreset,
         options: {
           darkModeSelector: '.dark',
         }
