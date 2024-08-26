@@ -44,13 +44,16 @@ const toggleColorMode = () => {
     --navbar-text-color: var(--text-color);
   }
 
-  height: 60px;
-  background-color: var(--p-surface-800);
-  display: flex;
-  align-items: center;
-  color: var(--navbar-text-color);
-  overflow: hidden;
-  color-scheme: dark;
+  & {
+    height: 60px;
+    background-color: var(--p-surface-800);
+    display: flex;
+    align-items: center;
+    color: var(--navbar-text-color);
+    overflow: hidden;
+    color-scheme: dark;
+  }
+
 
   /* .dark) & { */
   /*.dark & {
@@ -87,7 +90,9 @@ const toggleColorMode = () => {
     flex-shrink: 0;
   }
 
-  overflow: hidden;
+  & {
+    overflow: hidden;
+  }
 }
 
 .navbarLogo {

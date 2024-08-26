@@ -10,30 +10,30 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@capytale/activity.js": "^3.0.7",
-    "@pinia/nuxt": "^0.5.1",
-    "@primevue/themes": "^4.0.0",
-    "@vueuse/nuxt": "^10.10.0",
+    "@capytale/activity.js": "^3.0.9",
+    "@pinia/nuxt": "^0.5.4",
+    "@primevue/themes": "^4.0.5",
+    "@vueuse/nuxt": "^11.0.3",
     "fuse.js": "^7.0.0",
-    "nuxt": "^3.11.1",
-    "pinia": "^2.1.7",
+    "nuxt": "^3.13.0",
+    "pinia": "^2.2.2",
     "primeicons": "^7.0.0",
-    "primevue": "^4.0.0",
+    "primevue": "^4.0.5",
     "qrcode.vue": "^3.4.1",
-    "vue": "^3.4.21",
-    "vue-router": "^4.3.0"
+    "vue": "^3.4.38",
+    "vue-router": "^4.4.3"
   },
   "devDependencies": {
-    "@fortawesome/free-brands-svg-icons": "^6.5.2",
-    "@fortawesome/free-regular-svg-icons": "^6.5.2",
-    "@fortawesome/free-solid-svg-icons": "^6.5.2",
-    "@nuxtjs/color-mode": "^3.4.2",
-    "@nuxtjs/tailwindcss": "^6.11.4",
-    "@primevue/nuxt-module": "^4.0.0",
-    "@vesp/nuxt-fontawesome": "^1.0.4",
+    "@fortawesome/free-brands-svg-icons": "^6.6.0",
+    "@fortawesome/free-regular-svg-icons": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@nuxtjs/color-mode": "^3.4.4",
+    "@nuxtjs/tailwindcss": "^6.12.1",
+    "@primevue/nuxt-module": "^4.0.5",
+    "@vesp/nuxt-fontawesome": "^1.1.0",
     "node-sass": "^9.0.0",
     "nuxt-purgecss": "^2.0.0",
-    "sass": "^1.75.0",
-    "sass-loader": "^14.2.1"
+    "sass": "^1.77.8",
+    "sass-loader": "^16.0.1"
   }
 }

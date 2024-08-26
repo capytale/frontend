@@ -4,12 +4,15 @@ const baseUrl = '/~';
 
 export default defineNuxtConfig({
   ssr: false,
+
   // devtools: { enabled: true },
   modules: ['@primevue/nuxt-module', '@nuxtjs/color-mode', '@pinia/nuxt', '@vueuse/nuxt', "@nuxtjs/tailwindcss", '@vesp/nuxt-fontawesome'],
+
   colorMode: {
     classSuffix: '',
     preference: 'light', // default value of $colorMode.preference
   },
+
   primevue: {
     usePrimeVue: true,
     options: {
@@ -26,16 +29,19 @@ export default defineNuxtConfig({
 
     },
   },
+
   css: [
     'primeicons/primeicons.css',
     'assets/css/tailwind.css'
   ],
+
   fontawesome: {
     icons: {
       solid: ['balance-scale', 'glasses', 'lightbulb', 'recycle', 'bullseye', 'spell-check', 'medal', 'ban'],
       // regular: ['thumbs-up', 'thumbs-down'],
     }
   },
+
   nitro: {
     devProxy: {
       '/vanilla': { target: 'https://capytaledev.ac-paris.fr/vanilla', changeOrigin: false, secure: false },
@@ -43,12 +49,14 @@ export default defineNuxtConfig({
       '/web': { target: 'https://capytaledev.ac-paris.fr/web', changeOrigin: false, secure: false },
     },
   },
+
   devServer: {
     https: {
       key: resolve(process.env.HOME!, 'repos/virtual.ac-capytale.fr.key'),
       cert: resolve(process.env.HOME!, 'repos/virtual.ac-capytale.fr.crt')
     }
   },
+
   app: {
     baseURL: baseUrl,
     // head: {
@@ -61,5 +69,7 @@ export default defineNuxtConfig({
     //     }
     //   ]
     // }
-  }
+  },
+
+  compatibilityDate: '2024-08-26'
 })
