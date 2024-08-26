@@ -130,7 +130,7 @@ const toggle = (event) => {
     </div>
   </div>
 
-  <Dialog v-model:visible="createTagVisible" modal header="Créer une nouvelle étiquette" :style="{ width: '55rem' }">
+  <Dialog v-model:visible="createTagVisible" modal header="Créer une nouvelle étiquette" :style="{ width: '55rem' }" :dismissableMask="true">
     <div class="flex align-items-center gap-3 mb-3">
       <label for="label" class="font-semibold w-6rem">Nom de l'étiquette</label>
       <InputText v-model="label" id="label" class="flex-auto" autocomplete="off" />
