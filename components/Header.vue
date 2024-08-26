@@ -32,6 +32,10 @@ const toggleColorMode = () => {
 </template>
 
 <style lang="scss" scoped>
+.router-link-active {
+  font-weight: bold;
+}
+
 .navbar {
   --navbar-text-color: rgba(255, 255, 255, 0.95);
 
