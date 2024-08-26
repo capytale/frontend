@@ -155,7 +155,7 @@ const toggle = (event) => {
   </Dialog>
 
 
-  <Dialog v-model:visible="visible" modal header="Aide" :style="{ width: '60%' }">
+  <Dialog v-model:visible="visible" modal header="Aide" :style="{ width: '60%' }" :dismissableMask="true">
         <iframe id="inlineFrame" title="Inline Frame" style="overflow:hidden;height:90vh;width:100%"
             height="100%" width="100%" src="https://capytale2.ac-paris.fr/wiki/doku.php?id=etiquetter_et_d%C3%A9placer">
         </iframe>
