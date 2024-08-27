@@ -66,7 +66,7 @@ const nbFake = ref(new Array(props.viewsTotal));
 
 <template>
   <div v-if="my.loadingAssignments">
-    <Card class="flex-2 my-10">
+    <Card class="flex-2 my-10" v-if="false">
       <template #title>
         <Skeleton shape="circle" size="4rem" class="mr-2 my-2"></Skeleton>
         <Skeleton width="20rem" class="mb-2"></Skeleton>
@@ -106,10 +106,9 @@ const nbFake = ref(new Array(props.viewsTotal));
     </DataTable>
   </div>
   <template v-else>
-    <div class="myflex my-10">
+    <div class="myflex my-10" v-if="false">
       <span><img :src="my.assignments.icon" alt="icon" class="w-16 h-16" /> </span>
       <span class="activity-title">{{ my.assignments.title }}</span>
-
     </div>
 
     <DataTable :value="my.assignments.tab" tableStyle="min-width: 50rem" v-model:selection="selectedNid"
