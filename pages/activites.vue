@@ -72,7 +72,7 @@ const dispGroups = computed(() => {
 <template>
   <Card class="mb-4 rounded-t-none">
     <template #content>
-      <div class="flex flex-row justify-between flex-wrap activites-header">
+      <div class="flex flex-row justify-between flex-wrap items-center">
         <div class="text-3xl font-bold">Créer une nouvelle activité</div>
         <InputText v-model="search" class="" placeholder="Recherche..." />
         <div class="flex flex-row gap-4">
@@ -116,36 +116,3 @@ const dispGroups = computed(() => {
       .sort((a, b) => b.score - a.score)" :key="index" :activite="item"></ActiCard>
   </div>
 </template>
-
-<style>
-.v-enter-active {
-  transition: all 0.75s ease-out;
-  max-height: 1000px;
-}
-
-.v-leave-active {
-  transition: all 0.4s ease-out;
-  max-height: 1000px;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
-  max-height: 0;
-}
-
-.p-row-even,
-.p-row-odd {
-  cursor: pointer;
-}
-
-.p-row-even:hover,
-.p-row-odd:hover {
-  background-color: #f5f5f5;
-}
-
-.activites-header {
-  align-items: center;
-}
-</style>
-

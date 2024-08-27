@@ -39,7 +39,7 @@ const goActi = (event, msg) => {
 </script>
 
 <template>
-  <Card class="cursor-pointer hover:shadow-md" :dt="{ 'body.padding': '1.5rem 1.5rem 0.5rem 1.5rem' }">
+  <Card class="cursor-pointer hover:shadow-md" :dt="{ 'body.padding': '1.5rem 1.5rem 0.5rem 1.5rem' }" :pt="{ body: 'pc-body' }">
     <template #content>
       <div class="flex flex-row gap-4 justify-start items-center w-full" @click="(event) => goActi(event, 'coucou')">
         <img :src="activite.icon.path" class="w-24" />
@@ -62,7 +62,7 @@ const goActi = (event, msg) => {
   </Card>
 </template>
 
-<style lang="scss" scoped>
+<style>
 .starspin:hover {
   border-radius: 2em;
   border: 1px solid #facc15;
@@ -71,5 +71,10 @@ const goActi = (event, msg) => {
 
 .star {
   padding: 0.7em;
+}
+
+.pc-body {
+  height: 100%;
+  justify-content: space-between;
 }
 </style>
