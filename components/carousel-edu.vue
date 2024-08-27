@@ -1,12 +1,11 @@
 <template>
   <div
     ref="carousel"
-    class="lg:grid lg:grid-cols-3 lg:grid-rows-none lg:gap-4 flex flex-col items-center w-full"
+    class="lg:grid lg:grid-cols-3 lg:grid-rows-none lg:gap-4 flex flex-col items-center w-full mb-32"
     v-if="carouItems && carouItems.length > 0"
   >
     <Card
-      class="lg:col-span-2 order-2 lg:self-start mt-2"
-      :ui="{ body: { base: `min-h-[630px]` } }"
+      class="lg:col-span-2 order-2 lg:self-start mt-2 min-h-[700px]"
       ref="vidCard"
     >
       <template #title>
