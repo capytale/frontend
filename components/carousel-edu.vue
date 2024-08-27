@@ -32,15 +32,17 @@
       :style="lgAL ? 'height: ' + vidH.height.value + 'px' : ''"
       ref="scrolly"
     >
-      <div
+      <Card
         ref="itemRefs"
         v-for="(activite, index) of carouItems"
-        class="p-2 lg:p-1 box-border m-1 first:mt-0 last:mb-0 lg:basis-full bg-white border ring-gray-200 rounded-md cursor-pointer hover:bg-primary-100 flex flex-row justify-center items-center"
-        :class="acti == index ? 'ring-4 ring-primary-200' : ''"
+        class="p-2 lg:p-1 box-border m-1 first:mt-0 last:mb-0 lg:basis-full cursor-pointer flex flex-row justify-center items-center itemcard"
+        :class="acti == index ? 'selectedCard' : ''"
         @click="acti = index"
       >
+      <template #content>
         <p class="whitespace-nowrap font-semibold">{{ activite.name }}</p>
-      </div>
+      </template>
+      </Card>
     </div>
   </div>
 </template>
@@ -130,3 +132,25 @@ const carouItems = [
   },
 ];
 </script>
+
+<style lang="scss" scoped>
+.dark .itemcard:hover {
+  background-color: var(--p-surface-700);
+}
+
+.itemcard:hover {
+  background-color: var(--p-surface-100);
+}
+
+.dark .itemcard {
+  border: 1px solid var(--p-surface-700);
+}
+
+.selectedCard {
+  border: 1px solid var(--p-primary-500);
+}
+
+.dark .selectedCard {
+  border: 1px solid var(--p-primary-500);
+}
+</style>
