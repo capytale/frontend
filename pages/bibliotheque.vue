@@ -108,7 +108,7 @@ const clearFilter = () => {
                 <div class="flex items-center rech-avancee">
                   <Skeleton width="20rem" height="3rem"></Skeleton>
                 </div>
-                <Button type="button" label="Clear" class="invisible" />
+                <Button type="button" label="Annuler" class="invisible" />
               </div>
             </template>
           </Toolbar>
@@ -210,9 +210,9 @@ const clearFilter = () => {
 
                   <Button
                     v-if="filters['type'].value || filters['global'].value || filters['title'].value || filters['abstract'].value || filters['niveau'].value || filters['enseignement'].value || filters['auteur'].value"
-                    type="button" icon="pi pi-filter-slash" label="Clear" outlined severity="danger"
+                    type="button" icon="pi pi-filter-slash" label="Annuler" outlined severity="danger"
                     @click="clearFilter()" />
-                  <Button v-else type="button" icon="pi pi-filter-slash" label="Clear" outlined severity="secondary"
+                  <Button v-else type="button" icon="pi pi-filter-slash" label="Annuler" outlined severity="secondary"
                     class="invisible" />
 
                 </div>
