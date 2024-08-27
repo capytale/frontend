@@ -182,7 +182,7 @@ const corbeilleTid = () => {
   </div>
   <Menu ref="menu" :model="items" :popup="true" />
 
-  <Dialog v-model:visible="editVisible" modal :header="header" :style="{ width: '55rem' }">
+  <Dialog v-model:visible="editVisible" modal :header="header" :style="{ width: '55rem' }" dismissableMask>
     <div class="flex align-items-center gap-3 mb-3">
       <label for="label" class="font-semibold w-6rem">Nom de l'étiquette</label>
       <InputText v-model="label" id="label" class="flex-auto" autocomplete="off" />
@@ -207,7 +207,7 @@ const corbeilleTid = () => {
 
     </div>
   </Dialog>
-  <Dialog v-model:visible="colorVisible" modal :header="header" :style="{ width: '55rem' }">
+  <Dialog v-model:visible="colorVisible" modal :header="header" :style="{ width: '55rem' }" dismissableMask>
     <div class="flex align-items-center gap-3 mb-3">
       <ColorPicker v-model="color" inline />
     </div>

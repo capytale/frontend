@@ -79,7 +79,7 @@ const detailIconSize = "font-size: 1.5rem"
           <Checkbox v-model="signalChecked" inputId="signaler" :binary="true" @change="rating = null" />
           <label for="signaler" class="ml-2">Demander la dépublication </label>
           <i class="pi pi-info-circle" @click="info = true"></i>
-          <Dialog v-model:visible="info" modal header="Demander la dépublication" :style="{ width: '45rem' }">
+          <Dialog v-model:visible="info" modal header="Demander la dépublication" :style="{ width: '45rem' }" dismissableMask>
             <div class="my-6">
               <p>Pour cette activité, vous estimez que le contenu :</p>
               <ul>

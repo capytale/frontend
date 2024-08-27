@@ -21,7 +21,7 @@ const toggle = (event) => {
 
 
   <Dialog v-model:visible="visible" :header="'Évalué par ' + data.boss" modal
-    :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }" :style="{ width: '50%' }">
+    :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }" :style="{ width: '50%' }" dismissableMask>
     <Fieldset legend="Évaluation" class="m-4">
       <p class="m-0">{{ data.evalu }}</p>
     </Fieldset>

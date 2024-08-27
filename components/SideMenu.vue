@@ -130,7 +130,7 @@ const toggle = (event) => {
     </div>
   </div>
 
-  <Dialog v-model:visible="createTagVisible" modal header="Créer une nouvelle étiquette" :style="{ width: '55rem' }" :dismissableMask="true">
+  <Dialog v-model:visible="createTagVisible" modal header="Créer une nouvelle étiquette" :style="{ width: '55rem' }" dismissableMask>
     <div class="flex align-items-center gap-3 mb-3">
       <label for="label" class="font-semibold w-6rem">Nom de l'étiquette</label>
       <InputText v-model="label" id="label" class="flex-auto" autocomplete="off" />
@@ -155,7 +155,7 @@ const toggle = (event) => {
   </Dialog>
 
 
-  <Dialog v-model:visible="visible" modal header="Aide" :style="{ width: '60%' }" :dismissableMask="true">
+  <Dialog v-model:visible="visible" modal header="Aide" :style="{ width: '60%' }" dismissableMask>
         <iframe id="inlineFrame" title="Inline Frame" style="overflow:hidden;height:90vh;width:100%"
             height="100%" width="100%" src="https://capytale2.ac-paris.fr/wiki/doku.php?id=etiquetter_et_d%C3%A9placer">
         </iframe>

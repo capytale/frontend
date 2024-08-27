@@ -101,7 +101,7 @@ const dispGroups = computed(() => {
       </template>
     </Card>
   </div>
-  <Dialog v-model:visible="dialogActi" modal dismissableMask class="md:w-5/6 xl:w-10/12">
+  <Dialog v-model:visible="dialogActi" modal class="md:w-5/6 xl:w-10/12" dismissableMask>
     <template #header>
       <div class="text-lg font-bold">Catégorie {{ myStore.groupsAvecFav[dialogGroup].title }} : Choix des activités </div>
     </template>

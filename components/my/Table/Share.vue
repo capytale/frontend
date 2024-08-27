@@ -175,7 +175,7 @@ const wfStatusGetter = ((obj) => {
       </div>
 
       <Dialog v-model:visible="visible" header="Accès à l'activité" modal
-        :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }" :style="{ width: '75%' }">
+        :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }" :style="{ width: '75%' }" dismissableMask>
         <MyTableQrcode :code="props.data.code" :url="url" />
       </Dialog>
 
