@@ -101,11 +101,11 @@ const dispGroups = computed(() => {
       </template>
     </Card>
   </div>
-  <Dialog v-model:visible="dialogActi" modal dismissableMask class="md:w-5/6 xl:w-4/6">
+  <Dialog v-model:visible="dialogActi" modal dismissableMask class="md:w-5/6 xl:w-10/12">
     <template #header>
       <div class="text-lg font-bold">Catégorie {{ myStore.groupsAvecFav[dialogGroup].title }} : Choix des activités </div>
     </template>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
       <ActiCard v-for="acti in myStore.types.filter(el => myStore.groupsAvecFav[dialogGroup].activities.includes(el.id))"
         :activite="acti" />
     </div>
