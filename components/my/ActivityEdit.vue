@@ -50,7 +50,16 @@ onBeforeUnmount(() => {
 
 
 <template>
-  <iframe title="Modification des paramètres de l'activité" style="overflow:hidden;height:90vh;width:100%" height="100%"
-    width="100%" :src="editUrl">
-  </iframe>
+    <iframe title="Modification des paramètres de l'activité" class="fstyle" :src="editUrl">
+    </iframe>
 </template>
+
+<style scoped>
+.fstyle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+</style>

@@ -18,8 +18,8 @@ const visible = ref(false);
     <Button v-if="!props.data.isSa" class="pi pi-cog px-2 cog" @click="visible = true"
       v-tooltip.top="{ value: 'Modifier les paramètres', showDelay: 400, hideDelay: 0 }"
       aria-label="Modifier les paramètres" text />
-    <Dialog v-model:visible="visible" maximizable modal :header="'&nbsp;'" style="width: 80%; height: 80vh"
-      :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <Dialog :dismissable-mask="true" v-model:visible="visible" maximizable modal :header="'&nbsp;'" style="width: 80%; height: 80vh"
+      :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" content-class="h-full">
       <MyActivityEdit :data="props.data" @close="visible = false" />
     </Dialog>
   </div>
