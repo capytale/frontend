@@ -166,17 +166,13 @@ const clearFilter = () => {
           :rowsPerPageOptions="[5, 10, 20, 50]" dataKey="id" :filterDisplay='advancedSearch ? "row" : ""'
           sortField="changed" :sortOrder="-1" :globalFilterFields="['title', 'abstract', 'auteur']">
           <template #header>
-            <Toolbar>
-              <template #start>
+            <div class="flex flex-col lg:flex-row items-center h-24 justify-between">
                 <div class="titre">Bibliothèque entre enseignants
                              ({{ bib.bib.data.length }} activités)
                 </div>
-              </template>
-              <template #end>
-
-                <div class="flex justify-content-end">
+                <div class="flex flex-row gap-2 justify-content-end">
                   <Select v-model="filters['type'].value" :options="my.types" filter optionLabel="name" optionValue="id"
-                    placeholder="Filtrer par type" class="w-full md:w-14rem max-w-64" showClear>
+                    placeholder="Filtrer par type" class="w-full md:w-14rem max-w-[20rem] items-center" showClear>
                     <template #value="slotProps">
                       <div v-if="slotProps.value" class="flex align-items-center">
                         <img :src="getType(slotProps.value).icon.path" class="w-8 mr-3" />
@@ -199,26 +195,26 @@ const clearFilter = () => {
                     <InputIcon>
                       <i class="pi pi-search" />
                     </InputIcon>
-                    <InputText v-model="filters['global'].value" placeholder="Rechercher"
+                    <InputText class="h-full" v-model="filters['global'].value" placeholder="Rechercher"
                       v-tooltip.top="{ value: 'Recherche dans titre, description et auteur', showDelay: 100, hideDelay: 300 }" />
                   </IconField>
 
-                  <div class="flex items-center rech-avancee">
+                  <div class="flex items-center rech-avdancee">
                     <Checkbox v-model="advancedSearch" :binary="true" />
-                    <label for="ingredient1" class="ml-2">Recherche avancée</label>
+                    <label for="ingredient1" class="ml-2 whitespace-nowrap">Rech. avancée</label>
                   </div>
 
+                  <div class="grow flex items-center">
                   <Button
                     v-if="filters['type'].value || filters['global'].value || filters['title'].value || filters['abstract'].value || filters['niveau'].value || filters['enseignement'].value || filters['auteur'].value"
                     type="button" icon="pi pi-filter-slash" label="Annuler" outlined severity="danger"
                     @click="clearFilter()" />
                   <Button v-else type="button" icon="pi pi-filter-slash" label="Annuler" outlined severity="secondary"
                     class="invisible" />
-
+                  </div>
                 </div>
-              </template>
 
-            </Toolbar>
+            </div>
           </template>
 
           <Column field="icon" header="" style="width:5rem">
