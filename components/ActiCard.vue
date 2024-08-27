@@ -33,15 +33,6 @@ const toggleFav = async () => {
 };
 
 const goActi = (event, msg) => {
-  // console.log(event.target.tagName);
-  // if (!event.target.classList.contains("starspin")) {
-  //   appState.value.creaActiPanel = true;
-  //   appState.value.newActiPanel = false;
-  //   toast.add({
-  //     description: "Création d'une nouvelle activité",
-  //     title: props.activite.fullName,
-  //   });
-  // }
   if (!['i'].includes(event.target.tagName.toLowerCase()))
     window.location.href = `/web/node/add/${props.activite.bundle}?type=${props.activite.id}`;
 };
@@ -49,18 +40,19 @@ const goActi = (event, msg) => {
 
 <template>
   <Card class="cursor-pointer hover:shadow-md" @click="(event) => goActi(event, 'coucou')">
-    <template #title>
-      <div class="flex flex-row justify-between items-center w-full">
-        <img :src="activite.icon.path" class="w-16" />
-        <div class="text-lg font-semibold ml-2 grow">
-          {{ activite.name }} <sup v-if="activite.beta" class="text-red-500">beta</sup>
-        </div>
-        <i :class="'mx-2 text-lg cursor-pointer starspin star ' + star.icon" @click="toggleFav()"
-          v-tooltip.top="{ value: star.tt, showDelay: 300, hideDelay: 0 }"></i>
-      </div>
-    </template>
     <template #content>
-      <div class="text-sm">{{ activite.description }}</div>
+      <div class="flex flex-row gap-4 justify-between items-center w-full">
+        <img :src="activite.icon.path" class="w-24" />
+        <div>
+          <div class="text-lg font-semibold">
+            {{ activite.name }} <sup v-if="activite.beta" class="text-red-500">beta</sup>
+          <i :class="'mx-2 text-lg cursor-pointer starspin star ' + star.icon" @click="toggleFav()"
+            v-tooltip.top="{ value: star.tt, showDelay: 300, hideDelay: 0 }" />
+          </div>
+          <div class="text-base">{{ activite.description }}</div>
+      </div>
+
+      </div>
     </template>
   </Card>
 </template>
@@ -70,17 +62,6 @@ const goActi = (event, msg) => {
   border-radius: 2em;
   border: 1px solid #facc15;
   padding: 0.7em;
-
-  /* animation: ping 1s cubic-bezier(0, 0, 0.2, 1) 1; */
-
-  /* @keyframes ping { */
-  /*   50% { */
-  /*     transform: scale(0.5); */
-  /*   } */
-
-  /*   100% { */
-  /*     transform: scale(2.1); */
-  /*   } */
 }
 
 .star {
