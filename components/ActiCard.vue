@@ -39,9 +39,9 @@ const goActi = (event, msg) => {
 </script>
 
 <template>
-  <Card class="cursor-pointer hover:shadow-md" @click="(event) => goActi(event, 'coucou')">
+  <Card class="cursor-pointer hover:shadow-md" :dt="{ 'body.padding': '1.5rem 1.5rem 0.5rem 1.5rem' }">
     <template #content>
-      <div class="flex flex-row gap-4 justify-between items-center w-full">
+      <div class="flex flex-row gap-4 justify-start items-center w-full" @click="(event) => goActi(event, 'coucou')">
         <img :src="activite.icon.path" class="w-24" />
         <div>
           <div class="text-lg font-semibold">
@@ -50,14 +50,19 @@ const goActi = (event, msg) => {
             v-tooltip.top="{ value: star.tt, showDelay: 300, hideDelay: 0 }" />
           </div>
           <div class="text-base">{{ activite.description }}</div>
+        </div>
       </div>
-
+    </template>
+    <template #footer>
+      <div class="flex flex-row justify-end gap-2 mt-2">
+        <Button :icon="star.icon" label="favoris" severity="secondary" @click="toggleFav()" />
+        <Button as="a" label="aide" :href="activite.helpUrl" severity="secondary" />
       </div>
     </template>
   </Card>
 </template>
 
-<style>
+<style lang="scss" scoped>
 .starspin:hover {
   border-radius: 2em;
   border: 1px solid #facc15;
