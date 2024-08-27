@@ -5,7 +5,14 @@ import { definePreset } from '@primevue/themes';
 const capyPreset = definePreset(Lara, {
   components: {
     card: {
-      shadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)',
+      colorScheme: {
+        light: {
+          shadow: '0 1px 3px 0 var(--p-surface-300), 0 1px 2px -1px var(--p-surface-300)',
+        },
+        dark: {
+          shadow: '0 1px 3px 0 var(--p-surface-800), 0 1px 2px -1px var(--p-surface-800)',
+        }
+      }
     }
   }
 });
