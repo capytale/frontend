@@ -55,8 +55,9 @@ const goActi = (event, msg) => {
     </template>
     <template #footer>
       <div class="flex flex-row justify-end gap-2 mt-2">
-        <Button :icon="star.icon" label="favoris" severity="secondary" @click="toggleFav()" />
-        <Button as="a" label="aide" :href="activite.helpUrl" severity="secondary" />
+        <Button :icon="star.icon" label="Favoris" severity="secondary" @click="toggleFav()" />
+        <Button as="a" label="Aide" :href="activite.helpUrl" severity="secondary" />
+        <Button as="a" label="Créer" :href="`/web/node/add/${props.activite.bundle}?type=${props.activite.id}`" severity="primary" />
       </div>
     </template>
   </Card>
