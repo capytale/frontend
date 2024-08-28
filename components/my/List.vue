@@ -174,7 +174,7 @@ const nbselected = () => {
                   </div>
                 </Popover>
               </div>
-              <div class="card flex justify-content-center">
+              <div class="card flex justify-content-center" v-if="false">
                 <Button v-tooltip.bottom="'Déplacer'" icon="pi pi-folder-open" class="mr-2" severity="secondary"
                   @click="foldersToggle" />
                 <Popover ref="opFolders">
