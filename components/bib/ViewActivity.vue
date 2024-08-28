@@ -11,12 +11,8 @@ const url = computed(() => {
 
 <template>
      <span @click="visible = true" class="clickable" >{{ props.data.title }}</span>
-    <Dialog v-model:visible="visible" maximizable modal :header="'&nbsp;'" style="width: 80%; height: 80vh"
-        :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" dismissableMask>
-        <iframe id="inlineFrameExample" title="Inline Frame Example" style="overflow:hidden;height:90vh;width:100%"
-            height="100%" width="100%" :src=url>
-        </iframe>
-    </Dialog>
+
+    <DialogIframe v-model="visible" :header="'&nbsp;'" :url="url" />
 </template>
 
 <style scoped>
