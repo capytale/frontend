@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-if="model" v-model:visible="model" :header="props.titre || '&nbsp;'" style="width: 80%; height: 80vh"
+  <Dialog v-if="model" v-model:visible="model" :header="props.header || '&nbsp;'" style="width: 80%; height: 80vh"
   :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" content-class="h-full" maximizable modal dismissableMask>
   <template #header>
     <slot name="header" />
@@ -12,7 +12,7 @@
 <script lang="ts" setup>
 const props = defineProps<{
   url?: string
-  titre?: string
+  header?: string
   icon?: string
 }>()
 

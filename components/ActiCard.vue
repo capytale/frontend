@@ -63,7 +63,7 @@ const test = ref(false);
       </div>
     </template>
   </Card>
-  <DialogIframe v-model="test" :url="activite.helpUrl" @closeDialog="test = false" />
+  <DialogIframe v-model="test" :url="activite.helpUrl" />
 </template>
 
 <style>
