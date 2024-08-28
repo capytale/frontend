@@ -90,32 +90,30 @@ const toggle = (event) => {
           <div class="valorise">
             <Button icon="pi pi-plus" severity="info" @click="createTagVisible = true" rounded />
           </div>
-              <Button type="button" icon="pi pi-info-circle" text @click="visible=true" />
+          <Button type="button" icon="pi pi-info-circle" text @click="visible = true" />
+          <!-- <ToggleButton v-model="checked" onIcon="pi pi-search" offIcon="pi pi-search" onLabel="" offLabel="" -->
+            <!-- inputId="deplier" @click="handleSwitch" /> -->
         </span>
       </span>
       <div v-if="tags.tags.pending">loading......</div>
       <template v-else>
-        <div class="flex flex-wrap gap-2">
-          <div class="flex items-center rech-avancee">
-          <ToggleSwitch v-model="checked" @change="handleSwitch" inputId="deplier"/>
-            <label for="deplier" class="ml-2 text-gray-400">Rechercher</label>
-          </div>
-          <div v-if="checked" class="flex items-center rech-avancee">
-            <Checkbox v-model="strictSearch" :binary="true" inputId="rech"/>
-            <label for="rech" class="ml-2">Recherche stricte
-              <Button type="button" icon="pi pi-info-circle" text @click="toggle" />
-            </label>
-            <Popover ref="op">
-              <p>
-                En mode normal, les descendants sont conservés dès lors que la requête correspond à une étiquette.
-              </p>
-              <p>
-                En mode strict, lorsque la requête correspond à une étiquette, le filtrage se poursuit sur tous les
-                descendants.
-              </p>
-            </Popover>
-          </div>
-        </div>
+        <!-- <div class="flex flex-wrap gap-2"> -->
+        <!--   <div v-if="checked" class="flex items-center rech-avancee"> -->
+        <!--     <Checkbox v-model="strictSearch" :binary="true" inputId="rech" /> -->
+        <!--     <label for="rech" class="ml-2">Recherche stricte -->
+        <!--       <Button type="button" icon="pi pi-info-circle" text @click="toggle" /> -->
+        <!--     </label> -->
+        <!--     <Popover ref="op"> -->
+        <!--       <p> -->
+        <!--         En mode normal, les descendants sont conservés dès lors que la requête correspond à une étiquette. -->
+        <!--       </p> -->
+        <!--       <p> -->
+        <!--         En mode strict, lorsque la requête correspond à une étiquette, le filtrage se poursuit sur tous les -->
+        <!--         descendants. -->
+        <!--       </p> -->
+        <!--     </Popover> -->
+        <!--   </div> -->
+        <!-- </div> -->
         <Tree id="folders" v-model:expandedKeys="expandedKeys" v-model:selectionKeys="selectedKey" selectionMode="single"
           :value="tags.tags.data" class="w-full md:w-30rem" @nodeSelect="onNodeSelect" @nodeUnselect="onNodeUnselect"
           :filter="checked" :filterMode="strictSearch ? 'strict' : 'lenient'">
@@ -130,7 +128,8 @@ const toggle = (event) => {
     </div>
   </div>
 
-  <Dialog v-model:visible="createTagVisible" modal header="Créer une nouvelle étiquette" :style="{ width: '55rem' }" dismissableMask>
+  <Dialog v-model:visible="createTagVisible" modal header="Créer une nouvelle étiquette" :style="{ width: '55rem' }"
+    dismissableMask>
     <div class="flex align-items-center gap-3 mb-3">
       <label for="label" class="font-semibold w-6rem">Nom de l'étiquette</label>
       <InputText v-model="label" id="label" class="flex-auto" autocomplete="off" />
@@ -156,9 +155,9 @@ const toggle = (event) => {
 
 
   <Dialog v-model:visible="visible" modal header="Aide" :style="{ width: '60%' }" dismissableMask>
-        <iframe id="inlineFrame" title="Inline Frame" style="overflow:hidden;height:90vh;width:100%"
-            height="100%" width="100%" src="https://capytale2.ac-paris.fr/wiki/doku.php?id=etiquetter_et_d%C3%A9placer">
-        </iframe>
+    <iframe id="inlineFrame" title="Inline Frame" style="overflow:hidden;height:90vh;width:100%" height="100%"
+      width="100%" src="https://capytale2.ac-paris.fr/wiki/doku.php?id=etiquetter_et_d%C3%A9placer">
+    </iframe>
   </Dialog>
 </template>
 

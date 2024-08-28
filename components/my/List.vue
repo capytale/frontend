@@ -119,6 +119,10 @@ const myactivities = computed(() => {
     })
   }
 })
+const nbselected = () => {
+  if (selectedNid.value.length == 1) return "1 élément sélectionné "
+  return selectedNid.value.length + " éléments sélectionnés "
+}
 
 </script>
 
@@ -135,9 +139,12 @@ const myactivities = computed(() => {
       </div>
       <DataTable v-else v-model:filters="filters" v-model:selection="selectedNid" selectionMode="multiple"
         :value="myactivities" dataKey="nid" sortField="changed" tableStyle="min-width: 50rem" :sortOrder="-1" paginator
-        :rows="10" :rowsPerPageOptions="[10, 20, 50]" @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()"
-        @rowUnselectAll="onRowUnselectAll()" @rowSelectAll="onRowSelectAll()" :globalFilterFields="['title', 'type']"
-        class="my-card">
+                :rows="10" :rowsPerPageOptions="[10, 20, 50]"
+        paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+        currentPageReportTemplate='{first} à {last} sur {totalRecords} &nbsp; &nbsp;' @rowSelect="onRowSelect()"
+        @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()" @rowSelectAll="onRowSelectAll()"
+        :globalFilterFields="['title', 'type']" class="my-card">
+
 
         <template #header>
           <Toolbar>
@@ -145,6 +152,8 @@ const myactivities = computed(() => {
               <h2 style="margin:0px"> Mes activités </h2>
             </template>
             <template #start v-if="showToolbar">
+                            <span class="mr-2">{{ nbselected() }}</span>
+
               <Button v-if="oneCheckbox" v-tooltip.bottom="'Paramètres'" @click="handleEdit()" icon="pi pi-cog"
                 class="mr-2" severity="secondary" />
               <Button v-tooltip.bottom="'Supprimer'" @click="handleDelete()" icon="pi pi-trash" class="mr-2"
