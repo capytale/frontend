@@ -11,6 +11,7 @@ const codeForm = async () => {
       console.log("url", url)
       invalid.value = false
       location.href = url
+      return
     } catch (e) {
       console.error(e)
       message.value = e.message
