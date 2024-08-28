@@ -36,6 +36,7 @@ const visible = ref(false);
 }
 .clickable {
   cursor: pointer;
+  color: var(--p-button-text-primary-color);
   text-decoration: underline;
 }
 </style>

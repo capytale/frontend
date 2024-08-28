@@ -41,8 +41,8 @@ const clear = () => {
         <Message v-if="invalid" severity="error" closable @close="clear">{{ message }}</Message>
         <div class="flex flex-wrap align-items-center gap-2">
           <FloatLabel>
-          <InputText id="code" v-model="value" aria-describedby="code-help" :invalid="invalid" />
-            <label for="username">Code (ex : xxxx-123456)</label>
+            <label for="code">Code (ex : xxxx-123456)</label>
+            <InputText id="code" v-model="value" :invalid="invalid" />
           </FloatLabel>
           <Button type="submit" label="Go !" @click="codeForm" />
         </div>
