@@ -73,7 +73,7 @@ const dispGroups = computed(() => {
   <Card class="mb-4 rounded-t-none">
     <template #content>
       <div class="flex flex-row justify-between flex-wrap items-center">
-        <div class="text-3xl font-bold">Créer une nouvelle activité</div>
+        <div>Créer une nouvelle activité</div>
         <InputText v-model="search" class="" placeholder="Recherche..." />
         <div class="flex flex-row gap-4">
           <Select v-model="catChoice" :options="cats" option-label="label" option-value="value" :ui="inputstyle" />

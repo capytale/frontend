@@ -83,7 +83,7 @@ const toggle = (event) => {
           v-tooltip.right="{ value: 'Épingler le menu', showDelay: 300, hideDelay: 0 }"></i>
         <!-- <i class="pi pi-tags"></i> -->
         <span class="parent mr-1">
-          <span class="text-3xl font-bold">Étiquettes</span>
+          <span class="font-bold">Étiquettes</span>
           <div class="novalorise">
             <Button icon="pi pi-plus" severity="secondary" outlined rounded size="small" />
           </div>

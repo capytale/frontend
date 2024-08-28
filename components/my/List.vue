@@ -142,7 +142,7 @@ const myactivities = computed(() => {
         <template #header>
           <Toolbar>
             <template #start v-if="!showToolbar">
-              <h2 style="margin:0px" class="text-3xl font-bold"> Mes activités </h2>
+              <h2 style="margin:0px"> Mes activités </h2>
             </template>
             <template #start v-if="showToolbar">
               <Button v-if="oneCheckbox" v-tooltip.bottom="'Paramètres'" @click="handleEdit()" icon="pi pi-cog"

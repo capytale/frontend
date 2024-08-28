@@ -37,7 +37,7 @@ const out = () => {
 <template>
   <Card class="flex-2">
     <template #title>
-      <h2 style="margin:0px" class="text-3xl font-bold">Accéder à une activité</h2>
+      <h2 style="margin:0px">Accéder à une activité</h2>
     </template>
     <template #content>
 

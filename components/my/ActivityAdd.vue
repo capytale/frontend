@@ -1,7 +1,7 @@
 <template>
   <Card class="flex-1">
     <template #title>
-      <h2 style="margin:0px" class="text-3xl font-bold">Créer une nouvelle activité
+      <h2 style="margin:0px">Créer une nouvelle activité
       </h2>
     </template>
     <template #content>

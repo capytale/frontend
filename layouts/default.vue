@@ -5,7 +5,6 @@ const sideMenu = useSideMenuStore()
 useHead({
   htmlAttrs: {
     lang: 'fr',
-    style: 'font-size: 13px'
   }
 })
 </script>
@@ -54,6 +53,7 @@ body,
   border: 1px solid var(--gray-600);
 }
 
+/*
 .p-component {
   font-size: 1.3rem;
 }
@@ -65,6 +65,8 @@ body,
 .p-tag {
   font-size: 1rem;
 }
+  */
+
 .bggray {
   background: var(--p-surface-100);
 }

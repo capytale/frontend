@@ -98,7 +98,7 @@ const toggleColorMode = () => {
 .navbarLogo {
   font-family: Ubuntu, Tahoma, "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 700;
-  font-size: 24px;
+  font-size: 1.8rem;
   letter-spacing: 2px;
   height: 100%;
 
@@ -148,7 +148,7 @@ const toggleColorMode = () => {
 }
 
 .activityInfoTitle {
-  font-size: 20px;
+  font-size: 1.4rem;
   font-weight: 500;
 }
 
