@@ -29,37 +29,12 @@ const props = defineProps<{
   }
 }>()
 
-const emit = defineEmits<{
-  close: []
-}>()
+const visible = defineModel<boolean>()
 
 const editUrl = computed(() => `/web/c-hdls/node/${props.data.nid}/edit`)
-
-const close = () => {
-  emit('close')
-}
-
-onMounted(() => {
-  setCloseHandler(close)
-})
-
-onBeforeUnmount(() => {
-  removeCloseHandler(close)
-})
 </script>
 
 
 <template>
-    <iframe title="Modification des paramètres de l'activité" class="fstyle" :src="editUrl">
-    </iframe>
+  <DialogIframe v-model="visible" titre="Modification des paramètres de l'activité" :url="editUrl" />
 </template>
-
-<style scoped>
-.fstyle {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-</style>
