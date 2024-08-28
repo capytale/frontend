@@ -164,7 +164,7 @@ const nbselected = () => {
                 <Popover ref="opTags">
                   <div class="gap-3 w-25rem">
                     <Tree id="tags" v-model:selectionKeys="selectedTags" :value="tags.tags.data" selectionMode="multiple"
-                      class="w-full md:w-30rem scroll">
+                      class="w-full md:w-30rem scroll" :dt="{ padding: '0' }">
                       <template #default="slotProps">
                         <i class="pi pi-tag" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
                       </template>
