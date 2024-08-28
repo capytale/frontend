@@ -36,6 +36,8 @@ const goActi = (event, msg) => {
   if (!['i'].includes(event.target.tagName.toLowerCase()))
     window.location.href = `/web/node/add/${props.activite.bundle}?type=${props.activite.id}`;
 };
+
+const test = ref(false);
 </script>
 
 <template>
@@ -56,11 +58,12 @@ const goActi = (event, msg) => {
     <template #footer>
       <div class="flex flex-row justify-end gap-2 mt-2">
         <Button :icon="star.icon" label="Favoris" severity="secondary" @click="toggleFav()" />
-        <Button as="a" label="Aide" :href="activite.helpUrl" severity="secondary" />
+        <Button as="a" label="Aide" @click="test = true" severity="secondary" />
         <Button as="a" label="Créer" :href="`/web/node/add/${props.activite.bundle}?type=${props.activite.id}`" severity="primary" />
       </div>
     </template>
   </Card>
+  <DialogIframe v-model="test" :url="activite.helpUrl" @closeDialog="test = false" />
 </template>
 
 <style>
