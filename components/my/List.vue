@@ -156,8 +156,8 @@ const nbselected = () => {
 
               <Button v-if="oneCheckbox" v-tooltip.bottom="'Paramètres'" @click="handleEdit()" icon="pi pi-cog"
                 class="mr-2" severity="secondary" />
-              <Button v-tooltip.bottom="'Supprimer'" @click="handleDelete()" icon="pi pi-trash" class="mr-2"
-                severity="danger" />
+              <Button v-tooltip.bottom="'Supprimer'" @click="handleDelete()" icon="pi pi-trash" class="mr-2" outlined
+              severity="danger" />
               <div class="card flex justify-content-center">
                 <Button v-tooltip.bottom="'Étiqueter'" icon="pi pi-tags" class="mr-2" severity="secondary"
                   @click="tagsToggle" />

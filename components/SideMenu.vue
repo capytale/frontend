@@ -77,9 +77,9 @@ const toggle = (event) => {
   <div class="space-y-3 p-3">
     <div class="flex-1">
       <span class="flex items-center px-2 py-4 space-x-3 rounded-md">
-        <i v-if="sideMenu.visible" class="pi pi-lock highlight" @click="sideMenu.visible = false"
+        <i v-if="sideMenu.visible" class="pi pi-thumbtack highlight" @click="sideMenu.visible = false"
           v-tooltip.right="{ value: 'Des-épingler le menu', showDelay: 300, hideDelay: 0 }"></i>
-        <i v-else class="pi pi-lock-open highlight" @click="sideMenu.visible = true"
+        <i v-else class="pi pi-thumbtack unpinned highlight" @click="sideMenu.visible = true"
           v-tooltip.right="{ value: 'Épingler le menu', showDelay: 300, hideDelay: 0 }"></i>
         <!-- <i class="pi pi-tags"></i> -->
         <span class="parent mr-1">
@@ -241,6 +241,9 @@ const toggle = (event) => {
   display: inline;
 }
 
+.unpinned {
+  color: #ccc;
+}
 .highlight {
   cursor: pointer;
   padding: 0.7em;

@@ -41,19 +41,19 @@ const handleChangeWf = ((wf) => {
 })
 
 const wficon = ((wf) => {
-  if (wf == 100) return { icon: "pi pi-pencil", color: "blue", tt: "En cours" }
-  if (wf == 200) return { icon: "pi pi-envelope", color: "Orange", tt: "Rendu" }
-  if (wf == 300) return { icon: "pi pi-check-square", color: "green", tt: "Corrigé" }
+  if (wf == 100) return { icon: "pi pi-pencil", color: "var(--p-button-outlined-info-color)", tt: "En cours" }
+  if (wf == 200) return { icon: "pi pi-envelope", color: "var(--p-button-outlined-warn-color)", tt: "Rendu" }
+  if (wf == 300) return { icon: "pi pi-check-square", color: "var(--p-button-outlined-success-color)", tt: "Corrigé" }
 })
 const nextOne = ((wf) => {
-  if (wf == 300) return { icon: "pi pi-pencil", color: "blue", wf: 100, tt: "En cours" }
-  if (wf == 100) return { icon: "pi pi-envelope", color: "Orange", wf: 200, tt: "Rendu" }
-  if (wf == 200) return { icon: "pi pi-check-square", color: "green", wf: 300, tt: "Corrigé" }
+  if (wf == 300) return { icon: "pi pi-pencil", color: "var(--p-button-outlined-info-color)", wf: 100, tt: "En cours" }
+  if (wf == 100) return { icon: "pi pi-envelope", color: "var(--p-button-outlined-warn-color)", wf: 200, tt: "Rendu" }
+  if (wf == 200) return { icon: "pi pi-check-square", color: "var(--p-button-outlined-success-color)", wf: 300, tt: "Corrigé" }
 })
 const nextTwo = ((wf) => {
-  if (wf == 200) return { icon: "pi pi-pencil", color: "blue", wf: 100, tt: "En cours" }
-  if (wf == 300) return { icon: "pi pi-envelope", color: "Orange", wf: 200, tt: "Rendu" }
-  if (wf == 100) return { icon: "pi pi-check-square", color: "green", wf: 300, tt: "Corrigé" }
+  if (wf == 200) return { icon: "pi pi-pencil", color: "var(--p-button-outlined-info-color)", wf: 100, tt: "En cours" }
+  if (wf == 300) return { icon: "pi pi-envelope", color: "var(--p-button-outlined-warn-color)", wf: 200, tt: "Rendu" }
+  if (wf == 100) return { icon: "pi pi-check-square", color: "var(--p-button-outlined-success-color)", wf: 300, tt: "Corrigé" }
 })
 const chWf = ((sa_nid, wf) => {
   my.changeSaWf(sa_nid, wf)
@@ -118,10 +118,10 @@ const nbFake = ref(new Array(props.viewsTotal));
       <template #header>
         <Toolbar>
           <template #start v-if="showToolbar">
-            <Button v-tooltip.bottom="'En cours'" @click="handleChangeWf(100)" icon="pi pi-pencil" class="mr-2 blue" />
-            <Button v-tooltip.bottom="'Rendu'" @click="handleChangeWf(200)" icon="pi pi-envelope" class="mr-2 orange" />
+            <Button v-tooltip.bottom="'En cours'" @click="handleChangeWf(100)" icon="pi pi-pencil" class="mr-2" severity="info" outlined />
+            <Button v-tooltip.bottom="'Rendu'" @click="handleChangeWf(200)" icon="pi pi-envelope" class="mr-2"  severity="warn" outlined/>
             <Button v-tooltip.bottom="'Corrigé'" @click="handleChangeWf(300)" icon="pi pi-check-square"
-              class="mr-2 green" />
+              class="mr-2"  severity="success" outlined/>
 
             <Button v-tooltip.bottom="'Télécharger'" icon="pi pi-download" class="mr-2" severity="secondary" />
             <Button v-tooltip.bottom="'CSV'" icon="pi pi-file-excel" class="mr-2" severity="secondary" />
@@ -190,18 +190,6 @@ const nbFake = ref(new Array(props.viewsTotal));
 </template>
 
 <style scoped>
-.blue {
-  background-color: blue;
-}
-
-.orange {
-  background-color: orange;
-}
-
-.green {
-  background-color: green;
-}
-
 .myflex {
   display: flex;
   align-items: center;

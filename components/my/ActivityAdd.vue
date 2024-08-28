@@ -5,7 +5,7 @@
       </h2>
     </template>
     <template #content>
-      <div class="overscroll-x-auto myflex">
+      <div class="overscroll-x-auto myflex mt-4">
         <template v-if="myStore.favorites.length === 0">
           <!-- <div class="text-center">Aucune activité favorite</div> -->
         </template>
@@ -20,7 +20,7 @@
           </a>
         </fieldset>
         <NuxtLink to="/activites" class="hover:shadow-md acti-button">
-          <Button type="submit" label="Voir tout" />
+          <Button type="submit" label="Toutes les activités" />
         </NuxtLink>
       </div>
     </template>

@@ -36,7 +36,7 @@ const clear = () => {
     </template>
     <template #content>
 
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-2 mt-4">
         <Message v-if="invalid" severity="error" closable @close="clear">{{ message }}</Message>
         <div class="flex flex-wrap align-items-center gap-2">
           <FloatLabel>
