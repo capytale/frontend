@@ -159,18 +159,19 @@ const wfStatusGetter = ((obj) => {
   <div v-else>
 
     <template v-if="(props.data.whoami == 'cr' || props.data.whoami == 'as') && isTeacher">
-      <div class="card flex justify-content-center mystyle"
+      <div class="flex mystyle"
         v-tooltip.top="{ value: label.tooltipText, showDelay: 400, hideDelay: 0 }">
-        <Button type="button" :label="label.code" @click="toggle" class="mystyle p-3" :severity="label.severity"
+        <div :class="label.color" class="flex flex-col justify-center ml-2">
+          <i :class="label.mainIcon" style="font-size: 1.2rem"></i>
+          <i :class="label.secondaryIcon" style="font-size: 1.2rem"></i>
+        </div>
+        <Button type="button" :label="label.code" @click="toggle" class="mystyle" :severity="label.severity"
           aria-haspopup="true" aria-controls="overlay_menu" outlined>
           <template #icon>
             <i class="pi pi-angle-down m-2"></i>
-            <div :class="label.color">
-              <i :class="label.mainIcon + ' ml-2'" style="font-size: 1.2rem"></i>
-              <i :class="label.secondaryIcon + ' mr-2'" style="font-size: 1.2rem"></i>
-            </div>
           </template>
         </Button>
+
         <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
       </div>
 
@@ -215,6 +216,6 @@ const wfStatusGetter = ((obj) => {
 .mystyle {
   flex-direction: row-reverse;
   font-family: monospace;
-  width: 19rem
+  width: 100%;
 }
 </style>
