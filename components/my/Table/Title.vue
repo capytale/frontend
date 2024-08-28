@@ -15,7 +15,7 @@ const visible = ref(false);
   <div class="group parent">
     <a :href="playerUrl" class="clickable">{{ data.title }}</a>
     
-    <Button v-if="!props.data.isSa" class="pi pi-cog px-2 cog" @click="visible = true"
+    <Button v-if="!props.data.isSa" icon="pi pi-cog" class="px-2 cog" @click="visible = true"
       v-tooltip.top="{ value: 'Modifier les paramètres', showDelay: 400, hideDelay: 0 }"
       aria-label="Modifier les paramètres" text />
     <Dialog v-model:visible="visible" maximizable modal :header="'&nbsp;'" style="width: 80%; height: 80vh"
@@ -36,7 +36,6 @@ const visible = ref(false);
 }
 .clickable {
   cursor: pointer;
-  color: var(--p-sky-900);
   text-decoration: underline;
 }
 </style>
