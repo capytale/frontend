@@ -49,6 +49,21 @@ body,
   }
 }
 
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
 .dark .p-card {
   border: 1px solid var(--gray-600);
 }
