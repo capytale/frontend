@@ -35,7 +35,6 @@ const visible = defineModel<boolean>()
 const editUrl = computed(() => `/web/c-hdls/node/${props.data.nid}/edit`)
 
 const close = () => {
-  console.log('close')
   visible.value = false
 }
 
