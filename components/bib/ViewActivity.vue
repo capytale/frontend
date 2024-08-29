@@ -1,4 +1,6 @@
 <script setup>
+import {decode} from 'html-entities';
+
 const props = defineProps({
     data: Object,
 })
@@ -24,7 +26,7 @@ const countries = ref([
 </script>
 
 <template>
-     <span @click="visible = true" class="clickable" >{{ props.data.title }}</span>
+     <span @click="visible = true" class="clickable" >{{ decode(props.data.title) }}</span>
 
     <DialogIframe v-model="visible" :url="url">
     <template #header>
