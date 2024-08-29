@@ -16,10 +16,14 @@ useHead({
   <div class="appContainer">
     <Header></Header>
     <div class="flex">
-
-        <div class="container  mx-auto">
+      <div class="container mx-auto">
+        <div class="mb-8">
           <slot />
         </div>
+        <div class="mb-8">
+          <Footer></Footer>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -96,6 +100,7 @@ h3 {
   height: 50%;
   overflow: scroll;
 }
+
 /* ↑↑↑↑↑↑↑↑↑↑↑↑ */
 /*   List.vue   */
 
@@ -114,6 +119,7 @@ h3 {
   position: fixed;
   z-index: 1000;
 }
+
 /* ↑↑↑↑↑↑↑↑↑↑↑↑ */
 /*    My.vue    */
 
@@ -135,6 +141,7 @@ h3 {
   border: none;
   background: none;
 }
+
 /* ↑↑↑↑↑↑↑↑↑↑↑↑ */
 /* Comments.vue */
 
@@ -172,6 +179,7 @@ h3 {
 .p-tree ul {
   padding: 0 0 0 0.7em;
 }
+
 /* ↑↑↑↑↑↑↑↑↑↑↑↑ */
 /* TagEdit.vue  */
 
