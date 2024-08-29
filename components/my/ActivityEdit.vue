@@ -9,6 +9,7 @@ let handler: undefined | (() => void)
 }
 
 const setCloseHandler = (h: () => void) => {
+  if (handler === h) return
   if (handler) {
     handler()
   }
@@ -32,6 +33,24 @@ const props = defineProps<{
 const visible = defineModel<boolean>()
 
 const editUrl = computed(() => `/web/c-hdls/node/${props.data.nid}/edit`)
+
+const close = () => {
+  console.log('close')
+  visible.value = false
+}
+
+watch(visible, (v) => {
+  if (v) {
+    setCloseHandler(close)
+  } else {
+    removeCloseHandler(close)
+  }
+})
+
+onBeforeUnmount(() => {
+  removeCloseHandler(close)
+})
+
 </script>
 
 
