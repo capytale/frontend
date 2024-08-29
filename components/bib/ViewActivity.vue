@@ -45,7 +45,7 @@ const copy = (nid) => {
 <style scoped>
 .clickable {
   cursor: pointer;
-  color: var(--p-sky-900);
+  color: var(--p-sky-900); /* TODO supp la couleur et passer le span en a ? */
   text-decoration: underline;
 }
 </style>
