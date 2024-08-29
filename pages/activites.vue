@@ -73,7 +73,7 @@ const dispGroups = computed(() => {
   <Card class="mb-4 rounded-t-none">
     <template #content>
       <div class="flex flex-row justify-between flex-wrap items-center">
-        <div>Créer une nouvelle activité</div>
+        <h1 class="h1_comme_h2">Créer une nouvelle activité</h1>
         <InputText v-model="search" class="" placeholder="Recherche..." />
         <div class="flex flex-row gap-4">
           <Select v-model="catChoice" :options="cats" option-label="label" option-value="value" :ui="inputstyle" />
@@ -116,3 +116,10 @@ const dispGroups = computed(() => {
       .sort((a, b) => b.score - a.score)" :key="index" :activite="item"></ActiCard>
   </div>
 </template>
+
+<style>
+.h1_comme_h2 {
+  font-size: 1.5rem;
+  line-height: 1.75rem;
+}
+</style>

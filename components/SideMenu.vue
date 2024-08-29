@@ -156,7 +156,7 @@ const toggle = (event) => {
     </div>
   </Dialog>
 
-  <DialogIframe v-model="visible" header="Aide" url="https://capytale2.ac-paris.fr/wiki/doku.php?id=etiquetter_et_d%C3%A9placer" />
+  <DialogIframe v-model="visible" header="Aide" url="https://capytale2.ac-paris.fr/wiki/doku.php?id=etiquettes_vue" />
 </template>
 
 <style scoped>
