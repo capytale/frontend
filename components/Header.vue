@@ -24,7 +24,7 @@ const toggleColorMode = () => {
       <div class="activityInfo">
       </div>
       <div class="activityMenu">
-        <Button @click="toggleColorMode" :icon="themeIcon()" class="mr-2" outlined />
+        <FontAwesome :icon="colorMode.preference === 'light' ? 'moon':'sun'" class="text-xl cursor-pointer hover:text-yellow-400 mr-4" @click="toggleColorMode" />
         <EntButton />
       </div>
     </div>

@@ -72,7 +72,7 @@ export default defineNuxtConfig({
 
   fontawesome: {
     icons: {
-      solid: ['balance-scale', 'glasses', 'lightbulb', 'recycle', 'bullseye', 'spell-check', 'medal', 'ban'],
+      solid: ['balance-scale', 'glasses', 'lightbulb', 'recycle', 'bullseye', 'spell-check', 'medal', 'ban', 'moon', 'sun'],
       // regular: ['thumbs-up', 'thumbs-down'],
     }
   },
