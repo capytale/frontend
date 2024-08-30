@@ -44,8 +44,8 @@ const shareClassGetter = ((obj) => {
     </div>
 
 
-    <Dialog v-model:visible="visible" :header="props.title" modal :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }"
-      :style="{ width: '75%' }" dismissableMask>
+    <Dialog v-model:visible="visible" :header="props.data.title" modal :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }"
+      :style="{ width: '75%' }" maximizable dismissableMask>
       <MyTableBibForm :nid="props.data.nid" @closeBibForm="visible = false" />
     </Dialog>
   </div>
