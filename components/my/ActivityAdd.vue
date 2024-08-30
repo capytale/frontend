@@ -5,20 +5,23 @@
       </h2>
     </template>
     <template #content>
-      <div class="overscroll-x-auto myflex mt-4">
+      <div class="overscroll-x-auto myflex">
         <template v-if="myStore.favorites.length === 0">
           <!-- <div class="text-center">Aucune activité favorite</div> -->
         </template>
-        <fieldset v-else>
-          <legend class="text-lg">Mes activités favorites <i class="pi pi-star-fill text-yellow-400"></i> </legend>
+        <template v-else>
           <a v-for="el of myStore.types.filter(el => myStore.favorites.includes(el.id))" :key="el.id"
             :href="'/web/node/add/activity?type=' + el.id" v-tooltip.bottom="el.name" class="hover:shadow-md">
             <img :src="el.icon.path" class="w-16 inline" />
+            <span class="mystar">
+              <i class="pi pi-star-fill text-yellow-400" style="font-size: 0.5rem"></i>
+            </span>
             <div class="text-sm" v-if="false">
               {{ el.name.replace("Robot", "").replace("Carte", "").replace("Pi ", "") }}
             </div>
           </a>
-        </fieldset>
+        </template>
+
         <NuxtLink to="/activites" class="hover:shadow-md acti-button">
           <Button type="submit" label="Toutes les activités" />
         </NuxtLink>
@@ -38,8 +41,15 @@ myStore.types = await useActivities()
 <style scoped>
 .myflex {
   display: flex;
-  gap: 1em;
+  gap: 0.5em;
   align-items: center;
+}
+
+.mystar {
+  display: inline-block;
+  position: relative;
+  top: -30px;
+  left: -2px;
 }
 
 fieldset {
