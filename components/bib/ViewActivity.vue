@@ -49,12 +49,13 @@ const copy = (nid) => {
             <h2>{{ decode(props.data.title) }}</h2>
           </div>
           <div>
-            <Button @click="copy(props.data.nid)" label="Copier le lien" icon="pi pi-link" class="mx-2"
-              v-tooltip.bottom="{ value: 'Ce lien permet d\'accéder directement à cette ressource partagée. Cliquez pour copier', showDelay: 300, hideDelay: 100 }" />
             <Button v-if="backHomeVisible"  @click="backToHome" label="Voir le clone" :icon="patience ? 'pi pi-spin pi-spinner' : 'pi pi-chevron-left' " class="mx-2"
-              v-tooltip.bottom="{ value: 'Revenir à la page Mes activités', showDelay: 300, hideDelay: 100 }" />
+              v-tooltip.bottom="{ value: 'Retour à la page Mes activités', showDelay: 300, hideDelay: 100 }" />
             <Button v-else @click="clone(props.data.nid)" label="Cloner" icon="pi pi-clone" class="mx-2"
-              v-tooltip.bottom="{ value: 'Cloner cette ressource partagée', showDelay: 300, hideDelay: 100 }" />
+              v-tooltip.bottom="{ value: 'Cloner cette ressource', showDelay: 300, hideDelay: 100 }" />
+
+            <Button @click="copy(props.data.nid)" label="Copier le lien" icon="pi pi-link" class="mx-2 mr-2"
+              v-tooltip.bottom="{ value: 'Cliquez pour copier le lien permettant de consulter cette ressource', showDelay: 300, hideDelay: 100 }" />
           </div>
         </div>
       </div>
