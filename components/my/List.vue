@@ -213,7 +213,7 @@ const nbselected = () => {
 
                   <div class="flex justify-content-end">
                     <Select v-model="filters['type'].value" :options="my.types" filter optionLabel="name" optionValue="id"
-                      placeholder="Filter par type" class="w-full md:w-14rem" showClear>
+                      placeholder="Filtrer par type" class="w-full md:w-14rem" showClear>
                       <template #value="slotProps">
                         <div v-if="slotProps.value" class="flex align-items-center">
                           <img :src="typeIcon(slotProps.value, my)" class="w-8 mr-3" />
