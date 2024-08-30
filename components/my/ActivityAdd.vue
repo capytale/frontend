@@ -21,6 +21,10 @@
             </div>
           </a>
         </template>
+        <a v-for="el of listActivityTypesWithActivities().slice(0,nb)" :key="el.id" 
+          :href="'/web/node/add/activity?type=' + el.id" v-tooltip.bottom="el.name" class="hover:shadow-md">
+          <img :src="el.icon.path" class="w-16 inline" />
+        </a>
 
         <NuxtLink to="/activites" class="hover:shadow-md acti-button">
           <Button type="submit" label="Toutes les activités" />
@@ -33,9 +37,37 @@
 <script setup>
 import TypeApi from "@capytale/activity.js/backend/capytale/activityType";
 const myStore = useMyStore();
+const activites = useActivitiesStore()
 
 myStore.favorites = await TypeApi.getFavorites(true);
 myStore.types = await useActivities()
+
+// list activitiy types ordered by number of activities
+const listActivityTypes = () => {
+  let types = myStore.types.map((el) => {
+    return {
+      id: el.id,
+      name: el.name,
+      count: activites.activities.data.filter((act) => act.type === el.id).length,
+      icon: el.icon,
+    };
+  });
+  return types.sort((a, b) => b.count - a.count);
+};
+
+// reduce listActivityTypes to only show types with activities
+const listActivityTypesWithActivities = () => {
+  return listActivityTypes().filter((el) => el.count > 0);
+};
+
+// count number of favorites
+const nbFav = () => {
+  return myStore.favorites.length;
+};
+
+// nb elements to display
+const nb = 8-nbFav();
+
 </script>
 
 <style scoped>
