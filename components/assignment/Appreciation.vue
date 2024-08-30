@@ -24,5 +24,5 @@ const save = () => {
 </script>
 
 <template>
-  <Textarea v-model="value" rows="2" cols="20" @blur="save" />
+  <Textarea v-model="value" rows="2" cols="20" @blur="save" autoResize />
 </template>
