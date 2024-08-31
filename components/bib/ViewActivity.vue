@@ -39,8 +39,8 @@ const copy = (nid) => {
 </script>
 
 <template>
-  <span @click="visible = true" class="clickable">{{ decode(props.data.title) }}</span>
-
+  <Button link @click="visible = true" :dt="{ 'padding.x': '0', 'padding.y': '0' }">{{ decode(props.data.title) }}</Button>
+  
   <DialogIframe v-model="visible" :url="url">
     <template #header>
       <div style="width: 100%">
@@ -68,7 +68,7 @@ const copy = (nid) => {
 <style scoped>
 .clickable {
   cursor: pointer;
-  color: var(--p-primary-color); /* TODO supp la couleur et passer le span en a ? */
+  color: var(--p-primary-color); 
   text-decoration: underline;
 }
 </style>
