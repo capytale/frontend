@@ -22,7 +22,7 @@ const computedChanged = computed(() => {
     <i>Il y a {{ timeElapsed(data.changed * 1000) }}</i>
   </div>
   <div v-else>
-    Il y a {{ timeElapsed(computedChanged * 1000) }}
+    <span class='whitespace-nowrap'>Il y a {{ timeElapsed(computedChanged * 1000) }}</span>
   </div>
 </template>
 

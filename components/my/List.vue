@@ -270,7 +270,7 @@ const nbselected = () => {
               </template>
             </Column>
 
-            <Column field="changed" header="Modifié" style="min-width: 10rem; width:14rem" sortable>
+            <Column field="changed" header="Modifié" sortable>
               <template #body="p">
                 <MyTableChanged :data="p.data" />
               </template>
