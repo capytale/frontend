@@ -17,7 +17,7 @@ const visible = ref(false);
     
     <Button v-if="!props.data.isSa" icon="pi pi-cog" class="px-2 cog" @click="visible = true"
       v-tooltip.top="{ value: 'Modifier les paramètres', showDelay: 400, hideDelay: 0 }"
-      aria-label="Modifier les paramètres" text />
+      aria-label="Modifier les paramètres" text :dt="{ 'padding.y': '0' }" />
     <MyActivityEdit v-model="visible" :data="props.data" />
   </div>
 </template>
@@ -35,5 +35,9 @@ const visible = ref(false);
   cursor: pointer;
   color: var(--p-button-text-primary-color);
   text-decoration: underline;
+}
+
+.clickable:hover {
+  color: var(--p-button-text-hover-color);
 }
 </style>
