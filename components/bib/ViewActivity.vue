@@ -39,8 +39,8 @@ const copy = (nid) => {
 </script>
 
 <template>
-  <Button link @click="visible = true" :dt="{ 'padding.x': '0', 'padding.y': '0' }">{{ decode(props.data.title) }}</Button>
-  
+  <a @click="visible = true" class="tablelink">{{ decode(props.data.title) }}</a>
+
   <DialogIframe v-model="visible" :url="url">
     <template #header>
       <div style="width: 100%">
@@ -71,4 +71,12 @@ const copy = (nid) => {
   color: var(--p-primary-color); 
   text-decoration: underline;
 }
+
+.tablelink {
+  color: var(--p-primary-color);
+  cursor: pointer;
+}
+.tablelink:hover {
+  color: var(--p-primary-color-hover);
+} 
 </style>
