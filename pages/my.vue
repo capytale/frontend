@@ -2,6 +2,18 @@
 document.title = "Capytale"
 const sideMenu = useSideMenuStore()
 
+// Possible interaction dynamique avec le viewport pour auto-hide du menu
+import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
+
+const breakpoints = useBreakpoints(breakpointsTailwind)
+
+const bpsmAndLarger = breakpoints.greaterOrEqual('sm') // sm and larger
+const bplargerThanSm = breakpoints.greater('sm') // only larger than sm
+const bplgAndSmaller = breakpoints.smallerOrEqual('lg') // lg and smaller
+const bpsmallerThanLg = breakpoints.smaller('lg') // only smaller than lg
+
+//TODO : à voir !
+//fin du todo
 
 const { data: user, pending, error, status } = await fetchCurrentUser()
 
