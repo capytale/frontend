@@ -166,7 +166,7 @@ const wfStatusGetter = ((obj) => {
           <i :class="label.secondaryIcon" style="font-size: 1.2rem"></i>
         </div>
         <Button type="button" :label="label.code" @click="toggle" class="mystyle" :severity="label.severity"
-          aria-haspopup="true" aria-controls="overlay_menu" outlined>
+          aria-haspopup="true" aria-controls="overlay_menu" outlined :dt="{ 'padding.x': '0.4rem', 'padding.y': '0.2rem'}">
           <template #icon>
             <i class="pi pi-angle-down m-2"></i>
           </template>
