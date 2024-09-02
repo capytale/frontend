@@ -215,13 +215,13 @@ const classList = computed(() => {
 
       <Column field="appr" header="Appréciation">
         <template #body="p">
-          <AssignmentAppreciation :data="p.data" />
+          <AssignmentAppreciation :key="p.data.sa_nid" :data="p.data" />
         </template>
       </Column>
 
       <Column field="eval" header="Évaluation">
         <template #body="p">
-          <AssignmentEvaluation :data="p.data" />
+          <AssignmentEvaluation :key="p.data.sa_nid" :data="p.data" />
         </template>
       </Column>
 

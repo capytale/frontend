@@ -11,6 +11,7 @@ const props = defineProps({
 })
 
 const value = ref(richContentToPlainText(props.data.appreciation))
+watch(() => props.data.appreciation, () => value.value = richContentToPlainText(props.data.appreciation))
 
 const save = () => {
   my.saveAppr(props.data.sa_nid, value)
