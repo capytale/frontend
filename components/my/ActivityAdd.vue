@@ -21,10 +21,10 @@
             </div>
           </a>
         </template>
-        <a v-for="el of listActivityTypesWithActivities().slice(0,nb)" :key="el.id" 
-          :href="'/web/node/add/activity?type=' + el.id" v-tooltip.bottom="el.name" class="hover:shadow-md">
-          <img :src="el.icon.path" class="w-16 inline" />
-        </a>
+        <!-- <a v-for="el of listActivityTypesWithActivities().slice(0,nb)" :key="el.id"  -->
+        <!--   :href="'/web/node/add/activity?type=' + el.id" v-tooltip.bottom="el.name" class="hover:shadow-md"> -->
+        <!--   <img :src="el.icon.path" class="w-16 inline" /> -->
+        <!-- </a> -->
 
         <NuxtLink to="/activites" class="hover:shadow-md acti-button">
           <Button type="submit" label="Toutes les activités" />
@@ -55,10 +55,16 @@ const listActivityTypes = () => {
   return types.sort((a, b) => b.count - a.count);
 };
 
+// TODO : BUG
+// console.log(listActivityTypes());
+
+
 // reduce listActivityTypes to only show types with activities
 const listActivityTypesWithActivities = () => {
   return listActivityTypes().filter((el) => el.count > 0);
 };
+
+// console.log(listActivityTypesWithActivities());
 
 // count number of favorites
 const nbFav = () => {
