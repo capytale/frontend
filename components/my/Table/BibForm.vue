@@ -25,40 +25,38 @@ const currentKey = computed(() => {
   }
 })
 
-const share = ref(activites.activities.data[currentKey.value].status_shared == 1);
-const web = ref(activites.activities.data[currentKey.value].status_web == 1);
-const resume = ref(activites.activities.data[currentKey.value].abstract)
-
+const share = ref();
+const web = ref();
+const resume = ref()
 const selectedEnseignements = ref()
 const selectedNiveaux = ref()
 const selectedModules = ref()
 const selectedThemes = ref();
 
-const { data: idxEls, pending, error, status } = await fetchBibIndexingElements()
-const filteredModules = ref();
+const { data: idxEls, status } = await fetchBibIndexingElements()
 
 watch(
-  () => activites.activities.data[currentKey.value],
-  () => {
-    const c = activites.activities.data[currentKey.value]
-    if (c) {
-      share.value = c.status_shared == 1
-      web.value = c.status_web == 1
-      resume.value = c.abstract
-      selectedEnseignements.value = c.enseignements.map((x) => x.value)
-      selectedNiveaux.value = c.niveaux.map((x) => x.value)
-      if (c.modules.length == 0 || c.modules[0].target_id == 0) {
-        selectedModules.value = []
-      } else {
-        selectedModules.value = c.modules.map((x) => {
-          return idxEls.value.modules.filter((item) => item.tid == x.target_id)[0]
-        })
-      }
-      const fetchedThemes = c.themes.map((x) => x.target_id)
-      const keys = generateKeysByIds(idxEls.value.themes, fetchedThemes);
-      selectedThemes.value = keys
+  () => [idxEls.value, activites.activities.data[currentKey.value]], () => {
+    share.value = activites.activities.data[currentKey.value].status_shared == 1
+    web.value = activites.activities.data[currentKey.value].status_web == 1
+    resume.value = activites.activities.data[currentKey.value].abstract
+    selectedEnseignements.value = activites.activities.data[currentKey.value].enseignements.map((x) => x.value)
+    selectedNiveaux.value = activites.activities.data[currentKey.value].niveaux.map((x) => x.value)
+    if (activites.activities.data[currentKey.value].modules.length == 0 || activites.activities.data[currentKey.value].modules[0].target_id == 0) {
+      selectedModules.value = []
+    } else {
+      selectedModules.value = activites.activities.data[currentKey.value].modules.map((x) => {
+        return idxEls.value.modules.filter((item) => item.tid == x.target_id)[0]
+      })
     }
-  })
+    const fetchedThemes = activites.activities.data[currentKey.value].themes.map((x) => x.target_id)
+    selectedThemes.value = generateKeysByIds(idxEls.value.themes, fetchedThemes);
+  },
+  { immediate: true }
+)
+
+const filteredModules = ref();
+
 
 // cf. https://github.com/primefaces/primevue/issues/3837
 function generateKeysByIds(data, ids) {
@@ -190,7 +188,7 @@ const postBibForm = async () => {
   <label for="description" class="font-semibold w-6rem">Résumé (50 caractères minimum))</label>
   <Textarea id="resume" v-model="resume" autoResize rows="5" class="w-full" />
 
-  <div v-if="pending">
+  <div v-if="status == 'pending'">
     <p>Chargement des actvités...</p>
   </div>
   <div v-else-if="status == 'error'">
