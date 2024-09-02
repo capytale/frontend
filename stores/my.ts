@@ -85,10 +85,19 @@ export const useMyStore = defineStore('my', {
       this.assignments.tab = this.assignments.tab.map(el => el.sa_nid == sa_nid ? { ...el, tags: [] } : el);
       console.log("unHide", sa_nid, corbeilleTid)
       await httpClient.postJsonAsync(
-        assignmentsAPiEp,
+        assignmentsApiEp,
         { action: "unHide", sa_nid, corbeilleTid }
       );
     },
+
+    async hide(sa_nid: number, corbeilleTid: number) {
+      this.assignments.tab = this.assignments.tab.map(el => el.sa_nid == sa_nid ? { ...el, tags: [corbeilleTid] } : el);
+      await httpClient.postJsonAsync(
+        assignmentsApiEp,
+        { action: "hide", sa_nid, corbeilleTid }
+      );
+    },
+
 
 
   },

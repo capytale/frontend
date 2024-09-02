@@ -1,5 +1,6 @@
 <script setup>
 import { useToast } from "primevue/usetoast";
+import { FilterMatchMode } from '@primevue/core/api';
 const toast = useToast();
 import { useMyStore } from '@/stores/my'
 const my = useMyStore()
@@ -61,6 +62,25 @@ const chWf = ((sa_nid, wf) => {
 
 const nbFake = ref(new Array(props.viewsTotal));
 
+const filters = ref({
+  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  nom: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  classe: { value: null, matchMode: FilterMatchMode.CONTAINS },
+})
+
+const classList = computed(() => {
+  if (my.assignments.tab == null) return []
+  const classes = []
+  my.assignments.tab.forEach((assignment) => {
+    if (assignment.classe !== null && !classes.includes(assignment.classe)) {
+      classes.push({ classe: assignment.classe })
+    }
+  })
+  return classes
+})
+
+// console.log(classList.value)
+
 </script>
 
 
@@ -112,19 +132,23 @@ const nbFake = ref(new Array(props.viewsTotal));
     </div>
 
     <DataTable :value="my.assignments.tab" tableStyle="min-width: 50rem" v-model:selection="selectedNid"
-      selectionMode="multiple" @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()"
-      @rowUnselectAll="onRowUnselectAll()" @rowSelectAll="onRowSelectAll()">
+      v-model:filters="filters" :globalFilterFields="['nom', 'classe']" selectionMode="multiple" filterDisplay="row"
+      @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()"
+      @rowSelectAll="onRowSelectAll()">
 
-      <template #header>
+      <template #header v-if="showToolbar">
         <Toolbar>
-          <template #start v-if="showToolbar">
-            <Button v-tooltip.bottom="'En cours'" @click="handleChangeWf(100)" icon="pi pi-pencil" class="mr-2" severity="info" outlined />
-            <Button v-tooltip.bottom="'Rendu'" @click="handleChangeWf(200)" icon="pi pi-envelope" class="mr-2"  severity="warn" outlined/>
-            <Button v-tooltip.bottom="'Corrigé'" @click="handleChangeWf(300)" icon="pi pi-check-square"
-              class="mr-2"  severity="success" outlined/>
+          <template #start>
+            <Button v-tooltip.bottom="'En cours'" @click="handleChangeWf(100)" icon="pi pi-pencil" class="mr-2"
+              severity="info" outlined />
+            <Button v-tooltip.bottom="'Rendu'" @click="handleChangeWf(200)" icon="pi pi-envelope" class="mr-2"
+              severity="warn" outlined />
+            <Button v-tooltip.bottom="'Corrigé'" @click="handleChangeWf(300)" icon="pi pi-check-square" class="mr-2"
+              severity="success" outlined />
 
             <Button v-tooltip.bottom="'Télécharger'" icon="pi pi-download" class="mr-2" severity="secondary" />
             <Button v-tooltip.bottom="'CSV'" icon="pi pi-file-excel" class="mr-2" severity="secondary" />
+
           </template>
 
         </Toolbar>
@@ -132,25 +156,41 @@ const nbFake = ref(new Array(props.viewsTotal));
 
       <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
 
-      <Column field="changed" header="Dernière modif." style="max-width:10rem" sortable>
+      <Column field="changed" header="Dernière modif." style="width:10rem" sortable>
         <template #body="p">
           <MyTableChanged :data="p.data" />
         </template>
       </Column>
 
-      <!-- <Column field="tags" header="Tags" style="max-width:10rem" sortable> -->
-      <!--   <template #body="p"> -->
-      <!--     <AssignmentShowHide :data="p.data" /> -->
-      <!--   </template> -->
-      <!-- </Column> -->
-
-      <Column field="nom" header="Élève" style="max-width:10rem" sortable>
+      <Column field="tags" header="Tags" style="width:10rem" sortable>
         <template #body="p">
-          <AssignmentStudent :data="p.data" />
+          <AssignmentShowHide :data="p.data" />
         </template>
       </Column>
 
-      <Column field="classe" header="Classe" sortable></Column>
+      <Column field="nom" header="Élève" style="width:16rem" sortable>
+        <template #body="p">
+          <AssignmentStudent :data="p.data" />
+        </template>
+        <template #filter="{ filterModel, filterCallback }">
+          <InputText v-model="filterModel.value" type="text" style="width: 100%" @input="filterCallback()"
+            placeholder="Rechercher" />
+        </template>
+      </Column>
+
+      <Column field="classe" header="Classe" style="max-width:10rem" sortable>
+        <template #filter="{ filterModel, filterCallback }">
+          <!-- <template v-if="classList.length > 0"> -->
+          <!--   <Select v-model="filterModel.value" @change="filterCallback()" :options="classList" optionLabel="classe" -->
+          <!--     placeholder="Rechercher"> -->
+          <!--   </Select> -->
+          <!-- </template> -->
+          <!-- <template v-else> -->
+            <InputText v-model="filterModel.value" type="text" style="width: 100%" @input="filterCallback()" placeholder="Rechercher" />
+          <!-- </template> -->
+        </template>
+
+      </Column>
 
       <Column field="workflow" header="Mode" style="max-width:10rem" sortable>
         <template #body="p">

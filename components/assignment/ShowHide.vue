@@ -12,11 +12,11 @@ const corbeilleTid = () => {
 
 <template>
   <template v-if="props.data.tags.includes(corbeilleTid())">
-  <button @click="my.unHide(props.data.sa_nid, corbeilleTid())">RESTORE</button>
+  <Button @click="my.unHide(props.data.sa_nid, corbeilleTid())">RESTORE</Button>
   </template>
   <template v-else>
-    {{ props.data.sa_nid }}
-  <button @click="tags.addTag(props.data.sa_nid, corbeilleTid())">DELETE</button>
+    <!-- addTag({{ props.data.sa_nid }}, {{ corbeilleTid() }}) -->
+  <Button @click="my.hide(props.data.sa_nid, corbeilleTid())" icon="pi pi-eye-slash" text/>
   </template>
 </template>
 

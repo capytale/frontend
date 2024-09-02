@@ -20,7 +20,7 @@ const nbViews = computed(() => {
     <Button v-if="data.viewsTotal == 0" severity="secondary" text disabled>0 vue</Button>
     <Button v-else @click="visible = true" severity="primary" size="large"
       v-tooltip.top="{ value: 'Voir les copies', showDelay: 400, hideDelay: 0 }" text>{{ nbViews }} </Button>
-    <Dialog v-model:visible="visible" maximizable modal header="&nbsp;" :style="{ width: '90%' }" dismissableMask>
+    <Dialog v-model:visible="visible" position="top" maximizable modal header="&nbsp;" :style="{ width: '90%' }" dismissableMask>
       <template #header v-if="my.loadingAssignments">
         <Skeleton shape="circle" size="4rem" class="mr-2 my-2"></Skeleton>
         <Skeleton width="20rem" class="mb-2"></Skeleton>
