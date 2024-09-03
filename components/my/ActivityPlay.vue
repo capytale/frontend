@@ -41,7 +41,7 @@ const clear = () => {
         <Message v-if="invalid" severity="error" closable @close="clear">{{ message }}</Message>
         <div class="flex flex-wrap align-items-center gap-2">
           <FloatLabel>
-            <label for="code">Code (ex : xxxx-123456)</label>
+            <label for="code">Code (ex : a1bc-12345678)</label>
             <InputText id="code" v-model="value" :invalid="invalid" />
           </FloatLabel>
           <Button type="submit" label="Go !" @click="codeForm" />

@@ -36,21 +36,21 @@ const selectedThemes = ref();
 const { data: idxEls, status } = await fetchBibIndexingElements()
 
 watch(
-  () => [idxEls.value, activites.activities.data[currentKey.value]], () => {
-    share.value = activites.activities.data[currentKey.value].status_shared == 1
-    web.value = activites.activities.data[currentKey.value].status_web == 1
-    resume.value = activites.activities.data[currentKey.value].abstract
-    selectedEnseignements.value = activites.activities.data[currentKey.value].enseignements.map((x) => x.value)
-    selectedNiveaux.value = activites.activities.data[currentKey.value].niveaux.map((x) => x.value)
-    if (activites.activities.data[currentKey.value].modules.length == 0 || activites.activities.data[currentKey.value].modules[0].target_id == 0) {
+  () => [idxEls.value, activites.activities.data[currentKey.value]], ([a,b]) => {
+    share.value = b.status_shared == 1
+    web.value = b.status_web == 1
+    resume.value = b.abstract
+    selectedEnseignements.value = b.enseignements.map((x) => x.value)
+    selectedNiveaux.value = b.niveaux.map((x) => x.value)
+    if (b.modules.length == 0 || b.modules[0].target_id == 0) {
       selectedModules.value = []
     } else {
-      selectedModules.value = activites.activities.data[currentKey.value].modules.map((x) => {
-        return idxEls.value.modules.filter((item) => item.tid == x.target_id)[0]
+      selectedModules.value = b.modules.map((x) => {
+        return a.modules.filter((item) => item.tid == x.target_id)[0]
       })
     }
-    const fetchedThemes = activites.activities.data[currentKey.value].themes.map((x) => x.target_id)
-    selectedThemes.value = generateKeysByIds(idxEls.value.themes, fetchedThemes);
+    const fetchedThemes = b.themes.map((x) => x.target_id)
+    selectedThemes.value = generateKeysByIds(a.themes, fetchedThemes);
   },
   { immediate: true }
 )
