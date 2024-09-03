@@ -1,14 +1,19 @@
-<script setup>
-const props = defineProps({
-  activite: Object,
-});
-// import { useToast } from "primevue/usetoast";
-// const toast = useToast();
+<script setup lang="ts">
+import { useActivityTypesList } from "~/composables/activityTypes/list";
+import { useActivityTypeFavorites } from "~/composables/activityTypes/favorites";
 
-const myStore = useMyStore();
+const props = defineProps < {
+  type: string,
+} > ();
+
+// import { useToast } from "primevue/usetoast";
+// const toast = useToast();});
+
+const atl = useActivityTypesList();
+const atf = useActivityTypeFavorites();
 
 const star = computed(() => {
-  if (myStore.favorites.includes(props.activite.id)) {
+  if (atf.isFavorite(props.type)) {
     return {
       icon: "pi pi-star-fill text-yellow-400",
       tt: "Supprimer des favoris"
@@ -22,36 +27,30 @@ const star = computed(() => {
 });
 
 const toggleFav = async () => {
-
-  if (myStore.favorites.includes(props.activite.id)) {
-    await myStore.removeFavorite(props.activite.id);
-    // toast.add({ severity: 'success', summary: 'Suppression effectuée', life: 2000 });
-  } else {
-    await myStore.addFavorite(props.activite.id);
-    // toast.add({ severity: 'success', summary: 'Ajout effectué : ', life: 2000 });
-  }
+  atf.toggleFavorite(props.type);
 };
 
-const goActi = (event, msg) => {
+const goActi = (event: MouseEvent) => {
   if (!['i'].includes(event.target.tagName.toLowerCase()))
-    window.location.href = `/web/node/add/${props.activite.bundle}?type=${props.activite.id}`;
+    window.location.href = atl.getCreateUrl(props.type);
 };
 
 const test = ref(false);
 </script>
 
 <template>
-  <Card class="cursor-pointer hover:shadow-md" :dt="{ 'body.padding': '1.5rem 1.5rem 0.5rem 1.5rem' }" :pt="{ body: 'pc-body' }">
+  <Card class="cursor-pointer hover:shadow-md" :dt="{ 'body.padding': '1.5rem 1.5rem 0.5rem 1.5rem' }"
+    :pt="{ body: 'pc-body' }">
     <template #content>
-      <div class="flex flex-row gap-4 justify-start items-center w-full" @click="(event) => goActi(event, 'coucou')">
-        <img :src="activite.icon.path" class="w-24" />
+      <div class="flex flex-row gap-4 justify-start items-center w-full" @click="(event) => goActi(event)">
+        <img :src="atl.getTypeInfo(props.type)?.icon.path" class="w-24" />
         <div>
           <div class="text-lg font-semibold">
-            {{ activite.name }} <sup v-if="activite.beta" class="text-red-500">beta</sup>
-          <i :class="'mx-2 text-lg cursor-pointer starspin star ' + star.icon" @click="toggleFav()"
-            v-tooltip.top="{ value: star.tt, showDelay: 300, hideDelay: 0 }" />
+            {{ atl.getTypeInfo(props.type)?.name }} <sup v-if="atl.getTypeInfo(props.type)?.status?.beta" class="text-red-500">beta</sup>
+            <i :class="'mx-2 text-lg cursor-pointer starspin star ' + star.icon" @click="toggleFav()"
+              v-tooltip.top="{ value: star.tt, showDelay: 300, hideDelay: 0 }" />
           </div>
-          <div class="text-base">{{ activite.description }}</div>
+          <div class="text-base">{{ atl.getTypeInfo(props.type)?.description }}</div>
         </div>
       </div>
     </template>
@@ -59,11 +58,12 @@ const test = ref(false);
       <div class="flex flex-row justify-end gap-2 mt-2">
         <Button :icon="star.icon" label="Favoris" severity="secondary" @click="toggleFav()" />
         <Button as="a" label="Aide" @click="test = true" severity="secondary" />
-        <Button as="a" label="Créer" :href="`/web/node/add/${props.activite.bundle}?type=${props.activite.id}`" severity="primary" />
+        <Button as="a" label="Créer" :href="atl.getCreateUrl(props.type)"
+          severity="primary" />
       </div>
     </template>
   </Card>
-  <DialogIframe v-model="test" :url="activite.helpUrl" />
+  <DialogIframe v-model="test" :url="atl.getTypeInfo(props.type)?.helpUrl" />
 </template>
 
 <style>

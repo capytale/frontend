@@ -1,3 +1,49 @@
+<script lang="ts">
+/**
+ * Nombre de raccourcis de création d'activité à afficher
+ * C'est à dire les favorites + celle que l'utilisateur à déjà utilisées
+ */
+const nbShortcuts = 8;
+</script>
+
+<script setup lang="ts">
+import { useActivityTypesList } from "~/composables/activityTypes/list"
+import { useActivityTypeFavorites } from "~/composables/activityTypes/favorites"
+
+const atl = useActivityTypesList()
+const atf = useActivityTypeFavorites()
+
+const activites = useActivitiesStore()
+
+// liste des raccourcis à afficher
+const shortcutList = computed(() => {
+  const missings = nbShortcuts - atf.favoriteTypes.length;
+  if (missings <= 0) {
+    return atf.favoriteTypes;
+  }
+
+  const nbUsed: { [key: string]: number } = {};
+  if (activites.activities.data) {
+    for (const act of activites.activities.data) {
+      if (atl.typeExists(act.type) && atl.typeIsAvailable(act.type) && !atf.isFavorite(act.type)) {
+        if (!nbUsed[act.type]) nbUsed[act.type] = 1;
+        else nbUsed[act.type]++;
+      }
+    }
+  }
+  const used = Object.keys(nbUsed).sort((a, b) => nbUsed[b] - nbUsed[a]);
+  const result = atf.favoriteTypes.slice();
+  console.log("shortcutList", result);
+  const toAdd = Math.min(missings, used.length);
+  for (let i = 0; i < toAdd; i++) {
+    result.push(used[i]);
+  }
+  console.log("shortcutList", result);
+  return result;
+});
+
+</script>
+
 <template>
   <Card class="flex-1">
     <template #title>
@@ -6,26 +52,13 @@
     </template>
     <template #content>
       <div class="overscroll-x-auto myflex">
-        <template v-if="myStore.favorites.length === 0">
-          <!-- <div class="text-center">Aucune activité favorite</div> -->
-        </template>
-        <template v-else>
-          <a v-for="el of myStore.types.filter(el => myStore.favorites.includes(el.id))" :key="el.id"
-            :href="'/web/node/add/activity?type=' + el.id" v-tooltip.bottom="el.name" class="hover:shadow-md">
-            <img :src="el.icon.path" class="w-16 inline" />
-            <span class="mystar">
-              <i class="pi pi-star-fill text-yellow-400" style="font-size: 0.5rem"></i>
-            </span>
-            <div class="text-sm" v-if="false">
-              {{ el.name.replace("Robot", "").replace("Carte", "").replace("Pi ", "") }}
-            </div>
-          </a>
-        </template>
-        <!-- <a v-for="el of listActivityTypesWithActivities().slice(0,nb)" :key="el.id"  -->
-        <!--   :href="'/web/node/add/activity?type=' + el.id" v-tooltip.bottom="el.name" class="hover:shadow-md"> -->
-        <!--   <img :src="el.icon.path" class="w-16 inline" /> -->
-        <!-- </a> -->
-
+        <a v-for="type of shortcutList" :key="type" :href="atl.getCreateUrl(type)"
+          v-tooltip.bottom="atl.getTypeInfo(type)!.name" class="hover:shadow-md">
+          <img :src="atl.getTypeInfo(type)!.icon.path" class="w-16 inline" />
+          <span v-if="atf.isFavorite(type)" class="mystar">
+            <i class="pi pi-star-fill text-yellow-400" style="font-size: 0.5rem"></i>
+          </span>
+        </a>
         <NuxtLink to="/activites" class="hover:shadow-md acti-button">
           <Button type="submit" label="Toutes les activités" />
         </NuxtLink>
@@ -33,48 +66,6 @@
     </template>
   </Card>
 </template>
-
-<script setup>
-import TypeApi from "@capytale/activity.js/backend/capytale/activityType";
-const myStore = useMyStore();
-const activites = useActivitiesStore()
-
-myStore.favorites = await TypeApi.getFavorites(true);
-myStore.types = await useActivities()
-
-// list activitiy types ordered by number of activities
-const listActivityTypes = () => {
-  let types = myStore.types.map((el) => {
-    return {
-      id: el.id,
-      name: el.name,
-      count: activites.activities.data.filter((act) => act.type === el.id).length,
-      icon: el.icon,
-    };
-  });
-  return types.sort((a, b) => b.count - a.count);
-};
-
-// TODO : BUG
-// console.log(listActivityTypes());
-
-
-// reduce listActivityTypes to only show types with activities
-const listActivityTypesWithActivities = () => {
-  return listActivityTypes().filter((el) => el.count > 0);
-};
-
-// console.log(listActivityTypesWithActivities());
-
-// count number of favorites
-const nbFav = () => {
-  return myStore.favorites.length;
-};
-
-// nb elements to display
-const nb = 8-nbFav();
-
-</script>
 
 <style scoped>
 .myflex {
