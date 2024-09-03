@@ -68,9 +68,6 @@ const handleDelete = function () {
         toast.add({ severity: 'error', summary: 'Échec de la suppression : ', detail: `nid = ${selectedNid.value} - ${e}` });
       }
     },
-    reject: () => {
-      toast.add({ severity: 'info', summary: 'Annulation', life: 3000 });
-    }
   });
 }
 const handleMoveToFolderMultiple = async () => {
@@ -197,7 +194,7 @@ const nbselected = () => {
                       </div>
                     </Popover>
                   </div>
-                  <Button v-tooltip.bottom="'Télécharger'" icon="pi pi-download" class="mr-2" severity="secondary" />
+                  <!-- <Button v-tooltip.bottom="'Télécharger'" icon="pi pi-download" class="mr-2" severity="secondary" /> -->
                   <!-- <Button v-tooltip.bottom="'CSV'" icon="pi pi-file-excel" class="mr-2" severity="secondary" /> -->
                 </template>
 

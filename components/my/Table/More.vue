@@ -79,13 +79,13 @@ const actClonableItem = computed(() => {
 })
 
 const commonItems = ref([
-  {
-    label: 'Télécharger',
-    icon: 'pi pi-download',
-    command: () => {
-      toast.add({ severity: 'success', summary: 'Success', detail: 'File created', life: 3000 });
-    }
-  },
+  // {
+  //   label: 'Télécharger',
+  //   icon: 'pi pi-download',
+  //   command: () => {
+  //     toast.add({ severity: 'success', summary: 'Success', detail: 'File created', life: 3000 });
+  //   }
+  // },
   { separator: true },
   {
     label: 'Supprimer',
@@ -109,9 +109,6 @@ const commonItems = ref([
             toast.add({ severity: 'error', summary: 'Échec de la suppression : ', detail: `nid = ${props.data.nid} - ${e}` });
           }
         },
-        reject: () => {
-          toast.add({ severity: 'info', summary: 'Annulation', life: 3000 });
-        }
       });
     }
   }
