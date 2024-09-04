@@ -121,6 +121,7 @@ const nbselected = () => {
   return selectedNid.value.length + " éléments sélectionnés "
 }
 
+// TODO : ajouter skeletons dans le cas où activites.activities.pending
 </script>
 
 <template>
