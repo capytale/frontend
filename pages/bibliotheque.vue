@@ -200,8 +200,8 @@ const clearFilter = () => {
                   </IconField>
 
                   <div class="flex items-center rech-avdancee">
-                    <Checkbox v-model="advancedSearch" :binary="true" />
-                    <label for="ingredient1" class="ml-2 whitespace-nowrap">Rech. avancée</label>
+                    <Checkbox v-model="advancedSearch" inputId="advSearch" :binary="true" />
+                    <label for="advSearch" class="ml-2 whitespace-nowrap">Rech. avancée</label>
                   </div>
 
                   <div class="grow flex items-center">
