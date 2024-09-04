@@ -30,7 +30,31 @@ const onRowUnselect = function () {
 }
 
 const handleChangeWf = ((wf) => {
-  my.changeSaWf(selectedNid.value, wf)
+  // my.changeSaWf(selectedNid.value, wf)
+  const response = { ok: true } // TODO
+  if (response.ok) {
+    toast.add({ severity: 'success', summary: 'Changement(s) effectué(s) : ', life: 2000 });
+  } else {
+    toast.add({ severity: 'error', summary: 'Échec : ', detail: "nid = " });
+  }
+  selectedNid.value = []
+  hasSelected.value = false
+})
+
+const handleBulkUnArchive = (() => {
+  // my.bulkUnHide(selectedNid.value, wf)
+  const response = { ok: true } // TODO
+  if (response.ok) {
+    toast.add({ severity: 'success', summary: 'Changement(s) effectué(s) : ', life: 2000 });
+  } else {
+    toast.add({ severity: 'error', summary: 'Échec : ', detail: "nid = " });
+  }
+  selectedNid.value = []
+  hasSelected.value = false
+})
+
+const handleBulkArchive = (() => {
+  my.bulkHide(selectedNid.value, wf)
   const response = { ok: true } // TODO
   if (response.ok) {
     toast.add({ severity: 'success', summary: 'Changement(s) effectué(s) : ', life: 2000 });
@@ -64,6 +88,7 @@ const nbFake = ref(new Array(props.viewsTotal));
 
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  hasTags: { value: false, matchMode: FilterMatchMode.EQUALS },
   nom: { value: null, matchMode: FilterMatchMode.CONTAINS },
   classe: { value: null, matchMode: FilterMatchMode.CONTAINS },
 })
@@ -79,6 +104,15 @@ const classList = computed(() => {
   return classes
 })
 
+
+// Ajoute un champ à copy my.assignments.tab qui permet de savoir s'il y a des tags ou non
+const richTab = computed(() => {
+  if (my.assignments.tab == null) return []
+  return my.assignments.tab.map((assignment) => {
+    return { ...assignment, hasTags: assignment.tags.length > 0 }
+  })
+})
+
 const ttMessage = ((wf) => {
   let prefix = "Basculer dans l'état : "
   if (!hasSelected.value) prefix = "Sélectionner une ou plusieurs copies à basculer dans l'état : "
@@ -89,13 +123,21 @@ const ttMessage = ((wf) => {
 // console.log(classList.value)
 
 const nbselected = () => {
-  console.log(selectedNid.value)
-  if (selectedNid.value === undefined) return  "0 copie sélectionnée"
+  if (selectedNid.value === undefined) return "0 copie sélectionnée"
   if (selectedNid.value.length == 0) return "0 copie sélectionnée "
   if (selectedNid.value.length == 1) return "1 copie sélectionnée "
   return selectedNid.value.length + " copies sélectionnées "
 }
+const rowStyle = (data) => {
+  if (data.hasTags) {
+    return { fontWeight: 'lighter', fontStyle: 'italic', textDecoration: 'line-through' };
+  }
+};
 
+const dt = ref();
+const exportCSV = () => {
+    dt.value.exportCSV();
+};
 </script>
 
 
@@ -146,28 +188,38 @@ const nbselected = () => {
       <span class="activity-title">{{ my.assignments.title }}</span>
     </div>
 
-    <DataTable :value="my.assignments.tab" tableStyle="min-width: 50rem" v-model:selection="selectedNid"
-      v-model:filters="filters" :globalFilterFields="['nom', 'classe']" selectionMode="multiple" filterDisplay="row"
+    <DataTable :value="richTab" tableStyle="min-width: 50rem" v-model:selection="selectedNid" v-model:filters="filters"
+      :globalFilterFields="['hasTags', 'nom', 'classe']" selectionMode="multiple" filterDisplay="row"
       @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()"
-      @rowSelectAll="onRowSelectAll()">
+      @rowSelectAll="onRowSelectAll()" :rowStyle="rowStyle" ref="dt">
 
-        <Toolbar>
-          <template #start>
-                  <span class="mr-2">{{ nbselected() }}</span>
-            <Button v-tooltip.bottom="ttMessage(100)" @click="handleChangeWf(100)" label="En cours" icon="pi pi-pencil" class="mr-2"
-              severity="info" outlined :disabled="!hasSelected"/>
-            <Button v-tooltip.bottom="ttMessage(200)" @click="handleChangeWf(200)" label="Rendu" icon="pi pi-envelope" class="mr-2"
-              severity="warn" outlined :disabled="!hasSelected" />
-            <Button v-tooltip.bottom="ttMessage(300)" @click="handleChangeWf(300)" label="Corrigé" icon="pi pi-check-square" class="mr-2"
-              severity="success" outlined :disabled="!hasSelected" />
+      <Toolbar>
+        <template #start>
+          <span class="mr-2">{{ nbselected() }}</span>
+          <Button v-tooltip.bottom="ttMessage(100)" @click="handleChangeWf(100)" label="En cours" icon="pi pi-pencil"
+            class="mr-2" severity="info" outlined :disabled="!hasSelected" />
+          <Button v-tooltip.bottom="ttMessage(200)" @click="handleChangeWf(200)" label="Rendu" icon="pi pi-envelope"
+            class="mr-2" severity="warn" outlined :disabled="!hasSelected" />
+          <Button v-tooltip.bottom="ttMessage(300)" @click="handleChangeWf(300)" label="Corrigé" icon="pi pi-check-square"
+            class="mr-2" severity="success" outlined :disabled="!hasSelected" />
 
-            <!-- <Button v-tooltip.bottom="'Télécharger'" icon="pi pi-download" class="mr-2" severity="secondary" /> -->
-            <!-- <Button v-tooltip.bottom="'CSV'" icon="pi pi-file-excel" class="mr-2" severity="secondary" /> -->
 
-          </template>
+          <!-- <Button v-tooltip.bottom="'Télécharger'" icon="pi pi-download" class="mr-2" severity="secondary" /> -->
+          <!-- <Button v-tooltip.bottom="'CSV'" icon="pi pi-file-excel" class="mr-2" severity="secondary" /> -->
 
-        </Toolbar>
-            <!-- <Button v-tooltip.bottom="'Sélectionner une ou plusieurs copies à basculer dans l\'état : En cours'" icon="pi pi-pencil" class="mr-2" severity="info" outlined disabled /> -->
+        </template>
+        <template #end>
+          <Button icon="pi pi-external-link" label="Export CSV" @click="exportCSV($event)" outlined class="mr-2"/>
+          <Button v-if="filters['hasTags'].value" v-tooltip.bottom="Désarchiver" label="Désarchiver" @click="handleBulkUnArchive()" icon="pi pi-check-square"
+            class="mr-2" severity="secondary" outlined :disabled="!hasSelected" />
+          <Button v-else v-tooltip.bottom="Archiver" label="Archiver" @click="handleBulkArchive()" icon="pi pi-check-square"
+            class="mr-2" severity="secondary" outlined :disabled="!hasSelected" />
+          <ToggleButton v-model="filters['hasTags'].value" onLabel="Quitter les archives"
+            offLabel="Consulter les archives" offIcon="pi pi-eye-slash" class="mr-2"/>
+        </template>
+
+      </Toolbar>
+      <!-- <Button v-tooltip.bottom="'Sélectionner une ou plusieurs copies à basculer dans l\'état : En cours'" icon="pi pi-pencil" class="mr-2" severity="info" outlined disabled /> -->
 
       <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
 
@@ -177,9 +229,17 @@ const nbselected = () => {
         </template>
       </Column>
 
-      <Column field="tags" header="Tags" style="width:10rem" sortable>
+      <!-- <Column field="tags" header="Tags" style="width:10rem" sortable> -->
+      <!--   <template #body="p"> -->
+      <!--     <AssignmentShowHide :data="p.data" /> -->
+      <!--   </template> -->
+      <!-- </Column> -->
+
+      <Column field="hasTags" header="" style="width:0rem">
         <template #body="p">
-          <AssignmentShowHide :data="p.data" />
+          <div class="myInvisible">
+            <AssignmentShowHide :data="p.data" />
+          </div>
         </template>
       </Column>
 
@@ -229,13 +289,13 @@ const nbselected = () => {
         </template>
       </Column>
 
-      <Column field="appr" header="Appréciation">
+      <Column field="appreciation" header="Appréciation">
         <template #body="p">
           <AssignmentAppreciation :key="p.data.sa_nid" :data="p.data" />
         </template>
       </Column>
 
-      <Column field="eval" header="Évaluation">
+      <Column field="evaluation" header="Évaluation">
         <template #body="p">
           <AssignmentEvaluation :key="p.data.sa_nid" :data="p.data" />
         </template>
@@ -246,6 +306,10 @@ const nbselected = () => {
 </template>
 
 <style scoped>
+.myInvisible {
+  display: none;
+}
+
 .myflex {
   display: flex;
   align-items: center;
@@ -272,5 +336,4 @@ const nbselected = () => {
 
 .parent:hover .surprise {
   display: inline;
-}
-</style>
+}</style>
