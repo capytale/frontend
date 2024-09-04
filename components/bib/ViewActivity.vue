@@ -36,6 +36,23 @@ const copy = (nid) => {
   navigator.clipboard.writeText(url);
   toast.add({ severity: 'success', summary: 'Copié !', detail: url, life: 3000 });
 }
+
+const close = () => {
+  visible.value = false
+}
+
+watch(visible, (v) => {
+  if (v) {
+    drupal.setCloseHandler(close)
+  } else {
+    drupal.removeCloseHandler(close)
+  }
+})
+
+onBeforeUnmount(() => {
+  drupal.removeCloseHandler(close)
+})
+
 </script>
 
 <template>
