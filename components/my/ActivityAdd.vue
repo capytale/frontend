@@ -33,12 +33,10 @@ const shortcutList = computed(() => {
   }
   const used = Object.keys(nbUsed).sort((a, b) => nbUsed[b] - nbUsed[a]);
   const result = atf.favoriteTypes.slice();
-  console.log("shortcutList", result);
   const toAdd = Math.min(missings, used.length);
   for (let i = 0; i < toAdd; i++) {
     result.push(used[i]);
   }
-  console.log("shortcutList", result);
   return result;
 });
 
