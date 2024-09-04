@@ -1,28 +1,3 @@
-<script lang="ts">
-let handler: undefined | (() => void)
-
-(window as any).$drupalCloseActivityEdit = () => {
-  if (handler) {
-    handler()
-    handler = undefined
-  }
-}
-
-const setCloseHandler = (h: () => void) => {
-  if (handler === h) return
-  if (handler) {
-    handler()
-  }
-  handler = h
-}
-
-const removeCloseHandler = (h: () => void) => {
-  if (handler === h) {
-    handler = undefined
-  }
-}
-</script>
-
 <script setup lang="ts">
 const props = defineProps<{
   data: {
@@ -40,14 +15,14 @@ const close = () => {
 
 watch(visible, (v) => {
   if (v) {
-    setCloseHandler(close)
+    drupal.setCloseHandler(close)
   } else {
-    removeCloseHandler(close)
+    drupal.removeCloseHandler(close)
   }
 })
 
 onBeforeUnmount(() => {
-  removeCloseHandler(close)
+  drupal.removeCloseHandler(close)
 })
 
 </script>
