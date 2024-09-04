@@ -23,7 +23,7 @@ const getName = (id) => {
     <!-- {{ tag }} {{ props.data.nid }} -->
     <span class="parent mr-1">
       <Button v-if="getName(tag).label" removable class="pr-3 small-button" text @click="op = !op">
-        <i class="pi pi-tag px-2 normal" :style="'color:' + getName(tag).color"></i>{{ getName(tag).label }}
+        <i class="pi pi-tag px-2 normal" :style="'color:' + getName(tag).color"></i><span class="whitespace-nowrap">{{ getName(tag).label }}</span>
       </Button>
       <div class="poubelle">
         <Button icon="pi pi-times" severity="danger" @click="delTag(props.data.nid, tag)" outlined rounded />
