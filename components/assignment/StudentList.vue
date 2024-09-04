@@ -14,19 +14,19 @@ const props = defineProps({
 my.getAssignments(props.nid)
 
 const selectedNid = ref();
-const showToolbar = ref(false);
+const hasSelected = ref(false);
 
 const onRowSelect = function () {
-  showToolbar.value = true
+  hasSelected.value = true
 }
 const onRowSelectAll = function () {
-  showToolbar.value = true
+  hasSelected.value = true
 }
 const onRowUnselectAll = function () {
-  showToolbar.value = false
+  hasSelected.value = false
 }
 const onRowUnselect = function () {
-  showToolbar.value = selectedNid.value.length > 0
+  hasSelected.value = selectedNid.value.length > 0
 }
 
 const handleChangeWf = ((wf) => {
@@ -38,7 +38,7 @@ const handleChangeWf = ((wf) => {
     toast.add({ severity: 'error', summary: 'Échec : ', detail: "nid = " });
   }
   selectedNid.value = []
-  showToolbar.value = false
+  hasSelected.value = false
 })
 
 const wficon = ((wf) => {
@@ -79,7 +79,22 @@ const classList = computed(() => {
   return classes
 })
 
+const ttMessage = ((wf) => {
+  let prefix = "Basculer dans l'état : "
+  if (!hasSelected.value) prefix = "Sélectionner une ou plusieurs copies à basculer dans l'état : "
+  if (wf == 100) return prefix + "En cours"
+  if (wf == 200) return prefix + "Rendu"
+  if (wf == 300) return prefix + "Corrigé"
+})
 // console.log(classList.value)
+
+const nbselected = () => {
+  console.log(selectedNid.value)
+  if (selectedNid.value === undefined) return  "0 copie sélectionnée"
+  if (selectedNid.value.length == 0) return "0 copie sélectionnée "
+  if (selectedNid.value.length == 1) return "1 copie sélectionnée "
+  return selectedNid.value.length + " copies sélectionnées "
+}
 
 </script>
 
@@ -136,15 +151,15 @@ const classList = computed(() => {
       @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()"
       @rowSelectAll="onRowSelectAll()">
 
-      <template #header v-if="showToolbar">
         <Toolbar>
           <template #start>
-            <Button v-tooltip.bottom="'En cours'" @click="handleChangeWf(100)" icon="pi pi-pencil" class="mr-2"
-              severity="info" outlined />
-            <Button v-tooltip.bottom="'Rendu'" @click="handleChangeWf(200)" icon="pi pi-envelope" class="mr-2"
-              severity="warn" outlined />
-            <Button v-tooltip.bottom="'Corrigé'" @click="handleChangeWf(300)" icon="pi pi-check-square" class="mr-2"
-              severity="success" outlined />
+                  <span class="mr-2">{{ nbselected() }}</span>
+            <Button v-tooltip.bottom="ttMessage(100)" @click="handleChangeWf(100)" label="En cours" icon="pi pi-pencil" class="mr-2"
+              severity="info" outlined :disabled="!hasSelected"/>
+            <Button v-tooltip.bottom="ttMessage(200)" @click="handleChangeWf(200)" label="Rendu" icon="pi pi-envelope" class="mr-2"
+              severity="warn" outlined :disabled="!hasSelected" />
+            <Button v-tooltip.bottom="ttMessage(300)" @click="handleChangeWf(300)" label="Corrigé" icon="pi pi-check-square" class="mr-2"
+              severity="success" outlined :disabled="!hasSelected" />
 
             <!-- <Button v-tooltip.bottom="'Télécharger'" icon="pi pi-download" class="mr-2" severity="secondary" /> -->
             <!-- <Button v-tooltip.bottom="'CSV'" icon="pi pi-file-excel" class="mr-2" severity="secondary" /> -->
@@ -152,7 +167,7 @@ const classList = computed(() => {
           </template>
 
         </Toolbar>
-      </template>
+            <!-- <Button v-tooltip.bottom="'Sélectionner une ou plusieurs copies à basculer dans l\'état : En cours'" icon="pi pi-pencil" class="mr-2" severity="info" outlined disabled /> -->
 
       <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
 
@@ -186,7 +201,8 @@ const classList = computed(() => {
           <!--   </Select> -->
           <!-- </template> -->
           <!-- <template v-else> -->
-            <InputText v-model="filterModel.value" type="text" style="width: 100%" @input="filterCallback()" placeholder="Rechercher" />
+          <InputText v-model="filterModel.value" type="text" style="width: 100%" @input="filterCallback()"
+            placeholder="Rechercher" />
           <!-- </template> -->
         </template>
 
