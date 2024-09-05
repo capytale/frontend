@@ -84,6 +84,10 @@ const handleAddTagMultiple = async () => {
   await activites.tagActivities(selectedNid.value, tags)
 }
 
+const replaceTags = async () => {
+  await activites.replaceTags(selectedNid.value)
+}
+
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   title: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -188,9 +192,11 @@ const nbselected = () => {
                       @click="tagsToggle2" />
                     <Popover ref="opTags2">
                       <div class="gap-3 w-25rem">
-                      <MyTagsTree v-model:selection="selectedNid" :tags="tags.tags.data" />
-                        <Button v-if="false && selectedTags && Object.keys(selectedTags).length" type="button" label="Étiqueter"
-                          class="w-full" @click="handleAddTagMultiple" />
+                        <MyTagsTree v-model:selection="selectedNid" :tags="tags.tags.data" />
+                        <div class="flex flex-row justify-between">
+                          <Button label="Appliquer" @click="replaceTags" class="mt-4" size="small" />
+                          <Button label="Annuler" @click="console.log('on annule tout')" class="mt-4" severity="secondary" size="small" />
+                        </div>
                       </div>
                     </Popover>
                   </div>

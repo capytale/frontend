@@ -127,6 +127,11 @@ export const useActivitiesStore = defineStore('activities', {
       );
     },
 
+    async replaceTags(activities: any[]) {
+      console.log('coucou');
+    },
+      
+
     async bibIndexActivity(nid: number,
       share: number,
       web: number,
