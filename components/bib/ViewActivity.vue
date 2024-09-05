@@ -32,7 +32,7 @@ const url = computed(() => {
 })
 
 const copy = (nid) => {
-  const url = `https://np.ac-capytale.fr/web/b/${nid}`
+  const url = `/web/b/${nid}`
   navigator.clipboard.writeText(url);
   toast.add({ severity: 'success', summary: 'Copié !', detail: url, life: 3000 });
 }
