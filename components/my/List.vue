@@ -56,7 +56,7 @@ const confirm = useConfirm();
 const toast = useToast();
 const handleDelete = function () {
   confirm.require({
-    message: `Vous vous apprêtez à supprimer ${selectedNid.value.length} éléments DÉFINITIVEMENT.`,
+    message: `Vous vous apprêtez à supprimer ${selectedNid.value.length} élément(s) DÉFINITIVEMENT.`,
     header: 'Confirmation',
     icon: 'pi pi-exclamation-triangle',
     rejectLabel: 'Annuler',
@@ -66,6 +66,27 @@ const handleDelete = function () {
     accept: async () => {
       try {
         await activites.deleteActivity([...selectedNid.value.map((o) => o.nid)])
+        toast.add({ severity: 'success', summary: 'Suppression effectuée', life: 2000 });
+      }
+      catch (e) {
+        toast.add({ severity: 'error', summary: 'Échec de la suppression : ', detail: `nid = ${selectedNid.value} - ${e}` });
+      }
+    },
+  });
+}
+
+const handleBulkArchive = function () {
+  confirm.require({
+    message: `Vous vous apprêtez à archiver toutes les copies de ${selectedNid.value.length} élément(s).`,
+    header: 'Confirmation',
+    icon: 'pi pi-info-circle',
+    rejectLabel: 'Annuler',
+    rejectClass: 'p-button-secondary p-button-outlined',
+    acceptLabel: 'Archiver',
+    acceptClass: 'p-button-info',
+    accept: async () => {
+      try {
+        await activites.bulkArchive([...selectedNid.value.map((o) => o.nid)], corbeilleTid())
         toast.add({ severity: 'success', summary: 'Suppression effectuée', life: 2000 });
       }
       catch (e) {
@@ -170,7 +191,9 @@ const nbselected = () => {
                     class="mr-2" severity="secondary" />
                   <Button v-tooltip.bottom="'Supprimer'" @click="handleDelete()" icon="pi pi-trash" class="mr-2" outlined
                     severity="danger" />
-                    <div class="card flex justify-content-center">
+                  <Button v-tooltip.bottom="'Archiver toutes les copies et mettre le compteur de vues à 0'" @click="handleBulkArchive()" icon="pi pi-eye-slash"
+                    class="mr-2" outlined severity="danger" />
+                  <div class="card flex justify-content-center">
                     <Button v-tooltip.bottom="'Étiqueter'" icon="pi pi-tags" class="mr-2" severity="secondary"
                       @click="tagsToggle" />
                     <Popover ref="opTags">
@@ -195,7 +218,8 @@ const nbselected = () => {
                         <MyTagsTree v-model:selection="selectedNid" :tags="tags.tags.data" />
                         <div class="flex flex-row justify-between">
                           <Button label="Appliquer" @click="replaceTags" class="mt-4" size="small" />
-                          <Button label="Annuler" @click="console.log('on annule tout')" class="mt-4" severity="secondary" size="small" />
+                          <Button label="Annuler" @click="console.log('on annule tout')" class="mt-4" severity="secondary"
+                            size="small" />
                         </div>
                       </div>
                     </Popover>

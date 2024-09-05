@@ -107,7 +107,7 @@ export const useActivitiesStore = defineStore('activities', {
 
     async moveActivities(pxyNids: array, tid: number) {
       for (let item of pxyNids) {
-        this.activities.data = this.activities.data.map(el => el.nid == item.nid ? { ...el, tags: [ tid ] } : el);
+        this.activities.data = this.activities.data.map(el => el.nid == item.nid ? { ...el, tags: [tid] } : el);
       }
       let nids = [...pxyNids.map((o) => o.nid)];
       await httpClient.postJsonAsync(
@@ -127,10 +127,21 @@ export const useActivitiesStore = defineStore('activities', {
       );
     },
 
+    async bulkArchive(nids: number, corbeilleTid: number) {
+      // console.log("bulkArchive", nids, corbeilleTid)
+      for (let nid of nids) {
+        // console.log("nid", nid)
+        await httpClient.postJsonAsync(
+          myActivitiesApiEp,
+          { action: "bulkArchive", nid, corbeilleTid }
+        );
+      }
+    },
+
     async replaceTags(activities: any[], tags: any[]) {
       console.log('replaceTags', activities, tags);
     },
-      
+
 
     async bibIndexActivity(nid: number,
       share: number,
