@@ -55,9 +55,8 @@ function getTypeInfo(type: string): ActivityType {
 }
 
 function getCreateUrl(type: string): string {
-  const info = getTypeInfo(type);
-  if (info == null) return '';
-  return typeApi.getCreateUrl(info);
+  if (typeExists(type)) return typeApi.getCreateUrl(getTypeInfo(type));
+  else return '';
 }
 
 function typeExists(type: string): boolean {
