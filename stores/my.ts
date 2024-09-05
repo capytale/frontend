@@ -97,23 +97,23 @@ export const useMyStore = defineStore('my', {
       );
     },
 
-    async bulkUnHide(sa_nids: number, corbeilleTid: number) {
-      for (let sa_nid of sa_nids) {
-        this.assignments.tab = this.assignments.tab.map(el => el.sa_nid == sa_nid ? { ...el, tags: [] } : el);
-      }
-      await httpClient.postJsonAsync(
-        assignmentsApiEp,
-        { action: "bulkUnHide", sa_nids, corbeilleTid }
-      );
-    },
-
-    async bulkHide(sa_nids: number, corbeilleTid: number) {
+    async archive(sa_nids: number, corbeilleTid: number) {
       for (let sa_nid of sa_nids) {
         this.assignments.tab = this.assignments.tab.map(el => el.sa_nid == sa_nid ? { ...el, tags: [corbeilleTid] } : el);
       }
       await httpClient.postJsonAsync(
         assignmentsApiEp,
-        { action: "bulkHide", sa_nids, corbeilleTid }
+        { action: "archive", sa_nids, corbeilleTid }
+      );
+    },
+
+    async unArchive(sa_nids: number, corbeilleTid: number) {
+      for (let sa_nid of sa_nids) {
+        this.assignments.tab = this.assignments.tab.map(el => el.sa_nid == sa_nid ? { ...el, tags: [] } : el);
+      }
+      await httpClient.postJsonAsync(
+        assignmentsApiEp,
+        { action: "unArchive", sa_nids, corbeilleTid }
       );
     },
 

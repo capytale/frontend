@@ -34,7 +34,7 @@ const onRowUnselect = function () {
 }
 
 const handleChangeWf = ((wf) => {
-  // my.changeSaWf(selectedNid.value, wf)
+  my.changeSaWf(selectedNid.value, wf)
   const response = { ok: true } // TODO
   if (response.ok) {
     toast.add({ severity: 'success', summary: 'Changement(s) effectué(s) : ', life: 2000 });
@@ -45,8 +45,14 @@ const handleChangeWf = ((wf) => {
   hasSelected.value = false
 })
 
-const handleBulkUnArchive = (() => {
-  // my.bulkUnHide(selectedNid.value, wf)
+
+const tags = useTagsStore()
+const corbeilleTid = () => {
+  return tags.tags.data.find(o => o.label === 'Corbeille').id
+}
+
+const handleArchive = (() => {
+  my.archive([...selectedNid.value.map((o) => o.sa_nid)], corbeilleTid())
   const response = { ok: true } // TODO
   if (response.ok) {
     toast.add({ severity: 'success', summary: 'Changement(s) effectué(s) : ', life: 2000 });
@@ -55,10 +61,11 @@ const handleBulkUnArchive = (() => {
   }
   selectedNid.value = []
   hasSelected.value = false
+  toggle()
 })
 
-const handleBulkArchive = (() => {
-  my.bulkHide(selectedNid.value, wf)
+const handleUnArchive = (() => {
+  my.unArchive([...selectedNid.value.map((o) => o.sa_nid)], corbeilleTid())
   const response = { ok: true } // TODO
   if (response.ok) {
     toast.add({ severity: 'success', summary: 'Changement(s) effectué(s) : ', life: 2000 });
@@ -67,6 +74,7 @@ const handleBulkArchive = (() => {
   }
   selectedNid.value = []
   hasSelected.value = false
+  toggle()
 })
 
 const wficon = ((wf) => {
@@ -144,7 +152,21 @@ const rowStyle = (data) => {
 const dt = ref();
 const exportCSV = () => {
   dt.value.exportCSV();
-};
+}
+
+const menu = ref();
+const toggle = (event) => {
+  menu.value.toggle(event);
+}
+const items = ref([
+  {
+    label: 'Archiver',
+    icon: 'pi pi-eye-slash',
+    command: () => {
+      handleArchive()
+    }
+  }
+])
 </script>
 
 
@@ -203,25 +225,27 @@ const exportCSV = () => {
       <Toolbar>
         <template #start>
           <span class="mr-2">{{ nbselected() }}</span>
-          <Button v-tooltip.bottom="ttMessage(100)" @click="handleChangeWf(100)" label="En cours" icon="pi pi-pencil"
-            class="mr-2" severity="info" outlined :disabled="!hasSelected" />
-          <Button v-tooltip.bottom="ttMessage(200)" @click="handleChangeWf(200)" label="Rendu" icon="pi pi-envelope"
-            class="mr-2" severity="warn" outlined :disabled="!hasSelected" />
-          <Button v-tooltip.bottom="ttMessage(300)" @click="handleChangeWf(300)" label="Corrigé"
-            icon="pi pi-check-square" class="mr-2" severity="success" outlined :disabled="!hasSelected" />
-
+          <template v-if="filters['hasTags'].value">
+            <Button label="Désarchiver" @click="handleUnArchive()" icon="pi pi-check-square" class="mr-2"
+              severity="secondary" outlined :disabled="!hasSelected" />
+          </template>
+          <template v-else>
+            <Button v-tooltip.bottom="ttMessage(100)" @click="handleChangeWf(100)" label="En cours" icon="pi pi-pencil"
+              class="mr-2" severity="info" outlined :disabled="!hasSelected" />
+            <Button v-tooltip.bottom="ttMessage(200)" @click="handleChangeWf(200)" label="Rendu" icon="pi pi-envelope"
+              class="mr-2" severity="warn" outlined :disabled="!hasSelected" />
+            <Button v-tooltip.bottom="ttMessage(300)" @click="handleChangeWf(300)" label="Corrigé"
+              icon="pi pi-check-square" class="mr-2" severity="success" outlined :disabled="!hasSelected" />
+            <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" severity="secondary" link aria-haspopup="true"
+              v-tooltip.top="{ value: 'Plus', showDelay: 300, hideDelay: 100 }" aria-controls="overlay_menu" />
+            <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
+          </template>
 
           <!-- <Button v-tooltip.bottom="'Télécharger'" icon="pi pi-download" class="mr-2" severity="secondary" /> -->
-          <!-- <Button v-tooltip.bottom="'CSV'" icon="pi pi-file-excel" class="mr-2" severity="secondary" /> -->
 
         </template>
         <template #end>
           <Button icon="pi pi-external-link" label="Export CSV" @click="exportCSV($event)" outlined class="mr-2" />
-          <Button v-if="filters['hasTags'].value" v-tooltip.bottom="Désarchiver" label="Désarchiver"
-            @click="handleBulkUnArchive()" icon="pi pi-check-square" class="mr-2" severity="secondary" outlined
-            :disabled="!hasSelected" />
-          <Button v-else v-tooltip.bottom="Archiver" label="Archiver" @click="handleBulkArchive()"
-            icon="pi pi-check-square" class="mr-2" severity="secondary" outlined :disabled="!hasSelected" />
           <ToggleButton v-model="filters['hasTags'].value" onLabel="Quitter les archives"
             offLabel="Consulter les archives" offIcon="pi pi-eye-slash" class="mr-2" />
         </template>
