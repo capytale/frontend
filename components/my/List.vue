@@ -268,7 +268,7 @@ const nbselected = () => {
                       <InputText v-model="filters['title'].value" placeholder="Rechercher dans le titre" />
                     </IconField>
                   </div>
-                  <Button label="Colonnes" icon="pi pi-arrow-down" severity="secondary" outlined @click="colsChoiceToggle" />
+                  <Button label="Colonnes" icon="pi pi-arrow-down" outlined @click="colsChoiceToggle" />
                   <Popover ref="colsChoice">
                   <div v-for="(v, k) in cols" :key="k" class="m-2">
                     <Checkbox v-model="cols[k]" :binary="true" :inputId="'rech'+k" />
