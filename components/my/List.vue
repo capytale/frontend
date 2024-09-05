@@ -232,25 +232,7 @@ const nbselected = () => {
                   </template>
 
                   <div class="flex justify-content-end">
-                    <Select v-model="filters['type'].value" :options="my.types" filter optionLabel="name" optionValue="id"
-                      placeholder="Filtrer par type" class="w-full md:w-14rem" showClear>
-                      <template #value="slotProps">
-                        <div v-if="slotProps.value" class="flex align-items-center">
-                          <img :src="typeIcon(slotProps.value, my)" class="w-8 mr-3" />
-                          {{ slotProps.value }}
-                        </div>
-                        <span v-else>
-                          {{ slotProps.placeholder }}
-                        </span>
-                      </template>
-                      <template #option="slotProps">
-                        <div class="flex align-items-center">
-                          <img :src="slotProps.option.icon.path" class="w-8 mr-3" />
-                          <div>{{ slotProps.option.name }}</div>
-                        </div>
-                      </template>
-                    </Select>
-
+                    <MyTypeFilterSelect v-model="filters['type'].value" />
 
                     <IconField iconPosition="left">
                       <InputIcon>
