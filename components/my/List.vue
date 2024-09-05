@@ -14,11 +14,14 @@ activites.getActivities()
 
 my.types = await useActivities();
 
+const selectedTags = ref(null)
 
 const selectedFolder = ref(null)
 const opTags = ref();
+const opTags2 = ref();
 const opFolders = ref();
 const tagsToggle = (event) => { opTags.value.toggle(event); }
+const tagsToggle2 = (event) => { opTags2.value.toggle(event); }
 const foldersToggle = (event) => { opFolders.value.toggle(event); }
 
 const selectedNid = ref();
@@ -163,10 +166,27 @@ const nbselected = () => {
                     class="mr-2" severity="secondary" />
                   <Button v-tooltip.bottom="'Supprimer'" @click="handleDelete()" icon="pi pi-trash" class="mr-2" outlined
                     severity="danger" />
-                  <div class="card flex justify-content-center">
+                    <div class="card flex justify-content-center">
                     <Button v-tooltip.bottom="'Étiqueter'" icon="pi pi-tags" class="mr-2" severity="secondary"
                       @click="tagsToggle" />
                     <Popover ref="opTags">
+                      <div class="gap-3 w-25rem">
+                        <Tree id="tags" v-model:selectionKeys="selectedTags" :value="tags.tags.data"
+                          selectionMode="multiple" class="w-full md:w-30rem scroll" :dt="{ padding: '0' }">
+                          <template #default="slotProps">
+                            <i class="pi pi-tag" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
+                          </template>
+                        </Tree>
+                        <Button v-if="selectedTags && Object.keys(selectedTags).length" type="button" label="Étiqueter"
+                          class="w-full" @click="handleAddTagMultiple" />
+                      </div>
+                    </Popover>
+                  </div>
+
+                  <div class="card flex justify-content-center">
+                    <Button v-tooltip.bottom="'Étiqueter'" icon="pi pi-tags" class="mr-2" severity="secondary"
+                      @click="tagsToggle2" />
+                    <Popover ref="opTags2">
                       <div class="gap-3 w-25rem">
                       <MyTagsTree v-model:selection="selectedNid" :tags="tags.tags.data" />
                         <Button v-if="false && selectedTags && Object.keys(selectedTags).length" type="button" label="Étiqueter"
