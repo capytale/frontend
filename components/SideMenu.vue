@@ -75,7 +75,7 @@ const toggle = (event) => {
 
 <template>
   <div class="space-y-3 p-3">
-    <div class="flex-1">
+    <div class="flex flex-col">
       <span class="flex items-center px-2 py-4 space-x-3 rounded-md">
         <i v-if="sideMenu.visible" class="pi pi-thumbtack highlight" @click="sideMenu.visible = false"
           v-tooltip.right="{ value: 'Des-épingler le menu', showDelay: 300, hideDelay: 0 }"></i>
@@ -98,6 +98,8 @@ const toggle = (event) => {
           <!-- inputId="deplier" @click="handleSwitch" /> -->
         </span>
       </span>
+      <Button label="Ajouter une étiquette" severity="secondary" size="small" class="self-center" icon="pi pi-plus" @click="createTagVisible = true" />
+      <Divider />
       <div v-if="tags.tags.pending">loading......</div>
       <template v-else>
         <!-- <div class="flex flex-wrap gap-2"> -->
