@@ -85,7 +85,7 @@ const handleAddTagMultiple = async () => {
 }
 
 const replaceTags = async () => {
-  await activites.replaceTags(selectedNid.value)
+  await activites.replaceTags([...selectedNid.value.map((o) => o.nid)], selectedTags.value)
 }
 
 const filters = ref({

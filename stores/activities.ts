@@ -127,8 +127,8 @@ export const useActivitiesStore = defineStore('activities', {
       );
     },
 
-    async replaceTags(activities: any[]) {
-      console.log('coucou');
+    async replaceTags(activities: any[], tags: any[]) {
+      console.log('replaceTags', activities, tags);
     },
       
 
