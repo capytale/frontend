@@ -98,7 +98,7 @@ export const useMyStore = defineStore('my', {
     },
 
     async bulkUnHide(sa_nids: number, corbeilleTid: number) {
-      for (let nid of nids) {
+      for (let sa_nid of sa_nids) {
         this.assignments.tab = this.assignments.tab.map(el => el.sa_nid == sa_nid ? { ...el, tags: [] } : el);
       }
       await httpClient.postJsonAsync(
@@ -108,7 +108,7 @@ export const useMyStore = defineStore('my', {
     },
 
     async bulkHide(sa_nids: number, corbeilleTid: number) {
-      for (let nid of nids) {
+      for (let sa_nid of sa_nids) {
         this.assignments.tab = this.assignments.tab.map(el => el.sa_nid == sa_nid ? { ...el, tags: [corbeilleTid] } : el);
       }
       await httpClient.postJsonAsync(
