@@ -51,7 +51,7 @@ const shortcutList = computed(() => {
     <template #content>
       <div class="overscroll-x-auto myflex">
         <a v-for="type of shortcutList" :key="type" :href="atl.getCreateUrl(type)"
-          v-tooltip.bottom="atl.getTypeInfo(type)!.name" class="hover:shadow-md">
+          v-tooltip.bottom="atl.getTypeInfo(type)!.name" class="hover:shadow-md shrink-0">
           <img :src="atl.getTypeInfo(type)!.icon.path" class="w-16 inline" />
           <span v-if="atf.isFavorite(type)" class="mystar">
             <i class="pi pi-star-fill text-yellow-400" style="font-size: 0.5rem"></i>
