@@ -17,15 +17,6 @@ console.log("location", route.query)
 if (bib.bib == null || bib.bib.status != 'pending') {
   bib.getBib()
 }
-my.types = await useActivities()
-
-const getType = ((id) => {
-  const a = my.types.filter(o => o.id == id)
-  if (a.length == 0) return { name: "??", icon: { path: "" } }
-  return a[0]
-})
-// affiche l'icône du type TODO : Déplacer dans utils
-
 const decodeHtml = ((html) => {
   var txt = document.createElement("textarea");
   txt.innerHTML = html;
@@ -171,26 +162,7 @@ const clearFilter = () => {
                              ({{ bib.bib.data.length }} activités)
                 </div>
                 <div class="flex flex-row gap-2 justify-content-end">
-                  <Select v-model="filters['type'].value" :options="my.types" filter optionLabel="name" optionValue="id"
-                    placeholder="Filtrer par type" class="w-full md:w-14rem max-w-[20rem] items-center" showClear>
-                    <template #value="slotProps">
-                      <div v-if="slotProps.value" class="flex align-items-center">
-                        <img :src="getType(slotProps.value).icon.path" class="w-8 mr-3" />
-                        {{ slotProps.value }}
-                      </div>
-                      <span v-else>
-                        {{ slotProps.placeholder }}
-                      </span>
-                    </template>
-                    <template #option="slotProps">
-                      <div class="flex align-items-center">
-                        <img :src="slotProps.option.icon.path" class="w-8 mr-3" />
-                        <div>{{ slotProps.option.name }}</div>
-                      </div>
-                    </template>
-                  </Select>
-
-
+                  <TypeFilterSelect v-model="filters['type'].value" />
                   <IconField iconPosition="left">
                     <InputIcon>
                       <i class="pi pi-search" />
