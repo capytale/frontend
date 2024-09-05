@@ -267,14 +267,13 @@ const nbselected = () => {
               </template>
             </Column>
 
-            <Column v-if="isTeacher" field="title" header="Titre"
-              style="min-width:20rem; max-width:30rem; overflow:hidden" sortable>
+            <Column v-if="isTeacher" field="title" header="Titre" sortable style="max-width: 20rem;">
               <template #body="p">
                 <MyTableTitle :data="p.data" />
               </template>
             </Column>
 
-            <Column v-if="isTeacher" field="evaluation" header="Évaluation" style="max-width:12rem">
+            <Column v-if="isTeacher" field="evaluation" header="Évaluation" style="max-width: 12rem">
               <template #body="p">
                 <MyTableEvaluation :data="p.data" :isTeacher="isTeacher" />
               </template>
@@ -329,4 +328,7 @@ const nbselected = () => {
 
 <style scoped>
 /* Additionnal CSS in default.vue */
+.titlecol {
+  width: 20rem;
+}
 </style>
