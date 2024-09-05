@@ -8,8 +8,8 @@ const code = useCodeStore()
 import { useMyStore } from '@/stores/my'
 const my = useMyStore()
 const tags = useTagsStore()
-tags.getTags()
-tags.getFlatTags()
+await tags.getTags()
+await tags.getFlatTags()
 
 const selectedKey = ref(null);
 const createTagVisible = ref(false);

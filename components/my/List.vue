@@ -10,7 +10,9 @@ const my = useMyStore()
 const activites = useActivitiesStore()
 const tags = useTagsStore()
 
-activites.getActivities()
+await activites.getActivities()
+await tags.getTags()
+await tags.getFlatTags()
 
 const selectedTags = ref(null)
 
@@ -101,10 +103,6 @@ const handleMoveToFolderMultiple = async () => {
 const handleAddTagMultiple = async () => {
   const tags = Object.keys(selectedTags.value)
   await activites.tagActivities(selectedNid.value, tags)
-}
-
-const replaceTags = async () => {
-  await activites.replaceTags([...selectedNid.value.map((o) => o.nid)], selectedTags.value)
 }
 
 const filters = ref({
@@ -212,14 +210,7 @@ const nbselected = () => {
                     <Button v-tooltip.bottom="'Étiqueter'" icon="pi pi-tags" class="mr-2" severity="secondary"
                       @click="tagsToggle2" />
                     <Popover ref="opTags2">
-                      <div class="gap-3 w-25rem">
                         <MyTagsTree v-model:selection="selectedNid" :tags="tags.tags.data" />
-                        <div class="flex flex-row justify-between">
-                          <Button label="Appliquer" @click="replaceTags" class="mt-4" size="small" />
-                          <Button label="Annuler" @click="console.log('on annule tout')" class="mt-4" severity="secondary"
-                            size="small" />
-                        </div>
-                      </div>
                     </Popover>
                   </div>
                   <div class="card flex justify-content-center" v-if="false">
