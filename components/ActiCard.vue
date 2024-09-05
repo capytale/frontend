@@ -35,6 +35,8 @@ const goActi = (event: MouseEvent) => {
     window.location.href = atl.getCreateUrl(props.type);
 };
 
+const typeInfo = computed(() => atl.getTypeInfo(props.type));
+
 const test = ref(false);
 </script>
 
@@ -43,14 +45,14 @@ const test = ref(false);
     :pt="{ body: 'pc-body' }">
     <template #content>
       <div class="flex flex-row gap-4 justify-start items-center w-full" @click="(event) => goActi(event)">
-        <img :src="atl.getTypeInfo(props.type)?.icon.path" class="w-24" />
+        <img :src="typeInfo.icon.path" class="w-24" />
         <div>
           <div class="text-lg font-semibold">
-            {{ atl.getTypeInfo(props.type)?.name }} <sup v-if="atl.getTypeInfo(props.type)?.status?.beta" class="text-red-500">beta</sup>
+            {{ typeInfo.name }} <sup v-if="typeInfo.status?.beta" class="text-red-500">beta</sup>
             <i :class="'mx-2 text-lg cursor-pointer starspin star ' + star.icon" @click="toggleFav()"
               v-tooltip.top="{ value: star.tt, showDelay: 300, hideDelay: 0 }" />
           </div>
-          <div class="text-base">{{ atl.getTypeInfo(props.type)?.description }}</div>
+          <div class="text-base">{{ typeInfo.description }}</div>
         </div>
       </div>
     </template>
@@ -63,7 +65,7 @@ const test = ref(false);
       </div>
     </template>
   </Card>
-  <DialogIframe v-model="test" :url="atl.getTypeInfo(props.type)?.helpUrl" />
+  <DialogIframe v-model="test" :url="typeInfo.helpUrl" />
 </template>
 
 <style>

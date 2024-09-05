@@ -2,6 +2,22 @@ import { shallowRef, readonly, computed } from 'vue';
 
 import typeApi, { type ActivityType } from '@capytale/activity.js/backend/capytale/activityType';
 
+const unknownLogo = '/web/modules/custom/capytale_activity/src/Activity/logo/logo_false.svg';
+
+const unknownType: ActivityType = {
+  id: 'unknown',
+  name: 'Inconnu',
+  icon: { path: unknownLogo, style: {} },
+  plainIcon: { path: unknownLogo, style: {} },
+  helpUrl: '',
+  summary: '',
+  description: '',
+  niveau: [],
+  sujet: [],
+  bundle: '',
+  available: false,
+};
+
 const status = shallowRef<'loading' | 'loaded' | 'error'>('loading');
 const error = shallowRef<any>();
 const typeDico = shallowRef<{ [t: string]: ActivityType }>({});
@@ -33,8 +49,9 @@ function reload(): void {
     });
 }
 
-function getTypeInfo(type: string): ActivityType | undefined {
-  return typeDico.value[type];
+function getTypeInfo(type: string): ActivityType {
+  if (typeExists(type)) return typeDico.value[type];
+  else return unknownType;
 }
 
 function getCreateUrl(type: string): string {
