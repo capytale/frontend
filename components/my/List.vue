@@ -20,9 +20,23 @@ const selectedFolder = ref(null)
 const opTags = ref();
 const opTags2 = ref();
 const opFolders = ref();
+const colsChoice = ref();
 const tagsToggle = (event) => { opTags.value.toggle(event); }
 const tagsToggle2 = (event) => { opTags2.value.toggle(event); }
 const foldersToggle = (event) => { opFolders.value.toggle(event); }
+const colsChoiceToggle = (event) => { colsChoice.value.toggle(event); }
+
+// TODO : enregistrer les colonnes dans les prefs utilisateur et les charger au démarrage
+const cols = ref({
+  type: true,
+  title: true,
+  evaluation: true,
+  changed: true,
+  code: true,
+  tags: true,
+  more: true,
+  bib: true,
+})
 
 const selectedNid = ref();
 
@@ -254,6 +268,13 @@ const nbselected = () => {
                       <InputText v-model="filters['title'].value" placeholder="Rechercher dans le titre" />
                     </IconField>
                   </div>
+                  <Button label="Colonnes" icon="pi pi-arrow-down" severity="secondary" outlined @click="colsChoiceToggle" />
+                  <Popover ref="colsChoice">
+                  <div v-for="(v, k) in cols" :key="k" class="m-2">
+                    <Checkbox v-model="cols[k]" :binary="true" :inputId="'rech'+k" />
+                    <label :for="'rech'+k" class="ml-2">{{ k }}</label>
+                  </div>
+                  </Popover>
                 </template>
 
               </Toolbar>
@@ -261,36 +282,36 @@ const nbselected = () => {
 
             <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
 
-            <Column field="type" header="Type" sortable>
+            <Column v-if="cols.type" field="type" header="Type" sortable>
               <template #body="p">
                 <MyTableType :data="p.data" />
               </template>
             </Column>
 
-            <Column v-if="isTeacher" field="title" header="Titre" sortable style="max-width: 20rem;">
+            <Column v-if="isTeacher && cols.title" field="title" header="Titre" sortable style="max-width: 20rem;">
               <template #body="p">
                 <MyTableTitle :data="p.data" />
               </template>
             </Column>
 
-            <Column v-if="isTeacher" field="evaluation" header="Évaluation" style="max-width: 12rem">
+            <Column v-if="isTeacher && cols.evaluation" field="evaluation" header="Évaluation" style="max-width: 12rem">
               <template #body="p">
                 <MyTableEvaluation :data="p.data" :isTeacher="isTeacher" />
               </template>
             </Column>
-            <Column v-else field="evaluation" header="Évaluation" style="max-width:20rem">
+            <Column v-else-if="cols.evaluation" field="evaluation" header="Évaluation" style="max-width:20rem">
               <template #body="p">
                 <MyTableEvaluation :data="p.data" />
               </template>
             </Column>
 
-            <Column field="changed" header="Modifié" sortable>
+            <Column v-if="cols.changed" field="changed" header="Modifié" sortable>
               <template #body="p">
                 <MyTableChanged :data="p.data" />
               </template>
             </Column>
 
-            <Column field="code" header="Partage" style="min-width: 13rem">
+            <Column v-if="cols.code" field="code" header="Partage" style="min-width: 13rem">
               <template #body="p">
                 <MyTableShare :data="p.data" :isTeacher="isTeacher" />
                 <!-- <MyTableShare :code="p.data.code" :mode="p.data.mode" :boss="p.data.boss" :whoami="p.data.whoami"
@@ -298,7 +319,7 @@ const nbselected = () => {
               </template>
             </Column>
 
-            <Column v-if="isTeacher" field="bib" header="Bib." style="min-width: 5rem">
+            <Column v-if="isTeacher && cols.bib" field="bib" header="Bib." style="min-width: 5rem">
               <template #body="p">
                 <MyTableBib :data="p.data" />
                 <!-- <MyTableBib :nid="p.data.nid" :title="p.data.title" :shared="p.data.status_shared" :web="p.data.status_web"
@@ -306,14 +327,14 @@ const nbselected = () => {
               </template>
             </Column>
 
-            <Column field="tags" header="Étiquettes" style="">
+            <Column v-if="cols.tags" field="tags" header="Étiquettes" style="">
               <template #body="p">
                 <!-- {{ p.data.tags }} -->
                 <MyTableTags :data="p.data" />
               </template>
             </Column>
 
-            <Column field="more" header="">
+            <Column v-if="cols.more" field="more" header="">
               <template #body="p">
                 <MyTableMore :data="p.data" :isTeacher="isTeacher" />
               </template>
