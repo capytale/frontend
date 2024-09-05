@@ -12,8 +12,6 @@ const tags = useTagsStore()
 
 activites.getActivities()
 
-my.types = await useActivities();
-
 const selectedTags = ref(null)
 
 const selectedFolder = ref(null)
