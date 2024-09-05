@@ -119,7 +119,7 @@ const toggle = (event) => {
         <!-- </div> -->
         <Tree id="folders" v-model:expandedKeys="expandedKeys" v-model:selectionKeys="selectedKey" selectionMode="single"
           :value="tags.tags.data" class="w-full md:w-30rem" @nodeSelect="onNodeSelect" @nodeUnselect="onNodeUnselect"
-          :filter="checked" :filterMode="strictSearch ? 'strict' : 'lenient'">
+          :filter="checked" :filterMode="strictSearch ? 'strict' : 'lenient'" :dt="{ 'padding': '0' }">
           <template #default="slotProps">
             <div class="primary-nav left centerize">
 
