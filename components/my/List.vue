@@ -254,7 +254,7 @@ const nbselected = () => {
                   </template>
 
                   <div class="flex justify-content-end">
-                    <MyTypeFilterSelect v-model="filters['type'].value" />
+                    <TypeFilterSelect v-model="filters['type'].value" :activities="myactivities" />
 
                     <IconField iconPosition="left">
                       <InputIcon>

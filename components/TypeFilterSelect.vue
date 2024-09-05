@@ -1,5 +1,9 @@
 <script setup lang="ts">
 
+const props = defineProps<{
+  activities?: { type: string }[]
+}>()
+
 /**
  * Le type sélectionné
  */
@@ -15,16 +19,20 @@ const activites = useActivitiesStore()
  * Liste des types à afficher dans la drop down
  */
 const typesList = computed(() => {
-  const used: { [key: string]: true } = {};
-  if (activites.activities.data) {
-    for (const act of activites.activities.data) {
+  let keys: readonly string[];
+  if (props.activities == null) {
+    keys = atl.availableTypes;
+  } else {
+    const used: { [key: string]: true } = {};
+    for (const act of props.activities) {
       used[act.type] = true;
     }
+    keys = Object.keys(used);
   }
-  const keys = Object.keys(used);
-  const ret = keys.sort((a, b) => atl.getTypeInfo(a).name.localeCompare(atl.getTypeInfo(b).name));
+  const ret = keys.toSorted((a, b) => atl.getTypeInfo(a).name.localeCompare(atl.getTypeInfo(b).name));
   return ret;
 });
+
 </script>
 
 
