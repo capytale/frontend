@@ -138,7 +138,7 @@ const clearFilter = () => {
             <Skeleton width="10rem"></Skeleton>
           </template>
         </Column>
-        <Column header="nb clone">
+        <Column header="Nb. clone">
           <template #body>
             <Skeleton width="4rem"></Skeleton>
           </template>
@@ -272,7 +272,7 @@ const clearFilter = () => {
             </template>
           </Column>
 
-          <Column field="nb_clone" header="nb clone" sortable>
+          <Column field="nb_clone" header="Nb. clone" sortable>
             <template #body="p">
               {{ p.data.nb_clone }}
             </template>
