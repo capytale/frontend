@@ -1,15 +1,19 @@
-<script setup>
+<script lang="ts">
+const defaultNbFake = 4;
+</script>
+
+<script setup lang="ts">
 import { useToast } from "primevue/usetoast";
 import { FilterMatchMode } from '@primevue/core/api';
-const toast = useToast();
 import { useMyStore } from '@/stores/my'
+
+const toast = useToast();
 const my = useMyStore()
 
-const props = defineProps({
-  nid: String,
-  viewsTotal: Number,
-  required: true
-})
+const props = defineProps<{
+  nid: string,
+  viewsTotal?: number
+}>()
 
 my.getAssignments(props.nid)
 
@@ -84,7 +88,10 @@ const chWf = ((sa_nid, wf) => {
   my.changeSaWf(sa_nid, wf)
 })
 
-const nbFake = ref(new Array(props.viewsTotal));
+const nbFake = computed(() => {
+  if (props.viewsTotal == null) return new Array(defaultNbFake)
+  return new Array(props.viewsTotal)
+})
 
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -136,7 +143,7 @@ const rowStyle = (data) => {
 
 const dt = ref();
 const exportCSV = () => {
-    dt.value.exportCSV();
+  dt.value.exportCSV();
 };
 </script>
 
@@ -200,8 +207,8 @@ const exportCSV = () => {
             class="mr-2" severity="info" outlined :disabled="!hasSelected" />
           <Button v-tooltip.bottom="ttMessage(200)" @click="handleChangeWf(200)" label="Rendu" icon="pi pi-envelope"
             class="mr-2" severity="warn" outlined :disabled="!hasSelected" />
-          <Button v-tooltip.bottom="ttMessage(300)" @click="handleChangeWf(300)" label="Corrigé" icon="pi pi-check-square"
-            class="mr-2" severity="success" outlined :disabled="!hasSelected" />
+          <Button v-tooltip.bottom="ttMessage(300)" @click="handleChangeWf(300)" label="Corrigé"
+            icon="pi pi-check-square" class="mr-2" severity="success" outlined :disabled="!hasSelected" />
 
 
           <!-- <Button v-tooltip.bottom="'Télécharger'" icon="pi pi-download" class="mr-2" severity="secondary" /> -->
@@ -209,13 +216,14 @@ const exportCSV = () => {
 
         </template>
         <template #end>
-          <Button icon="pi pi-external-link" label="Export CSV" @click="exportCSV($event)" outlined class="mr-2"/>
-          <Button v-if="filters['hasTags'].value" v-tooltip.bottom="Désarchiver" label="Désarchiver" @click="handleBulkUnArchive()" icon="pi pi-check-square"
-            class="mr-2" severity="secondary" outlined :disabled="!hasSelected" />
-          <Button v-else v-tooltip.bottom="Archiver" label="Archiver" @click="handleBulkArchive()" icon="pi pi-check-square"
-            class="mr-2" severity="secondary" outlined :disabled="!hasSelected" />
+          <Button icon="pi pi-external-link" label="Export CSV" @click="exportCSV($event)" outlined class="mr-2" />
+          <Button v-if="filters['hasTags'].value" v-tooltip.bottom="Désarchiver" label="Désarchiver"
+            @click="handleBulkUnArchive()" icon="pi pi-check-square" class="mr-2" severity="secondary" outlined
+            :disabled="!hasSelected" />
+          <Button v-else v-tooltip.bottom="Archiver" label="Archiver" @click="handleBulkArchive()"
+            icon="pi pi-check-square" class="mr-2" severity="secondary" outlined :disabled="!hasSelected" />
           <ToggleButton v-model="filters['hasTags'].value" onLabel="Quitter les archives"
-            offLabel="Consulter les archives" offIcon="pi pi-eye-slash" class="mr-2"/>
+            offLabel="Consulter les archives" offIcon="pi pi-eye-slash" class="mr-2" />
         </template>
 
       </Toolbar>
@@ -226,20 +234,6 @@ const exportCSV = () => {
       <Column field="changed" header="Dernière modif." style="width:10rem" sortable>
         <template #body="p">
           <MyTableChanged :data="p.data" />
-        </template>
-      </Column>
-
-      <!-- <Column field="tags" header="Tags" style="width:10rem" sortable> -->
-      <!--   <template #body="p"> -->
-      <!--     <AssignmentShowHide :data="p.data" /> -->
-      <!--   </template> -->
-      <!-- </Column> -->
-
-      <Column field="hasTags" header="" style="width:0rem">
-        <template #body="p">
-          <div class="myInvisible">
-            <AssignmentShowHide :data="p.data" />
-          </div>
         </template>
       </Column>
 
@@ -336,4 +330,5 @@ const exportCSV = () => {
 
 .parent:hover .surprise {
   display: inline;
-}</style>
+}
+</style>
