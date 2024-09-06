@@ -1,5 +1,6 @@
 <template>
 <div class="gap-3 w-25rem">
+{{ props.selection }}
   <Tree :value="props.tags" :dt="{ 'tree.padding': '0', 'node.padding': '0.1rem' }" :pt="{ root: 'treePadd', rootChildren: 'treePadd'}">
   <template #default="slotProps">
     <Button :key="slotProps.node.id" severity="secondary" :text="estNullePart(slotProps.node)" :outlined="!estCommun(slotProps.node) && !estNullePart(slotProps.node)" @click="toggleTag(slotProps.node)" :dt="{ 'padding.x': '0.4rem', 'padding.y': '0.4rem'}">

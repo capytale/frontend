@@ -26,7 +26,7 @@ const tagsToggle = (event) => { opTags.value.toggle(event); }
 const tagsToggle2 = (event) => { 
   opTags2.value.toggle(event);
   selectedNid.value.forEach((o) => {
-    tmpTags.value.push({ nid: o.nid, tags: [...o.tags]})
+    tmpTags.value.push({ nid: o.nid, tags: [...o.tags], info: 'tmp'})
   })
 }
 
@@ -234,7 +234,8 @@ const nbselected = () => {
                     <Button v-tooltip.bottom="'Étiqueter'" icon="pi pi-tags" class="mr-2" severity="secondary"
                       @click="tagsToggle2" />
                     <Popover ref="opTags2">
-                        <MyTagsTree v-model:selection="selectedNid" :tags="tags.tags.data" />
+                        <MyTagsTree v-if="tmpTags.length === 0" v-model:selection="selectedNid" :tags="tags.tags.data" />
+                        <MyTagsTree v-else v-model:selection="tmpTags" :tags="tags.tags.data" />
                         <Button @click="cancelModif" label="Annuler" class="w-full" />
                     </Popover>
                   </div>
@@ -341,7 +342,7 @@ const nbselected = () => {
             <Column :class="cols.tags ? '' : 'hidden'" field="tags" header="Étiquettes" style="">
               <template #body="p">
                 <!-- {{ p.data.tags }} -->
-                <MyTableTags :data="tmpTags[p.data.nid] || p.data" />
+                <MyTableTags :data="tmpTags.find(o => o.nid === p.data.nid) || p.data" />
               </template>
             </Column>
 
