@@ -1,10 +1,6 @@
-import { ref, shallowRef, computed, readonly } from 'vue';
+import { shallowRef, readonly } from 'vue';
 
 import typeApi, { type ActivityGroup } from '@capytale/activity.js/backend/capytale/activityType';
-
-import { useActivityTypesList } from './list';
-
-let atl: ReturnType<typeof useActivityTypesList> | null = null;
 
 const status = shallowRef<'loading' | 'loaded' | 'error'>('loading');
 const error = shallowRef<any>();
@@ -13,11 +9,6 @@ const all = shallowRef<{ [type: string]: number }>({});
 let fetchPromise: Promise<void> | null = null;
 
 function reload(): void {
-  if (atl == null) {
-    atl = useActivityTypesList();
-  } else {
-    atl.reload();
-  }
   if (fetchPromise != null) return;
   status.value = 'loading';
   error.value = null;
@@ -44,24 +35,18 @@ function reload(): void {
     });
 }
 
-const compStatus = computed(() => {
-  if (status.value === 'error' || atl!.status === 'error') return 'error';
-  if (status.value === 'loading' || atl!.status === 'loading') return 'loading';
-  return status.value;
-});
-
-const compError = computed(() => {
-  if (error.value != null) return error.value;
-  if (atl!.error.value != null) return atl!.error.value;
-});
-
-export const useActivityTypeWeights = () => {
+function load() {
   if (status.value !== 'loaded') reload();
+}
+
+export const useActivityTypeWeights = (lazy: boolean = false) => {
+  if (!lazy && (status.value !== 'loaded')) reload();
   return readonly({
     reload,
+    load,
     groups,
     all,
-    status: compStatus,
-    error: compError,
+    status,
+    error,
   })
 }

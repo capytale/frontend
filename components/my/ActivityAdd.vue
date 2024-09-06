@@ -9,35 +9,81 @@ const nbShortcuts = 8;
 <script setup lang="ts">
 import { useActivityTypesList } from "~/composables/activityTypes/list"
 import { useActivityTypeFavorites } from "~/composables/activityTypes/favorites"
+import { useActivityTypeWeights } from "~/composables/activityTypes/weights"
 
 const atl = useActivityTypesList()
 const atf = useActivityTypeFavorites()
+const atw = useActivityTypeWeights(true)
 
 const activites = useActivitiesStore()
 
-// liste des raccourcis à afficher
-const shortcutList = computed(() => {
-  const missings = nbShortcuts - atf.favoriteTypes.length;
-  if (missings <= 0) {
+// index des types déjà utilisés avec leur nombre d'occurences
+type NbUsedIndex = { [key: string]: number }
+const existingTypeIndex = computed<NbUsedIndex | null>(() => {
+  if (!activites.activities.data) return null;
+  if (atf.status !== "loaded") return null;
+  if (nbShortcuts === atf.favoriteTypes.length) return null;
+  const ti: NbUsedIndex = {};
+  for (const act of activites.activities.data) {
+    let t = act.type;
+    const info = atl.getTypeInfo(t);
+    if ((info.replacedBy != null) && atl.typeIsAvailable(info.replacedBy)) {
+      t = info.replacedBy;
+    } else {
+      if (!atl.typeIsAvailable(t)) continue;
+    }
+    if (ti[t]) ti[t]++;
+    else ti[t] = 1;
+  }
+  return ti;
+});
+
+// liste des favoris
+const shortcutList1 = computed(() => {
+  if (atf.status !== "loaded") return null;
+  if (nbShortcuts === atf.favoriteTypes.length) return atf.favoriteTypes;
+  if (atf.favoriteTypes.length > nbShortcuts) {
+    if (existingTypeIndex.value == null) return null;
+    return atf.favoriteTypes
+      .toSorted((a, b) => ((existingTypeIndex.value![b] || 0) - (existingTypeIndex.value![a] || 0)))
+      .slice(0, nbShortcuts);
+  } else {
     return atf.favoriteTypes;
   }
+});
 
-  const nbUsed: { [key: string]: number } = {};
-  if (activites.activities.data) {
-    for (const act of activites.activities.data) {
-      if (atl.typeExists(act.type) && atl.typeIsAvailable(act.type) && !atf.isFavorite(act.type)) {
-        if (!nbUsed[act.type]) nbUsed[act.type] = 1;
-        else nbUsed[act.type]++;
-      }
+// liste des favoris + les plus utilisés
+const shortcutList2 = computed(() => {
+  if (shortcutList1.value == null) return null;
+  if (shortcutList1.value.length >= nbShortcuts) {
+    return shortcutList1.value;
+  } else {
+    if (existingTypeIndex.value == null) return shortcutList1.value;
+    const noFav = [];
+    for (const t of Object.keys(existingTypeIndex.value)) {
+      if (!atf.isFavorite(t)) noFav.push(t);
     }
+    if ((noFav.length + shortcutList1.value.length) < nbShortcuts) atw.load();
+    noFav.sort((a, b) => (existingTypeIndex.value![b] - existingTypeIndex.value![a]));
+    return shortcutList1.value.concat(noFav.slice(0, nbShortcuts - shortcutList1.value.length));
   }
-  const used = Object.keys(nbUsed).sort((a, b) => nbUsed[b] - nbUsed[a]);
-  const result = atf.favoriteTypes.slice();
-  const toAdd = Math.min(missings, used.length);
-  for (let i = 0; i < toAdd; i++) {
-    result.push(used[i]);
+});
+
+// liste des favoris + les plus utilisés + les promus
+const shortcutList = computed(() => {
+  if (shortcutList2.value == null) return null;
+  if (shortcutList2.value.length >= nbShortcuts) {
+    return shortcutList2.value;
+  } else {
+    if (atw.status !== "loaded") return shortcutList2.value;
+    const promoted = [];
+    for (const t in atw.all) {
+      if (shortcutList2.value.includes(t)) continue;
+      promoted.push(t);
+    }
+    promoted.sort((a, b) => (atw.all[b] - atw.all[a]));
+    return shortcutList2.value.concat(promoted.slice(0, nbShortcuts - shortcutList2.value.length));
   }
-  return result;
 });
 
 </script>
@@ -51,8 +97,8 @@ const shortcutList = computed(() => {
     <template #content>
       <div class="overscroll-x-auto myflex">
         <a v-for="type of shortcutList" :key="type" :href="atl.getCreateUrl(type)"
-          v-tooltip.bottom="atl.getTypeInfo(type)!.name" class="hover:shadow-md shrink-0">
-          <img :src="atl.getTypeInfo(type)!.icon.path" class="w-16 inline" />
+          v-tooltip.bottom="atl.getTypeInfo(type).name" class="hover:shadow-md shrink-0">
+          <img :src="atl.getTypeInfo(type).icon.path" class="w-16 inline" />
           <span v-if="atf.isFavorite(type)" class="mystar">
             <i class="pi pi-star-fill text-yellow-400" style="font-size: 0.5rem"></i>
           </span>
