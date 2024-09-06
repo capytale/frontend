@@ -282,36 +282,36 @@ const nbselected = () => {
 
             <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
 
-            <Column v-if="cols.type" field="type" header="Type" sortable>
+            <Column :class="cols.type ? '' : 'hidden'" field="type" header="Type" sortable>
               <template #body="p">
                 <MyTableType :data="p.data" />
               </template>
             </Column>
 
-            <Column v-if="cols.title" field="title" header="Titre" sortable style="min-width: 15rem; max-width: 20rem;">
+            <Column :class="cols.title ? '' : 'hidden'" field="title" header="Titre" sortable style="min-width: 15rem; max-width: 20rem;">
               <template #body="p">
                 <MyTableTitle :data="p.data" />
               </template>
             </Column>
 
-            <Column v-if="isTeacher && cols.evaluation" field="evaluation" header="Évaluation" style="max-width: 12rem">
+            <Column v-if="isTeacher" :class="cols.evaluation ? '' : 'hidden'" field="evaluation" header="Évaluation" style="max-width: 12rem">
               <template #body="p">
                 <MyTableEvaluation :data="p.data" :isTeacher="isTeacher" />
               </template>
             </Column>
-            <Column v-else-if="cols.evaluation" field="evaluation" header="Évaluation" style="max-width:20rem">
+            <Column v-else :class="cols.evaluation ? '' : 'hidden'" field="evaluation" header="Évaluation" style="max-width:20rem">
               <template #body="p">
                 <MyTableEvaluation :data="p.data" />
               </template>
             </Column>
 
-            <Column v-if="cols.changed" field="changed" header="Modifié" sortable>
+            <Column :class="cols.changed ? '' : 'hidden'" field="changed" header="Modifié" sortable>
               <template #body="p">
                 <MyTableChanged :data="p.data" />
               </template>
             </Column>
 
-            <Column v-if="cols.code" field="code" header="Partage" style="min-width: 13rem">
+            <Column :class="cols.code ? '' : 'hidden'" field="code" header="Partage" style="min-width: 13rem">
               <template #body="p">
                 <MyTableShare :data="p.data" :isTeacher="isTeacher" />
                 <!-- <MyTableShare :code="p.data.code" :mode="p.data.mode" :boss="p.data.boss" :whoami="p.data.whoami"
@@ -319,7 +319,7 @@ const nbselected = () => {
               </template>
             </Column>
 
-            <Column v-if="isTeacher && cols.bib" field="bib" header="Bib." style="min-width: 5rem">
+            <Column v-if="isTeacher" :class="cols.bib ? '' : 'hidden'" field="bib" header="Bib." style="min-width: 5rem">
               <template #body="p">
                 <MyTableBib :data="p.data" />
                 <!-- <MyTableBib :nid="p.data.nid" :title="p.data.title" :shared="p.data.status_shared" :web="p.data.status_web"
@@ -327,7 +327,7 @@ const nbselected = () => {
               </template>
             </Column>
 
-            <Column v-if="cols.tags" field="tags" header="Étiquettes" style="">
+            <Column :class="cols.tags ? '' : 'hidden'" field="tags" header="Étiquettes" style="">
               <template #body="p">
                 <!-- {{ p.data.tags }} -->
                 <MyTableTags :data="p.data" />
