@@ -288,7 +288,7 @@ const nbselected = () => {
               </template>
             </Column>
 
-            <Column v-if="isTeacher && cols.title" field="title" header="Titre" sortable style="max-width: 20rem;">
+            <Column v-if="cols.title" field="title" header="Titre" sortable style="min-width: 15rem; max-width: 20rem;">
               <template #body="p">
                 <MyTableTitle :data="p.data" />
               </template>
