@@ -83,14 +83,14 @@ const wficon = ((wf) => {
   if (wf == 300) return { icon: "pi pi-check-square", color: "var(--p-button-outlined-success-color)", tt: "Corrigé" }
 })
 const nextOne = ((wf) => {
-  if (wf == 300) return { icon: "pi pi-pencil", color: "var(--p-button-outlined-info-color)", wf: 100, tt: "En cours" }
-  if (wf == 100) return { icon: "pi pi-envelope", color: "var(--p-button-outlined-warn-color)", wf: 200, tt: "Rendu" }
-  if (wf == 200) return { icon: "pi pi-check-square", color: "var(--p-button-outlined-success-color)", wf: 300, tt: "Corrigé" }
+  if (wf == 300) return { icon: "pi pi-pencil", color: "var(--p-button-outlined-info-color)", wf: 100, tt: "Basculer → En cours" }
+  if (wf == 100) return { icon: "pi pi-envelope", color: "var(--p-button-outlined-warn-color)", wf: 200, tt: "Basculer → Rendu" }
+  if (wf == 200) return { icon: "pi pi-check-square", color: "var(--p-button-outlined-success-color)", wf: 300, tt: "Basculer → Corrigé" }
 })
 const nextTwo = ((wf) => {
-  if (wf == 200) return { icon: "pi pi-pencil", color: "var(--p-button-outlined-info-color)", wf: 100, tt: "En cours" }
-  if (wf == 300) return { icon: "pi pi-envelope", color: "var(--p-button-outlined-warn-color)", wf: 200, tt: "Rendu" }
-  if (wf == 100) return { icon: "pi pi-check-square", color: "var(--p-button-outlined-success-color)", wf: 300, tt: "Corrigé" }
+  if (wf == 200) return { icon: "pi pi-pencil", color: "var(--p-button-outlined-info-color)", wf: 100, tt: "Basculer → En cours" }
+  if (wf == 300) return { icon: "pi pi-envelope", color: "var(--p-button-outlined-warn-color)", wf: 200, tt: "Basculer → Rendu" }
+  if (wf == 100) return { icon: "pi pi-check-square", color: "var(--p-button-outlined-success-color)", wf: 300, tt: "Basculer → Corrigé" }
 })
 const chWf = ((sa_nid, wf) => {
   my.changeSaWf(sa_nid, wf)
@@ -167,6 +167,13 @@ const items = ref([
     }
   }
 ])
+
+const archMessage = (a) => {
+  if (a) return "Revenir aux copies non archivées"
+  return "Consulter les archives"
+}
+
+
 </script>
 
 
@@ -218,7 +225,7 @@ const items = ref([
     </div>
 
     <DataTable :value="richTab" tableStyle="min-width: 50rem" v-model:selection="selectedNid" v-model:filters="filters"
-      :globalFilterFields="['hasTags', 'nom', 'classe']" selectionMode="multiple" filterDisplay="row"
+      :globalFilterFields="['hasTags', 'nom', 'classe']" selectionMode="multiple" filterDisplay="menu"
       @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()"
       @rowSelectAll="onRowSelectAll()" :rowStyle="rowStyle" ref="dt">
 
@@ -246,8 +253,8 @@ const items = ref([
         </template>
         <template #end>
           <Button icon="pi pi-external-link" label="Export CSV" @click="exportCSV($event)" outlined class="mr-2" />
-          <ToggleButton v-model="filters['hasTags'].value" onLabel="Quitter les archives"
-            offLabel="Consulter les archives" offIcon="pi pi-eye-slash" class="mr-2" />
+          <ToggleButton v-model="filters['hasTags'].value" v-tooltip.bottom="archMessage(filters['hasTags'].value)" onLabel="Quitter les archives"
+            offLabel="Archives" offIcon="pi pi-eye-slash" class="mr-2" />
         </template>
 
       </Toolbar>
@@ -291,9 +298,9 @@ const items = ref([
           <span class="parent mr-1">
             <Button text v-tooltip.top="{ value: wficon(p.data.workflow).tt, showDelay: 300, hideDelay: 0 }">
               <i v-if="!my.assignments.is_in_time_range" class="pi pi-lock pr-1"
-                style="color: red; font-size: 1.5rem;"></i>
+                style="color: red; font-size: 1.1rem;"></i>
               <i :class="wficon(p.data.workflow).icon"
-                :style="{ color: wficon(p.data.workflow).color, 'font-size': '1.5rem' }"></i>
+                :style="{ color: wficon(p.data.workflow).color, 'font-size': '1.1rem' }"></i>
             </Button>
             <div class="surprise">
               <Button :icon="nextOne(p.data.workflow).icon" :style="{ color: nextOne(p.data.workflow).color }"
