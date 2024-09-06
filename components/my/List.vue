@@ -112,6 +112,10 @@ const handleDelete = function () {
 }
 
 const handleBulkArchive = function () {
+  if (corbeilleTid() == null) {
+    toast.add({ severity: 'error', summary: 'Archivage impossible', detail: `L'étiquette spéciale nommée "Corbeille" doit être présente mais n'a pas été trouvée.` });
+    return
+  }
   confirm.require({
     message: `Vous vous apprêtez à archiver toutes les copies de ${selectedNid.value.length} élément(s).`,
     header: 'Confirmation',
@@ -155,6 +159,7 @@ const getTagName = (tid) => {
 }
 
 const corbeilleTid = () => {
+  if (!tags.tags.data.find(o => o.label === 'Corbeille')) return null
   return tags.tags.data.find(o => o.label === 'Corbeille').id
 }
 

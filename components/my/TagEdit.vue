@@ -158,6 +158,7 @@ const handleWant = (event) => {
   }
 }
 const corbeilleTid = () => {
+  if (!props.tags.find(o => o.label === 'Corbeille')) return null
   return props.tags.find(o => o.label === 'Corbeille').id
 }
 // console.log("corbeille !!!", corbeilleTid())
