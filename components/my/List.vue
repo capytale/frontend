@@ -19,10 +19,20 @@ const selectedTags = ref(null)
 const selectedFolder = ref(null)
 const opTags = ref();
 const opTags2 = ref();
+const tmpTags = ref([]);
 const opFolders = ref();
 const colsChoice = ref();
 const tagsToggle = (event) => { opTags.value.toggle(event); }
-const tagsToggle2 = (event) => { opTags2.value.toggle(event); }
+const tagsToggle2 = (event) => { 
+  opTags2.value.toggle(event);
+  selectedNid.value.forEach((o) => {
+    tmpTags.value.push({ nid: o.nid, tags: [...o.tags]})
+  })
+}
+
+const cancelModif = () => {
+  tmpTags.value = []
+}
 const foldersToggle = (event) => { opFolders.value.toggle(event); }
 const colsChoiceToggle = (event) => { colsChoice.value.toggle(event); }
 
@@ -225,6 +235,7 @@ const nbselected = () => {
                       @click="tagsToggle2" />
                     <Popover ref="opTags2">
                         <MyTagsTree v-model:selection="selectedNid" :tags="tags.tags.data" />
+                        <Button @click="cancelModif" label="Annuler" class="w-full" />
                     </Popover>
                   </div>
                   <div class="card flex justify-content-center" v-if="false">
@@ -330,7 +341,7 @@ const nbselected = () => {
             <Column :class="cols.tags ? '' : 'hidden'" field="tags" header="Étiquettes" style="">
               <template #body="p">
                 <!-- {{ p.data.tags }} -->
-                <MyTableTags :data="p.data" />
+                <MyTableTags :data="tmpTags[p.data.nid] || p.data" />
               </template>
             </Column>
 
