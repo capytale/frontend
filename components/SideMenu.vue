@@ -84,14 +84,6 @@ const toggle = (event) => {
         <!-- <i class="pi pi-tags"></i> -->
         <span class="parent mr-1">
           <span class="font-bold">Étiquettes</span>
-          <div class="novalorise">
-            <Button icon="pi pi-plus" severity="secondary" aria-label="Créer une nouvelle étiquette" outlined rounded
-              size="small" />
-          </div>
-          <div class="valorise">
-            <Button icon="pi pi-plus" severity="info" @click="createTagVisible = true" rounded
-              v-tooltip.right="{ value: 'Créer une nouvelle étiquette', showDelay: 300, hideDelay: 0 }" />
-          </div>
           <Button type="button" icon="pi pi-info-circle" aria-label="Info sur les étiquettes" text @click="visible = true"
             v-tooltip.right="{ value: 'Info sur les étiquettes', showDelay: 300, hideDelay: 0 }" />
           <!-- <ToggleButton v-model="checked" onIcon="pi pi-search" offIcon="pi pi-search" onLabel="" offLabel="" -->

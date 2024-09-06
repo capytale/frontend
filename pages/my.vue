@@ -25,6 +25,10 @@ const handleResize = (event) => {
 
 // TODO : récupérer la dernière size dans les prefs utilisateur
 const size = [25,75]
+
+const gutter = computed(() => {
+  return sideMenu.visible ? 2 : 0
+})
 </script>
 
 <template>
@@ -33,12 +37,22 @@ const size = [25,75]
       <MyActivityPlay />
       <MyActivityAdd />
     </div>
-    <Splitter @resizeend="handleResize">
-    <SplitterPanel :size="size[0]">
+    <Splitter @resizeend="handleResize" class="relative" :gutterSize="gutter">
+    <SplitterPanel :size="size[0]" v-show="sideMenu.visible">
       <SideMenu />
     </SplitterPanel>
     <SplitterPanel :size="size[1]">
+    <div class="flex flex-row">
+      <div>
+      <div v-if="!sideMenu.visible" class="mt-16 h-16 w-16 rounded-full border-2 flex justify-center items-center absolute top-0 -left-8 z-[99]" style="background-color: var(--p-card-background)" @mouseover="sideMenu.hover = true">
+      <i class="pi pi-tags" style="font-size: 1.5rem;"></i>
+      </div>
+      <div v-if="sideMenu.hover && !sideMenu.visible" class="absolute top-24 left-6 z-[100] p-card" @mouseleave="sideMenu.hover = false">
+      <SideMenu />
+      </div>
+      </div>
       <MyList />
+    </div>
     </SplitterPanel>
     </Splitter>
   </div>
