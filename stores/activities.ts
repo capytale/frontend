@@ -138,11 +138,11 @@ export const useActivitiesStore = defineStore('activities', {
       }
     },
 
-    async replaceTags(nid: any[], tid: any[]) {
-      console.log('replaceTags', nid, tid);
+    async replaceTags(nids: any[], tids: any[]) {
+      console.log('replaceTags', nids, tids);
       await httpClient.postJsonAsync(
         myActivitiesApiEp,
-        { action: "replaceTags", nid, tid }
+        { action: "replaceTags", nids, tids }
       );
     },
 
