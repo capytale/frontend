@@ -27,7 +27,7 @@ const nbViews = computed(() => {
   <div v-if="props.data.extra">
     <Button v-if="data.viewsTotal == 0" severity="secondary" text disabled>0 vue</Button>
     <Button v-else @click="visible = true" severity="primary" size="large"
-      v-tooltip.top="{ value: details + 'Cliquez pour voir les copies', showDelay: 400, hideDelay: 0 }" text> {{ nbViews }} </Button>
+      v-tooltip.top="{ value: details + 'Cliquez pour les voir', showDelay: 400, hideDelay: 0 }" text> {{ nbViews }} </Button>
     <Dialog v-model:visible="visible" position="top" maximizable modal header="&nbsp;" :style="{ width: '90%' }" dismissableMask>
       <template #header v-if="my.loadingAssignments">
         <Skeleton shape="circle" size="4rem" class="mr-2 my-2"></Skeleton>

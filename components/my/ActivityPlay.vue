@@ -37,13 +37,14 @@ const clear = () => {
     </template>
     <template #content>
 
-      <div class="flex flex-col gap-2 mt-4">
+      <div class="flex flex-col gap-2 ">
         <Message v-if="invalid" severity="error" closable @close="clear">{{ message }}</Message>
+        <label for="code" class="text-xs">Code (ex : a1bc-12345678)</label>
         <div class="flex flex-wrap align-items-center gap-2">
-          <FloatLabel>
-            <label for="code">Code (ex : a1bc-12345678)</label>
+          <!-- <FloatLabel> -->
+            <!-- <label for="code">Code (ex : a1bc-12345678)</label> -->
             <InputText id="code" v-model="value" :invalid="invalid" />
-          </FloatLabel>
+          <!-- </FloatLabel> -->
           <Button type="submit" label="Go !" @click="codeForm" />
         </div>
       </div>
