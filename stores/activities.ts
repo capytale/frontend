@@ -128,9 +128,8 @@ export const useActivitiesStore = defineStore('activities', {
     },
 
     async bulkArchive(nids: number, corbeilleTid: number) {
-      // console.log("bulkArchive", nids, corbeilleTid)
       for (let nid of nids) {
-        // console.log("nid", nid)
+        this.activities.data = this.activities.data.map(el => el.nid == nid ? { ...el, viewsDetails: {100: 0, 200: 0, 300:0, visible: 0}   } : el);
         await httpClient.postJsonAsync(
           myActivitiesApiEp,
           { action: "bulkArchive", nid, corbeilleTid }

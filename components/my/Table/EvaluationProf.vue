@@ -19,7 +19,7 @@ const nbViews = computed(() => {
   if (!props.isTeacher)
     return "Activité personnelle"
   else
-    return props.data.viewsTotal > 1 ? props.data.viewsTotal + ' vues' : props.data.viewsTotal + ' vue'
+    return props.data.viewsDetails.visible > 1 ? props.data.viewsDetails.visible + ' vues' : props.data.viewsDetails.visible + ' vue'
 })
 </script>
 
@@ -37,7 +37,7 @@ const nbViews = computed(() => {
         <img :src="my.assignments.icon" alt="icon" class="w-16 h-16" />
         <span class="activity-title">{{ my.assignments.title }}</span>
       </template>
-      <AssignmentStudentList :nid="props.data.nid" :viewsTotal="parseInt(data.viewsTotal)" />
+      <AssignmentStudentList :nid="props.data.nid" :viewsVisible="parseInt(data.viewsDetails.visible)" />
     </Dialog>
   </div>
 </template>

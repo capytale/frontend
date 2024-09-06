@@ -12,7 +12,7 @@ const my = useMyStore()
 
 const props = defineProps<{
   nid: string,
-  viewsTotal?: number
+  viewsVisible?: number
 }>()
 
 my.getAssignments(props.nid)
@@ -97,8 +97,8 @@ const chWf = ((sa_nid, wf) => {
 })
 
 const nbFake = computed(() => {
-  if (props.viewsTotal == null) return new Array(defaultNbFake)
-  return new Array(props.viewsTotal)
+  if (props.viewsVisible == null) return new Array(defaultNbFake)
+  return new Array(props.viewsVisible)
 })
 
 const filters = ref({
