@@ -10,7 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@capytale/activity.js": "^3.0.9",
+    "@capytale/activity.js": "^3.0.10",
     "@pinia/nuxt": "^0.5.4",
     "@primevue/themes": "^4.0.5",
     "@vueuse/nuxt": "^11.0.3",
