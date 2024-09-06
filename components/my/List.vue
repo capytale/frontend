@@ -30,9 +30,19 @@ const tagsToggle2 = (event) => {
   })
 }
 
+const replaceTags = async () => {
+  await activites.replaceTags([...tmpTags.value.map((o) => o.nid)], tmpTags.value.map((o) => o.tags))
+  selectedNid.value.forEach((o) => {
+    o.tags = tmpTags.value.find((p) => p.nid === o.nid).tags
+  })
+  tmpTags.value = []
+  opTags2.value.hide()
+}
 const cancelModif = () => {
   tmpTags.value = []
+  opTags2.value.hide()
 }
+
 const foldersToggle = (event) => { opFolders.value.toggle(event); }
 const colsChoiceToggle = (event) => { colsChoice.value.toggle(event); }
 
@@ -236,7 +246,11 @@ const nbselected = () => {
                     <Popover ref="opTags2">
                         <MyTagsTree v-if="tmpTags.length === 0" v-model:selection="selectedNid" :tags="tags.tags.data" />
                         <MyTagsTree v-else v-model:selection="tmpTags" :tags="tags.tags.data" />
-                        <Button @click="cancelModif" label="Annuler" class="w-full" />
+                        <div class="flex flex-row justify-between">
+                          <Button label="Appliquer" @click="replaceTags" class="mt-4" size="small" />
+                          <Button label="Annuler" @click="cancelModif" class="mt-4" severity="secondary"
+                            size="small" />
+                        </div>
                     </Popover>
                   </div>
                   <div class="card flex justify-content-center" v-if="false">

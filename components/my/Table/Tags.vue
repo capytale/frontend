@@ -21,7 +21,7 @@ const getName = (id) => {
 <template>
   <div v-for="tag in props.data.tags" :key="props.data.nid + tag">
     <!-- {{ tag }} {{ props.data.nid }} -->
-    {{ props.data.info }}
+    <!-- {{ props.data.info }} -->
     <span class="parent mr-1">
       <Button v-if="getName(tag).label" removable class="pr-3 small-button" text @click="op = !op">
         <i class="pi pi-tag px-2 normal" :style="'color:' + getName(tag).color"></i><span class="whitespace-nowrap">{{ getName(tag).label }}</span>
