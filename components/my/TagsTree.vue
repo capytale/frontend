@@ -33,7 +33,7 @@ const replaceTags = async () => {
 }
 
 const cancelModif = () => {
-  events.forEach((event) => {
+  events.slice().reverse().forEach((event) => {
     if (event.type === 'tag') {
       selection.value.find((activite) => activite.nid === event.nid).tags = selection.value.find((activite) => activite.nid === event.nid).tags.filter((id) => id !== event.tid)
     } else if (event.type === 'untag') {
