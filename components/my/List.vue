@@ -356,7 +356,7 @@ const nbselected = () => {
             <Column :class="cols.tags ? '' : 'hidden'" field="tags" header="Étiquettes" style="">
               <template #body="p">
                 <!-- {{ p.data.tags }} -->
-                <MyTableTags :data="tmpTags.find(o => o.nid === p.data.nid) || p.data" />
+                <MyTableTags :tmp="tmpTags.find(o => o.nid === p.data.nid)" :data="p.data" />
               </template>
             </Column>
 
