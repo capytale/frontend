@@ -37,10 +37,12 @@ const replaceTags = async () => {
   })
   tmpTags.value = []
   opTags2.value.hide()
+  selectedNid.value = []
 }
 const cancelModif = () => {
   tmpTags.value = []
   opTags2.value.hide()
+  selectedNid.value = []
 }
 
 const foldersToggle = (event) => { opFolders.value.toggle(event); }
