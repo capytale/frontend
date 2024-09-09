@@ -12,6 +12,10 @@ const backToHome = () => {
 }
 
 const clone = async (nid) => {
+  if (activites.activities.length === 0) {
+    const activites = useActivitiesStore()
+    await activites.getActivities()
+  }
   try {
     const response = await activites.cloneActivity(nid)
     toast.add({ severity: 'success', summary: 'Clonage réussi ', life: 2000 });
@@ -66,7 +70,8 @@ onBeforeUnmount(() => {
             <h2>{{ decode(props.data.title) }}</h2>
           </div>
           <div>
-            <Button v-if="backHomeVisible"  @click="backToHome" label="Voir le clone" :icon="patience ? 'pi pi-spin pi-spinner' : 'pi pi-chevron-left' " class="mx-2"
+            <Button v-if="backHomeVisible" @click="backToHome" label="Voir le clone"
+              :icon="patience ? 'pi pi-spin pi-spinner' : 'pi pi-chevron-left'" class="mx-2"
               v-tooltip.bottom="{ value: 'Retour à la page Mes activités', showDelay: 300, hideDelay: 100 }" />
             <Button v-else @click="clone(props.data.nid)" label="Cloner" icon="pi pi-clone" class="mx-2"
               v-tooltip.bottom="{ value: 'Cloner cette ressource', showDelay: 300, hideDelay: 100 }" />
@@ -85,7 +90,7 @@ onBeforeUnmount(() => {
 <style scoped>
 .clickable {
   cursor: pointer;
-  color: var(--p-primary-color); 
+  color: var(--p-primary-color);
   text-decoration: underline;
 }
 
@@ -93,7 +98,8 @@ onBeforeUnmount(() => {
   color: var(--p-primary-color);
   cursor: pointer;
 }
+
 .tablelink:hover {
   color: var(--p-primary-color-hover);
-} 
+}
 </style>
