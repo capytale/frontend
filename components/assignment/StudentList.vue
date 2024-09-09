@@ -50,8 +50,8 @@ const handleChangeWf = ((wf) => {
 
 const tags = useTagsStore()
 const corbeilleTid = () => {
-  if (!tags.tags.data.find(o => o.label === 'Corbeille')) return null
-  return tags.tags.data.find(o => o.label === 'Corbeille').id
+  if (!tags.tags.find(o => o.label === 'Corbeille')) return null
+  return tags.tags.find(o => o.label === 'Corbeille').id
 }
 
 // compte le nombre de copies avec le workflow n

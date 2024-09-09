@@ -3,8 +3,6 @@ const sideMenu = useSideMenuStore()
 const activeTag = useActiveTagStore()
 
 const tags = useTagsStore()
-await tags.getTags()
-await tags.getFlatTags()
 
 const selectedKey = ref(null);
 const createTagVisible = ref(false);
@@ -49,15 +47,15 @@ const strictSearch = ref(false);
       </span>
       <Button label="Ajouter une étiquette" severity="secondary" size="small" class="self-center" icon="pi pi-plus" @click="createTagVisible = true" />
       <Divider />
-      <div v-if="tags.tags.pending">loading......</div>
+      <div v-if="tags.status === 'pending'">loading......</div>
       <template v-else>
         <Tree id="folders" v-model:expandedKeys="expandedKeys" v-model:selectionKeys="selectedKey" selectionMode="single"
-          :value="tags.tags.data" class="w-full md:w-30rem" @nodeSelect="onNodeSelect" @nodeUnselect="onNodeUnselect"
+          :value="tags.tags" class="w-full md:w-30rem" @nodeSelect="onNodeSelect" @nodeUnselect="onNodeUnselect"
           :filter="checked" :filterMode="strictSearch ? 'strict' : 'lenient'" :dt="{ 'padding': '0' }">
           <template #default="slotProps">
             <div class="primary-nav left centerize">
 
-              <MyTagEdit :slotProps="slotProps" :tags="tags.tags.data" />
+              <MyTagEdit :slotProps="slotProps" :tags="tags.tags" />
             </div>
           </template>
         </Tree>

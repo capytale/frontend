@@ -6,7 +6,7 @@ const props = defineProps({
 const my = useMyStore()
 const tags = useTagsStore()
 const corbeilleTid = () => {
-  return tags.tags.data.find(o => o.label === 'Corbeille').id
+  return tags.tags.find(o => o.label === 'Corbeille').id
 }
 </script>
 

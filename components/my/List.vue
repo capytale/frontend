@@ -1,16 +1,12 @@
 <script setup>
 import { FilterMatchMode } from '@primevue/core/api';
-import { typeIcon } from '~/utils/format';
 
-const { data: user, pending: usrpnd, error: usrerr, status: usrstts } = await fetchCurrentUser()
-const isTeacher = user.value.roles.includes('teacher')
-
-import { useMyStore } from '@/stores/my'
-const my = useMyStore()
+const user = useUserStore()
 const activites = useActivitiesStore()
 const tags = useTagsStore()
 
-await activites.getActivities()
+const isTeacher = user.user.data.roles.includes('teacher')
+
 
 const activitiesByTag = {};
 
@@ -24,9 +20,6 @@ activites.activities.data.forEach(activity => {
     });
   }
 });
-
-await tags.getTags()
-await tags.getFlatTags()
 
 const selectedTags = ref(null)
 
@@ -169,13 +162,13 @@ const filters = ref({
 const activeTag = useActiveTagStore()
 
 const getTagName = (tid) => {
-  const tag = tags.flatTags.data.find(o => o.id === tid)
+  const tag = tags.flatTags.find(o => o.id === tid)
   return tag ? tag.label : ''
 }
 
 const corbeilleTid = () => {
-  if (!tags.tags.data.find(o => o.label === 'Corbeille')) return null
-  return tags.tags.data.find(o => o.label === 'Corbeille').id
+  if (!tags.tags.find(o => o.label === 'Corbeille')) return null
+  return tags.tags.find(o => o.label === 'Corbeille').id
 }
 
 const myactivities = computed(() => {
@@ -261,8 +254,8 @@ const nbselected = () => {
                     <Button v-tooltip.bottom="'Étiqueter'" icon="pi pi-tags" class="mr-2" @click="tagsToggle2"
                       severity="secondary" outlined />
                     <Popover ref="opTags2">
-                      <MyTagsTree v-if="tmpTags.length === 0" v-model:selection="selectedNid" :tags="tags.tags.data" />
-                      <MyTagsTree v-else v-model:selection="tmpTags" :tags="tags.tags.data" />
+                      <MyTagsTree v-if="tmpTags.length === 0" v-model:selection="selectedNid" :tags="tags.tags" />
+                      <MyTagsTree v-else v-model:selection="tmpTags" :tags="tags.tags" />
                       <div class="flex flex-row justify-between">
                         <Button label="Annuler" @click="cancelModif" class="mt-4" severity="secondary" size="small" />
                         <Button label="Appliquer" @click="replaceTags" class="mt-4" size="small" />
@@ -274,7 +267,7 @@ const nbselected = () => {
                       @click="foldersToggle" />
                     <Popover ref="opFolders">
                       <div class="gap-3 w-25rem">
-                        <Tree id="folder" v-model:selectionKeys="selectedFolder" :value="tags.tags.data"
+                        <Tree id="folder" v-model:selectionKeys="selectedFolder" :value="tags.tags"
                           selectionMode="single" class="w-full md:w-30rem scroll">
                           <template #default="slotProps">
                             <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label

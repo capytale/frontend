@@ -6,7 +6,7 @@ import { myPrivateTags } from '@/mockup_data/my-private-tags'
 let myActivitiesCache: { property: object }
 // renvoie {data, pending, error, status}
 export function fetchMyActivities() {
-  return useAsyncData('activKey', async () => {
+  return useLazyAsyncData('activKey', async () => {
     if (online) {
       return myActivitiesCache = await httpClient.getJsonAsync<any>("/web/c-hdls/api/all-activities")
     } else {
@@ -42,7 +42,7 @@ export function fetchAssignments(nid: string) {
 
 let myTagsCache
 export function fetchTags() {
-  return useAsyncData('tagsKey', async () => {
+  return useLazyAsyncData('tagsKey', async () => {
     if (online) {
       myTagsCache = await httpClient.getJsonAsync<any>("/web/c-hdls/api/get-private-tags-flat-list")
       return unflatten(myTagsCache)
@@ -60,7 +60,7 @@ export function fetchTags() {
 
 let myFlatTagsCache
 export function fetchFlatTags() {
-  return useAsyncData('flatTagsKey', async () => {
+  return useLazyAsyncData('flatTagsKey', async () => {
     if (online) {
       myFlatTagsCache = await httpClient.getJsonAsync<any>("/web/c-hdls/api/get-private-tags-flat-list")
       return myFlatTagsCache
@@ -71,6 +71,25 @@ export function fetchFlatTags() {
     {
       getCachedData() {
         return myFlatTagsCache
+      }
+    }
+  )
+}
+
+
+let myAllTagsCache
+export function fetchAllTags() {
+  return useLazyAsyncData('alltagsKey', async () => {
+    if (online) {
+      myTagsCache = await httpClient.getJsonAsync<any>("/web/c-hdls/api/get-private-tags-flat-list")
+      return { tags: unflatten(myTagsCache), flatTags: myTagsCache }
+    } else {
+      return myTagsCache = { tags: unflatten(myPrivateTags), flatTags: myPrivateTags }
+    }
+  },
+    {
+      getCachedData() {
+        return myAllTagsCache
       }
     }
   )

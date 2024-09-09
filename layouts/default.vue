@@ -1,6 +1,6 @@
 <script setup>
-const theme = useThemeStore()
-const sideMenu = useSideMenuStore()
+const user = useUserStore()
+user.getUser()
 
 useHead({
   htmlAttrs: {

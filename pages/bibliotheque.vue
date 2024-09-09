@@ -5,7 +5,6 @@ import { FilterMatchMode } from '@primevue/core/api';
 import { useRoute } from 'vue-router';
 // import Dialog from 'primevue/dialog';
 
-const my = useMyStore()
 const bib = useBibStore()
 
 const products = ref(new Array(20));

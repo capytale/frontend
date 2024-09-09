@@ -4,7 +4,7 @@ import { me } from '@/mockup_data/me';
 
 let currentUserCache: { property: object }
 export function fetchCurrentUser() {
-  return useAsyncData('currUserKey', async () => {
+  return useLazyAsyncData('currUserKey', async () => {
     if (online) {
       return currentUserCache = await httpClient.getJsonAsync<any>("/web/c-auth/api/me")
     } else {

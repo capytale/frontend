@@ -125,11 +125,11 @@ const isSuccessor = (id, notMe) => {
   if (id == notMe) {
     return true
   }
-  const current = tagstore.flatTags.data.find(t => t.id == id)
+  const current = tagstore.flatTags.find(t => t.id == id)
   if (current.parentid == 0) {
     return current.id == notMe
   }
-  const parent = tagstore.flatTags.data.find(t => t.id == current.parentid)
+  const parent = tagstore.flatTags.find(t => t.id == current.parentid)
   return isSuccessor(parent.id, notMe)
 }
 

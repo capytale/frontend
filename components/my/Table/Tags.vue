@@ -14,7 +14,7 @@ const delTag = (nid, tid) => {
 }
 
 const getName = (id) => {
-  let obj = tags.flatTags.data.find(o => o.id === id);
+  let obj = tags.flatTags.find(o => o.id === id);
   return { label: obj ? obj.label : '', color: obj ? obj.color : '' }
 }
 

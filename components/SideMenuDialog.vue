@@ -1,9 +1,5 @@
 <script setup>
-const activeTag = useActiveTagStore()
-
 const tags = useTagsStore()
-await tags.getTags()
-await tags.getFlatTags()
 
 const label = ref('');
 const wantSubTag = ref(false);
@@ -52,7 +48,7 @@ const visible = defineModel('visible')
       <label for="checked" class="ml-2">Imbriquer l'étiquette sous : </label>
     </div>
     <div class="flex align-items-center gap-3 mb-5">
-      <Tree id="folders" v-model:selectionKeys="selectedTag" :value="tags.tags.data" selectionMode="single"
+      <Tree id="folders" v-model:selectionKeys="selectedTag" :value="tags.tags" selectionMode="single"
         class="w-full md:w-30rem" @nodeSelect="onNodeSelect" @nodeUnselect="onNodeUnselect">
         <template #default="slotProps">
           <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}

@@ -2,6 +2,11 @@
 document.title = "Capytale"
 const sideMenu = useSideMenuStore()
 const activites = useActivitiesStore()
+const tags = useTagsStore()
+const user = useUserStore()
+
+activites.getActivities()
+tags.getAllTags()
 
 // Possible interaction dynamique avec le viewport pour auto-hide du menu
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
@@ -16,7 +21,6 @@ const bpsmallerThanLg = breakpoints.smaller('lg') // only smaller than lg
 //TODO : à voir !
 //fin du todo
 
-const { data: user, pending, error, status } = await fetchCurrentUser()
 
 const handleResize = (event) => {
   console.log("Ces valeurs pourraient être intégrées dans les pref utilisateur et chargées au démarrage")
@@ -36,6 +40,15 @@ const sideState = computed(() => {
 const gutter = computed(() => {
   return sideMenu.visible && sideState.value !== 'empty' ? 2 : 0
 })
+
+const isReady = computed(() => {
+  return {
+    acti : activites.activities.status === 'success',
+    tags : tags.status === 'success',
+    user : user.user.status === 'success',
+    all : activites.activities.status === 'success' && tags.status === 'success' && user.user.status === 'success'
+  }
+})
 </script>
 
 <template>
@@ -46,7 +59,7 @@ const gutter = computed(() => {
     </div>
     <Splitter @resizeend="handleResize" class="relative" :gutterSize="gutter">
     <SplitterPanel :size="size[0]" v-show="sideMenu.visible && sideState !== 'empty'">
-      <SideMenu />
+      <SideMenu v-if="isReady.tags" />
     </SplitterPanel>
     <SplitterPanel :size="size[1]">
     <div class="flex flex-row overflow-scroll">
@@ -55,10 +68,11 @@ const gutter = computed(() => {
       <i class="pi pi-tags" style="font-size: 1.5rem;"></i>
       </div>
       <div v-if="sideMenu.hover && !sideMenu.visible" class="absolute top-24 left-6 z-[100] p-card" @mouseleave="sideMenu.hover = false">
-      <SideMenu />
+      <SideMenu v-if="isReady.tags" />
       </div>
       </div>
-      <MyList />
+      <MyListSkeleton v-if="!isReady.all" />
+      <MyList v-else />
     </div>
     </SplitterPanel>
     </Splitter>

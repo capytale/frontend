@@ -1,10 +1,6 @@
 <script setup>
 const colorMode = useColorMode()
-const { data: user, pending, error, status } = await fetchCurrentUser()
-
-const themeIcon = () => {
-  return colorMode.preference === 'light' ? 'pi pi-moon' : 'pi pi-sun';
-}
+const user = useUserStore()
 
 const toggleColorMode = () => {
   colorMode.preference = colorMode.preference === 'light' ? 'dark' : 'light';
@@ -18,8 +14,8 @@ const toggleColorMode = () => {
         <NuxtLink href="/"> CAPYTALE </NuxtLink>
       </span>
       <div class="capytaleMenu">
-        <NuxtLink v-if="user" to="/my"><span class="px-2">Mes activités</span></NuxtLink>
-        <NuxtLink v-if="user" to="/bibliotheque"><span class="px-2">La bibliothèque</span></NuxtLink>
+        <NuxtLink v-if="user.user.data" to="/my"><span class="px-2">Mes activités</span></NuxtLink>
+        <NuxtLink v-if="user.user.data" to="/bibliotheque"><span class="px-2">La bibliothèque</span></NuxtLink>
       </div>
       <div class="activityInfo">
       </div>
