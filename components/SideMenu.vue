@@ -1,26 +1,13 @@
 <script setup>
-import { useSideMenuStore } from '@/stores/ui'
-import Popover from 'primevue/popover';
 const sideMenu = useSideMenuStore()
 const activeTag = useActiveTagStore()
-const code = useCodeStore()
 
-import { useMyStore } from '@/stores/my'
-const my = useMyStore()
 const tags = useTagsStore()
 await tags.getTags()
 await tags.getFlatTags()
 
 const selectedKey = ref(null);
 const createTagVisible = ref(false);
-const label = ref('');
-const wantSubTag = ref([]);
-const selectedTag = ref([])
-
-const save = () => {
-  tags.createTag(label.value, Object.keys(selectedTag.value)[0] || 0)
-  createTagVisible.value = false;
-}
 
 const onNodeSelect = (node) => {
   activeTag.activate(node.key)
@@ -29,22 +16,7 @@ const onNodeUnselect = (node) => {
   activeTag.activate(null)
 };
 
-
-
-
-const nodes = ref(null);
 const expandedKeys = ref({});
-const expandAll = () => {
-  for (let node of tags.tags.data) {
-    expandNode(node);
-  }
-
-  expandedKeys.value = { ...expandedKeys.value };
-};
-
-const collapseAll = () => {
-  expandedKeys.value = {};
-};
 
 const expandNode = (node) => {
   if (node.children && node.children.length) {
@@ -56,21 +28,9 @@ const expandNode = (node) => {
   }
 };
 
-const handleSwitch = () => {
-  if (checked.value === true) {
-    expandAll();
-  } else {
-    collapseAll()
-  }
-};
-
 const visible = ref(false);
 const checked = ref(false);
 const strictSearch = ref(false);
-const op = ref();
-const toggle = (event) => {
-  op.value.toggle(event);
-}
 </script>
 
 <template>
@@ -81,36 +41,16 @@ const toggle = (event) => {
           v-tooltip.right="{ value: 'Des-épingler le menu', showDelay: 300, hideDelay: 0 }"></i>
         <i v-else class="pi pi-thumbtack unpinned highlight" @click="sideMenu.visible = true"
           v-tooltip.right="{ value: 'Épingler le menu', showDelay: 300, hideDelay: 0 }"></i>
-        <!-- <i class="pi pi-tags"></i> -->
         <span class="parent mr-1">
           <span class="font-bold">Étiquettes</span>
           <Button type="button" icon="pi pi-info-circle" aria-label="Info sur les étiquettes" text @click="visible = true"
             v-tooltip.right="{ value: 'Info sur les étiquettes', showDelay: 300, hideDelay: 0 }" />
-          <!-- <ToggleButton v-model="checked" onIcon="pi pi-search" offIcon="pi pi-search" onLabel="" offLabel="" -->
-          <!-- inputId="deplier" @click="handleSwitch" /> -->
         </span>
       </span>
       <Button label="Ajouter une étiquette" severity="secondary" size="small" class="self-center" icon="pi pi-plus" @click="createTagVisible = true" />
       <Divider />
       <div v-if="tags.tags.pending">loading......</div>
       <template v-else>
-        <!-- <div class="flex flex-wrap gap-2"> -->
-        <!--   <div v-if="checked" class="flex items-center rech-avancee"> -->
-        <!--     <Checkbox v-model="strictSearch" :binary="true" inputId="rech" /> -->
-        <!--     <label for="rech" class="ml-2">Recherche stricte -->
-        <!--       <Button type="button" icon="pi pi-info-circle" text @click="toggle" /> -->
-        <!--     </label> -->
-        <!--     <Popover ref="op"> -->
-        <!--       <p> -->
-        <!--         En mode normal, les descendants sont conservés dès lors que la requête correspond à une étiquette. -->
-        <!--       </p> -->
-        <!--       <p> -->
-        <!--         En mode strict, lorsque la requête correspond à une étiquette, le filtrage se poursuit sur tous les -->
-        <!--         descendants. -->
-        <!--       </p> -->
-        <!--     </Popover> -->
-        <!--   </div> -->
-        <!-- </div> -->
         <Tree id="folders" v-model:expandedKeys="expandedKeys" v-model:selectionKeys="selectedKey" selectionMode="single"
           :value="tags.tags.data" class="w-full md:w-30rem" @nodeSelect="onNodeSelect" @nodeUnselect="onNodeUnselect"
           :filter="checked" :filterMode="strictSearch ? 'strict' : 'lenient'" :dt="{ 'padding': '0' }">
@@ -125,30 +65,7 @@ const toggle = (event) => {
     </div>
   </div>
 
-  <Dialog v-model:visible="createTagVisible" modal header="Créer une nouvelle étiquette" :style="{ width: '55rem' }"
-    dismissableMask>
-    <div class="flex align-items-center gap-3 mb-3">
-      <label for="label" class="font-semibold w-6rem">Nom de l'étiquette</label>
-      <InputText v-model="label" id="label" class="flex-auto" autocomplete="off" />
-    </div>
-    <div class="flex align-items-center">
-      <Checkbox v-model="wantSubTag" inputId="checked" name="checked" value="subTag" @change="handleWant(event)" />
-      <label for="checked" class="ml-2">Imbriquer l'étiquette sous : </label>
-    </div>
-    <div class="flex align-items-center gap-3 mb-5">
-      <Tree id="folders" v-model:selectionKeys="selectedTag" :value="tags.tags.data" selectionMode="single"
-        class="w-full md:w-30rem" @nodeSelect="onNodeSelect" @nodeUnselect="onNodeUnselect">
-        <template #default="slotProps">
-          <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
-        </template>
-      </Tree>
-    </div>
-    <div cl:ass="flex justify-content-end gap-2">
-      <Button type="button" label="Cancel" severity="secondary" @click="createTagVisible = false"></Button>
-      <Button type="button" label="Save" @click="save"></Button>
-
-    </div>
-  </Dialog>
+  <SideMenuDialog v-model:visible="createTagVisible" />
 
   <DialogIframe v-model="visible" header="Aide" url="https://capytale2.ac-paris.fr/wiki/doku.php?id=etiquettes_vue" />
 </template>
