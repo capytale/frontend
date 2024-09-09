@@ -22,7 +22,15 @@
           '.mp4'
         "
         type="video/mp4"
+        v-if="smAL"
       />
+      <img
+        :src="
+          'https://cdn.ac-paris.fr/capytale/media/4_3_qualite28_' +
+          videos[acti % 7] +
+          '.png'
+        "
+        v-else />
       </template>
     </Card>
 
@@ -53,6 +61,7 @@ const { isOutside } = useMouseInElement(carousel);
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const lgAL = breakpoints.greaterOrEqual("lg");
+const smAL = breakpoints.greaterOrEqual("sm");
 const vidCard = ref();
 const vidH = useElementBounding(vidCard);
 
@@ -65,6 +74,8 @@ setInterval(() => {
     } else acti.value = 0;
   }
 }, 5000);
+
+
 const videos = [
   "Codabloc",
   "ConsolePython",
