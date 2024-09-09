@@ -83,7 +83,7 @@ const cards = [
   {
     title: "Adoption massive",
     description:
-      "Accès via tous les ENT de France<br>Des centaines de milliers d'utilisateurs.",
+      "Accès via tous les ENT de France.<br>Des centaines de milliers d'utilisateurs.",
     icon: "pi pi-users",
     // icon: "i-heroicons-presentation-chart-bar",
     icon: "pi pi-chart-line",
