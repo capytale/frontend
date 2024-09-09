@@ -3,51 +3,20 @@ import httpClient from '@capytale/activity.js/backend/capytale/http'
 // Definit le endpoint de l'API
 const myActivitiesApiEp = "/web/c-hdls/api/my-activities"
 const assignmentsApiEp = "/web/c-hdls/api/assignments"
-import TypeApi from '@capytale/activity.js/backend/capytale/activityType'
-import type { ActivityType, ActivityGroups } from "@capytale/activity.js/activity/activityType/activityType";
 
 
 
 export const useMyStore = defineStore('my', {
   state: () => ({
     assignments: [],
-    favorites: [] as string[],
-    types: [] as ActivityType[],
-    groups: {} as ActivityGroups,
-    actiSelView: "groups",
   }),
   getters: {
-    groupsAvecFav(state) {
-      return {
-        favorites: {
-          title: "Favoris",
-          activities: state.favorites
-        },
-
-        ...state.groups
-      }
-    }
   },
   actions: {
     async getAssignments(nid: string) {
       this.loadingAssignments = true
       this.assignments = await httpClient.getJsonAsync<any>("/web/c-hdls/api/assignments/" + nid)
       this.loadingAssignments = false
-    },
-    async getTypes() {
-      this.types = await TypeApi.getList()
-    },
-    async getGroups() {
-      this.groups = await TypeApi.getGroups()
-    },
-    async getFavorites() {
-      this.favorites = await TypeApi.getFavorites(true)
-    },
-    async addFavorite(type: string) {
-      this.favorites = await TypeApi.addFavorite(type)
-    },
-    async removeFavorite(type: string) {
-      this.favorites = await TypeApi.removeFavorite(type)
     },
     async saveAppr(nid, appr: any) {
       console.log("saveAppr", nid, appr._rawValue)

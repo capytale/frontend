@@ -78,7 +78,6 @@ const seuil = computed(() => {
   else return 0.7;
 });
 
-const cats = useCats();
 const catChoice = ref("all");
 const search = ref("");
 
@@ -94,12 +93,6 @@ const chosenCats = computed(() => {
     });
   } else
     return [];
-  return myStore.types.map((el) => {
-    return {
-      ...el,
-      score: el.niveau[catChoice.value],
-    };
-  });
 });
 
 const dialogActi = ref(false);
