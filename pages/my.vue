@@ -42,7 +42,7 @@ const gutter = computed(() => {
       <SideMenu />
     </SplitterPanel>
     <SplitterPanel :size="size[1]">
-    <div class="flex flex-row">
+    <div class="flex flex-row overflow-scroll">
       <div>
       <div v-if="!sideMenu.visible" class="mt-16 h-16 w-16 rounded-full border-2 flex justify-center items-center absolute top-0 -left-8 z-[99]" style="background-color: var(--p-card-background)" @mouseover="sideMenu.hover = true">
       <i class="pi pi-tags" style="font-size: 1.5rem;"></i>
