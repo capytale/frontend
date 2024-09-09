@@ -291,7 +291,7 @@ const nbselected = () => {
                     </Button>
                   </template>
 
-                  <div class="flex justify-content-end">
+                  <div class="flex gap-2 justify-content-end">
                     <TypeFilterSelect v-model="filters['type'].value" :activities="myactivities" />
 
                     <IconField iconPosition="left">
@@ -300,14 +300,15 @@ const nbselected = () => {
                       </InputIcon>
                       <InputText v-model="filters['title'].value" placeholder="Rechercher dans le titre" />
                     </IconField>
+                    <Button label="Colonnes" icon="pi pi-arrow-down" outlined @click="colsChoiceToggle" />
+                    <Popover ref="colsChoice">
+                      <div v-for="(v, k) in cols" :key="k" class="m-2">
+                        <Checkbox v-model="cols[k]" :binary="true" :inputId="'rech' + k" />
+                        <label :for="'rech' + k" class="ml-2">{{ k }}</label>
+                      </div>
+                    </Popover>
                   </div>
-                  <Button label="Colonnes" icon="pi pi-arrow-down" outlined @click="colsChoiceToggle" />
-                  <Popover ref="colsChoice">
-                    <div v-for="(v, k) in cols" :key="k" class="m-2">
-                      <Checkbox v-model="cols[k]" :binary="true" :inputId="'rech' + k" />
-                      <label :for="'rech' + k" class="ml-2">{{ k }}</label>
-                    </div>
-                  </Popover>
+
                 </template>
 
               </Toolbar>
