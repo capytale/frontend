@@ -127,6 +127,11 @@ export const useActivitiesStore = defineStore('activities', {
       );
     },
 
+    async changeMyVueCount(nid: number, a, b, c, d) {
+        console.log("archive", nid, a, b, c, d)
+        this.activities.data = this.activities.data.map(el => el.nid == nid ? { ...el, viewsDetails: {100: a, 200: b, 300:c, visible: d}   } : el);
+    },
+
     async bulkArchive(nids: number, corbeilleTid: number) {
       for (let nid of nids) {
         this.activities.data = this.activities.data.map(el => el.nid == nid ? { ...el, viewsDetails: {100: 0, 200: 0, 300:0, visible: 0}   } : el);

@@ -67,6 +67,7 @@ export const useMyStore = defineStore('my', {
     },
 
     async archive(sa_nids: number, corbeilleTid: number) {
+      console.log("archive", sa_nids, corbeilleTid)
       for (let sa_nid of sa_nids) {
         this.assignments.tab = this.assignments.tab.map(el => el.sa_nid == sa_nid ? { ...el, tags: [corbeilleTid] } : el);
       }

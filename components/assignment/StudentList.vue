@@ -9,6 +9,7 @@ import { useMyStore } from '@/stores/my'
 
 const toast = useToast();
 const my = useMyStore()
+const activites = useActivitiesStore()
 
 const props = defineProps<{
   nid: string,
@@ -35,6 +36,7 @@ const onRowUnselect = function () {
 
 const handleChangeWf = ((wf) => {
   my.changeSaWf(selectedNid.value, wf)
+  activites.changeMyVueCount(props.nid, countWf(100), countWf(200), countWf(300), countWf(0))
   const response = { ok: true } // TODO
   if (response.ok) {
     toast.add({ severity: 'success', summary: 'Changement(s) effectué(s) : ', life: 2000 });
@@ -48,11 +50,22 @@ const handleChangeWf = ((wf) => {
 
 const tags = useTagsStore()
 const corbeilleTid = () => {
+  if (!tags.tags.data.find(o => o.label === 'Corbeille')) return null
   return tags.tags.data.find(o => o.label === 'Corbeille').id
 }
 
+// compte le nombre de copies avec le workflow n
+const countWf = (n) => {
+  if ( n == 0) return my.assignments.tab.filter((o) => o.tags.length == 0).length
+  if (my.assignments.tab == null) return 0
+  return my.assignments.tab.filter((o) => o.workflow == n && o.tags.length == 0).length
+}
+
+console.log(countWf(100))
+
 const handleArchive = (() => {
   my.archive([...selectedNid.value.map((o) => o.sa_nid)], corbeilleTid())
+  activites.changeMyVueCount(props.nid, countWf(100), countWf(200), countWf(300), countWf(0))
   const response = { ok: true } // TODO
   if (response.ok) {
     toast.add({ severity: 'success', summary: 'Changement(s) effectué(s) : ', life: 2000 });
@@ -66,6 +79,7 @@ const handleArchive = (() => {
 
 const handleUnArchive = (() => {
   my.unArchive([...selectedNid.value.map((o) => o.sa_nid)], corbeilleTid())
+  activites.changeMyVueCount(props.nid, countWf(100), countWf(200), countWf(300), countWf(0))
   const response = { ok: true } // TODO
   if (response.ok) {
     toast.add({ severity: 'success', summary: 'Changement(s) effectué(s) : ', life: 2000 });
@@ -94,6 +108,7 @@ const nextTwo = ((wf) => {
 })
 const chWf = ((sa_nid, wf) => {
   my.changeSaWf(sa_nid, wf)
+  activites.changeMyVueCount(props.nid, countWf(100), countWf(200), countWf(300), countWf(0))
 })
 
 const nbFake = computed(() => {
@@ -163,6 +178,10 @@ const items = ref([
     label: 'Archiver',
     icon: 'pi pi-eye-slash',
     command: () => {
+      if (corbeilleTid() == null) {
+        toast.add({ severity: 'error', summary: 'Archivage impossible', detail: `L'étiquette spéciale nommée "Corbeille" doit être présente mais n'a pas été trouvée.` });
+        return
+      }
       handleArchive()
     }
   }
@@ -253,8 +272,8 @@ const archMessage = (a) => {
         </template>
         <template #end>
           <Button icon="pi pi-external-link" label="Export CSV" @click="exportCSV($event)" outlined class="mr-2" />
-          <ToggleButton v-model="filters['hasTags'].value" v-tooltip.bottom="archMessage(filters['hasTags'].value)" onLabel="Quitter les archives"
-            offLabel="Archives" offIcon="pi pi-eye-slash" class="mr-2" />
+          <ToggleButton v-model="filters['hasTags'].value" v-tooltip.bottom="archMessage(filters['hasTags'].value)"
+            onLabel="Quitter les archives" offLabel="Archives" offIcon="pi pi-eye-slash" class="mr-2" />
         </template>
 
       </Toolbar>
