@@ -300,8 +300,8 @@ const nbselected = () => {
                       </InputIcon>
                       <InputText v-model="filters['title'].value" placeholder="Rechercher dans le titre" />
                     </IconField>
-                    <Button label="Colonnes" icon="pi pi-arrow-down" outlined @click="colsChoiceToggle" />
-                    <Popover ref="colsChoice">
+                    <Button label="Colonnes" icon="pi pi-arrow-down" outlined @click="colsChoiceToggle" v-if="false" />
+                    <Popover ref="colsChoice" v-if="false">
                       <div v-for="(v, k) in cols" :key="k" class="m-2">
                         <Checkbox v-model="cols[k]" :binary="true" :inputId="'rech' + k" />
                         <label :for="'rech' + k" class="ml-2">{{ k }}</label>
