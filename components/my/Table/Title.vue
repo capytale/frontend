@@ -16,9 +16,6 @@ const visible = ref(false);
     <a :href="playerUrl" v-tooltip.top="data.title" class="clickable">{{ data.title }}</a>
     
     <i class="pi pi-cog cog" style="font-size: 1.5rem;" v-if="!props.data.isSa" @click="visible = true" />
-    <Button v-if="!props.data.isSa && false" icon="pi pi-cog" class="cog" @click="visible = true"
-      v-tooltip.top="{ value: 'Modifier les paramètres', showDelay: 400, hideDelay: 0 }"
-      aria-label="Modifier les paramètres" text :dt="{ 'padding.y': '0', 'padding.x': '0' }" />
     <MyActivityEdit v-model="visible" :data="props.data" />
   </div>
 </template>
@@ -36,7 +33,7 @@ const visible = ref(false);
   cursor: pointer;
   color: var(--p-button-text-primary-color);
   text-decoration: underline;
-  width: calc(100% - 2rem);
+  max-width: calc(100% - 2rem);
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
