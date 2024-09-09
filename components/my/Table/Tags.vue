@@ -21,17 +21,21 @@ const getName = (id) => {
 const workingTags = computed(() => {
   return props.tmp || props.data
 })
+
+const testSet = computed(() => {
+  return new Set([...(props.data.tags || []), ...(props.tmp?.tags || [])])
+})
 </script>
 
 <template>
-  <div v-for="tag in workingTags.tags" :key="workingTags.nid + tag">
+  <div v-for="tag in testSet" :key="workingTags.nid + tag">
     <!-- {{ tag }} {{ workingTags.nid }} -->
     <!-- {{ workingTags.info }} -->
     <span class="parent mr-1">
       <Button v-if="getName(tag).label" removable class="pr-3 small-button" text @click="op = !op">
-        <i class="pi pi-tag px-2 normal" :style="'color:' + getName(tag).color"></i>
-        <span class="whitespace-nowrap" :class="props.data.tags.includes(tag) ? '' : 'italic'">
-        {{ getName(tag).label }}{{ props.data.tags.includes(tag) ? '' : '*' }}
+        <i class="pi pi-tag" :style="'color:' + getName(tag).color"></i>
+        <span class="whitespace-nowrap" :class="props.data.tags.includes(tag) ? (workingTags.tags.includes(tag) ? '' : 'line-through') : 'italic'">
+        {{ getName(tag).label }}{{ props.data.tags.includes(tag) ? (workingTags.tags.includes(tag) ? '' : '') : '*' }}
         </span>
       </Button>
       <div class="poubelle">
