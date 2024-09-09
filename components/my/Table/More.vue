@@ -3,7 +3,7 @@ import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 
 const activites = useActivitiesStore()
-activites.getActivities()
+// activites.getActivities()
 
 const props = defineProps({
   data: Object,
