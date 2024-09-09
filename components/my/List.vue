@@ -11,6 +11,21 @@ const activites = useActivitiesStore()
 const tags = useTagsStore()
 
 await activites.getActivities()
+
+const activitiesByTag = {};
+
+activites.activities.data.forEach(activity => {
+  if (activity.tags) {
+    activity.tags.forEach(tag => {
+      if (!activitiesByTag[tag]) {
+        activitiesByTag[tag] = [];
+      }
+      activitiesByTag[tag].push(activity);
+    });
+  }
+});
+
+
 await tags.getTags()
 await tags.getFlatTags()
 
@@ -165,12 +180,7 @@ const corbeilleTid = () => {
 
 const myactivities = computed(() => {
   if (activeTag.tid) { // user has selected a tag
-    return activites.activities.data.filter(o => {
-      if (!o.tags) return false
-      for (let tag of o.tags) {
-        if (tag === activeTag.tid) return true
-      }
-    })
+    return activitiesByTag[activeTag.tid] || []
   } else { // no tag selected : show all activities except those in the trash
     if (!activites.activities.data) return []
     return activites.activities.data.filter(o => {
