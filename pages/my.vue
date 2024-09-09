@@ -24,7 +24,7 @@ const handleResize = (event) => {
 }
 
 // TODO : récupérer la dernière size dans les prefs utilisateur
-const size = [20,80]
+const size = [25,75]
 
 const gutter = computed(() => {
   return sideMenu.visible ? 2 : 0

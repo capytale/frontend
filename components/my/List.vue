@@ -23,10 +23,10 @@ const tmpTags = ref([]);
 const opFolders = ref();
 const colsChoice = ref();
 const tagsToggle = (event) => { opTags.value.toggle(event); }
-const tagsToggle2 = (event) => { 
+const tagsToggle2 = (event) => {
   opTags2.value.toggle(event);
   selectedNid.value.forEach((o) => {
-    tmpTags.value.push({ nid: o.nid, tags: [...o.tags], info: 'tmp'})
+    tmpTags.value.push({ nid: o.nid, tags: [...o.tags], info: 'tmp' })
   })
 }
 
@@ -225,39 +225,38 @@ const nbselected = () => {
                   <span class="mr-2">{{ nbselected() }}</span>
 
                   <Button v-if="oneCheckbox" v-tooltip.bottom="'Paramètres'" @click="handleEdit()" icon="pi pi-cog"
-                    class="mr-2" severity="secondary" />
-                  <Button v-tooltip.bottom="'Supprimer'" @click="handleDelete()" icon="pi pi-trash" class="mr-2" outlined
-                    severity="danger" />
-                  <Button v-tooltip.bottom="'Archiver toutes les copies et mettre le compteur de vues à 0'" @click="handleBulkArchive()" icon="pi pi-eye-slash"
-                    class="mr-2" outlined severity="danger" />
-                  <div class="card flex justify-content-center">
-                    <Button v-tooltip.bottom="'Étiqueter'" icon="pi pi-tags" class="mr-2" severity="secondary"
-                      @click="tagsToggle" />
-                    <Popover ref="opTags">
-                      <div class="gap-3 w-25rem">
-                        <Tree id="tags" v-model:selectionKeys="selectedTags" :value="tags.tags.data"
-                          selectionMode="multiple" class="w-full md:w-30rem scroll" :dt="{ padding: '0' }">
-                          <template #default="slotProps">
-                            <i class="pi pi-tag" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
-                          </template>
-                        </Tree>
-                        <Button v-if="selectedTags && Object.keys(selectedTags).length" type="button" label="Étiqueter"
-                          class="w-full" @click="handleAddTagMultiple" />
-                      </div>
-                    </Popover>
-                  </div>
+                    class="mr-2" severity="secondary" outlined />
+                  <Button v-tooltip.bottom="'Supprimer'" @click="handleDelete()" icon="pi pi-trash" class="mr-2"
+                    severity="danger" outlined />
+                  <Button v-tooltip.bottom="'Archiver toutes les copies et mettre le compteur de vues à 0'"
+                    @click="handleBulkArchive()" icon="pi pi-eye-slash" class="mr-2" outlined severity="secondary" />
+                  <!-- <div class="card flex justify-content-center"> -->
+                  <!--   <Button v-tooltip.bottom="'Étiqueter'" icon="pi pi-tags" class="mr-2" severity="secondary" -->
+                  <!--     @click="tagsToggle" /> -->
+                  <!--   <Popover ref="opTags"> -->
+                  <!--     <div class="gap-3 w-25rem"> -->
+                  <!--       <Tree id="tags" v-model:selectionKeys="selectedTags" :value="tags.tags.data" -->
+                  <!--         selectionMode="multiple" class="w-full md:w-30rem scroll" :dt="{ padding: '0' }"> -->
+                  <!--         <template #default="slotProps"> -->
+                  <!--           <i class="pi pi-tag" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }} -->
+                  <!--         </template> -->
+                  <!--       </Tree> -->
+                  <!--       <Button v-if="selectedTags && Object.keys(selectedTags).length" type="button" label="Étiqueter" -->
+                  <!--         class="w-full" @click="handleAddTagMultiple" /> -->
+                  <!--     </div> -->
+                  <!--   </Popover> -->
+                  <!-- </div> -->
 
                   <div class="card flex justify-content-center">
-                    <Button v-tooltip.bottom="'Étiqueter'" icon="pi pi-tags" class="mr-2" severity="secondary"
-                      @click="tagsToggle2" />
+                    <Button v-tooltip.bottom="'Étiqueter'" icon="pi pi-tags" class="mr-2" @click="tagsToggle2"
+                      severity="secondary" outlined />
                     <Popover ref="opTags2">
-                        <MyTagsTree v-if="tmpTags.length === 0" v-model:selection="selectedNid" :tags="tags.tags.data" />
-                        <MyTagsTree v-else v-model:selection="tmpTags" :tags="tags.tags.data" />
-                        <div class="flex flex-row justify-between">
-                          <Button label="Appliquer" @click="replaceTags" class="mt-4" size="small" />
-                          <Button label="Annuler" @click="cancelModif" class="mt-4" severity="secondary"
-                            size="small" />
-                        </div>
+                      <MyTagsTree v-if="tmpTags.length === 0" v-model:selection="selectedNid" :tags="tags.tags.data" />
+                      <MyTagsTree v-else v-model:selection="tmpTags" :tags="tags.tags.data" />
+                      <div class="flex flex-row justify-between">
+                        <Button label="Appliquer" @click="replaceTags" class="mt-4" size="small" />
+                        <Button label="Annuler" @click="cancelModif" class="mt-4" severity="secondary" size="small" />
+                      </div>
                     </Popover>
                   </div>
                   <div class="card flex justify-content-center" v-if="false">
@@ -303,10 +302,10 @@ const nbselected = () => {
                   </div>
                   <Button label="Colonnes" icon="pi pi-arrow-down" outlined @click="colsChoiceToggle" />
                   <Popover ref="colsChoice">
-                  <div v-for="(v, k) in cols" :key="k" class="m-2">
-                    <Checkbox v-model="cols[k]" :binary="true" :inputId="'rech'+k" />
-                    <label :for="'rech'+k" class="ml-2">{{ k }}</label>
-                  </div>
+                    <div v-for="(v, k) in cols" :key="k" class="m-2">
+                      <Checkbox v-model="cols[k]" :binary="true" :inputId="'rech' + k" />
+                      <label :for="'rech' + k" class="ml-2">{{ k }}</label>
+                    </div>
                   </Popover>
                 </template>
 
@@ -321,18 +320,21 @@ const nbselected = () => {
               </template>
             </Column>
 
-            <Column :class="cols.title ? '' : 'hidden'" field="title" header="Titre" sortable style="min-width: 15rem; max-width: 20rem;">
+            <Column :class="cols.title ? '' : 'hidden'" field="title" header="Titre" sortable
+              style="min-width: 15rem; max-width: 20rem;">
               <template #body="p">
                 <MyTableTitle :data="p.data" />
               </template>
             </Column>
 
-            <Column v-if="isTeacher" :class="cols.evaluation ? '' : 'hidden'" field="evaluation" header="Évaluation" style="max-width: 12rem">
+            <Column v-if="isTeacher" :class="cols.evaluation ? '' : 'hidden'" field="evaluation" header="Évaluation"
+              style="max-width: 12rem">
               <template #body="p">
                 <MyTableEvaluation :data="p.data" :isTeacher="isTeacher" />
               </template>
             </Column>
-            <Column v-else :class="cols.evaluation ? '' : 'hidden'" field="evaluation" header="Évaluation" style="max-width:20rem">
+            <Column v-else :class="cols.evaluation ? '' : 'hidden'" field="evaluation" header="Évaluation"
+              style="max-width:20rem">
               <template #body="p">
                 <MyTableEvaluation :data="p.data" />
               </template>
