@@ -148,7 +148,7 @@ const handleAddTagMultiple = async () => {
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   title: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  type: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  type: { value: null, matchMode: FilterMatchMode.IN },
 });
 
 const activeTag = useActiveTagStore()

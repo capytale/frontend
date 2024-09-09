@@ -59,7 +59,7 @@ const initFilters = () => {
     niveau: { value: null, matchMode: FilterMatchMode.CONTAINS },
     enseignement: { value: null, matchMode: FilterMatchMode.CONTAINS },
     auteur: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    type: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    type: { value: null, matchMode: FilterMatchMode.IN },
   };
 };
 
