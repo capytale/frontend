@@ -48,6 +48,7 @@ const replaceTags = async () => {
   await activites.replaceTags([...tmpTags.value.map((o) => o.nid)], tmpTags.value.map((o) => o.tags))
   selectedNid.value.forEach((o) => {
     o.tags = tmpTags.value.find((p) => p.nid === o.nid).tags
+    o.changed = Date.now()
   })
   tmpTags.value = []
   opTags2.value.hide()
