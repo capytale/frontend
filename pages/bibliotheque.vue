@@ -189,7 +189,7 @@ const clearFilter = () => {
             </div>
           </template>
 
-          <Column field="icon" header="" style="width:5rem">
+          <Column field="icon" header="" style="min-width:5rem">
             <template #body="p">
               <MyTableType :data="p.data" />
             </template>

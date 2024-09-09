@@ -161,7 +161,7 @@ const wfStatusGetter = ((obj) => {
   </div>
   <div v-else>
 
-    <template v-if="(props.data.whoami == 'cr' || props.data.whoami == 'as') && isTeacher">
+    <template v-if="(props.data.whoami == 'cr' || props.data.whoami == 'as') && isTeacher && label.code != 'student_activity'">
       <div class="flex mystyle"
         v-tooltip.top="{ value: label.tooltipText, showDelay: 400, hideDelay: 0 }">
         <div :class="label.color" class="flex flex-col justify-center ml-2">
