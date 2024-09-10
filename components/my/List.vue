@@ -21,7 +21,6 @@ activites.activities.data.forEach(activity => {
   }
 });
 
-const selectedTags = ref(null)
 
 const selectedFolder = ref(null)
 const opTags = ref();
@@ -29,7 +28,6 @@ const opTags2 = ref();
 const tmpTags = ref([]);
 const opFolders = ref();
 const colsChoice = ref();
-const tagsToggle = (event) => { opTags.value.toggle(event); }
 const tagsToggle2 = (event) => {
   opTags2.value.toggle(event);
   selectedNid.value.forEach((o) => {
@@ -119,40 +117,6 @@ const handleDelete = function () {
   });
 }
 
-const handleBulkArchive = function () {
-  if (corbeilleTid() == null) {
-    toast.add({ severity: 'error', summary: 'Archivage impossible', detail: `L'étiquette spéciale nommée "Corbeille" doit être présente mais n'a pas été trouvée.` });
-    return
-  }
-  confirm.require({
-    message: `Vous vous apprêtez à archiver toutes les copies de ${selectedNid.value.length} élément(s).`,
-    header: 'Confirmation',
-    icon: 'pi pi-info-circle',
-    rejectLabel: 'Annuler',
-    rejectClass: 'p-button-secondary p-button-outlined',
-    acceptLabel: 'Archiver',
-    acceptClass: 'p-button-info',
-    accept: async () => {
-      try {
-        await activites.bulkArchive([...selectedNid.value.map((o) => o.nid)], corbeilleTid())
-        toast.add({ severity: 'success', summary: 'Suppression effectuée', life: 2000 });
-      }
-      catch (e) {
-        toast.add({ severity: 'error', summary: 'Échec de la suppression : ', detail: `nid = ${selectedNid.value} - ${e}` });
-      }
-    },
-  });
-}
-const handleMoveToFolderMultiple = async () => {
-  const folder = Object.keys(selectedFolder.value)[0]
-  // console.log("folder: ", folder)
-  await activites.moveActivities(selectedNid.value, folder)
-}
-const handleAddTagMultiple = async () => {
-  const tags = Object.keys(selectedTags.value)
-  await activites.tagActivities(selectedNid.value, tags)
-}
-
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   title: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -199,7 +163,7 @@ const nbselected = () => {
     <template #content>
 
       <div v-if="activites.activities.pending">
-        <p>Chargement des actvités...</p>
+        <p>Chargement des activités...</p>
       </div>
       <div v-else-if="activites.activities.status == 'error'">
         <p>Impossible de charger les activités.</p>
@@ -233,27 +197,11 @@ const nbselected = () => {
                     severity="danger" outlined />
                   <Button v-tooltip.bottom="'Archiver toutes les copies et mettre le compteur de vues à 0'"
                     @click="handleBulkArchive()" icon="pi pi-eye-slash" class="mr-2" outlined severity="secondary" />
-                  <!-- <div class="card flex justify-content-center"> -->
-                  <!--   <Button v-tooltip.bottom="'Étiqueter'" icon="pi pi-tags" class="mr-2" severity="secondary" -->
-                  <!--     @click="tagsToggle" /> -->
-                  <!--   <Popover ref="opTags"> -->
-                  <!--     <div class="gap-3 w-25rem"> -->
-                  <!--       <Tree id="tags" v-model:selectionKeys="selectedTags" :value="tags.tags.data" -->
-                  <!--         selectionMode="multiple" class="w-full md:w-30rem scroll" :dt="{ padding: '0' }"> -->
-                  <!--         <template #default="slotProps"> -->
-                  <!--           <i class="pi pi-tag" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }} -->
-                  <!--         </template> -->
-                  <!--       </Tree> -->
-                  <!--       <Button v-if="selectedTags && Object.keys(selectedTags).length" type="button" label="Étiqueter" -->
-                  <!--         class="w-full" @click="handleAddTagMultiple" /> -->
-                  <!--     </div> -->
-                  <!--   </Popover> -->
-                  <!-- </div> -->
 
                   <div class="card flex justify-content-center">
                     <Button v-tooltip.bottom="'Étiqueter'" icon="pi pi-tags" class="mr-2" @click="tagsToggle2"
                       severity="secondary" outlined />
-                    <Popover ref="opTags2">
+                    <Popover ref="opTags2" @hide="cancelModif">
                       <MyTagsTree v-if="tmpTags.length === 0" v-model:selection="selectedNid" :tags="tags.tags" />
                       <MyTagsTree v-else v-model:selection="tmpTags" :tags="tags.tags" />
                       <div class="flex flex-row justify-between">
@@ -353,22 +301,17 @@ const nbselected = () => {
             <Column :class="cols.code ? '' : 'hidden'" field="code" header="Partage" style="min-width: 13rem">
               <template #body="p">
                 <MyTableShare :data="p.data" :isTeacher="isTeacher" />
-                <!-- <MyTableShare :code="p.data.code" :mode="p.data.mode" :boss="p.data.boss" :whoami="p.data.whoami"
-              :wf="p.data.workflow" :isTeacher="isTeacher" :tr_beg="p.data.tr_beg" :tr_end="p.data.tr_end" /> -->
               </template>
             </Column>
 
             <Column v-if="isTeacher" :class="cols.bib ? '' : 'hidden'" field="bib" header="Bib." style="min-width: 5rem">
               <template #body="p">
                 <MyTableBib :data="p.data" />
-                <!-- <MyTableBib :nid="p.data.nid" :title="p.data.title" :shared="p.data.status_shared" :web="p.data.status_web"
-            :whoami="p.data.whoami" /> -->
               </template>
             </Column>
 
             <Column :class="cols.tags ? '' : 'hidden'" field="tags" header="Étiquettes" style="">
               <template #body="p">
-                <!-- {{ p.data.tags }} -->
                 <MyTableTags :tmp="tmpTags.find(o => o.nid === p.data.nid)" :data="p.data" />
               </template>
             </Column>
