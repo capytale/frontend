@@ -40,7 +40,7 @@ const baseUrl = '/~';
 export default defineNuxtConfig({
   ssr: false,
 
-  // devtools: { enabled: true },
+  devtools: { enabled: true },
   modules: ['@primevue/nuxt-module', '@nuxtjs/color-mode', '@pinia/nuxt', '@vueuse/nuxt', "@nuxtjs/tailwindcss", '@vesp/nuxt-fontawesome'],
 
   colorMode: {
