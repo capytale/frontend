@@ -29,7 +29,7 @@ const itemsGetter = ((obj) => {
       icon: 'pi pi-copy',
       command: () => {
         navigator.clipboard.writeText(obj.code);
-        toast.add({ severity: 'success', summary: 'Copié !', detail: obj.code, life: 2000 });
+        toast.add({ severity: 'info', summary: 'Code copié', detail: 'Le code de partage a été copié dans le presse-papier.', life: 2000 });
       }
     },
     {
@@ -37,7 +37,7 @@ const itemsGetter = ((obj) => {
       icon: 'pi pi-link',
       command: () => {
         navigator.clipboard.writeText(url);
-        toast.add({ severity: 'success', summary: 'Copié !', detail: url, life: 3000 });
+        toast.add({ severity: 'info', summary: 'URL copiée', detail: 'L\'URL de partage a été copiée dans le presse-papier.', life: 2000 });
       }
     },
     {
