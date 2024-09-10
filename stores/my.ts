@@ -9,6 +9,7 @@ const assignmentsApiEp = "/web/c-hdls/api/assignments"
 export const useMyStore = defineStore('my', {
   state: () => ({
     assignments: [],
+    loadingAssignments: false,
   }),
   getters: {
   },
