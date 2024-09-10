@@ -11,7 +11,7 @@ export const useActivitiesStore = defineStore('activities', {
     async getActivities() {
       // await new Promise(resolve => setTimeout(resolve, 3000))
       this.activities = await fetchMyActivities()
-      
+
     },
     async getMetadata(nid) {
       // console.log("getMetadata", nid)
@@ -21,12 +21,37 @@ export const useActivitiesStore = defineStore('activities', {
     },
 
     getAllDetails(activity: any) {
+      if (activity.refreshRequested) return;
+      if (activity.extra) return;
       if (activity.detailsRequested) return;
       activity.detailsRequested = true;
       httpClient.getJsonAsync("/web/c-hdls/api/all-details/" + activity.nid).then((details: any) => {
+        delete activity.detailsRequested
+        if (activity.refreshRequested) return
         for (const key in details) activity[key] = details[key]
         activity.extra = true
       })
+    },
+
+    /**
+     * Mets à jour les champs de l'activité passée en paramètre
+     * Si l'utilisateur a un studentAssignment lié à l'activité, il est mis à jour
+     */
+    refreshDetails(activity: any) {
+      if (activity.refreshRequested) return;
+      activity.refreshRequested = true;
+      httpClient.getJsonAsync("/web/c-hdls/api/refresh-details/" + activity.nid).then((details: any) => {
+        delete activity.refreshRequested
+        for (const key in details) activity[key] = details[key]
+        activity.extra = true
+      })
+      if (!activity.isSa) {
+        this.activities.data.forEach((a) => {
+          if ((a.isSa) && (a.activityId == activity.nid)) {
+            this.refreshDetails(a)
+          }
+        })
+      }
     },
 
     async deleteActivity(nids: Array) {
@@ -147,13 +172,13 @@ export const useActivitiesStore = defineStore('activities', {
     },
 
     async changeMyVueCount(nid: number, a, b, c, d) {
-        console.log("archive", nid, a, b, c, d)
-        this.activities.data = this.activities.data.map(el => el.nid == nid ? { ...el, viewsDetails: {100: a, 200: b, 300:c, visible: d}   } : el);
+      console.log("archive", nid, a, b, c, d)
+      this.activities.data = this.activities.data.map(el => el.nid == nid ? { ...el, viewsDetails: { 100: a, 200: b, 300: c, visible: d } } : el);
     },
 
     async bulkArchive(nids: number, corbeilleTid: number) {
       for (let nid of nids) {
-        this.activities.data = this.activities.data.map(el => el.nid == nid ? { ...el, viewsDetails: {100: 0, 200: 0, 300:0, visible: 0}   } : el);
+        this.activities.data = this.activities.data.map(el => el.nid == nid ? { ...el, viewsDetails: { 100: 0, 200: 0, 300: 0, visible: 0 } } : el);
         await httpClient.postJsonAsync(
           myActivitiesApiEp,
           { action: "bulkArchive", nid, corbeilleTid }

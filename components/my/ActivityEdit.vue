@@ -5,6 +5,8 @@ const props = defineProps<{
   }
 }>()
 
+const activites = useActivitiesStore()
+
 const visible = defineModel<boolean>()
 
 const editUrl = computed(() => `/web/c-hdls/node/${props.data.nid}/edit`)
@@ -13,10 +15,11 @@ const close = () => {
   visible.value = false
 }
 
-watch(visible, (v) => {
+watch(visible, (v, ov) => {
   if (v) {
     drupal.setCloseHandler(close)
   } else {
+    if (ov) activites.refreshDetails(props.data)
     drupal.removeCloseHandler(close)
   }
 })
