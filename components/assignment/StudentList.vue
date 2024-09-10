@@ -246,6 +246,9 @@ const archMessage = (a) => {
     <DataTable :value="richTab" tableStyle="min-width: 50rem" v-model:selection="selectedNid" v-model:filters="filters"
       :globalFilterFields="['hasTags', 'nom', 'classe']" selectionMode="multiple" filterDisplay="menu"
       @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()"
+            paginator :rows="10" :rowsPerPageOptions="[10, 20, 50]"
+            paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+            currentPageReportTemplate='{first} à {last} sur {totalRecords} &nbsp; &nbsp;'
       @rowSelectAll="onRowSelectAll()" :rowStyle="rowStyle" ref="dt">
 
       <Toolbar>
