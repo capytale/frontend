@@ -10,16 +10,17 @@ const my = useMyStore()
 const details = computed(() => {
   if (!props.isTeacher)
     return "Activité personnelle"
-  else
+  const arch = props.data.viewsTotal - props.data.viewsDetails.visible
   return props.data.viewsDetails["100"] + " copies en cours\n"
     + props.data.viewsDetails["200"] + " copies rendue(s)\n"
     + props.data.viewsDetails["300"] + " copies corrigée(s)\n\n"
+    + arch + " archivée(s)"
 })
 const nbViews = computed(() => {
   if (!props.isTeacher)
     return "Activité personnelle"
   else if (props.data.viewsDetails.visible == 0)
-    return "Aucune copie¹"
+    return "Aucune copie"
   else
     return props.data.viewsDetails.visible > 1 ? props.data.viewsDetails.visible + ' copies' : props.data.viewsDetails.visible + ' copie'
 })
@@ -29,7 +30,7 @@ const nbViews = computed(() => {
   <div v-if="props.data.extra">
     <Button v-if="data.viewsTotal == 0" severity="secondary" text disabled>Aucune copie</Button>
     <Button v-else @click="visible = true" severity="primary" size="large"
-      v-tooltip.top="{ value: details + 'Cliquez pour les voir', showDelay: 400, hideDelay: 0 }" text> {{ nbViews }} </Button>
+      v-tooltip.top="{ value: details, showDelay: 400, hideDelay: 0 }" text> {{ nbViews }} </Button>
     <Dialog v-model:visible="visible" position="top" maximizable modal header="&nbsp;" :style="{ width: '90%' }" dismissableMask>
       <template #header v-if="my.loadingAssignments">
         <Skeleton shape="circle" size="4rem" class="mr-2 my-2"></Skeleton>
