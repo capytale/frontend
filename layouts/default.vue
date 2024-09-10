@@ -1,5 +1,9 @@
 <script setup>
 const user = useUserStore()
+const colorMode = useColorMode()
+
+const bgColor = computed(() => colorMode.preference === 'light' ? 'background-color: var(--p-slate-300)' : 'background-color: var(--p-slate-700)')
+
 user.getUser()
 
 useHead({
@@ -13,7 +17,7 @@ useHead({
   <ConfirmDialog></ConfirmDialog>
   <Toast position="bottom-right" />
 
-  <div class="appContainer">
+  <div class="appContainer" :style="bgColor">
     <Header></Header>
     <div class="flex">
       <div class="container mx-auto">
