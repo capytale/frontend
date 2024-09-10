@@ -53,7 +53,7 @@ const actClonableItem = computed(() => {
       icon: 'pi pi-lock-open',
       command: async () => {
         try {
-          const response = await activites.unlockMode(props.data.nid)
+          const response = await activites.unlockMode(props.data)
           toast.add({ severity: 'success', summary: 'Distribution débloquée', life: 2000 });
         }
         catch (e) {
@@ -67,7 +67,7 @@ const actClonableItem = computed(() => {
       icon: 'pi pi-lock',
       command: async () => {
         try {
-          const response = await activites.lockMode(props.data.nid)
+          const response = await activites.lockMode(props.data)
           toast.add({ severity: 'success', summary: 'Distribution bloquée', life: 2000 });
         }
         catch (e) {

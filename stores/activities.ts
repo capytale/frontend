@@ -75,20 +75,38 @@ export const useActivitiesStore = defineStore('activities', {
       this.activities.data.push(r)
     },
 
-    async lockMode(nid: number) {
-      this.activities.data = this.activities.data.map(el => el.nid == nid ? { ...el, mode: "N_X" } : el);
-      await httpClient.postJsonAsync(
-        myActivitiesApiEp,
-        { action: "lockMode", nid }
-      );
+    async lockMode(activity: any) {
+      // Optimistic update
+      const oldMode = activity.mode
+      activity.mode = "N_X"
+      try {
+        await httpClient.postJsonAsync(
+          myActivitiesApiEp,
+          { action: "lockMode", nid: activity.nid }
+        );
+      }
+      catch (e) {
+        // Rollback
+        activity.mode = oldMode
+        throw e
+      }
     },
 
-    async unlockMode(nid: number) {
-      this.activities.data = this.activities.data.map(el => el.nid == nid ? { ...el, mode: "N_O" } : el);
-      await httpClient.postJsonAsync(
-        myActivitiesApiEp,
-        { action: "unlockMode", nid }
-      );
+    async unlockMode(activity: any) {
+      // Optimistic update
+      const oldMode = activity.mode
+      activity.mode = "N_O"
+      try {
+        await httpClient.postJsonAsync(
+          myActivitiesApiEp,
+          { action: "unlockMode", nid: activity.nid }
+        );
+      }
+      catch (e) {
+        // Rollback
+        activity.mode = oldMode
+        throw e
+      }
     },
 
     async tagActivities(pxyNids: any[], tids: any[]) {
