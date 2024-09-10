@@ -7,9 +7,9 @@ const props = defineProps({
 import { ref } from "vue";
 
 const events = ref([
-    { status: '1. Créer une activité', icon: 'pi pi-sparkles', color: '#327BB8', content: 'Vous pouvez consulter la bibliothèque pour réutiliser une activité partagée ou en créer une nouvelle en cliquant dans la liste présentée ci-dessus.'},
-    { status: '2. Distribuer à la classe', icon: 'pi pi-users', color: '#F46036', content: "Votre activité possède un code de partage que vous donnez aux élève pour leur permettre de créer des copies à partir de votre activité." },
-    { status: '3. Évaluer les travaux', icon: 'pi pi-check-circle', color: '#22c55e', content: "Vous consultez et évaluez les copies de vos élèves qui arrivent automatiquement." },
+    { status: '1. Créer une activité', icon: 'pi pi-sparkles', color: '#327BB8', float: 'right', img: 'https://cdn.ac-paris.fr/capytale/media/4_3_qualite28_Codabloc.png', content: 'Vous pouvez consulter la bibliothèque pour réutiliser une activité partagée ou en créer une nouvelle en cliquant dans la liste présentée ci-dessus.'},
+    { status: '2. Distribuer à la classe', icon: 'pi pi-users', color: '#F46036', float: 'left', img: 'https://cdn.ac-paris.fr/capytale/media/4_3_qualite28_MicroBit.png', content: "Votre activité possède un code de partage que vous donnez aux élève pour leur permettre de créer des copies à partir de votre activité." },
+    { status: '3. Évaluer les travaux', icon: 'pi pi-check-circle', color: '#22c55e', float: 'right', img: 'https://cdn.ac-paris.fr/capytale/media/4_3_qualite28_GeoGebra.png', content: "Vous consultez et évaluez les copies de vos élèves qui arrivent automatiquement." },
 ]);
 
 </script>
@@ -17,11 +17,10 @@ const events = ref([
 <template>
   <template v-if="props.isTeacher">
     <h1>Bienvenue sur Capytale</h1>
-    <h2>le service de partage d'activités de sciences et de codage !</h2>
 
-    <h3>
-      Vous n'avez pas encore d'activité.
-    </h3>
+    <p class="mt-8 mb-10">
+      Activités pédagogiques Python, GeoGebra, Scratch ou MathAléa mais aussi MicroBit, Arduino ou programmation de robots.
+    </p>
 
     <Timeline :value="events" align="alternate" class="customized-timeline">
             <template #marker="slotProps">
@@ -42,6 +41,9 @@ const events = ref([
                     </template>
                 </Card>
             </template>
+            <template #opposite="slotProps">
+              <img :src="slotProps.item.img" :class="'cropped-image mt-6 ' + slotProps.item.float">
+            </template>
         </Timeline>
     <p>
       Pour commencer, vous pouvez créer une nouvelle activité ci-dessus ou bien consulter la bibliothèque d'activités
@@ -54,3 +56,22 @@ const events = ref([
     Welcome newbie student !
   </template>
 </template>
+
+
+<style scoped>
+.cropped-image {
+  width: 80%;
+  height: 150px;
+  border-radius: 10px;
+  object-fit: cover;
+object-position: 0% 0%;
+}
+
+.right {
+  float: right;
+  }
+.left {
+  float: left;
+}
+</style>
+
