@@ -88,12 +88,6 @@ const onRowUnselect = function () {
   oneCheckbox.value = selectedNid.value.length == 1
 }
 
-const handleEdit = function () {
-  const nid = selectedNid.value[0].nid
-  const url = `/web/node/${nid}/edit`
-  window.location.href = url
-}
-
 const confirm = useConfirm();
 const toast = useToast();
 const handleDelete = function () {
@@ -191,8 +185,6 @@ const nbselected = () => {
                 <template #start v-if="showToolbar">
                   <span class="mr-2">{{ nbselected() }}</span>
 
-                  <Button v-if="oneCheckbox" v-tooltip.bottom="'Paramètres'" @click="handleEdit()" icon="pi pi-cog"
-                    class="mr-2" severity="secondary" outlined />
                   <Button v-tooltip.bottom="'Supprimer'" @click="handleDelete()" icon="pi pi-trash" class="mr-2"
                     severity="danger" outlined />
                   <Button v-tooltip.bottom="'Archiver toutes les copies et mettre le compteur de copies à 0'"
