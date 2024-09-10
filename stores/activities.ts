@@ -9,8 +9,9 @@ export const useActivitiesStore = defineStore('activities', {
   }),
   actions: {
     async getActivities() {
+      // await new Promise(resolve => setTimeout(resolve, 3000))
       this.activities = await fetchMyActivities()
-      // TODO : pas besoin de renvoyer un objet pour les tags : la liste csv des tids suffit. 
+      
     },
     async getMetadata(nid) {
       // console.log("getMetadata", nid)

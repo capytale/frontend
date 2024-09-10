@@ -170,7 +170,7 @@ const nbselected = () => {
       </div>
       <template v-else>
 
-        <MyWelcomeNewbie v-if="myactivities.length == 0" :isTeacher="isTeacher" />
+        <MyWelcomeNewbie v-if="activites.activities.data.length == 0" :isTeacher="isTeacher" />
 
         <template v-else>
 
@@ -195,7 +195,7 @@ const nbselected = () => {
                     class="mr-2" severity="secondary" outlined />
                   <Button v-tooltip.bottom="'Supprimer'" @click="handleDelete()" icon="pi pi-trash" class="mr-2"
                     severity="danger" outlined />
-                  <Button v-tooltip.bottom="'Archiver toutes les copies et mettre le compteur de vues à 0'"
+                  <Button v-tooltip.bottom="'Archiver toutes les copies et mettre le compteur de copies à 0'"
                     @click="handleBulkArchive()" icon="pi pi-eye-slash" class="mr-2" outlined severity="secondary" />
 
                   <div class="card flex justify-content-center">

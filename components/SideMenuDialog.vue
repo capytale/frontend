@@ -40,7 +40,6 @@ const visible = defineModel('visible')
     dismissableMask>
     <div class="flex align-items-center gap-3 mb-3">
       <label for="label" class="font-semibold w-6rem">Nom de l'étiquette</label>
-      {{ selectedTag }}
       <InputText v-model="label" id="label" class="flex-auto" autocomplete="off" />
     </div>
     <div class="flex align-items-center">

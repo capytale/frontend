@@ -18,14 +18,16 @@ const details = computed(() => {
 const nbViews = computed(() => {
   if (!props.isTeacher)
     return "Activité personnelle"
+  else if (props.data.viewsDetails.visible == 0)
+    return "Aucune copie¹"
   else
-    return props.data.viewsDetails.visible > 1 ? props.data.viewsDetails.visible + ' vues' : props.data.viewsDetails.visible + ' vue'
+    return props.data.viewsDetails.visible > 1 ? props.data.viewsDetails.visible + ' copies' : props.data.viewsDetails.visible + ' copie'
 })
 </script>
 
 <template>
   <div v-if="props.data.extra">
-    <Button v-if="data.viewsTotal == 0" severity="secondary" text disabled>0 vue</Button>
+    <Button v-if="data.viewsTotal == 0" severity="secondary" text disabled>Aucune copie</Button>
     <Button v-else @click="visible = true" severity="primary" size="large"
       v-tooltip.top="{ value: details + 'Cliquez pour les voir', showDelay: 400, hideDelay: 0 }" text> {{ nbViews }} </Button>
     <Dialog v-model:visible="visible" position="top" maximizable modal header="&nbsp;" :style="{ width: '90%' }" dismissableMask>
