@@ -19,7 +19,7 @@ const atl = useActivityTypesList()
 const typesList = computed<{ [type: string]: string[] }>(() => {
   let types: readonly string[];
   if (props.activities == null) {
-    types = atl.availableTypes;
+    types = atl.list;
   } else {
     const used: { [key: string]: true } = {};
     for (const act of props.activities) {
@@ -35,6 +35,7 @@ const typesList = computed<{ [type: string]: string[] }>(() => {
     if (info.filterWith) {
       mt = info.filterWith;
     } else {
+      if ((!info.available) && (!info.replacedBy)) continue;
       mt = t;
     }
     if (merged[mt] == null) {
