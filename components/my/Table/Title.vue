@@ -15,7 +15,7 @@ const visible = ref(false);
   <div class="flex flex-row items-center justify-between parent">
     <a :href="playerUrl" v-tooltip.top="data.title" class="clickable">{{ data.title }}</a>
     
-    <i class="pi pi-cog cog" style="font-size: 1.5rem;" v-if="!props.data.isSa" @click="visible = true" />
+    <i class="pi pi-cog cog" style="font-size: 1.5rem;" v-if="!props.data.isSa" @click.stop="visible = true" />
     <MyActivityEdit v-model="visible" :data="props.data" />
   </div>
 </template>
