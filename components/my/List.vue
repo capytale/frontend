@@ -111,6 +111,41 @@ const handleDelete = function () {
   });
 }
 
+const handleBulkArchive = function () {
+  if (corbeilleTid() == null) {
+    toast.add({ severity: 'error', summary: 'Archivage impossible', detail: `L'étiquette spéciale nommée "Corbeille" doit être présente mais n'a pas été trouvée.` });
+    return
+  }
+  confirm.require({
+    message: `Vous vous apprêtez à archiver toutes les copies de ${selectedNid.value.length} élément(s).`,
+    header: 'Confirmation',
+    icon: 'pi pi-info-circle',
+    rejectLabel: 'Annuler',
+    rejectClass: 'p-button-secondary p-button-outlined',
+    acceptLabel: 'Archiver',
+    acceptClass: 'p-button-info',
+    accept: async () => {
+      try {
+        await activites.bulkArchive([...selectedNid.value.map((o) => o.nid)], corbeilleTid())
+        toast.add({ severity: 'success', summary: 'Suppression effectuée', life: 2000 });
+      }
+      catch (e) {
+        toast.add({ severity: 'error', summary: 'Échec de la suppression : ', detail: `nid = ${selectedNid.value} - ${e}` });
+      }
+    },
+  });
+}
+const handleMoveToFolderMultiple = async () => {
+  const folder = Object.keys(selectedFolder.value)[0]
+  // console.log("folder: ", folder)
+  await activites.moveActivities(selectedNid.value, folder)
+}
+const handleAddTagMultiple = async () => {
+  const tags = Object.keys(selectedTags.value)
+  await activites.tagActivities(selectedNid.value, tags)
+}
+
+
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   title: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -163,7 +198,6 @@ const nbselected = () => {
         <p>Impossible de charger les activités.</p>
       </div>
       <template v-else>
-
         <MyWelcomeNewbie v-if="activites.activities.data.length == 0" :isTeacher="isTeacher" />
 
         <template v-else>

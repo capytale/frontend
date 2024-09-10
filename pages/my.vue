@@ -29,7 +29,7 @@ const handleResize = (event) => {
 }
 
 // TODO : récupérer la dernière size dans les prefs utilisateur
-const size = [25,75]
+const size = [20,80]
 
 const sideState = computed(() => {
   if(activites.activities.data?.length === 0) return "empty";
@@ -38,7 +38,7 @@ const sideState = computed(() => {
 })
 
 const gutter = computed(() => {
-  return sideMenu.visible && sideState.value !== 'empty' ? 2 : 0
+  return sideMenu.visible && sideState.value !== 'empty' ? 4 : 0
 })
 
 const isReady = computed(() => {
