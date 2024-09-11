@@ -105,13 +105,6 @@ h3 {
   overflow: scroll;
 }
 
-/* ↑↑↑↑↑↑↑↑↑↑↑↑ */
-/*   List.vue   */
-
-.p-inputicon {
-  top: 38%;
-}
-
 /*    My.vue    */
 /* ↓↓↓↓↓↓↓↓↓↓↓↓ */
 .sidemenu-inactive {
