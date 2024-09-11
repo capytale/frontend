@@ -35,7 +35,7 @@ const capyPreset = definePreset(Lara, {
   }
 });
 
-const baseUrl = '/~';
+const baseUrl = '/coucou';
 
 export default defineNuxtConfig({
   ssr: false,
@@ -94,6 +94,7 @@ export default defineNuxtConfig({
 
   app: {
     baseURL: baseUrl,
+    publicPath: baseUrl,
     // head: {
     //   link: [
     //     {
