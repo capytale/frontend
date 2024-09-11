@@ -123,11 +123,12 @@ const filters = ref({
   classe: { value: null, matchMode: FilterMatchMode.CONTAINS },
 })
 
+
 const classList = computed(() => {
   if (my.assignments.tab == null) return []
   const classes = []
   my.assignments.tab.forEach((assignment) => {
-    if (assignment.classe !== null && !classes.includes(assignment.classe)) {
+    if (assignment.classe !== null && !classes.find(el => el.classe === assignment.classe)) {
       classes.push({ classe: assignment.classe })
     }
   })
@@ -282,7 +283,7 @@ const archMessage = (a) => {
               <InputText v-model="filters['fullname'].value" placeholder="Rechercher parmi les élèves" />
             </IconField>
 
-          <Select v-model="filters['classe'].value" :options="classList" optionLabel="classe" class="mr-2"
+          <Select v-model="filters['classe'].value" :options="classList" optionLabel="classe" optionValue="classe" class="mr-2"
             placeholder="Filtrer par classe" style="min-width: 12rem" :showClear="true" />
           {{ filters['classe'].value }}
 
