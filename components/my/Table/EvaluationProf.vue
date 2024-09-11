@@ -7,14 +7,23 @@ const props = defineProps({
 
 const visible = ref(false);
 const my = useMyStore()
+
+
+const pluriel = (s) => {
+  return s > 1 ? 's' : ''
+}
+
 const details = computed(() => {
   if (!props.isTeacher)
     return "Activité personnelle"
   const arch = props.data.viewsTotal - props.data.viewsDetails.visible
-  return props.data.viewsDetails["100"] + " copies en cours\n"
-    + props.data.viewsDetails["200"] + " copies rendue(s)\n"
-    + props.data.viewsDetails["300"] + " copies corrigée(s)\n\n"
-    + arch + " archivée(s)"
+  const a = props.data.viewsDetails["100"]
+  const b = props.data.viewsDetails["200"]
+  const c = props.data.viewsDetails["300"]
+  return a + " copie" + pluriel(a) + " en cours\n"
+    + b + " copie" + pluriel(b) + " rendue" + pluriel(b) + "\n"
+    + c + " copie" + pluriel(c) + " corrigée" + pluriel(c) + "\n\n"
+    + arch + " archivée" + pluriel(arch)
 })
 const nbViews = computed(() => {
   if (!props.isTeacher)
@@ -31,7 +40,8 @@ const nbViews = computed(() => {
     <Button v-if="data.viewsTotal == 0" severity="secondary" text disabled>Aucune copie</Button>
     <Button v-else @click="visible = true" severity="primary" size="large"
       v-tooltip.top="{ value: details, showDelay: 400, hideDelay: 0 }" text> {{ nbViews }} </Button>
-    <Dialog v-model:visible="visible" position="top" maximizable modal header="&nbsp;" :style="{ width: '90%' }" dismissableMask>
+    <Dialog v-model:visible="visible" position="top" maximizable modal header="&nbsp;" :style="{ width: '90%' }"
+      dismissableMask>
       <template #header v-if="my.loadingAssignments">
         <Skeleton shape="circle" size="4rem" class="mr-2 my-2"></Skeleton>
         <Skeleton width="20rem" class="mb-2"></Skeleton>
@@ -46,13 +56,12 @@ const nbViews = computed(() => {
 </template>
 
 <style scoped>
-
 .encours {
   color: var(--warning-color);
 }
+
 .activity-title {
   font-size: 2rem;
   font-weight: bold;
 }
-
 </style>
