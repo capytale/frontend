@@ -1,9 +1,20 @@
-<script setup>
+<script setup lang="ts">
 const colorMode = useColorMode()
 const user = useUserStore()
+const $route = useRoute();
 
 const toggleColorMode = () => {
   colorMode.preference = colorMode.preference === 'light' ? 'dark' : 'light';
+}
+
+const backToLegacy = () => {
+  let backUrl: string = '/web/my?legacy&force'
+  if ($route.name === 'bibliotheque') {
+    backUrl = '/web/bibliotheque?legacy&force'
+  } else if ($route.name === 'assignments-nid') {
+    backUrl = `/web/assignments/${$route.params.nid}?legacy&force`
+  }
+  window.location.assign(backUrl)
 }
 
 </script>
@@ -20,9 +31,12 @@ const toggleColorMode = () => {
       <div class="activityInfo">
       </div>
       <div class="activityMenu">
-      <div class="cursor-pointer hover:text-yellow-400 mr-2 px-2" @click="toggleColorMode">
-        <FontAwesome :icon="colorMode.preference === 'light' ? 'sun':'moon'" class="text-xl"  />
-      </div>
+        <Button type="button" label="Retourner à l'interface classique" icon="pi pi-home" @click="backToLegacy" severity="info" text aria-haspopup="true"
+          v-tooltip.top="{ value: 'Retourner à l\'interface classique', showDelay: 300, hideDelay: 100 }" aria-controls="overlay_menu" />
+
+        <div class="cursor-pointer hover:text-yellow-400 mr-2 px-2" @click="toggleColorMode">
+          <FontAwesome :icon="colorMode.preference === 'light' ? 'sun' : 'moon'" class="text-xl" />
+        </div>
         <EntButton />
       </div>
     </div>
