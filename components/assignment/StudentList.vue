@@ -56,7 +56,7 @@ const corbeilleTid = () => {
 
 // compte le nombre de copies avec le workflow n
 const countWf = (n) => {
-  if ( n == 0) return my.assignments.tab.filter((o) => o.tags.length == 0).length
+  if (n == 0) return my.assignments.tab.filter((o) => o.tags.length == 0).length
   if (my.assignments.tab == null) return 0
   return my.assignments.tab.filter((o) => o.workflow == n && o.tags.length == 0).length
 }
@@ -245,11 +245,11 @@ const archMessage = (a) => {
 
     <DataTable :value="richTab" tableStyle="min-width: 50rem" v-model:selection="selectedNid" v-model:filters="filters"
       :globalFilterFields="['hasTags', 'fullname', 'classe']" selectionMode="multiple" filterDisplay="menu"
-      @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()"
-            paginator :rows="10" :rowsPerPageOptions="[10, 20, 50]"
-            paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-            currentPageReportTemplate='{first} à {last} sur {totalRecords} &nbsp; &nbsp;'
-      @rowSelectAll="onRowSelectAll()" :rowStyle="rowStyle" ref="dt">
+      @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()" paginator :rows="10"
+      :rowsPerPageOptions="[10, 20, 50]"
+      paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+      currentPageReportTemplate='{first} à {last} sur {totalRecords} &nbsp; &nbsp;' @rowSelectAll="onRowSelectAll()"
+      :rowStyle="rowStyle" ref="dt">
 
       <Toolbar>
         <template #start>
@@ -274,13 +274,24 @@ const archMessage = (a) => {
 
         </template>
         <template #end>
-          <Button icon="pi pi-external-link" label="Export CSV" @click="exportCSV($event)" outlined class="mr-2" />
-          <ToggleButton v-model="filters['hasTags'].value" v-tooltip.bottom="archMessage(filters['hasTags'].value)"
-            onLabel="Quitter les archives" offLabel="Archives" offIcon="pi pi-eye-slash" class="mr-2" />
+
+            <IconField iconPosition="left" class="mr-2">
+              <InputIcon>
+                <i class="pi pi-search" />
+              </InputIcon>
+              <InputText v-model="filters['fullname'].value" placeholder="Rechercher parmi les élèves" />
+            </IconField>
+
+          <Select v-model="filters['classe'].value" :options="classList" optionLabel="classe" class="mr-2"
+            placeholder="Filtrer par classe" style="min-width: 12rem" :showClear="true" />
+          {{ filters['classe'].value }}
+
+            <Button icon="pi pi-external-link" label="Export CSV" @click="exportCSV($event)" outlined class="mr-2" />
+            <ToggleButton v-model="filters['hasTags'].value" v-tooltip.bottom="archMessage(filters['hasTags'].value)"
+              onLabel="Quitter les archives" offLabel="Archives" offIcon="pi pi-eye-slash" class="mr-2" />
         </template>
 
       </Toolbar>
-      <!-- <Button v-tooltip.bottom="'Sélectionner une ou plusieurs copies à basculer dans l\'état : En cours'" icon="pi pi-pencil" class="mr-2" severity="info" outlined disabled /> -->
 
       <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
 
