@@ -238,7 +238,7 @@ const nbselected = () => {
                     <Popover ref="opTags2" @hide="cancelModif">
                       <MyTagsTree v-if="tmpTags.length === 0" v-model:selection="selectedNid" :tags="tags.tags" />
                       <MyTagsTree v-else v-model:selection="tmpTags" :tags="tags.tags" />
-                      <div class="flex flex-row justify-between">
+                      <div class="flex flex-row justify-between gap-2">
                         <Button label="Annuler" @click="cancelModif" class="mt-4" severity="secondary" size="small" />
                         <Button label="Appliquer" @click="replaceTags" class="mt-4" size="small" />
                       </div>

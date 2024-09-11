@@ -145,7 +145,7 @@ h3 {
 
 /* TagEdit.vue  */
 /* ↓↓↓↓↓↓↓↓↓↓↓↓ */
-.p-tree {
+/* .p-tree {
   padding: 0px;
   padding-right: 1em;
   border: none;
@@ -175,7 +175,7 @@ h3 {
 
 .p-tree ul {
   padding: 0 0 0 0.7em;
-}
+} */
 
 /* ↑↑↑↑↑↑↑↑↑↑↑↑ */
 /* TagEdit.vue  */
