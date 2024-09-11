@@ -119,7 +119,7 @@ const nbFake = computed(() => {
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   hasTags: { value: false, matchMode: FilterMatchMode.EQUALS },
-  nom: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  fullname: { value: null, matchMode: FilterMatchMode.CONTAINS },
   classe: { value: null, matchMode: FilterMatchMode.CONTAINS },
 })
 
@@ -139,7 +139,7 @@ const classList = computed(() => {
 const richTab = computed(() => {
   if (my.assignments.tab == null) return []
   return my.assignments.tab.map((assignment) => {
-    return { ...assignment, hasTags: assignment.tags.length > 0 }
+    return { ...assignment, hasTags: assignment.tags.length > 0, fullname: assignment.nom + " " + assignment.prenom }
   })
 })
 
@@ -244,7 +244,7 @@ const archMessage = (a) => {
     </div>
 
     <DataTable :value="richTab" tableStyle="min-width: 50rem" v-model:selection="selectedNid" v-model:filters="filters"
-      :globalFilterFields="['hasTags', 'nom', 'classe']" selectionMode="multiple" filterDisplay="menu"
+      :globalFilterFields="['hasTags', 'fullname', 'classe']" selectionMode="multiple" filterDisplay="menu"
       @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()"
             paginator :rows="10" :rowsPerPageOptions="[10, 20, 50]"
             paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
@@ -290,7 +290,7 @@ const archMessage = (a) => {
         </template>
       </Column>
 
-      <Column field="nom" header="Élève" style="width:16rem" sortable>
+      <Column field="fullname" header="Élève" style="width:16rem" sortable>
         <template #body="p">
           <AssignmentStudent :data="p.data" />
         </template>

@@ -8,6 +8,6 @@ const props = defineProps({
 
 <template>
     <a :href="data.player">
-        {{ data.nom }} {{ data.prenom }}
+        {{ data.fullname }}
     </a>
 </template>
