@@ -1,20 +1,9 @@
 <script setup>
 const sideMenu = useSideMenuStore()
 const activeTag = useActiveTagStore()
-
 const tags = useTagsStore()
 
-const selectedKey = ref(null);
 const createTagVisible = ref(false);
-
-const onNodeSelect = (node) => {
-  activeTag.activate(node.key)
-};
-const onNodeUnselect = (node) => {
-  activeTag.activate(null)
-};
-
-const expandedKeys = ref({});
 
 const expandNode = (node) => {
   if (node.children && node.children.length) {
@@ -45,13 +34,14 @@ const strictSearch = ref(false);
             v-tooltip.right="{ value: 'Info sur les étiquettes', showDelay: 300, hideDelay: 0 }" />
         </span>
       </span>
-      <Button label="Ajouter une étiquette" severity="secondary" size="small" class="self-center" icon="pi pi-plus" @click="createTagVisible = true" />
+      <Button label="Ajouter une étiquette" severity="secondary" size="small" class="self-center" icon="pi pi-plus"
+        @click="createTagVisible = true" />
       <Divider />
       <div v-if="tags.status === 'pending'">loading......</div>
       <template v-else>
-        <Tree id="folders" v-model:expandedKeys="expandedKeys" v-model:selectionKeys="selectedKey" selectionMode="single"
-          :value="tags.tags" class="w-full md:w-30rem" @nodeSelect="onNodeSelect" @nodeUnselect="onNodeUnselect"
-          :filter="checked" :filterMode="strictSearch ? 'strict' : 'lenient'" :dt="{ 'padding': '0' }">
+        <Tree id="folders" v-model:expandedKeys="activeTag.expanded" v-model:selectionKeys="activeTag.tid"
+          selectionMode="single" :value="tags.tags" class="w-full md:w-30rem" :filter="checked"
+          :filterMode="strictSearch ? 'strict' : 'lenient'" :dt="{ 'padding': '0' }">
           <template #default="slotProps">
             <div class="primary-nav left centerize">
 

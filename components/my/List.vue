@@ -154,9 +154,16 @@ const filters = ref({
 
 const activeTag = useActiveTagStore()
 
-const getTagName = (tid) => {
-  const tag = tags.flatTags.find(o => o.id === tid)
-  return tag ? tag.label : ''
+const getTidFromStore = (obj) => {
+  for (let tid in obj) {
+    return tid
+  }
+}
+const getTagName = (obj) => {
+  const tid = getTidFromStore(obj)
+  if (tid) {
+    return tags.flatTags.find(o => o.id == tid).label
+  }
 }
 
 const corbeilleTid = () => {
@@ -165,8 +172,9 @@ const corbeilleTid = () => {
 }
 
 const myactivities = computed(() => {
-  if (activeTag.tid) { // user has selected a tag
-    return activitiesByTag[activeTag.tid] || []
+  const tid = getTidFromStore(activeTag.tid)
+  if (tid) { // user has selected a tag
+    return activitiesByTag[tid] || []
   } else { // no tag selected : show all activities except those in the trash
     if (!activites.activities.data) return []
     return activites.activities.data.filter(o => {
@@ -241,8 +249,8 @@ const nbselected = () => {
                       @click="foldersToggle" />
                     <Popover ref="opFolders">
                       <div class="gap-3 w-25rem">
-                        <Tree id="folder" v-model:selectionKeys="selectedFolder" :value="tags.tags"
-                          selectionMode="single" class="w-full md:w-30rem scroll">
+                        <Tree id="folder" v-model:selectionKeys="selectedFolder" :value="tags.tags" selectionMode="single"
+                          class="w-full md:w-30rem scroll">
                           <template #default="slotProps">
                             <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label
                             }}
@@ -258,9 +266,9 @@ const nbselected = () => {
                 </template>
 
                 <template #end>
-                  <template v-if="activeTag.tid">
-                    Filtre par étiquette :
-                    <Button removable class="removable pr-2 mr-1" text @click="activeTag.activate(null)"
+                  <template v-if="getTidFromStore(activeTag.tid)">
+                    <span class="text-red-500 font-bold">Filtre par étiquette :</span>
+                    <Button removable class="removable pr-2 mr-1" text @click="activeTag.tid = {}"
                       v-tooltip.top="{ value: 'Supprimer', showDelay: 400, hideDelay: 0 }">
                       {{ getTagName(activeTag.tid) }}
                       <i class="pi pi-times px-2" style="color:red"></i>
