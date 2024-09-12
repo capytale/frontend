@@ -17,6 +17,9 @@ const atw = useActivityTypeWeights(true)
 
 const activites = useActivitiesStore()
 
+
+const visible = ref(false);
+
 // index des types déjà utilisés avec leur nombre d'occurences
 type NbUsedIndex = { [key: string]: number }
 const existingTypeIndex = computed<NbUsedIndex | null>(() => {
@@ -103,9 +106,14 @@ const shortcutList = computed(() => {
             <i class="pi pi-star-fill text-yellow-400" style="font-size: 0.5rem"></i>
           </span>
         </a>
-        <NuxtLink to="/activites" class="hover:shadow-md acti-button">
-          <Button type="submit" label="Toutes les activités" />
-        </NuxtLink>
+        <!-- <NuxtLink to="/activites" class="hover:shadow-md acti-button"> -->
+        <!--   <Button type="submit" label="Toutes les activités" /> -->
+        <!-- </NuxtLink> -->
+        <Button label="Toutes les activités" @click="visible = true" />
+        <Dialog v-model:visible="visible" header="Créer une nouvelle activité" modal :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }"
+          :style="{ width: '75%' }" maximizable dismissableMask>
+          <ActivitySelector />
+        </Dialog>
       </div>
     </template>
   </Card>

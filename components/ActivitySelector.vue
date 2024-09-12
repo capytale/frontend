@@ -103,11 +103,16 @@ const dispGroups = computed(() => {
 </script>
 
 <template>
-  <Card class="mb-4 rounded-t-none">
+  <Card class="mb-4 mt-2 rounded-t-none">
     <template #content>
       <div class="flex flex-row justify-between flex-wrap items-center">
-        <h1 class="h1_comme_h2">Créer une nouvelle activité</h1>
-        <InputText v-model="search" class="" placeholder="Recherche..." />
+        <!-- <h1 class="h1_comme_h2">Créer une nouvelle activité</h1> -->
+        <IconField iconPosition="left">
+          <InputIcon>
+            <i class="pi pi-search" />
+          </InputIcon>
+          <InputText v-model="search" class="rech" placeholder="Rechercher parmi les types d'activité" size="100" />
+        </IconField>
         <div class="flex flex-row gap-4">
           <!--Select v-model="catChoice" :options="cats" option-label="label" option-value="value" :ui="inputstyle" /-->
           <!--Select v-model="matChoice" :options="mats" option-label="label" option-value="value" :ui="inputstyle" /-->
@@ -161,5 +166,11 @@ const dispGroups = computed(() => {
 .h1_comme_h2 {
   font-size: 1.5rem;
   line-height: 1.75rem;
+}
+</style>
+
+<style scoped>
+.rech {
+  width: 25rem;
 }
 </style>
