@@ -18,11 +18,8 @@ const label = computed(() => labelGetter(props.data))
 const items = computed(() => itemsGetter(props.data))
 const wfStatus = computed(() => wfStatusGetter(props.data))
 
-const url = `https://np.ac-capytale.fr/web/c/${props.data.code}`
-
-
 const itemsGetter = ((obj) => {
-  const url = `https://np.ac-capytale.fr/web/c/${obj.code}`
+  const url = window.location.origin + `/web/c/${obj.code}`
   return [
     {
       label: 'Copier le code partage avec la classe',
