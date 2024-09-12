@@ -29,8 +29,6 @@ const testSet = computed(() => {
 
 <template>
   <div v-for="tag in testSet" :key="workingTags.nid + tag">
-    <!-- {{ tag }} {{ workingTags.nid }} -->
-    <!-- {{ workingTags.info }} -->
     <span class="parent mr-1">
       <span class="etiquette">
         <i class="pi pi-tag mr-2" :style="'color:' + getName(tag).color"></i>
