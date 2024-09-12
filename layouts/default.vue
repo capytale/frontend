@@ -145,6 +145,10 @@ h3 {
 
 /* TagEdit.vue  */
 /* ↓↓↓↓↓↓↓↓↓↓↓↓ */
+.p-tree-node-label :hover .surprise {
+  display: inline;
+}
+
 /* .p-tree {
   padding: 0px;
   padding-right: 1em;
