@@ -61,7 +61,7 @@ const countWf = (n) => {
   return my.assignments.tab.filter((o) => o.workflow == n && o.tags.length == 0).length
 }
 
-console.log(countWf(100))
+// console.log(countWf(100))
 
 const handleArchive = (() => {
   if (selectedNid.value.length == 0) {

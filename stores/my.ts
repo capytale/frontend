@@ -20,21 +20,21 @@ export const useMyStore = defineStore('my', {
       this.loadingAssignments = false
     },
     async saveAppr(nid, appr: any) {
-      console.log("saveAppr", nid, appr._rawValue)
+      // console.log("saveAppr", nid, appr._rawValue)
       await httpClient.postJsonAsync(
         myActivitiesApiEp,
         { action: "saveAppr", nid, appr: appr._rawValue }
       );
     },
     async saveEval(nid, evalu: any) {
-      console.log("saveEval", nid, evalu)
+      // console.log("saveEval", nid, evalu)
       await httpClient.postJsonAsync(
         myActivitiesApiEp,
         { action: "saveEval", nid, evalu: evalu._rawValue }
       );
     },
     async changeSaWf(sa_nid: string | Array, newWorkflow: string) {
-      console.log("saveSaWf0", sa_nid, newWorkflow)
+      // console.log("saveSaWf0", sa_nid, newWorkflow)
       let nids
       if (Array.isArray(sa_nid)) {
         nids = [...sa_nid.map((o) => o.sa_nid)]
@@ -68,7 +68,7 @@ export const useMyStore = defineStore('my', {
     },
 
     async archive(sa_nids: number, corbeilleTid: number) {
-      console.log("archive", sa_nids, corbeilleTid)
+      // console.log("archive", sa_nids, corbeilleTid)
       for (let sa_nid of sa_nids) {
         this.assignments.tab = this.assignments.tab.map(el => el.sa_nid == sa_nid ? { ...el, tags: [corbeilleTid] } : el);
       }

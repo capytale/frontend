@@ -10,7 +10,7 @@ const bib = useBibStore()
 const products = ref(new Array(20));
 
 const route = useRoute()
-console.log("location", route.query)
+// console.log("location", route.query)
 // TODO: faire en sorte que les recherces avancées génèrent une url copiable.
 
 if (bib.bib == null || bib.bib.status != 'pending') {
@@ -30,7 +30,7 @@ const list_niveaux = (() => {
     let a = String(bib.bib.data[item].niveau).split(', ')
     if (a[0] != "null") set = xunion(set, a)
   }
-  console.log("set", set)
+  // console.log("set", set)
   return set
 })
 const list_enseignements = (() => {
@@ -39,7 +39,7 @@ const list_enseignements = (() => {
     let a = String(bib.bib.data[item].enseignement).split(', ')
     if (a[0] != "null") set = xunion(set, a)
   }
-  console.log("set", set)
+  // console.log("set", set)
   return set
 })
 

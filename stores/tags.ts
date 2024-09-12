@@ -32,9 +32,9 @@ export const useTagsStore = defineStore('tags', {
           { action: "create", tagValues: label, parentId }
         )
       } catch (e) {
-        console.log("error", e)
+        // console.log("error", e)
       }
-      console.log("newTid: ", newTid)
+      // console.log("newTid: ", newTid)
       this.data.data.flatTags = [...this.data.data.flatTags, { id: newTid, color: "#FF0000", key: newTid, label, parentid: parentId }]
       this.data.data.tags = unflatten(this.data.data.flatTags)
     },

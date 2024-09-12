@@ -73,7 +73,7 @@ export const useActivitiesStore = defineStore('activities', {
           { action: "clone", nid }
         )
       } catch (e) {
-        console.log("error", e)
+        // console.log("error", e)
       }
       // console.log("le clone : ", r.changed, r.code, r.nid, r.title, r.type)
       // On ajoute le clone au store
@@ -175,7 +175,7 @@ export const useActivitiesStore = defineStore('activities', {
     },
 
     async changeMyVueCount(nid: number, a, b, c, d) {
-      console.log("archive", nid, a, b, c, d)
+      // console.log("archive", nid, a, b, c, d)
       this.activities.data = this.activities.data.map(el => el.nid == nid ? { ...el, viewsDetails: { 100: a, 200: b, 300: c, visible: d } } : el);
     },
 
@@ -208,7 +208,7 @@ export const useActivitiesStore = defineStore('activities', {
       selThemes: any[],
     ) {
       const indexElements = { nid, share, web, resume, selEnseignements, selNiveaux, selModules, selThemes }
-      console.log("bibIndexActivity : ", indexElements)
+      // console.log("bibIndexActivity : ", indexElements)
       await httpClient.postJsonAsync(
         myActivitiesApiEp,
         { action: "bibIndex", indexElements }

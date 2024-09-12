@@ -41,7 +41,7 @@ const estCommun = (tag) => selection.value.every((activite) => activite.tags.inc
 const estNullePart = (tag) => selection.value.every((activite) => !activite.tags.includes(tag.id))
 
 const toggleTag = (tag) => {
-  console.log(tag);
+  // console.log(tag);
   
   if(estCommun(tag)) {
     selection.value.forEach((activite) => {
