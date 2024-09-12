@@ -98,20 +98,20 @@ const shortcutList = computed(() => {
       </h2>
     </template>
     <template #content>
-      <div class="overscroll-x-auto myflex">
+      <div class="overflow-x-auto myflex flex-wrap justify-around">
         <a v-for="type of shortcutList" :key="type" :href="atl.getCreateUrl(type)"
           v-tooltip.bottom="atl.getTypeInfo(type).name" class="hover:shadow-md shrink-0">
           <img :src="atl.getTypeInfo(type).icon.path" class="w-16 inline" />
-          <span v-if="atf.isFavorite(type)" class="mystar">
+          <span class="mystar" :class="atf.isFavorite(type) ? '' : 'opacity-0'">
             <i class="pi pi-star-fill text-yellow-400" style="font-size: 0.5rem"></i>
           </span>
         </a>
         <!-- <NuxtLink to="/activites" class="hover:shadow-md acti-button"> -->
         <!--   <Button type="submit" label="Toutes les activités" /> -->
         <!-- </NuxtLink> -->
-        <Button label="Toutes les activités" @click="visible = true" />
+        <Button class="w-full md:w-auto" label="Toutes les activités" @click="visible = true" />
         <Dialog v-model:visible="visible" header="Créer une nouvelle activité" modal :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }"
-          :style="{ width: '75%' }" maximizable dismissableMask>
+          class="w-11/12 md:w-3/4" maximizable dismissableMask>
           <ActivitySelector />
         </Dialog>
       </div>
