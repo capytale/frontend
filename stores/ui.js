@@ -2,14 +2,14 @@ import { defineStore } from 'pinia'
 import { usePrimeVue } from 'primevue/config';
 
 export const useSideMenuStore = defineStore('sideMenu', {
-  state: () => ({ visible: true, hover: false }),
+  state: () => ({ visible: false }),
   actions: {
     toggle() {
       this.visible = !this.visible;
     },
-    toggleHover() {
-      this.hover = !this.hover;
-    },
+    // toggleHover() {
+    //   this.hover = !this.hover;
+    // },
   },
 })
 export const useActiveTagStore = defineStore('activeTag', {
