@@ -66,9 +66,9 @@ const isReady = computed(() => {
           <div>
             <div v-if="!sideMenu.visible && sideState !== 'empty'"
               class="mt-16 h-16 w-16 rounded-full border-2 flex justify-center items-center absolute top-0 -left-8 z-[99]"
-              style="background-color: var(--p-card-background)" @click="sideMenu.visible = true">
+              style="background-color: var(--p-card-background)">
               <div class="parent">
-                <i class="pi pi-tags m-4" style="font-size: 1.5rem;"></i>
+                <i class="pi pi-tags m-4" style="font-size: 1.5rem;" @click="sideMenu.visible = true"></i>
                 <div v-if="!sideMenu.visible && sideState !== 'empty'" class="absolute z-[100] p-card zzz">
                   <div class="ohlala">
                     <div class="tagWrapper p-card absolute surprise mx-20 my-40">
