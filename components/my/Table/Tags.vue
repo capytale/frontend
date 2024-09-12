@@ -32,14 +32,15 @@ const testSet = computed(() => {
     <!-- {{ tag }} {{ workingTags.nid }} -->
     <!-- {{ workingTags.info }} -->
     <span class="parent mr-1">
-      <Button v-if="getName(tag).label" removable class="pr-3 small-button" text @click="op = !op">
-        <i class="pi pi-tag" :style="'color:' + getName(tag).color"></i>
-        <span class="whitespace-nowrap" :class="props.data.tags.includes(tag) ? (workingTags.tags.includes(tag) ? '' : 'line-through') : 'italic'">
-        {{ getName(tag).label }}{{ props.data.tags.includes(tag) ? (workingTags.tags.includes(tag) ? '' : '') : '*' }}
+      <span class="etiquette">
+        <i class="pi pi-tag mr-2" :style="'color:' + getName(tag).color"></i>
+        <span class="whitespace-nowrap"
+          :class="props.data.tags.includes(tag) ? (workingTags.tags.includes(tag) ? '' : 'line-through') : 'italic'">
+          {{ getName(tag).label }}{{ props.data.tags.includes(tag) ? (workingTags.tags.includes(tag) ? '' : '') : '*' }}
         </span>
-      </Button>
-      <div class="poubelle">
-        <Button icon="pi pi-times" severity="danger" @click="delTag(workingTags.nid, tag)" outlined rounded />
+      </span>
+      <div class="poubelle" v-tooltip.top="{ value: 'Désétiqueter', showDelay: 300, hideDelay: 0 }">
+        <Button icon="pi pi-times" severity="danger" @click="delTag(workingTags.nid, tag)" text rounded />
       </div>
     </span>
   </div>
@@ -47,21 +48,24 @@ const testSet = computed(() => {
 
 
 <style scoped>
+.etiquette {
+  cursor: default;
+}
+
 .poubelle {
   display: none;
   position: absolute;
   left: 100%;
-  bottom: -30%;
-  padding-left:0.5rem;
+  bottom: -50%;
+  padding-left: 0.3rem;
   z-index: 1;
 }
-.parent{
+
+.parent {
   position: relative;
 }
+
 .parent:hover .poubelle {
   display: inline;
-}
-.small-button {
-  padding: 0;
 }
 </style>
