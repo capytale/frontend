@@ -38,7 +38,7 @@ const nbViews = computed(() => {
 <template>
   <div v-if="props.data.extra">
     <Button v-if="data.viewsTotal == 0" severity="secondary" text disabled>Aucune copie</Button>
-    <Button v-else @click="visible = true" severity="primary" size="large"
+    <Button v-else @click="visible = true" severity="primary"
       v-tooltip.top="{ value: details, showDelay: 400, hideDelay: 0 }" text> {{ nbViews }} </Button>
     <Dialog v-model:visible="visible" position="top" maximizable modal header="&nbsp;" :style="{ width: '90%' }"
       dismissableMask>
