@@ -22,6 +22,11 @@
       <Skeleton width="3rem" height="3rem"></Skeleton>
     </template>
   </Column>
+  <Column header="Type" style="width:5rem">
+    <template #body>
+      <Skeleton width="3rem" height="3rem"></Skeleton>
+    </template>
+  </Column>
   <Column header="Titre">
     <template #body>
       <Skeleton width="15rem" class="mb-2"></Skeleton>
@@ -39,7 +44,7 @@
   </Column>
   <Column header="Partage">
     <template #body>
-      <Skeleton width="10rem"></Skeleton>
+      <Skeleton width="12rem"></Skeleton>
     </template>
   </Column>
   <Column header="Bib.">
@@ -47,7 +52,7 @@
       <Skeleton width="4rem"></Skeleton>
     </template>
   </Column>
-  <Column header="Dernière modif." style="max-width:10rem" sortable>
+  <Column header="Étiquettes" style="max-width:10rem" sortable>
     <template #body>
       <Skeleton width="5rem" class="mb-2"></Skeleton>
     </template>
