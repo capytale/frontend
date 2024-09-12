@@ -33,12 +33,17 @@ const nbViews = computed(() => {
   else
     return props.data.viewsDetails.visible > 1 ? props.data.viewsDetails.visible + ' copies' : props.data.viewsDetails.visible + ' copie'
 })
+
+const testAssignments = () => {
+  my.getAssignments(props.data.nid)
+  visible.value = true
+}
 </script>
 
 <template>
   <div v-if="props.data.extra">
     <Button v-if="data.viewsTotal == 0" severity="secondary" text disabled>Aucune copie</Button>
-    <Button v-else @click="visible = true" severity="primary"
+    <Button v-else @click="testAssignments" severity="primary"
       v-tooltip.top="{ value: details, showDelay: 400, hideDelay: 0 }" text> {{ nbViews }} </Button>
     <Dialog v-model:visible="visible" position="top" maximizable modal header="&nbsp;" :style="{ width: '90%' }"
       dismissableMask>

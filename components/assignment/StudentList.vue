@@ -16,7 +16,7 @@ const props = defineProps<{
   viewsVisible?: number
 }>()
 
-my.getAssignments(props.nid)
+// my.getAssignments(props.nid)
 
 const selectedNid = ref();
 const hasSelected = ref(false);
