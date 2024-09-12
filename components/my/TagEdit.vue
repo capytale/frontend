@@ -169,17 +169,19 @@ const corbeilleTid = () => {
 <template>
   <div>
     <template v-if="slotProps.node.id == corbeilleTid()">
-      <span v-tooltip.top="{ value: 'Voir/masquer les activités de la corbeille', showDelay: 500, hideDelay: 0 }" aria-controls="overlay_menu" >
-      <i class="pi pi-trash" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
+      <span v-tooltip.top="{ value: 'Voir/masquer les activités de la corbeille', showDelay: 500, hideDelay: 0 }"
+        aria-controls="overlay_menu">
+        <i class="pi pi-trash" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
       </span>
 
     </template>
     <template v-else>
-      <span v-tooltip.top="{ value: '(Dés)activer le filtre sur cette étiquette', showDelay: 500, hideDelay: 0 }" aria-controls="overlay_menu" >
+      <span v-tooltip.top="{ value: '(Dés)activer le filtre sur cette étiquette', showDelay: 500, hideDelay: 0 }"
+        aria-controls="overlay_menu">
         <i class="pi pi-tag" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
       </span>
+      <i class="pi pi-cog surprise mx-2" @click.stop="toggle"></i>
     </template>
-    <i class="pi pi-cog surprise mx-2" @click.stop="toggle"></i>
   </div>
   <Menu ref="menu" :model="items" :popup="true" />
 
