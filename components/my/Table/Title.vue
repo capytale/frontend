@@ -13,9 +13,13 @@ const visible = ref(false);
 
 <template>
   <div class="flex flex-row items-center justify-between parent">
-    <a :href="playerUrl" v-tooltip.top="data.title" class="clickable">{{ data.title }}</a>
+    <a :href="playerUrl" 
+      v-tooltip.top="{ value: data.title, showDelay: 400, hideDelay: 0 }"
+      class="clickable">{{ data.title }}</a>
     
-    <i class="pi pi-cog cog" style="font-size: 1.5rem;" v-if="!props.data.isSa" @click.stop="visible = true" />
+    <i class="pi pi-cog cog" style="font-size: 1.5rem;" v-if="!props.data.isSa" @click.stop="visible = true" 
+      v-tooltip.top="{ value: 'Modifier les paramètres', showDelay: 300, hideDelay: 0 }"
+  />
     <MyActivityEdit v-model="visible" :data="props.data" />
   </div>
 </template>

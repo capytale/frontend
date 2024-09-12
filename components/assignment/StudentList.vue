@@ -64,6 +64,10 @@ const countWf = (n) => {
 console.log(countWf(100))
 
 const handleArchive = (() => {
+  if (selectedNid.value.length == 0) {
+    toast.add({ severity: 'error', summary: 'Archivage impossible', detail: `Vous devez sélectionner au moins une copie à archiver.` });
+    return
+  }
   my.archive([...selectedNid.value.map((o) => o.sa_nid)], corbeilleTid())
   activites.changeMyVueCount(props.nid, countWf(100), countWf(200), countWf(300), countWf(0))
   const response = { ok: true } // TODO
@@ -174,7 +178,7 @@ const menu = ref();
 const toggle = (event) => {
   menu.value.toggle(event);
 }
-const items = ref([
+const itemsA = ref([
   {
     label: 'Archiver',
     icon: 'pi pi-eye-slash',
@@ -245,8 +249,8 @@ const archMessage = (a) => {
     </div>
 
     <DataTable :value="richTab" tableStyle="min-width: 50rem" v-model:selection="selectedNid" v-model:filters="filters"
-      :globalFilterFields="['hasTags', 'fullname', 'classe']" selectionMode="multiple" filterDisplay="menu"
-      @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()" paginator :rows="10"
+      :globalFilterFields="['hasTags', 'fullname', 'classe']" selectionMode="multiple" @rowSelect="onRowSelect()"
+      @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()" paginator :rows="10"
       :rowsPerPageOptions="[10, 20, 50]"
       paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
       currentPageReportTemplate='{first} à {last} sur {totalRecords} &nbsp; &nbsp;' @rowSelectAll="onRowSelectAll()"
@@ -266,30 +270,30 @@ const archMessage = (a) => {
               class="mr-2" severity="warn" outlined :disabled="!hasSelected" />
             <Button v-tooltip.bottom="ttMessage(300)" @click="handleChangeWf(300)" label="Corrigé"
               icon="pi pi-check-square" class="mr-2" severity="success" outlined :disabled="!hasSelected" />
-            <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" severity="secondary" link aria-haspopup="true"
-              v-tooltip.top="{ value: 'Plus', showDelay: 300, hideDelay: 100 }" aria-controls="overlay_menu" />
-            <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
+            <Button type="button" icon="pi pi-eye-slash" @click="toggle" severity="secondary" outlined aria-haspopup="true"
+              v-tooltip.top="{ value: 'Déplacer dans les archives', showDelay: 300, hideDelay: 100 }" aria-controls="overlay_menu" />
+            <Menu ref="menu" id="overlay_menu" :model="itemsA" :popup="true" />
           </template>
+
+          <IconField iconPosition="left" class="ml-10 mr-2">
+            <InputIcon>
+              <i class="pi pi-search" />
+            </InputIcon>
+            <InputText v-model="filters['fullname'].value" placeholder="Rechercher parmi les élèves" />
+          </IconField>
+
+          <Select v-model="filters['classe'].value" :options="classList" optionLabel="classe" optionValue="classe"
+            class="mr-2" placeholder="Filtrer par classe" style="min-width: 12rem" :showClear="true" />
+          {{ filters['classe'].value }}
 
           <!-- <Button v-tooltip.bottom="'Télécharger'" icon="pi pi-download" class="mr-2" severity="secondary" /> -->
 
         </template>
         <template #end>
 
-            <IconField iconPosition="left" class="mr-2">
-              <InputIcon>
-                <i class="pi pi-search" />
-              </InputIcon>
-              <InputText v-model="filters['fullname'].value" placeholder="Rechercher parmi les élèves" />
-            </IconField>
-
-          <Select v-model="filters['classe'].value" :options="classList" optionLabel="classe" optionValue="classe" class="mr-2"
-            placeholder="Filtrer par classe" style="min-width: 12rem" :showClear="true" />
-          {{ filters['classe'].value }}
-
-            <Button icon="pi pi-external-link" label="Export CSV" @click="exportCSV($event)" outlined class="mr-2" />
-            <ToggleButton v-model="filters['hasTags'].value" v-tooltip.bottom="archMessage(filters['hasTags'].value)"
-              onLabel="Quitter les archives" offLabel="Archives" offIcon="pi pi-eye-slash" class="mr-2" />
+          <Button icon="pi pi-external-link" label="Export CSV" @click="exportCSV($event)" outlined class="mr-2" />
+          <ToggleButton v-model="filters['hasTags'].value" v-tooltip.bottom="archMessage(filters['hasTags'].value)"
+            onLabel="Quitter les archives" offLabel="Archives" offIcon="pi pi-eye-slash" class="mr-2" />
         </template>
 
       </Toolbar>
