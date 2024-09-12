@@ -28,8 +28,8 @@ const actItems = ref([
     icon: 'pi pi-clone',
     command: async () => {
       try {
-        const response = await activites.cloneActivity(props.data.nid)
-        toast.add({ severity: 'success', summary: 'Clonage réussi ', life: 2000 });
+        const c = await activites.cloneActivity(props.data.nid)
+        toast.add({ severity: 'success', summary: 'Clonage réussi', life: 4000, detail: `Titre du clone : "${c.title}"` });
       }
       catch (e) {
         toast.add({ severity: 'error', summary: 'Échec du clonage : ', detail: `nid = ${props.data.nid} - ${e}` });

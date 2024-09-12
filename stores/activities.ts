@@ -65,10 +65,10 @@ export const useActivitiesStore = defineStore('activities', {
       );
     },
 
-    async cloneActivity(nid: number) {
+    async cloneActivity(nid: number|string): Promise<{ nid: number | string, title: string }> {
       let r
       try {
-        r = await httpClient.postGetJsonAsync(
+        r = await httpClient.postGetJsonAsync<any>(
           myActivitiesApiEp,
           { action: "clone", nid }
         )
@@ -97,7 +97,10 @@ export const useActivitiesStore = defineStore('activities', {
       r.views_total = 0
       r.whoami = "cr"
       r.workflow = "0"
-      this.activities.data.push(r)
+      if (this.activities.status === "success") {
+        this.activities.data.push(r)
+      }
+      return r
     },
 
     async lockMode(activity: any) {

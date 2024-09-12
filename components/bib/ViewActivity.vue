@@ -1,28 +1,34 @@
-<script setup>
+<script setup lang="ts">
 import { decode } from 'html-entities';
 const toast = useToast();
 const activites = useActivitiesStore()
 
-const backHomeVisible = ref(false);
+const clone = ref<{ nid: number | string, title: string } | null>();
 const patience = ref(false);
 
-const backToHome = () => {
-  navigateTo('/my')
+const goToClone = () => {
+  if (!clone.value) return
+  window.location.assign(`/web/c-act/n/${clone.value.nid}/play/create`)
   patience.value = true
 }
 
-const clone = async (nid) => {
-  if (activites.activities.length === 0) {
-    const activites = useActivitiesStore()
-    await activites.getActivities()
+let lockClone = false
+
+const doClone = async (nid: number | string) => {
+  if (lockClone) return
+  if (clone.value) {
+    toast.add({ severity: 'error', summary: 'Activité déjà clonée', life: 2000 });
+    return
   }
+  lockClone = true
   try {
-    const response = await activites.cloneActivity(nid)
-    toast.add({ severity: 'success', summary: 'Clonage réussi ', life: 2000 });
-    backHomeVisible.value = true
+    const c = await activites.cloneActivity(nid)
+    clone.value = c
+    toast.add({ severity: 'success', summary: 'Clonage réussi', life: 4000, detail: `Titre du clone : "${c.title}"` });
   }
   catch (e) {
-    toast.add({ severity: 'error', summary: 'Échec du clonage : ', detail: `nid = ${nid} - ${e}` });
+    lockClone = false
+    toast.add({ severity: 'error', summary: 'Échec du clonage'});
   }
 }
 
@@ -36,7 +42,7 @@ const url = computed(() => {
 })
 
 const copy = (nid) => {
-  const url = `/web/b/${nid}`
+  const url = window.location.origin + `/web/b/${nid}`
   navigator.clipboard.writeText(url);
   toast.add({ severity: 'success', summary: 'Copié !', detail: url, life: 3000 });
 }
@@ -70,10 +76,10 @@ onBeforeUnmount(() => {
             <h2>{{ decode(props.data.title) }}</h2>
           </div>
           <div>
-            <Button v-if="backHomeVisible" @click="backToHome" label="Voir le clone"
-              :icon="patience ? 'pi pi-spin pi-spinner' : 'pi pi-chevron-left'" class="mx-2"
-              v-tooltip.bottom="{ value: 'Retour à la page Mes activités', showDelay: 300, hideDelay: 100 }" />
-            <Button v-else @click="clone(props.data.nid)" label="Cloner" icon="pi pi-clone" class="mx-2"
+            <Button v-if="clone" @click="goToClone" label="Voir le clone"
+              :icon="patience ? 'pi pi-spin pi-spinner' : 'pi pi-external-link'" class="mx-2"
+              v-tooltip.bottom="{ value: `Ouvrir l'activité\n'${clone.title}'`, showDelay: 300, hideDelay: 100 }" />
+            <Button v-else @click="doClone(props.data.nid)" label="Cloner" icon="pi pi-clone" class="mx-2"
               v-tooltip.bottom="{ value: 'Cloner cette ressource', showDelay: 300, hideDelay: 100 }" />
 
             <Button @click="copy(props.data.nid)" label="Copier le lien" icon="pi pi-link" class="mx-2 mr-2"
