@@ -89,7 +89,7 @@ const commonItems = ref([
   { separator: true },
   {
     label: 'Supprimer',
-    icon: 'pi pi-trash',
+    icon: 'pi pi-times-circle',
     class: 'redImportant',
     command: async () => {
       confirm.require({

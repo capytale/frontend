@@ -216,7 +216,7 @@ const nbselected = () => {
             paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
             currentPageReportTemplate='{first} à {last} sur {totalRecords} &nbsp; &nbsp;' @rowSelect="onRowSelect()"
             @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()" @rowSelectAll="onRowSelectAll()"
-            :globalFilterFields="['title', 'type']" class="my-card">
+            :globalFilterFields="['title', 'type']" class="mydatatable">
 
 
             <template #header>
@@ -227,7 +227,7 @@ const nbselected = () => {
                 <template #start v-if="showToolbar">
                   <span class="mr-2">{{ nbselected() }}</span>
 
-                  <Button v-tooltip.bottom="'Supprimer'" @click="handleDelete()" icon="pi pi-trash" class="mr-2"
+                  <Button v-tooltip.bottom="'Supprimer'" @click="handleDelete()" icon="pi pi-times-circle" class="mr-2"
                     severity="danger" outlined />
                   <Button v-tooltip.bottom="'Archiver toutes les copies et mettre le compteur de copies à 0'"
                     @click="handleBulkArchive()" icon="pi pi-eye-slash" class="mr-2" outlined severity="secondary" />
@@ -298,7 +298,7 @@ const nbselected = () => {
               </Toolbar>
             </template>
 
-            <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+            <Column selectionMode="multiple" ></Column>
 
             <Column :class="cols.type ? '' : 'hidden'" field="type" header="Type" sortable>
               <template #body="p">
@@ -367,5 +367,9 @@ const nbselected = () => {
 /* Additionnal CSS in default.vue */
 .titlecol {
   width: 20rem;
+}
+.mydataTable {
+  background-color: var(--p-surface-700);
+  color: var(--p-on-surface-700);
 }
 </style>
