@@ -46,7 +46,7 @@ body,
 }
 
 
-.appContainer {
+.azppContainer {
   height: 100%;
   display: grid;
   grid-template-rows: 60px 1fr;

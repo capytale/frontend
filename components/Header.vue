@@ -20,18 +20,17 @@ const backToLegacy = () => {
 </script>
 <template>
   <div class="navbar">
-    <div class="navbarContainer">
-      <span class="navbarLogo">
+    <div class="navbarContainer flex-wrap">
+      <span class="navbarLogo hidden lg:block order-1">
         <NuxtLink href="/"> CAPYTALE </NuxtLink>
       </span>
-      <div class="capytaleMenu">
+      <div class="capytaleMenu order-4 md:order-2">
         <NuxtLink v-if="user.user.data" to="/my"><span class="px-2">Mes activités</span></NuxtLink>
         <NuxtLink v-if="user.user.data" to="/bibliotheque"><span class="px-2">La bibliothèque</span></NuxtLink>
       </div>
-      <div class="activityInfo">
-      </div>
-      <div class="activityMenu">
-        <Button type="button" label="Retourner à l'interface classique" icon="pi pi-chevron-left" @click="backToLegacy"
+
+      <div class="activityMenu grow justify-end order-3">
+        <Button type="button" label="Interface classique" icon="pi pi-chevron-left" @click="backToLegacy"
           severity="info" text aria-haspopup="true" aria-controls="overlay_menu" />
 
         <div class="cursor-pointer hover:text-yellow-400 mr-2 px-2" @click="toggleColorMode">
@@ -57,12 +56,11 @@ const backToLegacy = () => {
   }
 
   & {
-    height: 60px;
+    min-height: 4rem;
     background-color: var(--p-surface-800);
     display: flex;
     align-items: center;
     color: var(--navbar-text-color);
-    overflow: hidden;
     color-scheme: dark;
   }
 
@@ -95,15 +93,11 @@ const backToLegacy = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
+  column-gap: 1rem;
   height: 100%;
 
   &>* {
     flex-shrink: 0;
-  }
-
-  & {
-    overflow: hidden;
   }
 }
 
@@ -131,57 +125,16 @@ const backToLegacy = () => {
 
 .capytaleMenu {
   display: flex;
-  gap: 8px;
-}
-
-.activityInfo {
-  flex-shrink: 1;
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
+  gap: 1rem;
+  min-height: 3rem;
   align-items: center;
-  overflow: hidden;
-  gap: 12px;
 }
 
-.activityInfoText {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-
-  &>* {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 100%;
-  }
-}
-
-.activityInfoTitle {
-  font-size: 1.4rem;
-  font-weight: 500;
-}
-
-.activityLogo {
-  width: 35px;
-  height: 37px;
-  background-color: orange;
-  border-radius: 4px;
-  border: 1px solid red;
-  flex-shrink: 0;
-
-  @media only screen and (max-width: 992px) {
-    display: none;
-  }
-}
 
 .activityMenu {
   padding-right: 16px;
   display: flex;
   gap: 8px;
-  justify-content: center;
   align-items: center;
 }
 
