@@ -35,7 +35,6 @@ const nbViews = computed(() => {
 })
 
 const testAssignments = () => {
-  my.getAssignments(props.data.nid)
   visible.value = true
 }
 </script>
