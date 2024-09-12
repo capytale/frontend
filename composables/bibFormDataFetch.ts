@@ -1,18 +1,11 @@
 import httpClient from '@capytale/activity.js/backend/capytale/http'
-import { online } from '@/constants'
-import { myBibFormIndexingElements } from '@/mockup_data/my-bib-form-indexing-elements'
 
 let bibIndexingElementsCache
 export function fetchBibIndexingElements() {
   return useAsyncData('idxKey', async () => {
-    if (online) {
-      bibIndexingElementsCache = await httpClient.getJsonAsync<any>("/web/c-hdls/api/my-bib-form-indexing-elements")
-      bibIndexingElementsCache.themes = unflatten(bibIndexingElementsCache.themes)
-      return bibIndexingElementsCache
-    } else {
-      myBibFormIndexingElements.themes = unflatten(myBibFormIndexingElements.themes)
-      return myBibFormIndexingElements
-    }
+    bibIndexingElementsCache = await httpClient.getJsonAsync<any>("/web/c-hdls/api/my-bib-form-indexing-elements")
+    bibIndexingElementsCache.themes = unflatten(bibIndexingElementsCache.themes)
+    return bibIndexingElementsCache
   },
     {
       getCachedData() {
