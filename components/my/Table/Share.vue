@@ -161,15 +161,16 @@ const wfStatusGetter = ((obj) => {
   </div>
   <div v-else>
 
-    <template v-if="(props.data.whoami == 'cr' || props.data.whoami == 'as') && isTeacher && label.code != 'student_activity'">
-      <div class="flex mystyle"
-        v-tooltip.top="{ value: label.tooltipText, showDelay: 400, hideDelay: 0 }">
+    <template
+      v-if="(props.data.whoami == 'cr' || props.data.whoami == 'as') && isTeacher && label.code != 'student_activity'">
+      <div class="flex mystyle" v-tooltip.top="{ value: label.tooltipText, showDelay: 400, hideDelay: 0 }">
         <div :class="label.color" class="flex flex-col justify-center ml-2">
           <i :class="label.mainIcon" style="font-size: 1.2rem"></i>
           <i :class="label.secondaryIcon" style="font-size: 1.2rem"></i>
         </div>
         <Button type="button" :label="label.code" @click="toggle" class="mystyle" :severity="label.severity"
-          aria-haspopup="true" aria-controls="overlay_menu" outlined :dt="{ 'padding.x': '0.4rem', 'padding.y': '0.2rem'}">
+          aria-haspopup="true" aria-controls="overlay_menu" outlined
+          :dt="{ 'padding.x': '0.4rem', 'padding.y': '0.2rem' }">
           <template #icon>
             <i class="pi pi-angle-down m-2"></i>
           </template>
@@ -195,10 +196,16 @@ const wfStatusGetter = ((obj) => {
       Associé par {{ props.data.boss }}
     </template>
     <template v-else>
-    <div class="flex flex-row gap-2 items-center">
-      <i :class="wfStatus.icon + ' ml-2'" :style="'font-size: 1.3rem; color: ' + wfStatus.color"
-        v-tooltip.top="{ value: wfStatus.label, showDelay: 400, hideDelay: 0 }"></i>
-      <span class="whitespace-nowrap">{{ props.data.whoami == 'as' ? 'Associé par ' : 'Apprenant de ' }}{{ props.data.boss }}</span>
+      <div class="flex flex-row gap-2 items-center">
+        <div v-if="props.status_clonable">
+            <i class="pi pi-lock" style="font-size: 1.3rem; color: red"></i>
+        </div>
+        <div v-else>
+          <i :class="wfStatus.icon + ' ml-2'" :style="'font-size: 1.3rem; color: ' + wfStatus.color"
+            v-tooltip.top="{ value: wfStatus.label, showDelay: 400, hideDelay: 0 }"></i>
+          <span class="whitespace-nowrap">{{ props.data.whoami == 'as' ? 'Associé par ' : 'Apprenant de ' }}{{
+            props.data.boss }}</span>
+        </div>
       </div>
     </template>
   </div>
