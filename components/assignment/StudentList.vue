@@ -117,7 +117,8 @@ const chWf = ((sa_nid, wf) => {
 
 const nbFake = computed(() => {
   if (props.viewsVisible == null) return new Array(defaultNbFake)
-  return new Array(props.viewsVisible)
+  // return new Array(props.viewsVisible)
+  return new Array(10)
 })
 
 const filters = ref({
