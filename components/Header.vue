@@ -31,8 +31,8 @@ const backToLegacy = () => {
       <div class="activityInfo">
       </div>
       <div class="activityMenu">
-        <Button type="button" label="Retourner à l'interface classique" icon="pi pi-home" @click="backToLegacy" severity="info" text aria-haspopup="true"
-          v-tooltip.top="{ value: 'Retourner à l\'interface classique', showDelay: 300, hideDelay: 100 }" aria-controls="overlay_menu" />
+        <Button type="button" label="Retourner à l'interface classique" icon="pi pi-chevron-left" @click="backToLegacy"
+          severity="info" text aria-haspopup="true" aria-controls="overlay_menu" />
 
         <div class="cursor-pointer hover:text-yellow-400 mr-2 px-2" @click="toggleColorMode">
           <FontAwesome :icon="colorMode.preference === 'light' ? 'sun' : 'moon'" class="text-xl" />
