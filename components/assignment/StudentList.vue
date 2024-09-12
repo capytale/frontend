@@ -284,7 +284,6 @@ const archMessage = (a) => {
 
           <Select v-model="filters['classe'].value" :options="classList" optionLabel="classe" optionValue="classe"
             class="mr-2" placeholder="Filtrer par classe" style="min-width: 12rem" :showClear="true" />
-          {{ filters['classe'].value }}
 
           <!-- <Button v-tooltip.bottom="'Télécharger'" icon="pi pi-download" class="mr-2" severity="secondary" /> -->
 
