@@ -7,7 +7,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <a :href="data.player">
+    <a :href="data.player" class="clickable">
         {{ data.fullname }}
     </a>
 </template>

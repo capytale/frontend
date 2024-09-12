@@ -28,7 +28,7 @@ const visible = ref(false);
 </template>
 
 
-<style scoped>
+<style>
 .cog {
   color: rgba(0, 0, 0, 0);
 }
