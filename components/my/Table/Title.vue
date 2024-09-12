@@ -33,6 +33,12 @@ const visible = ref(false);
   color: rgba(0, 0, 0, 0);
 }
 
+@media (pointer: coarse) {
+  .cog {
+    color: var(--p-button-text-primary-color);
+  }
+}
+
 .parent:hover .cog {
   color: var(--p-button-text-primary-color);
 }
