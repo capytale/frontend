@@ -98,7 +98,7 @@ const shortcutList = computed(() => {
       </h2>
     </template>
     <template #content>
-      <div class="overflow-x-auto myflex flex-wrap justify-around">
+      <div class="overflow-x-auto myflex flex-wrap">
         <a v-for="type of shortcutList" :key="type" :href="atl.getCreateUrl(type)"
           v-tooltip.bottom="atl.getTypeInfo(type).name" class="hover:shadow-md shrink-0">
           <img :src="atl.getTypeInfo(type).icon.path" class="w-16 inline" />
