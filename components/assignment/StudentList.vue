@@ -1,5 +1,6 @@
 <script lang="ts">
-const defaultNbFake = 4;
+const defaultNbFake = 5;
+const maxNbFake = 10;
 </script>
 
 <script setup lang="ts">
@@ -117,8 +118,7 @@ const chWf = ((sa_nid, wf) => {
 
 const nbFake = computed(() => {
   if (props.viewsVisible == null) return new Array(defaultNbFake)
-  // return new Array(props.viewsVisible)
-  return new Array(10)
+  else return new Array(Math.min(props.viewsVisible, maxNbFake))
 })
 
 const filters = ref({
