@@ -4,7 +4,7 @@ build:
       - node_modules/
   stage: build
   rules:
-    - if: !$GITLAB_AC_PARIS
+    - if: $GITLAB_AC_PARIS == null
       when: never
   image: node:20
   script:
@@ -17,7 +17,7 @@ build:
 deploy:
   stage: deploy
   rules:
-    - if: !$GITLAB_AC_PARIS
+    - if: $GITLAB_AC_PARIS == null
       when: never
     - if: $PROD_AUTO_DEPLOY
       when: on_success
