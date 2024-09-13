@@ -6,17 +6,23 @@ const wantSubTag = ref(false);
 const selectedTag = ref(null);
 
 const save = () => {
-  tags.createTag(label.value, Object.keys(selectedTag.value).shift() || 0)
+
+  if (wantSubTag.value.length == 0) {
+    tags.createTag(label.value, 0)
+  } else {
+    const parentId = selectedTag.value ? Object.keys(selectedTag.value).shift() : 0
+    tags.createTag(label.value, parentId)
+  }
   visible.value = false;
 }
 
 const onNodeSelect = (node) => {
   selectedTag.value = node.key
-  wantSubTag.value = true
+  wantSubTag.value = ['subTag']
 };
 const onNodeUnselect = (node) => {
   selectedTag.value = null
-  wantSubTag.value = false
+  wantSubTag.value = []
 };
 
 const expandedKeys = ref({});
@@ -30,20 +36,27 @@ const expandNode = (node) => {
     }
   }
 };
+const handleWant = (event) => {
+  if (wantSubTag.value) {
+    // console.log("wantSubTag.value: ", wantSubTag.value)
+    selectedTag.value = []
+  }
+}
 
 const visible = defineModel('visible')
 
 </script>
 
 <template>
-    <Dialog v-model:visible="visible" modal header="Créer une nouvelle étiquette" :style="{ width: '55rem' }"
+  <Dialog v-model:visible="visible" modal header="Créer une nouvelle étiquette" :style="{ width: '55rem' }"
     dismissableMask>
     <div class="flex align-items-center gap-3 mb-3">
       <label for="label" class="font-semibold w-6rem">Nom de l'étiquette</label>
       <InputText v-model="label" id="label" class="flex-auto" autocomplete="off" />
     </div>
     <div class="flex align-items-center">
-      <Checkbox v-model="wantSubTag" inputId="checked" name="checked" binary  />
+      <!-- <Checkbox v-model="wantSubTag" inputId="checked" name="checked" binary /> -->
+      <Checkbox v-model="wantSubTag" inputId="checked" name="checked" value="subTag" @change="handleWant(event)" />
       <label for="checked" class="ml-2">Imbriquer l'étiquette sous : </label>
     </div>
     <div class="flex align-items-center gap-3 mb-5">
@@ -59,7 +72,7 @@ const visible = defineModel('visible')
       <Button type="button" label="Enregistrer" @click="save"></Button>
 
     </div>
-    </Dialog>
+  </Dialog>
 </template>
 
 <style scoped>

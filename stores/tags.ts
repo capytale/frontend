@@ -47,6 +47,7 @@ export const useTagsStore = defineStore('tags', {
         return o.id != id
       })
       this.data.data.flatTags = filterData(this.data.data.flatTags, tid)
+      this.data.data.tags = unflatten(this.data.data.flatTags)
       await httpClient.postJsonAsync(
         privateTagsApiEp,
         { action: "destroy", tid }
