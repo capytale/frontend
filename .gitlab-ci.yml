@@ -3,7 +3,10 @@ build:
     paths:
       - node_modules/
   stage: build
-  image: node:18
+  rules:
+    - if: !$GITLAB_AC_PARIS
+      when: never
+  image: node:20
   script:
     - npm install
     - npm run generate
@@ -14,15 +17,13 @@ build:
 deploy:
   stage: deploy
   rules:
-    - if: '$CI_COMMIT_BRANCH == "develop"'
-      variables:
-        REMOTE: "gitdeploy@capytaledev.in.ac-paris.fr"
-    - if: '$CI_COMMIT_BRANCH == "preprod"'
-      variables:
-        REMOTE: "gitdeploy@capytalepreprod.ac-paris.fr"
-    - if: '$CI_COMMIT_BRANCH == "main"'
-      variables:
-        REMOTE: "gitdeploy@capytale2.ac-paris.fr"
+    - if: !$GITLAB_AC_PARIS
+      when: never
+    - if: $PROD_AUTO_DEPLOY
+      when: on_success
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: manual
+    - when: on_success
   image: tjaisson/rsync
   script:
     - mkdir -p ~/.ssh/
@@ -32,6 +33,5 @@ deploy:
     - chmod a-r-w-x,u+r ~/.ssh/config
     - FOLDER="/home/gitdeploy"
     - TARGET="vue-frontend"
-    - URL="${REMOTE}:${FOLDER}/${TARGET}"
+    - URL="${CI_COMMIT_BRANCH}:${FOLDER}/${TARGET}"
     - rsync -avzP --delete .output/public/ "${URL}/"
-
