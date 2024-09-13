@@ -21,7 +21,6 @@ const bpsmallerThanLg = breakpoints.smaller('lg') // only smaller than lg
 //TODO : à voir !
 //fin du todo
 
-
 const handleResize = (event) => {
   // console.log("Ces valeurs pourraient être intégrées dans les pref utilisateur et chargées au démarrage")
   // console.log(event.sizes)
