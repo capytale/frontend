@@ -222,7 +222,7 @@ const nbselected = () => {
             <template #header>
               <Toolbar>
                 <template #start v-if="!showToolbar">
-                  <h2 style="margin:0px"> Mes activités </h2>
+                  <h2 class="ml-8"> Mes activités </h2>
                 </template>
                 <template #start v-if="showToolbar">
                   <span class="mr-2">{{ nbselected() }}</span>

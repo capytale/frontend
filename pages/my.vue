@@ -48,6 +48,9 @@ const isReady = computed(() => {
     all: activites.activities.status === 'success' && tags.status === 'success' && user.user.status === 'success'
   }
 })
+
+const tagsLogo = ref("pi pi-tags")
+
 </script>
 
 <template>
@@ -64,12 +67,15 @@ const isReady = computed(() => {
         <div class="flex flex-row overflow-scroll">
           <div>
             <div v-if="!sideMenu.visible && sideState !== 'empty'"
-              class="mt-16 h-16 w-16 rounded-full border-2 flex justify-center items-center absolute top-0 -left-8 z-[99]"
-              style="background-color: var(--p-card-background)">
+              class="mt-16 h-14 w-14 rounded-full border-2 border-blue-500 flex justify-center items-center absolute -top-10 left-4 z-[99]"
+              style="background-color: var(--p-card-background)"
+              v-tooltip.right="{ value: 'Épingler le menu des étiquettes', showDelay: 300, hideDelay: 0 }"
+              @click="sideMenu.visible = true" @mouseover="tagsLogo = 'pi-thumbtack rotate'"
+              @mouseleave="tagsLogo = 'pi-tags'">
               <div class="parent">
-                <i class="pi pi-tags m-4" style="font-size: 1.5rem;" @click="sideMenu.visible = true"></i>
+                <i :class="'pi ' + tagsLogo + ' m-4'" style="font-size: 1.5rem;"></i>
                 <div v-if="!sideMenu.visible && sideState !== 'empty'" class="absolute z-[100] p-card zzz">
-                  <div class="ohlala">
+                  <div class="positionner">
                     <div class="tagWrapper p-card absolute surprise mx-20 my-40">
                       <SideMenu v-if="isReady.tags" />
                     </div>
@@ -88,10 +94,14 @@ const isReady = computed(() => {
 
 <style scoped>
 /* Additionnal CSS in default.vue */
-.ohlala {
+.positionner {
   position: relative;
   left: -1.5rem;
   bottom: -1.5rem;
+}
+
+.rotate {
+  transform: rotate(-45deg);
 }
 
 .surprise {

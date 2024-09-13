@@ -18,16 +18,19 @@ const expandNode = (node) => {
 const visible = ref(false);
 const checked = ref(false);
 const strictSearch = ref(false);
+const pinLogo = ref("pi pi-thumbtack");
 </script>
 
 <template>
   <div class="space-y-3 p-3">
     <div class="flex flex-col">
       <span class="flex items-center px-2 py-4 space-x-3 rounded-md">
-        <i v-if="sideMenu.visible" class="pi pi-thumbtack highlight" @click="sideMenu.visible = false"
-          v-tooltip.right="{ value: 'Des-épingler le menu', showDelay: 300, hideDelay: 0 }"></i>
-        <i v-else class="pi pi-thumbtack unpinned highlight" @click="sideMenu.visible = true"
-          v-tooltip.right="{ value: 'Épingler le menu', showDelay: 300, hideDelay: 0 }"></i>
+        <i v-if="sideMenu.visible" :class="'pi ' + pinLogo + ' highlight'" @click="sideMenu.visible = false"
+          v-tooltip.right="{ value: 'Des-épingler le menu', showDelay: 300, hideDelay: 0 }"
+              @mouseover="pinLogo = 'pi-thumbtack rotate'" @mouseleave="pinLogo = 'pi-thumbtack'"
+        ></i>
+        <!-- <i v-else class="pi pi-thumbtack unpinned highlight" @click="sideMenu.visible = true" -->
+        <!--   v-tooltip.right="{ value: 'Épingler le menu', showDelay: 300, hideDelay: 0 }"></i> -->
         <span class="parent mr-1">
           <span class="font-bold">Étiquettes</span>
           <Button type="button" icon="pi pi-info-circle" aria-label="Info sur les étiquettes" text @click="visible = true"
@@ -59,6 +62,9 @@ const strictSearch = ref(false);
 </template>
 
 <style scoped>
+.rotate {
+transform: rotate(-45deg);
+}
 .sidemenu {
   position: fixed;
   width: 300px;
