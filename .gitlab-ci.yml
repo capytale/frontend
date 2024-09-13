@@ -6,6 +6,7 @@ build:
   rules:
     - if: $GITLAB_AC_PARIS == null
       when: never
+    - when: always
   image: node:20
   script:
     - npm install
