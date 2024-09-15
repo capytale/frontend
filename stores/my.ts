@@ -17,6 +17,7 @@ export const useMyStore = defineStore('my', {
   },
   actions: {
     async getAssignments(nid: string) {
+      this.mathalea = false
       this.loadingAssignments = true
       this.assignments = await httpClient.getJsonAsync<any>("/web/c-hdls/api/assignments/" + nid)
       if(this.assignments.icon.includes('mathalea')) {
