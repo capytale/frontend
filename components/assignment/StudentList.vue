@@ -198,7 +198,7 @@ const archMessage = (a) => {
   return "Consulter les archives"
 }
 
-
+const mathalea = ref(false)
 </script>
 
 
@@ -244,11 +244,6 @@ const archMessage = (a) => {
     </DataTable>
   </div>
   <template v-else>
-    <div class="myflex my-10" v-if="false">
-      <span><img :src="my.assignments.icon" alt="icon" class="w-16 h-16" /> </span>
-      <span class="activity-title">{{ my.assignments.title }}</span>
-    </div>
-
     <DataTable :value="richTab" tableStyle="min-width: 50rem" v-model:selection="selectedNid" v-model:filters="filters"
       :globalFilterFields="['hasTags', 'fullname', 'classe']" selectionMode="multiple" @rowSelect="onRowSelect()"
       @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()" paginator :rows="10"
@@ -290,7 +285,9 @@ const archMessage = (a) => {
 
         </template>
         <template #end>
-
+          <Button v-if="my.mathalea" v-tooltip="'Détails des résultats'" @click="mathalea = true" text>
+          <img :src="my.assignments.icon" class="h-10" />
+          </Button>
           <Button icon="pi pi-external-link" label="Export CSV" @click="exportCSV($event)" outlined class="mr-2" />
           <ToggleButton v-model="filters['hasTags'].value" v-tooltip.bottom="archMessage(filters['hasTags'].value)"
             onLabel="Quitter les archives" offLabel="Archives" offIcon="pi pi-eye-slash" class="mr-2" />
@@ -365,6 +362,7 @@ const archMessage = (a) => {
       </Column>
 
     </DataTable>
+    <AssignmentMathaleaList v-model="mathalea" v-if="my.mathalea" />
   </template>
 </template>
 

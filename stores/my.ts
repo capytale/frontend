@@ -1,4 +1,5 @@
 import httpClient from '@capytale/activity.js/backend/capytale/http'
+import evalApi from "@capytale/activity.js/backend/capytale/evaluation"
 
 // Definit le endpoint de l'API
 const myActivitiesApiEp = "/web/c-hdls/api/my-activities"
@@ -9,6 +10,7 @@ const assignmentsApiEp = "/web/c-hdls/api/assignments"
 export const useMyStore = defineStore('my', {
   state: () => ({
     assignments: [],
+    mathalea: false,
     loadingAssignments: false,
   }),
   getters: {
@@ -17,6 +19,9 @@ export const useMyStore = defineStore('my', {
     async getAssignments(nid: string) {
       this.loadingAssignments = true
       this.assignments = await httpClient.getJsonAsync<any>("/web/c-hdls/api/assignments/" + nid)
+      if(this.assignments.icon.includes('mathalea')) {
+        this.mathalea = await evalApi.listEvals(nid)
+      }        
       this.loadingAssignments = false
     },
     async saveAppr(nid, appr: any) {
