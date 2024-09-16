@@ -256,7 +256,7 @@ const nbselected = () => {
                       </div>
                     </Popover>
                   </div>
-                  <!-- <Button v-tooltip.bottom="'Télécharger'" icon="pi pi-download" class="mr-2" severity="secondary" /> -->
+                  <Button v-tooltip.bottom="'Télécharger\n(bientôt disponible)'" icon="pi pi-download" class="mr-2" severity="secondary"  disabled/>
                   <!-- <Button v-tooltip.bottom="'CSV'" icon="pi pi-file-excel" class="mr-2" severity="secondary" /> -->
                 </template>
 

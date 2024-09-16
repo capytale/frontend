@@ -266,8 +266,9 @@ const mathalea = ref(false)
               class="mr-2" severity="warn" outlined :disabled="!hasSelected" />
             <Button v-tooltip.bottom="ttMessage(300)" @click="handleChangeWf(300)" label="Corrigé"
               icon="pi pi-check-square" class="mr-2" severity="success" outlined :disabled="!hasSelected" />
-            <Button type="button" icon="pi pi-eye-slash" @click="toggle" severity="secondary" outlined aria-haspopup="true"
-              v-tooltip.top="{ value: 'Déplacer dans les archives', showDelay: 300, hideDelay: 100 }" aria-controls="overlay_menu" />
+            <Button type="button" icon="pi pi-eye-slash" @click="toggle" severity="secondary" outlined
+              aria-haspopup="true" v-tooltip.top="{ value: 'Déplacer dans les archives', showDelay: 300, hideDelay: 100 }"
+              aria-controls="overlay_menu" />
             <Menu ref="menu" id="overlay_menu" :model="itemsA" :popup="true" />
           </template>
 
@@ -286,9 +287,12 @@ const mathalea = ref(false)
         </template>
         <template #end>
           <Button v-if="my.mathalea" v-tooltip="'Détails des résultats'" @click="mathalea = true" text>
-          <img :src="my.assignments.icon" class="h-10" />
+            <img :src="my.assignments.icon" class="h-10" />
           </Button>
-          <Button icon="pi pi-external-link" label="Export CSV" @click="exportCSV($event)" outlined class="mr-2" />
+          <Button icon="pi pi-download" class="mr-2" severity="secondary" disabled
+            v-tooltip.bottom="'Télécharger les copies\n(bientôt disponible)'" />
+          <Button icon="pi pi-file-excel" @click="exportCSV($event)" outlined class="mr-2"
+            v-tooltip.bottom="'Télécharger au format csv'" />
           <ToggleButton v-model="filters['hasTags'].value" v-tooltip.bottom="archMessage(filters['hasTags'].value)"
             onLabel="Quitter les archives" offLabel="Archives" offIcon="pi pi-eye-slash" class="mr-2" />
         </template>
