@@ -3,7 +3,7 @@
 
 <template>
   <div style="width: 100%">
-    <div class="flex gap-6 flex-wrap">
+    <div class="flex flex-col md:flex-row gap-6 flex-wrap">
         <NuxtLink to="/mentions_legales" class="link">Mentions légales</NuxtLink>
         <NuxtLink to="/cgu" class="link">Conditions générales d'utilisation</NuxtLink>
         <NuxtLink to="/rgpd" class="link">Politique de protection des données personnelles</NuxtLink>
@@ -15,5 +15,6 @@
 <style scoped>
 .link {
   color: var(--p-primary-color);
+  white-space: normal;
 }
 </style>
