@@ -104,6 +104,18 @@ const search = (event) => {
 
 
 const postBibForm = async () => {
+  if (share.value == 0) {
+    confirm.require({
+      message: 'Merci de cocher au moins une case de partage ou fermez cette fenêtre.',
+      header: 'Attention',
+      icon: 'pi pi-exclamation-triangle',
+      rejectClass: 'invisible',
+      rejectLabel: 'Cancel',
+      acceptLabel: 'Ok',
+    });
+    return false
+  }
+
   if (share.value == 1 && (resume.value == null || resume.value.length < 20)) {
     confirm.require({
       message: 'Merci de saisir un résumé de 50 caractères au minimum.',
@@ -113,7 +125,7 @@ const postBibForm = async () => {
       rejectLabel: 'Cancel',
       acceptLabel: 'Ok',
     });
-    return
+    return false
   }
 
   if (share.value == 1 && selectedEnseignements.value.length == 0) {
@@ -125,7 +137,7 @@ const postBibForm = async () => {
       rejectLabel: 'Cancel',
       acceptLabel: 'Ok',
     });
-    return
+    return false
   }
   if (share.value == 1 && selectedNiveaux.value.length == 0) {
     confirm.require({
@@ -136,7 +148,7 @@ const postBibForm = async () => {
       rejectLabel: 'Cancel',
       acceptLabel: 'Ok',
     });
-    return
+    return false
   }
   // console.log('selectedModules : ', selectedModules.value)
 
@@ -165,6 +177,7 @@ const postBibForm = async () => {
   )
 
   bib.bib.refresh() // TODO : on doit pouvoir faire plus léger en ne récupérant que ce qui a été ajouté ou supprimé
+  return true
 }
 
 </script>
@@ -222,7 +235,7 @@ const postBibForm = async () => {
   </div>
   <div class="flex justify-content-end gap-2 my-4" style="position: absolute; height:2em; bottom: 0;">
     <Button type="button" label="Annuler" severity="secondary" @click="$emit('closeBibForm')"></Button>
-    <Button type="button" label="Enregistrer" @click="() => { postBibForm(); $emit('closeBibForm') }"></Button>
+    <Button type="button" label="Enregistrer" @click="async () => { const r = await postBibForm(); console.log('r', r); if (r) {$emit('closeBibForm')} }"></Button>
   </div>
 </template>
 
