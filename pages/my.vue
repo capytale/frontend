@@ -71,7 +71,7 @@ const tagsLogo = ref("pi pi-tags")
               class="mt-16 h-14 w-14 flex justify-center items-center absolute -top-10 left-4 z-[99]"
               @mouseover="tagsLogo = 'pi-thumbtack rotate'" @mouseleave="tagsLogo = 'pi-tags'">
               <div class="parent">
-                <i :class="'parent pi ' + tagsLogo + ' p-4 rounded-full border-2 border-blue-500 '"
+                <i :class="'parent pi ' + tagsLogo + ' p-4 rounded-full border-2 border-blue-500 pointer'"
                   style="font-size: 1.5rem; background-color: var(--p-card-background)" @click="sideMenu.visible = true"
                   v-tooltip.right="{ value: 'Épingler le menu des étiquettes', showDelay: 300, hideDelay: 0 }"></i>
                 <div class="absolute z-[100] p-card zzz">
@@ -119,5 +119,9 @@ const tagsLogo = ref("pi pi-tags")
 
 .parent:hover .surprise {
   display: inline;
+}
+
+.pointer {
+  cursor: pointer;
 }
 </style>
