@@ -16,6 +16,23 @@ export const formatDateTime = (date) => {
   return new Date(date).toLocaleDateString("fr-FR", options);
 };
 
+// formate la date et l'heure 	12/09 à 19:28 ou 	12/09/22 à 19:28
+export const formatPrettyDateTime = (date) => {
+  const optionsDay = {
+    month: "2-digit",
+    day: "2-digit",
+  };
+  if (new Date(date).getFullYear() != new Date().getFullYear()) {
+    optionsDay.year = "2-digit";
+  }
+  const optionsHour = {
+    hour: "2-digit",
+    minute: "2-digit",
+  };
+  return new Date(date).toLocaleDateString("fr-FR", optionsDay) + " à " + new Date(date).toLocaleTimeString("fr-FR", optionsHour);
+};
+
+
 // formate un tmiestamp en date relaive : il ya ... secondes, minutes, heures, jours, mois, ans
 export function timeElapsed(ts) {
     var now = new Date().getTime();
