@@ -137,21 +137,6 @@ export const useActivitiesStore = defineStore('activities', {
       }
     },
 
-    async tagActivities(pxyNids: any[], tids: any[]) {
-      const xunion = (a, b) => [...new Set([...a, ...b])];
-      for (let item of pxyNids) {
-        const wellFormedTids = tids.map(el => { return el })
-        this.activities.data = this.activities.data.map(el => {
-          return el.nid == item.nid ? { ...el, tags: xunion(el.tags ? el.tags : [], wellFormedTids) } : el
-        });
-      }
-      let nids = [...pxyNids.map((o) => o.nid)];
-      await httpClient.postJsonAsync(
-        myActivitiesApiEp,
-        { action: "addTags", nids, tids }
-      );
-    },
-
     async moveActivities(pxyNids: array, tid: number) {
       for (let item of pxyNids) {
         this.activities.data = this.activities.data.map(el => el.nid == item.nid ? { ...el, tags: [tid] } : el);
@@ -190,7 +175,6 @@ export const useActivitiesStore = defineStore('activities', {
     },
 
     async replaceTags(nids: any[], tids: any[]) {
-      // console.log('replaceTags', nids, tids);
       await httpClient.postJsonAsync(
         myActivitiesApiEp,
         { action: "replaceTags", nids, tids }

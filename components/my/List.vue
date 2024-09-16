@@ -140,10 +140,6 @@ const handleMoveToFolderMultiple = async () => {
   // console.log("folder: ", folder)
   await activites.moveActivities(selectedNid.value, folder)
 }
-const handleAddTagMultiple = async () => {
-  const tags = Object.keys(selectedTags.value)
-  await activites.tagActivities(selectedNid.value, tags)
-}
 
 
 const filters = ref({
@@ -226,6 +222,7 @@ const nbselected = () => {
                 </template>
                 <template #start v-if="showToolbar">
                   <span class="mr-2">{{ nbselected() }}</span>
+                  <span class="ml-8 mr-2">{{ nbselected() }}</span>
 
                   <Button v-tooltip.bottom="'Supprimer'" @click="handleDelete()" icon="pi pi-times-circle" class="mr-2"
                     severity="danger" outlined />
