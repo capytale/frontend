@@ -4,7 +4,11 @@ const user = useUserStore()
 const $route = useRoute();
 
 const toggleColorMode = () => {
-  colorMode.preference = colorMode.preference === 'light' ? 'dark' : 'light';
+  if (checked.value) {
+    colorMode.preference = 'dark'
+  } else {
+    colorMode.preference = 'light'
+  }
 }
 
 const backToLegacy = () => {
@@ -17,6 +21,7 @@ const backToLegacy = () => {
   window.location.assign(backUrl)
 }
 
+const checked = ref(false);
 </script>
 <template>
   <div class="navbar">
@@ -30,12 +35,15 @@ const backToLegacy = () => {
       </div>
 
       <div class="activityMenu grow justify-end order-3">
-        <Button type="button" label="Interface classique" icon="pi pi-chevron-left" @click="backToLegacy"
-          severity="info" text aria-haspopup="true" aria-controls="overlay_menu" />
+        <Button type="button" label="Interface classique" icon="pi pi-chevron-left" @click="backToLegacy" severity="info"
+          text aria-haspopup="true" aria-controls="overlay_menu" class="mr-4" />
 
-        <div class="cursor-pointer hover:text-yellow-400 mr-2 px-2" @click="toggleColorMode">
-          <FontAwesome :icon="colorMode.preference === 'light' ? 'sun' : 'moon'" class="text-xl" />
-        </div>
+        <i :class="checked ? 'pi pi-sun' : 'pi pi-sun text-yellow-400'"></i>
+        <ToggleSwitch v-model="checked" @change="toggleColorMode" style="transform: scale(0.7)" class="-mx-1"
+          v-tooltip.top="{ value: 'Mode clair/sombre', showDelay: 300, hideDelay: 100 }"
+          aria-controls="Mode clair/sombre" />
+
+        <i :class="checked ? 'pi pi-moon text-yellow-400 mr-4' : 'pi pi-moon mr-4'"></i>
         <EntButton />
       </div>
     </div>
