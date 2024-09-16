@@ -53,7 +53,7 @@ const toggle = (event) => {
     <Column field="score" header="Note">
     <template #body="slotProps">
       <Tag :style="getStyle(slotProps.data.score, slotProps.data.scoreMax)" severity="secondary">
-      <span>{{ slotProps.data.score ?  slotProps.data.score : "-" }} / {{ slotProps.data.scoreMax }}</span>
+      <span>{{ slotProps.data.score !== null ?  slotProps.data.score : "-" }} / {{ slotProps.data.scoreMax }}</span>
       </Tag> 
     </template>
     </Column>
