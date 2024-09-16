@@ -59,7 +59,8 @@ const tagsLogo = ref("pi pi-tags")
       <MyActivityPlay />
       <MyActivityAdd />
     </div>
-    <Splitter @resizeend="handleResize" class="relative" :gutterSize="gutter">
+    <MyListSkeleton v-if="!isReady.all" />
+    <Splitter v-else @resizeend="handleResize" class="relative" :gutterSize="gutter">
       <SplitterPanel :size="size[0]" v-show="sideMenu.visible && sideState !== 'empty'">
         <SideMenu v-if="isReady.tags" />
       </SplitterPanel>
@@ -71,8 +72,7 @@ const tagsLogo = ref("pi pi-tags")
               @mouseover="tagsLogo = 'pi-thumbtack rotate'" @mouseleave="tagsLogo = 'pi-tags'">
               <div class="parent">
                 <i :class="'parent pi ' + tagsLogo + ' p-4 rounded-full border-2 border-blue-500 '"
-                  style="font-size: 1.5rem; background-color: var(--p-card-background)"
-                  @click="sideMenu.visible = true"
+                  style="font-size: 1.5rem; background-color: var(--p-card-background)" @click="sideMenu.visible = true"
                   v-tooltip.right="{ value: 'Épingler le menu des étiquettes', showDelay: 300, hideDelay: 0 }"></i>
                 <div class="absolute z-[100] p-card zzz">
                   <div class="positionner">
@@ -84,8 +84,8 @@ const tagsLogo = ref("pi pi-tags")
               </div>
             </div>
           </div>
-          <MyListSkeleton v-if="!isReady.all" />
-          <MyList v-else />
+          <!-- <MyListSkeleton v-if="!isReady.all" /> -->
+          <MyList />
         </div>
       </SplitterPanel>
     </Splitter>
