@@ -156,11 +156,11 @@ const clearFilter = () => {
           :rowsPerPageOptions="[5, 10, 20, 50]" dataKey="id" :filterDisplay='advancedSearch ? "row" : ""'
           sortField="changed" :sortOrder="-1" :globalFilterFields="['title', 'abstract', 'auteur']">
           <template #header>
-            <div class="flex flex-col lg:flex-row items-center h-24 justify-between">
+            <div class="flex flex-col lg:flex-row items-start lg:items-center min-h-24 justify-between">
                 <div class="titre">Bibliothèque entre enseignants
                              ({{ bib.bib.data.length }} activités)
                 </div>
-                <div class="flex flex-row gap-2 justify-content-end">
+                <div class="flex flex-col md:flex-row gap-2 justify-content-end">
                   <TypeFilterSelect v-model="filters['type'].value" />
                   <IconField iconPosition="left">
                     <InputIcon>
