@@ -13,8 +13,8 @@
   <Column field="evalAuto" header="Éval auto" bodyStyle="text-align: center;"></Column>
   <Column v-for="(e, idx) in evals" :key="e.label" :header="e.label" :field="idx.toString()">
     <template #body="slotProps">
-    <Tag :style="getStyle(slotProps.data[idx], e.scoreMax)">
-    <span>{{ slotProps.data[idx] }} / {{ e.scoreMax }}</span>
+    <Tag :style="getStyle(slotProps.data[idx], e.scoreMax)" severity="secondary">
+    <span>{{ slotProps.data[idx] ? slotProps.data[idx] : '-' }} / {{ e.scoreMax }}</span>
     </Tag>
   </template>
   </Column>
