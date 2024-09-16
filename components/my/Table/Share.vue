@@ -200,8 +200,8 @@ const wfStatusGetter = ((obj) => {
         <div v-else>
           <i :class="wfStatus.icon + ' ml-2'" :style="'font-size: 1.3rem; color: ' + wfStatus.color"
             v-tooltip.top="{ value: wfStatus.label, showDelay: 400, hideDelay: 0 }"></i>
-          <span class="whitespace-nowrap">{{ props.data.whoami == 'as' ? 'Associé par ' : 'Apprenant de ' }}{{
-            props.data.boss }}</span>
+          <span class="whitespace-nowrap ml-2">{{ props.data.whoami == 'as' ? 'Associé par ' : 'Apprenant de ' }}{{
+            props.data.boss ? props.data.boss : 'inconnu'}}</span>
         </div>
       </div>
     </template>
