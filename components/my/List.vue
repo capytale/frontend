@@ -321,7 +321,7 @@ const nbselected = () => {
               </template>
             </Column>
 
-            <Column :class="cols.changed ? '' : 'hidden'" field="changed" header="Modifié" sortable>
+            <Column :class="cols.changed ? '' : 'hidden'" field="changed" header="Dernier accès" sortable>
               <template #body="p">
                 <MyTableChanged :data="p.data" />
               </template>

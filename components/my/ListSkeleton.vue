@@ -37,7 +37,7 @@
       <Skeleton width="10rem" height="4rem"></Skeleton>
     </template>
   </Column>
-  <Column header="Modifié">
+  <Column header="Dernier accès">
     <template #body>
       <Skeleton width="5rem"></Skeleton>
     </template>
