@@ -220,7 +220,6 @@ const nbselected = () => {
                   <h2 class="ml-8"> Mes activités </h2>
                 </template>
                 <template #start v-if="showToolbar">
-                  <span class="mr-2">{{ nbselected() }}</span>
                   <span class="ml-8 mr-2">{{ nbselected() }}</span>
 
                   <Button v-tooltip.bottom="'Supprimer'" @click="handleDelete()" icon="pi pi-times-circle" class="mr-2"
