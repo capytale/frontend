@@ -42,8 +42,33 @@ export const useTagsStore = defineStore('tags', {
       return this.data.data.flatTags.some(el => el.parentid == tid)
     },
     async destroyTag(tid) {
+
+
+      // On retire le tag de toutes les activités qui le contiennent
+      const activites = useActivitiesStore()
+
+      // get all children of the tag
+      const getChildren = (data, id) => {
+        const children = data.filter(o => o.parentid == id)
+        return children.concat(...children.map(c => getChildren(data, c.id)))
+      }
+      // untag all activities that have the tag or its children
+      activites.activities.data = activites.activities.data.map(a => {
+        a.tags = a.tags.filter(t => t != tid)
+        return a
+      })
+      for (const child of getChildren(this.data.data.flatTags, tid)) {
+        console.log("del: ", child.id)
+        activites.activities.data = activites.activities.data.map(a => {
+          a.tags = a.tags.filter(t => t != child.id)
+          return a
+        })
+      }
+
       const filterData = (data, id) => data.filter(o => {
-        if (o.children) o.children = filterData(o.children, id);
+        if (o.children) {
+          o.children = filterData(o.children, id);
+        }
         return o.id != id
       })
       this.data.data.flatTags = filterData(this.data.data.flatTags, tid)

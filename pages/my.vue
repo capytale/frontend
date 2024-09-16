@@ -67,14 +67,14 @@ const tagsLogo = ref("pi pi-tags")
         <div class="flex flex-row overflow-scroll">
           <div>
             <div v-if="!sideMenu.visible && sideState !== 'empty'"
-              class="mt-16 h-14 w-14 rounded-full border-2 border-blue-500 flex justify-center items-center absolute -top-10 left-4 z-[99]"
-              style="background-color: var(--p-card-background)"
-              v-tooltip.right="{ value: 'Épingler le menu des étiquettes', showDelay: 300, hideDelay: 0 }"
-              @click="sideMenu.visible = true" @mouseover="tagsLogo = 'pi-thumbtack rotate'"
-              @mouseleave="tagsLogo = 'pi-tags'">
+              class="mt-16 h-14 w-14 flex justify-center items-center absolute -top-10 left-4 z-[99]"
+              @mouseover="tagsLogo = 'pi-thumbtack rotate'" @mouseleave="tagsLogo = 'pi-tags'">
               <div class="parent">
-                <i :class="'pi ' + tagsLogo + ' m-4'" style="font-size: 1.5rem;"></i>
-                <div v-if="!sideMenu.visible && sideState !== 'empty'" class="absolute z-[100] p-card zzz">
+                <i :class="'parent pi ' + tagsLogo + ' p-4 rounded-full border-2 border-blue-500 '"
+                  style="font-size: 1.5rem; background-color: var(--p-card-background)"
+                  @click="sideMenu.visible = true"
+                  v-tooltip.right="{ value: 'Épingler le menu des étiquettes', showDelay: 300, hideDelay: 0 }"></i>
+                <div class="absolute z-[100] p-card zzz">
                   <div class="positionner">
                     <div class="tagWrapper p-card absolute surprise mx-20 my-40">
                       <SideMenu v-if="isReady.tags" />
