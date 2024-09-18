@@ -110,7 +110,7 @@ const shortcutList = computed(() => {
         <!--   <Button type="submit" label="Toutes les activités" /> -->
         <!-- </NuxtLink> -->
         <Button class="w-full md:w-auto" label="Toutes les activités" @click="visible = true" />
-        <Dialog v-model:visible="visible" header="Créer une nouvelle activité" modal :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }"
+        <Dialog v-model:visible="visible" header="Créer une nouvelle activité" position="top" modal :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }"
           class="w-11/12 md:w-3/4" maximizable dismissableMask>
           <ActivitySelector />
         </Dialog>
