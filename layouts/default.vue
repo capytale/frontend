@@ -40,7 +40,6 @@ body,
 }
 
 .container {
-  min-width: 400px;
   max-width: min(calc(100% - 2rem), 1600px);
 }
 
