@@ -1,37 +1,45 @@
 <script setup>
+const my = useMyStore()
+
 const props = defineProps({
   data: Object,
-  required: true
+  nid: String,
 })
-const my = useMyStore()
 const visible = ref(false);
 
-const st = ref()
-if (my.mathalea) st.value = my.mathalea.students.find(s => s.uid == props.data.sa_uid).evaluations
-
-const getStyle = function (score, scoreMax) {
-  // Couleurs de  ff0000 -> ffff00 -> 00ff00
-  // pour Score/scoreMax de 
-  //              0      -> 0.5    -> 1
-  const r = Math.min(255, 510 - parseInt(510 * score / scoreMax));
-  const g = Math.min(255, parseInt(510 * score / scoreMax));
-  const idle = ''
-  if (score != null) return "background-color: #" + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + "00"
-  return idle
+const close = () => {
+  visible.value = false
 }
+
+watch(visible, (v, ov) => {
+  if (v) {
+    drupal.setCloseHandler(close)
+  } else {
+    if (ov) {
+      // Ici les actions à faire lorsque le metaPLayer se referme
+      my.getAssignments(props.nid)
+      // TODO : ne pas recharger toutes les lignes mais seulement celle du data.sa_nid
+    }
+    drupal.removeCloseHandler(close)
+  }
+})
+
+onBeforeUnmount(() => {
+  drupal.removeCloseHandler(close)
+})
+
+const openInNewTab = () => {
+  window.open(props.data.player, '_blank');
+}
+
 </script>
 
 <template>
   <div>
-    <!-- <a :href="data.player" class="clickable"> -->
-    <!--     {{ data.fullname }} -->
-    <!-- </a> -->
-    <span @click.exact.stop="visible = true" v-on:click.ctrl="console.log('youpi')" class="clickable"> {{ data.fullname }} </span>
+    <span @click.exact.stop="visible = true" v-on:click.ctrl.stop="openInNewTab" class="clickable"
+      v-tooltip.top="{ value: 'Ctrl+clic pour ouvrir dans un nouvel onglet', showDelay: 300, hideDelay: 100 }" aria-controls="overlay_menu" >
+    {{ data.fullname }}
+    </span>
     <FullIframe v-model="visible" :url="data.player" :position="'top'" />
-    <div v-if="my.mathalea.totalScoreMax && false" class="flex flex-row gap-2">
-      <Tag v-for="(e, idx) in my.mathalea.evaluations" :key="e.label" :style="getStyle(st[idx].score, e.scoreMax)">
-        <span>{{ st[idx].score }} / {{ e.scoreMax }}</span>
-      </Tag>
-    </div>
   </div>
 </template>

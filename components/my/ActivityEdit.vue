@@ -32,5 +32,5 @@ onBeforeUnmount(() => {
 
 
 <template>
-  <DialogIframe v-model="visible" header="Modification des paramètres de l'activité" :url="editUrl" />
+  <DialogIframe v-model="visible" :header="`Modification des paramètres de : ${props.data.title}`" :url="editUrl" />
 </template>

@@ -145,6 +145,7 @@ const classList = computed(() => {
 const richTab = computed(() => {
   if (my.assignments.tab == null) return []
   return my.assignments.tab.map((assignment) => {
+    // TODO : reprendre le hsaTgas avec le bon critère
     return { ...assignment, hasTags: assignment.tags.length > 0, fullname: assignment.nom + " " + assignment.prenom }
   })
 })
@@ -309,7 +310,7 @@ const mathalea = ref(false)
 
       <Column field="fullname" header="Élève" style="width:16rem" sortable>
         <template #body="p">
-          <AssignmentStudent :data="p.data" />
+          <AssignmentStudent :data="p.data" :nid="nid" />
         </template>
         <template #filter="{ filterModel, filterCallback }">
           <InputText v-model="filterModel.value" type="text" style="width: 100%" @input="filterCallback()"
