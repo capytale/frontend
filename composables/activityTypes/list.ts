@@ -105,19 +105,18 @@ function typeIsAvailable(type: string): boolean {
 
 const availableTypes = computed(() => list.value.filter(t => getTypeInfo(t)?.available));
 
-export const useActivityTypesList = () => {
-  if (status.value !== 'loaded') reload();
+function buildStore() {
   return readonly({
     reload,
     /**
      * Liste complète des types d'activité. Y compris les types non disponibles
      * pour l'utilisateur courant.
-     * Valeur réactive.
+     * Valeur réactive égale à [] tant que la liste n'est pas chargée.
      */
     list,
     /**
      * Liste des types d'activité disponibles pour l'utilisateur courant.
-     * Valeur réactive.
+     * Valeur réactive égale à [] tant que la liste n'est pas chargée.
      */
     availableTypes,
     getTypeInfo,
@@ -130,9 +129,21 @@ export const useActivityTypesList = () => {
      */
     status,
     /**
-     * Erreur lors du chargement de la liste des types d'activité.
+     * Erreur lors du chargement de la liste des types d'activité
+     * lorsque status === 'error'.
+     * 
      * Valeur réactive.
      */
     error,
   })
 };
+
+type Store = ReturnType<typeof buildStore>;
+let store: Store | null = null;
+
+function useActivityTypesList(): Store {
+  if (status.value !== 'loaded') reload();
+  return store || (store = buildStore());
+}
+
+export { useActivityTypesList };
