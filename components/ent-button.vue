@@ -36,12 +36,23 @@ const popENT = ref()
 const toggle = (event) => {
   popENT.value.toggle(event)
 }
+
+const op = ref()
+const toggle2 = (event) => {
+  op.value.toggle(event)
+}
+
+const items = ref([
+  { label: "Déconnexion", icon: "pi pi-sign-out", url: "/web/user/logout" },
+])
 </script>
 
 <template>
-  <div v-if="user" class="text-white">
-    <span>{{ user.firstname }} {{ user.lastname }}</span>
-    <a href="/web/user/logout"><span class="px-2"><i class="pi pi-sign-out"></i></span></a>
+  <div v-if="user">
+    <Avatar :label="user.firstname[0]+user.lastname[0]" class="mr-2 cursor-pointer" size="large" style="color: var(--p-content-color)" @click="toggle2" />
+    <Popover ref="op" pt:content:style="padding: 0;">
+    <Menu :model="items" />
+    </Popover>
   </div>
   <div class="flex flex-row items-stretch" v-else>
     <Button @click="toggle" icon="pi pi-sign-in" label="Connexion" class="mr-2" />
