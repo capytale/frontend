@@ -25,17 +25,6 @@ const save = () => {
 const st = ref()
 if(my.mathalea) st.value = my.mathalea.students.find(s => s.uid == props.data.sa_uid).evaluations
 
-const getStyle = function (score, scoreMax) {
-// Couleurs de  ff0000 -> ffff00 -> 00ff00
-// pour Score/scoreMax de 
-//              0      -> 0.5    -> 1
-  const r = Math.min(255, 510 - parseInt(510*score/scoreMax));
-  const g = Math.min(255, parseInt(510*score/scoreMax));
-  const idle = ''
-  if (score != null) return "background-color: #" + r.toString(16).padStart(2,'0') + g.toString(16).padStart(2,'0') + "00"
-  return idle
-}
-
 const op = ref();
 const toggle = (event) => {
   op.value.toggle(event);
@@ -52,7 +41,7 @@ const toggle = (event) => {
     <Column field="label" header="Exercice"></Column>
     <Column field="score" header="Note">
     <template #body="slotProps">
-      <Tag :style="getStyle(slotProps.data.score, slotProps.data.scoreMax)" severity="secondary">
+      <Tag :style="getStyle(slotProps.data.score, slotProps.data.scoreMax)" outlined>
       <span>{{ slotProps.data.score !== null ?  slotProps.data.score : "-" }} / {{ slotProps.data.scoreMax }}</span>
       </Tag> 
     </template>
