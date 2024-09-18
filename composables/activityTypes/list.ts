@@ -12,10 +12,9 @@ const unknownType: ActivityType = {
   helpUrl: '',
   summary: '',
   description: '',
-  niveau: [],
-  sujet: [],
   bundle: '',
   available: false,
+  detailedEvaluation: false,
 };
 
 const status = shallowRef<'loading' | 'loaded' | 'error'>('loading');
