@@ -45,7 +45,6 @@ export default defineNuxtConfig({
 
   colorMode: {
     classSuffix: '',
-    preference: 'light', // default value of $colorMode.preference
   },
 
   primevue: {

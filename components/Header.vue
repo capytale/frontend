@@ -3,14 +3,6 @@ const colorMode = useColorMode()
 const user = useUserStore()
 const $route = useRoute();
 
-const toggleColorMode = () => {
-  if (checked.value) {
-    colorMode.preference = 'dark'
-  } else {
-    colorMode.preference = 'light'
-  }
-}
-
 const backToLegacy = () => {
   let backUrl: string = '/web/my?legacy&force'
   if ($route.name === 'bibliotheque') {
@@ -21,7 +13,15 @@ const backToLegacy = () => {
   window.location.assign(backUrl)
 }
 
-const checked = ref(false);
+const checked = computed({
+  get () {
+    return colorMode.value === 'dark'
+  },
+  set () {
+    colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+  }
+})
+
 </script>
 <template>
   <div class="navbar">
@@ -39,7 +39,7 @@ const checked = ref(false);
           text aria-haspopup="true" aria-controls="overlay_menu" class="mr-4" />
 
         <i :class="checked ? 'pi pi-sun' : 'pi pi-sun text-yellow-400'"></i>
-        <ToggleSwitch v-model="checked" @change="toggleColorMode" style="transform: scale(0.7)" class="-mx-1"
+        <ToggleSwitch v-model="checked" @change="checked = !checked" style="transform: scale(0.7)" class="-mx-1"
           v-tooltip.top="{ value: 'Mode clair/sombre', showDelay: 300, hideDelay: 100 }"
           aria-controls="Mode clair/sombre" />
 

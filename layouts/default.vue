@@ -1,8 +1,7 @@
 <script setup>
 const user = useUserStore()
 const colorMode = useColorMode()
-
-const bgColor = computed(() => colorMode.preference === 'light' ? 'background-color: var(--p-neutral-100)' : 'background-color: var(--p-gray-800)')
+const bgColor = computed(() => colorMode.value === 'light' ? 'background-color: var(--p-neutral-100)' : 'background-color: var(--p-gray-800)')
 
 user.getUser()
 
