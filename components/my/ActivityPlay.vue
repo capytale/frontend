@@ -43,7 +43,7 @@ const clear = () => {
         <div class="flex flex-wrap align-items-center gap-2">
           <!-- <FloatLabel> -->
             <!-- <label for="code">Code (ex : a1bc-12345678)</label> -->
-            <InputText id="code" v-model="value" :invalid="invalid" />
+            <InputText id="code" v-model="value" :invalid="invalid" @keydown.enter="codeForm" autofocus />
           <!-- </FloatLabel> -->
           <Button type="submit" label="Go !" @click="codeForm" />
         </div>
