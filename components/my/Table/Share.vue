@@ -18,8 +18,9 @@ const label = computed(() => labelGetter(props.data))
 const items = computed(() => itemsGetter(props.data))
 const wfStatus = computed(() => wfStatusGetter(props.data))
 
+let url 
 const itemsGetter = ((obj) => {
-  const url = window.location.origin + `/web/c/${obj.code}`
+  url = window.location.origin + `/web/c/${obj.code}`
   return [
     {
       label: 'Copier le code partage avec la classe',
