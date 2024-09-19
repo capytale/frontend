@@ -247,8 +247,8 @@ const mathalea = ref(false)
   <template v-else>
     <DataTable :value="richTab" tableStyle="min-width: 50rem" v-model:selection="selectedNid" v-model:filters="filters"
       :globalFilterFields="['hasTags', 'fullname', 'classe']" selectionMode="multiple" @rowSelect="onRowSelect()"
-      @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()" paginator :rows="10"
-      :rowsPerPageOptions="[10, 20, 50]" sortField="fullname"  :sortOrder="1"
+      @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()" paginator :rows="40"
+      :rowsPerPageOptions="[10, 40, 60]" sortField="fullname"  :sortOrder="1"
       paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
       currentPageReportTemplate='{first} à {last} sur {totalRecords} &nbsp; &nbsp;' @rowSelectAll="onRowSelectAll()"
       :rowStyle="rowStyle" ref="dt">

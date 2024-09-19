@@ -75,7 +75,7 @@ function getTypeInfo(type: string): ActivityType {
  * @returns une valeur réactive contenant l'URL de création
  */
 function getCreateUrl(type: string): string {
-  if (typeExists(type)) return typeApi.getCreateUrl(getTypeInfo(type));
+  if (typeExists(type)) return `/web/c-hdls/activity/${type}/add`;
   else return '';
 }
 
