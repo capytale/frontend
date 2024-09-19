@@ -36,7 +36,7 @@ const openInNewTab = () => {
 
 <template>
   <div>
-    <a :href="data.player"  v-on:click.prevent.self @click.exact.stop="visible = true" v-on:click.ctrl.stop="openInNewTab" class="clickable"
+    <a :href="data.player"  v-on:click.prevent.self @click.exact.stop="visible = true" v-on:click.ctrl.stop="openInNewTab" v-on:click.meta.stop="openInNewTab" class="clickable"
       v-tooltip.top="{ value: 'Ctrl+clic pour ouvrir dans un nouvel onglet', showDelay: 300, hideDelay: 100 }" aria-controls="overlay_menu" >
     {{ data.fullname }}
     </a>
