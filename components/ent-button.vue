@@ -42,16 +42,19 @@ const toggle2 = (event) => {
   op.value.toggle(event)
 }
 
-const items = ref([
+const items = ref([{
+  label: user.value.firstname + " " + user.value.lastname, icon: "pi pi-user",
+  items: [
   { label: "Déconnexion", icon: "pi pi-sign-out", url: "/web/user/logout" },
-])
+  ]
+}])
 </script>
 
 <template>
   <div v-if="user">
-    <Avatar :label="user.firstname[0]+user.lastname[0]" class="mr-2 cursor-pointer" size="large" style="color: var(--p-content-color)" @click="toggle2" />
+    <Avatar :label="user.firstname[0]+user.lastname[0]" class="mr-2 cursor-pointer" :dt="{ 'width': '2.5rem', 'height': '2.5rem' }" style="color: var(--p-content-color)" @click="toggle2" />
     <Popover ref="op" pt:content:style="padding: 0;">
-    <Menu :model="items" />
+      <Menu :model="items" />
     </Popover>
   </div>
   <div class="flex flex-row items-stretch" v-else>
