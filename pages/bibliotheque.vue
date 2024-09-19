@@ -3,6 +3,7 @@ import { useMyStore } from '@/stores/my'
 import { useBibStore } from '@/stores/bib'
 import { FilterMatchMode } from '@primevue/core/api';
 import { useRoute } from 'vue-router';
+import httpClient from '@capytale/activity.js/backend/capytale/http'
 // import Dialog from 'primevue/dialog';
 
 const bib = useBibStore()
@@ -16,10 +17,11 @@ const route = useRoute()
 if (bib.bib == null || bib.bib.status != 'pending') {
   bib.getBib()
 }
-const decodeHtml = ((html) => {
+const abstractObj = ((html) => {
   var txt = document.createElement("textarea");
   txt.innerHTML = html;
-  return txt.value;
+  if (txt.value.includes('+…+')) return { abstract: txt.value.replace('+…+', ''), truncated: true }
+  return { abstract: txt.value, truncated: false }
 })
 
 const advancedSearch = ref(false)
@@ -67,6 +69,20 @@ initFilters();
 const clearFilter = () => {
   initFilters();
 };
+
+const op = ref();
+const toggle = (event) => {
+  op.value.toggle(event);
+}
+const displayFull = async (nid) => {
+  const full = await httpClient.getJsonAsync("/web/c-hdls/api/bib/full-descr/" + nid)
+  // console.log("displayFull", full)
+  let item = bib.bib.data.find(item => item.nid === nid)
+  item.abstractFull = full.abstract
+}
+
+
+
 
 // const playerUrl = function (nid) {
 //   return `/web/c-act/n/${nid}/play/view`
@@ -157,33 +173,33 @@ const clearFilter = () => {
           sortField="changed" :sortOrder="-1" :globalFilterFields="['title', 'abstract', 'auteur']">
           <template #header>
             <div class="flex flex-col xl:flex-row items-start lg:items-center min-h-24 justify-between">
-                <div class="titre self-start">Bibliothèque entre enseignants
-                             ({{ bib.bib.data.length }} activités)
+              <div class="titre self-start">Bibliothèque entre enseignants
+                ({{ bib.bib.data.length }} activités)
+              </div>
+              <div class="flex flex-col md:flex-row gap-2 justify-content-end self-start">
+                <TypeFilterSelect v-model="filters['type'].value" />
+                <IconField iconPosition="left">
+                  <InputIcon>
+                    <i class="pi pi-search" />
+                  </InputIcon>
+                  <InputText class="h-full" v-model="filters['global'].value" placeholder="Rechercher"
+                    v-tooltip.top="{ value: 'Recherche dans titre, description et auteur', showDelay: 100, hideDelay: 300 }" />
+                </IconField>
+
+                <div class="flex items-center rech-avdancee">
+                  <Checkbox v-model="advancedSearch" inputId="advSearch" :binary="true" />
+                  <label for="advSearch" class="ml-2 whitespace-nowrap">Rech. avancée</label>
                 </div>
-                <div class="flex flex-col md:flex-row gap-2 justify-content-end self-start">
-                  <TypeFilterSelect v-model="filters['type'].value" />
-                  <IconField iconPosition="left">
-                    <InputIcon>
-                      <i class="pi pi-search" />
-                    </InputIcon>
-                    <InputText class="h-full" v-model="filters['global'].value" placeholder="Rechercher"
-                      v-tooltip.top="{ value: 'Recherche dans titre, description et auteur', showDelay: 100, hideDelay: 300 }" />
-                  </IconField>
 
-                  <div class="flex items-center rech-avdancee">
-                    <Checkbox v-model="advancedSearch" inputId="advSearch" :binary="true" />
-                    <label for="advSearch" class="ml-2 whitespace-nowrap">Rech. avancée</label>
-                  </div>
-
-                  <div class="grow flex items-center">
+                <div class="grow flex items-center">
                   <Button
                     v-if="filters['type'].value || filters['global'].value || filters['title'].value || filters['abstract'].value || filters['niveau'].value || filters['enseignement'].value || filters['auteur'].value"
                     type="button" icon="pi pi-filter-slash" label="Annuler" outlined severity="danger"
                     @click="clearFilter()" />
                   <Button v-else type="button" icon="pi pi-filter-slash" label="Annuler" outlined severity="secondary"
                     class="invisible" />
-                  </div>
                 </div>
+              </div>
 
             </div>
           </template>
@@ -207,7 +223,19 @@ const clearFilter = () => {
 
           <Column field="abstract" header="Description">
             <template #body="p">
-              {{ decodeHtml(p.data.abstract) }}
+              <template v-if="abstractObj(p.data.abstract).truncated">
+                <p>{{ abstractObj(p.data.abstract).abstract }}
+                  <span @click="toggle" @click.stop="displayFull(p.data.nid)" class="text-blue-500 font-bold">[...]</span>
+                </p>
+                <Popover ref="op">
+                  <div class="w-96">
+                    {{ p.data.abstractFull }}
+                  </div>
+                </Popover>
+              </template>
+              <template v-else>
+                <p>{{ p.data.abstract }}</p>
+              </template>
             </template>
             <template #filter="{ filterModel, filterCallback }">
               <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Rechercher" />
