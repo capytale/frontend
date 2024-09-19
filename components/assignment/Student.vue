@@ -36,10 +36,10 @@ const openInNewTab = () => {
 
 <template>
   <div>
-    <span @click.exact.stop="visible = true" v-on:click.ctrl.stop="openInNewTab" class="clickable"
+    <a :href="data.player"  v-on:click.prevent.self @click.exact.stop="visible = true" v-on:click.ctrl.stop="openInNewTab" class="clickable"
       v-tooltip.top="{ value: 'Ctrl+clic pour ouvrir dans un nouvel onglet', showDelay: 300, hideDelay: 100 }" aria-controls="overlay_menu" >
     {{ data.fullname }}
-    </span>
+    </a>
     <FullIframe v-model="visible" :url="data.player" :position="'top'" />
   </div>
 </template>
