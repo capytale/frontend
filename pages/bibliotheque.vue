@@ -74,6 +74,7 @@ const clearFilter = () => {
 </script>
 
 <template>
+  <div>
   <div v-if="bib.bib == null">
     <p>Chargement des actvités...</p>
   </div>
@@ -269,6 +270,7 @@ const clearFilter = () => {
       </div>
     </template>
   </template>
+</div>
 </template>
 
 <style scoped>

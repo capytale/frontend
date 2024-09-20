@@ -8,6 +8,7 @@ a {
 </style>
 
 <template>
+  <div>
   <h1> Conditions générales d'utilisation</h1>
   <div class="wrapper">
 
@@ -177,6 +178,5 @@ a {
       <p>Les présentes CGU sont soumises au droit administratif français.</p>
 
 </div>
-
-
+</div>
 </template>

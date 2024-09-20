@@ -1,4 +1,5 @@
 <template>
+  <div>
     <div class="flex flex-row items-center justify-around">
       <img :src="'https://capytale2.ac-paris.fr/logo.svg'" class="w-40 mr-4 rounded-lg my-16" />
       <div>
@@ -21,6 +22,7 @@
     </div>
 
      <CarouselEdu />
+     </div>
 </template>
 
 <script setup>

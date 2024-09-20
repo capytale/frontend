@@ -9,6 +9,7 @@ a {
 </style>
 
 <template>
+  <div>
   <h1>Politique de protection des données personnelles</h1>
 
   <div class="wrapper">
@@ -152,6 +153,7 @@ a {
       respecté vos droits. </p>
 
   </div>
+</div>
 </template>
 
 
