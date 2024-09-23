@@ -211,7 +211,7 @@ const nbselected = () => {
             paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
             currentPageReportTemplate='{first} à {last} sur {totalRecords} &nbsp; &nbsp;' @rowSelect="onRowSelect()"
             @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()" @rowSelectAll="onRowSelectAll()"
-            :globalFilterFields="['title', 'type']" class="mydatatable">
+            :globalFilterFields="['title', 'type', 'code']" class="mydatatable">
 
 
             <template #header>
@@ -277,7 +277,7 @@ const nbselected = () => {
                       <InputIcon>
                         <i class="pi pi-search" />
                       </InputIcon>
-                      <InputText v-model="filters['title'].value" placeholder="Rechercher dans le titre" />
+                      <InputText v-model="filters['global'].value" placeholder="Rechercher dans le titre" />
                     </IconField>
                     <Button label="Colonnes" icon="pi pi-arrow-down" outlined @click="colsChoiceToggle" v-if="false" />
                     <Popover ref="colsChoice" v-if="false">
