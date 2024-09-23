@@ -11,18 +11,32 @@
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 mb-32">
       <Card v-for="(c, index) of cards" key="index">
-      <template #content>
-        <div class="flex flex-row align-center">
-          <i :class="c.icon" class="mt-2 mr-2 text-gray-500" ></i>
-          <div class="font-semibold">{{ c.title }}</div>
-        </div>
-        <div class="mt-2 text-gray-500" v-html="c.description"></div>
-      </template>
+        <template #content>
+          <div class="flex flex-row align-center">
+            <i :class="c.icon" class="mt-2 mr-2 text-gray-500"></i>
+            <div class="font-semibold">{{ c.title }}</div>
+          </div>
+          <div class="mt-2 text-gray-500" v-html="c.description"></div>
+        </template>
       </Card>
     </div>
 
-     <CarouselEdu />
-     </div>
+    <div class="flex flex-row items-center justify-around">
+      <img :src="'https://capytale2.ac-paris.fr/logo.svg'" class="w-40 mr-4 rounded-lg my-16" />
+      <div>
+        <h2>Créer, distribuer et évaler des activités pédagogiques</h2>
+      </div>
+    </div>
+    <CapyTimeline />
+
+    <div class="flex flex-row items-center justify-around">
+      <img :src="'https://capytale2.ac-paris.fr/logo.svg'" class="w-40 mr-4 rounded-lg my-16" />
+      <div>
+        <h2>Une sélection d'outils complète et cohérente</h2>
+      </div>
+    </div>
+    <CarouselEdu />
+  </div>
 </template>
 
 <script setup>
@@ -45,7 +59,7 @@ const cards = [
   {
     title: "Environnement standardisé",
     description:
-    "Adapté aux besoins de l’enseignement secondaire sur les STIAM (Sciences, Technologie, Ingénierie, Arts et Mathématiques).",
+      "Adapté aux besoins de l’enseignement secondaire sur les STIAM (Sciences, Technologie, Ingénierie, Arts et Mathématiques).",
     // icon: "i-heroicons-academic-cap",
     icon: "pi pi-cog",
   },
