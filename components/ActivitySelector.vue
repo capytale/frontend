@@ -17,7 +17,8 @@ const groupsWithFav = computed(() => {
   if (atf.showFavorites) {
     return [
       {
-        title: "Favoris",
+        title: "Mes Favoris",
+        icon: "pi pi-star-fill text-yellow-400",
         activities: atf.favoriteTypes,
         isFavorites: true,
       },
@@ -125,7 +126,7 @@ const dispGroups = computed(() => {
       <Card v-for="obj of groupsWithFav" class="hover:ring-capycolor-400 hover:ring-2 hover:cursor-pointer"
         @click="dialogActi = true; openedGroup = obj">
         <template #header>
-          <div class="text-center font-bold pt-3">{{ obj.title }}</div>
+          <div class="text-center font-bold pt-3">{{ obj.title }} <i v-if="obj.icon" :class="obj.icon"></i></div>
         </template>
         <template #content>
           <div class="flex flex-wrap">
