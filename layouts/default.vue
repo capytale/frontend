@@ -13,18 +13,20 @@ useHead({
 </script>
 
 <template>
-  <ConfirmDialog></ConfirmDialog>
-  <Toast position="bottom-right" />
+  <div>
+    <ConfirmDialog></ConfirmDialog>
+    <Toast position="bottom-right" />
 
-  <div class="appContainer" :style="bgColor">
-    <Header></Header>
-    <div class="flex">
-      <div class="container mx-auto">
-        <div class="mb-8">
-          <slot />
-        </div>
-        <div class="mb-8">
-          <Footer></Footer>
+    <div class="appContainer" :style="bgColor">
+      <Header></Header>
+      <div class="flex">
+        <div class="container mx-auto">
+          <div class="mb-8">
+            <slot />
+          </div>
+          <div class="mb-8">
+            <Footer></Footer>
+          </div>
         </div>
       </div>
     </div>
