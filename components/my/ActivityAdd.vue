@@ -99,6 +99,18 @@ const shortcutList = computed(() => {
     </template>
     <template #content>
       <div class="overflow-x-auto myflex flex-wrap">
+          <template v-if="atf.status == 'loading'">
+          <!-- <template v-if="true"> -->
+          <Skeleton width="4rem" height="4rem" class="mr-2 inline"></Skeleton>
+          <Skeleton width="4rem" height="4rem" class="mr-2 inline"></Skeleton>
+          <Skeleton width="4rem" height="4rem" class="mr-2 inline"></Skeleton>
+          <Skeleton width="4rem" height="4rem" class="mr-2 inline"></Skeleton>
+          <Skeleton width="4rem" height="4rem" class="mr-2 inline"></Skeleton>
+          <Skeleton width="4rem" height="4rem" class="mr-2 inline"></Skeleton>
+          <Skeleton width="4rem" height="4rem" class="mr-2 inline"></Skeleton>
+          <Skeleton width="4rem" height="4rem" class="mr-2 inline"></Skeleton>
+        </template>
+        <template v-else>
         <a v-for="type of shortcutList" :key="type" :href="atl.getCreateUrl(type)"
           v-tooltip.bottom="atl.getTypeInfo(type).name" class="hover:shadow-md shrink-0">
           <img :src="atl.getTypeInfo(type).icon.path" class="w-16 inline" />
@@ -106,6 +118,7 @@ const shortcutList = computed(() => {
             <i class="pi pi-star-fill text-yellow-400" style="font-size: 0.5rem"></i>
           </span>
         </a>
+        </template>
         <!-- <NuxtLink to="/activites" class="hover:shadow-md acti-button"> -->
         <!--   <Button type="submit" label="Toutes les activités" /> -->
         <!-- </NuxtLink> -->
