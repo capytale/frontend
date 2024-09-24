@@ -1,41 +1,56 @@
 <template>
   <div>
-    <div class="flex flex-row items-center justify-around">
-      <img :src="'https://capytale2.ac-paris.fr/logo.svg'" class="w-40 mr-4 rounded-lg my-16" />
-      <div>
-        <h1>Capytale</h1>
-        <h2>
-          Activités numériques et de programmation pour la classe
-        </h2>
-      </div>
-    </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 mb-32">
-      <Card v-for="(c, index) of cards" key="index">
-        <template #content>
-          <div class="flex flex-row align-center">
-            <i :class="c.icon" class="mt-2 mr-2 text-gray-500"></i>
-            <div class="font-semibold">{{ c.title }}</div>
+      <div class="bottomRight">
+          <span @click="nextSnap"
+            class="slidedown-icon h-8 w-8 bg-primary text-primary-contrast rounded-full inline-flex items-center justify-center">
+            <i class="pi pi-arrow-down" />
+          </span>
+        </div>
+    <article class="scroller">
+
+      <section>
+        <div class="flex flex-row items-center justify-around">
+          <img :src="'https://capytale2.ac-paris.fr/logo.svg'" class="w-40 mr-4 rounded-lg my-16" />
+          <div>
+            <h1>Capytale</h1>
+            <h2>
+              Activités numériques et de programmation pour la classe
+            </h2>
           </div>
-          <div class="mt-2 text-gray-500" v-html="c.description"></div>
-        </template>
-      </Card>
-    </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 mb-32">
+          <Card v-for="(c, index) of cards" key="index">
+            <template #content>
+              <div class="flex flex-row align-center">
+                <i :class="c.icon" class="mt-2 mr-2 text-gray-500"></i>
+                <div class="font-semibold">{{ c.title }}</div>
+              </div>
+              <div class="mt-2 text-gray-500" v-html="c.description"></div>
+            </template>
+          </Card>
+        </div>
+      </section>
 
-    <div class="flex flex-row items-center justify-around">
-      <img :src="'https://capytale2.ac-paris.fr/logo.svg'" class="w-40 mr-4 rounded-lg my-16" />
-      <div>
-        <h2>Créer, distribuer et évaler des activités pédagogiques</h2>
-      </div>
-    </div>
-    <CapyTimeline />
+      <section>
+        <div class="flex flex-row items-center justify-around">
+          <img :src="'https://capytale2.ac-paris.fr/logo.svg'" class="w-40 mr-4 rounded-lg my-16" />
+          <div>
+            <h2>Créer, distribuer et évaler des activités pédagogiques</h2>
+          </div>
+        </div>
+        <CapyTimeline />
+      </section>
 
-    <div class="flex flex-row items-center justify-around">
-      <img :src="'https://capytale2.ac-paris.fr/logo.svg'" class="w-40 mr-4 rounded-lg my-16" />
-      <div>
-        <h2>Une sélection d'outils complète et cohérente</h2>
-      </div>
-    </div>
-    <CarouselEdu />
+      <section>
+        <div class="flex flex-row items-center justify-around">
+          <img :src="'https://capytale2.ac-paris.fr/logo.svg'" class="w-40 mr-4 rounded-lg my-16" />
+          <div>
+            <h2>Une sélection d'outils complète et cohérente</h2>
+          </div>
+        </div>
+        <CarouselEdu />
+      </section>
+    </article>
   </div>
 </template>
 
@@ -105,4 +120,59 @@ const cards = [
     icon: "pi pi-chart-line",
   },
 ];
+
+const nextSnap = () => {
+  const scroller = document.querySelector(".scroller");
+  const sections = scroller.querySelectorAll("section");
+  const currentScroll = scroller.scrollTop;
+  let nextSnap = 0;
+  for (let i = 0; i < sections.length; i++) {
+    const section = sections[i];
+    if (section.offsetTop > currentScroll) {
+      nextSnap = section.offsetTop;
+      break;
+    }
+  }
+  scroller.scrollTo({ top: nextSnap, behavior: "smooth" });
+};
+
 </script>
+
+<style scoped>
+@keyframes slidedown-icon {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(10px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.slidedown-icon {
+  animation: slidedown-icon;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  /* cursor: pointer; */
+}
+
+.scroller {
+  /* height: 80vh; */
+  overflow-y: scroll;
+  scroll-snap-type: y proximity;
+}
+.scroller section {
+  scroll-snap-align: start;
+}
+.bottomRight {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 99;
+  text-align: center;
+}
+</style>
