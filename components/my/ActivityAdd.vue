@@ -73,7 +73,7 @@ const shortcutList2 = computed(() => {
 });
 
 // liste des favoris + les plus utilisés + les promus
-const shortcutList = computed(() => {
+const shortcutList3 = computed(() => {
   if (shortcutList2.value == null) return null;
   if (shortcutList2.value.length >= nbShortcuts) {
     return shortcutList2.value;
@@ -89,6 +89,20 @@ const shortcutList = computed(() => {
   }
 });
 
+// liste des favoris + les plus utilisés + les promus + des skelettes pour compléter
+const shortcutList = computed(() => {
+  if (shortcutList3.value == null) {
+    return Array(nbShortcuts).fill(null);
+  }
+  if (shortcutList3.value.length >= nbShortcuts) {
+    return shortcutList3.value;
+  } else {
+    return shortcutList3.value.concat(Array(nbShortcuts - shortcutList3.value.length).fill(null));
+  }
+});
+
+
+
 </script>
 
 <template>
@@ -99,32 +113,25 @@ const shortcutList = computed(() => {
     </template>
     <template #content>
       <div class="overflow-x-auto myflex flex-wrap">
-          <template v-if="atf.status == 'loading'">
-          <!-- <template v-if="true"> -->
-          <Skeleton width="4rem" height="4rem" class="mr-2 inline"></Skeleton>
-          <Skeleton width="4rem" height="4rem" class="mr-2 inline"></Skeleton>
-          <Skeleton width="4rem" height="4rem" class="mr-2 inline"></Skeleton>
-          <Skeleton width="4rem" height="4rem" class="mr-2 inline"></Skeleton>
-          <Skeleton width="4rem" height="4rem" class="mr-2 inline"></Skeleton>
-          <Skeleton width="4rem" height="4rem" class="mr-2 inline"></Skeleton>
-          <Skeleton width="4rem" height="4rem" class="mr-2 inline"></Skeleton>
-          <Skeleton width="4rem" height="4rem" class="mr-2 inline"></Skeleton>
+        <template v-for="type of shortcutList">
+          <div class="aspect-square w-16 relative">
+            <template v-if="type">
+              <a :href="atl.getCreateUrl(type)" v-tooltip.bottom="atl.getTypeInfo(type).name"
+                class="hover:shadow-md shrink-0">
+                <img :src="atl.getTypeInfo(type).icon.path" class="w-full h-full" />
+              </a>
+              <span v-if="atf.isFavorite(type)" class="mystar">
+                <i class="pi pi-star-fill text-yellow-400" style="font-size: 0.5rem"></i>
+              </span>
+            </template>
+            <template v-else>
+              <Skeleton height="100%" />
+            </template>
+          </div>
         </template>
-        <template v-else>
-        <a v-for="type of shortcutList" :key="type" :href="atl.getCreateUrl(type)"
-          v-tooltip.bottom="atl.getTypeInfo(type).name" class="hover:shadow-md shrink-0">
-          <img :src="atl.getTypeInfo(type).icon.path" class="w-16 inline" />
-          <span class="mystar" :class="atf.isFavorite(type) ? '' : 'opacity-0'">
-            <i class="pi pi-star-fill text-yellow-400" style="font-size: 0.5rem"></i>
-          </span>
-        </a>
-        </template>
-        <!-- <NuxtLink to="/activites" class="hover:shadow-md acti-button"> -->
-        <!--   <Button type="submit" label="Toutes les activités" /> -->
-        <!-- </NuxtLink> -->
         <Button class="w-full md:w-auto" label="Toutes les activités" @click="visible = true" />
-        <Dialog v-model:visible="visible" header="Créer une nouvelle activité" position="top" modal :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }"
-          class="w-11/12 md:w-3/4" maximizable dismissableMask>
+        <Dialog v-model:visible="visible" header="Créer une nouvelle activité" position="top" modal
+          :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }" class="w-11/12 md:w-3/4" maximizable dismissableMask>
           <ActivitySelector />
         </Dialog>
       </div>
@@ -135,27 +142,13 @@ const shortcutList = computed(() => {
 <style scoped>
 .myflex {
   display: flex;
-  gap: 0.5em;
-  align-items: center;
+  gap: 0.7rem;
+  align-items: stretch;
 }
 
 .mystar {
-  display: inline-block;
-  position: relative;
-  top: -30px;
-  left: -2px;
-}
-
-fieldset {
-  border: 1px solid #000;
-  padding: 0.5em 1em 1em 1em;
-  border-radius: 5px;
-  /* position: relative; */
-  /* top: -10px; */
-}
-
-.acti-button {
-  position: relative;
-  top: 2px;
+  position: absolute;
+  top: -0.65rem;
+  left: 3.88rem;
 }
 </style>
