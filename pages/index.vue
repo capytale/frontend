@@ -1,12 +1,11 @@
 <template>
-  <div>
+  <article>
       <div class="bottomRight">
           <span @click="nextSnap"
             class="slidedown-icon h-8 w-8 bg-primary text-primary-contrast rounded-full inline-flex items-center justify-center">
             <i class="pi pi-arrow-down" />
           </span>
         </div>
-    <article class="scroller">
 
       <section>
         <div class="flex flex-row items-center justify-around">
@@ -51,7 +50,6 @@
         <CarouselEdu />
       </section>
     </article>
-  </div>
 </template>
 
 <script setup>
@@ -124,16 +122,20 @@ const cards = [
 const nextSnap = () => {
   const scroller = document.querySelector(".scroller");
   const sections = scroller.querySelectorAll("section");
-  const currentScroll = scroller.scrollTop;
+  const currentScroll = window.scrollY;
   let nextSnap = 0;
   for (let i = 0; i < sections.length; i++) {
     const section = sections[i];
+    console.log(section.offsetTop, currentScroll);
+    
     if (section.offsetTop > currentScroll) {
       nextSnap = section.offsetTop;
       break;
     }
   }
-  scroller.scrollTo({ top: nextSnap, behavior: "smooth" });
+  console.log(nextSnap);
+  
+  window.scrollTo({ top: nextSnap, behavior: "smooth" });
 };
 
 </script>
@@ -157,16 +159,17 @@ const nextSnap = () => {
   animation: slidedown-icon;
   animation-duration: 1s;
   animation-iteration-count: infinite;
-  /* cursor: pointer; */
+  cursor: pointer;
 }
 
 .scroller {
-  /* height: 80vh; */
+  height: calc(100vh - 8rem);
   overflow-y: scroll;
   scroll-snap-type: y proximity;
 }
 .scroller section {
   scroll-snap-align: start;
+  padding: 2rem;
 }
 .bottomRight {
   position: fixed;
