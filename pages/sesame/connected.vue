@@ -36,7 +36,7 @@ colorMode.preference = 'light'
       </li>
     </ul>
 
-    <!-- <Codes /> -->
+    <SesameCodes />
 
     <h2>Gérez les comptes de vos élèves</h2>
     <!-- <Eleves /> -->
