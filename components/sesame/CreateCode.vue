@@ -1,69 +1,62 @@
 <script setup lang="ts">
-import type { FormError, FormSubmitEvent } from '#ui/types'
+// import type { FormError, FormSubmitEvent } from '#ui/types'
 import sesame from "@capytale/activity.js/backend/capytale/sesame";
+import { useToast } from "primevue/usetoast";
+const toast = useToast();
 
 
-const durations = [{
-  temps: '1 h',
-  value: '1'
-}, {
-  temps: '2 h',
-  value: '2'
-}, {
-  temps: '6 h',
-  value: '6'
-}, {
-  temps: '1 jour',
-  value: '24'
-}, {
-  temps: '2 jours',
-  value: '48',
-}, {
-  temps: '3 jours',
-  value: '72',
-}, {
-  temps: '5 jours',
-  value: '120',
-}, {
-  temps: '7 jours',
-  value: '168'
-}]
+const durations = ref([
+  { label: '1 h', value: '1' },
+  { label: '2 h', value: '2' },
+  { label: '6 h', value: '6' },
+  { label: '1 jour', value: '24' },
+  { label: '2 jours', value: '48' },
+  { label: '3 jours', value: '72' },
+  { label: '5 jours', value: '120' },
+  { label: '7 jours', value: '168' }
+])
 
-const count = ref(0);
 const authenticated = ref(false);
+
+const validity = ref(2)
+const classe = ref("")
+const noClasse = ref(false);
+const requireMail = ref(false);
 
 const getCount = async function () {
   try {
     const mycount = await sesame.countUsers()
     authenticated.value = true;
-    count.value = mycount.count;
   } catch {
     authenticated.value = false;
   }
 }
 getCount();
 
-const state = reactive({
-  validity: 2,
-  classe: "",
-  requireMail: false,
-})
-
-const validate = (state: any): FormError[] => {
-  const errors = []
-  if (!state.classe) errors.push({ path: 'classe', message: 'Obligatoire' })
-  return errors
-}
-
-async function onSubmit(e: FormSubmitEvent<any>) {
-  const validity = e.data.validity
-  const classe = e.data.classe
-  const requireMail = e.data.requireMail
-  //console.log("validity:" + validity + " requireMail:" + requireMail + " classe:" + classe)
+// const validate = (state: any): FormError[] => {
+//   const errors = []
+//   if (!state.classe) errors.push({ path: 'classe', message: 'Obligatoire' })
+//   return errors
+// }
+//
+async function handleSubmit() {
+  // console.log("validity:" + validity.value + " requireMail:" + requireMail.value + " classe:" + classe.value)
   const d = new Date()
-  d.setTime(d.getTime() + parseInt(validity) * 3600 * 1000)
-  const code = await sesame.createCode({ exp: d, require_mail: requireMail, classe })
-  useEvent('createCodeEvent', code);
+  d.setTime(d.getTime() + parseInt(validity.value) * 3600 * 1000)
+  if (classe.value === "") {
+    noClasse.value = true;
+    toast.add({ severity: 'warn', summary: 'Nom de classe obligatoire' });
+    return;
+  }
+  try {
+    const ret = await sesame.createCode({ exp: d, require_mail: requireMail.value, classe: classe.value })
+    toast.add({ severity: 'success', summary: 'Réussi', life: 4000, detail: `Code : "${ret.code}"` });
+  }
+  catch (e) {
+    toast.add({ severity: 'error', summary: 'Échec', detail: `${e}` });
+  }
+  // console.log("code:", code)
+  // useEvent('createCodeEvent', code);
 }
 </script>
 
@@ -75,33 +68,26 @@ async function onSubmit(e: FormSubmitEvent<any>) {
   </template>
   <template v-else>
 
-    <div class="card">
-      <UForm :validate="validate" :state="state" class="space-y-4" @submit="onSubmit">
-        <div class="cols">
-          <UFormGroup label="Choisir la durée de validité du code Sésame dans une limite de 7 jours" name="validity">
-            <USelect v-model="state.validity" :options="durations" option-attribute="temps" />
-          </UFormGroup>
-
-          <UFormGroup label="Indiquer le nom de la classe pour ce nouveau code Sésame" name="classe">
-            <UInput v-model="state.classe" />
-          </UFormGroup>
-        </div>
-
-        <UFormGroup label="">
-          <UCheckbox v-model="state.requireMail" label="📧 Obliger les élèves à saisir une adresse email" />
-        </UFormGroup>
-
-        <UButton type="submit">
-          Créer le code Sésame
-        </UButton>
-      </UForm>
+    <div class="flex flex-row gap-10">
+      <div class="flex flex-col gap-2">
+        <label for="validity">Choisir la durée de validité du code Sésame</label>
+        <Select id="validity" v-model="validity" :options="durations" optionLabel="label" optionValue="value"
+          placeholder="Durée" />
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="classe">Indiquer le nom de la classe pour ce nouveau code Sésame *</label>
+        <InputText id="classe" v-model="classe" :invalid="noClasse" />
+      </div>
     </div>
+    <div class="flex flex-row gap-10 my-4">
+      <div class="card flex justify-center">
+        <Checkbox inputId="requireMail" v-model="requireMail" :binary="true" />
+        <label for="requireMail" class="ml-2"> 📧 Obliger les élèves à saisir une adresse email </label>
+      </div>
+    </div>
+    <div class="flex flex-row gap-10 my-4">
+      <Button label="Créer le code Sésame" @click="handleSubmit" />
+    </div>
+
   </template>
 </template>
-
-<style>
-.cols {
-  display: inline-flex;
-  gap: 4em;
-}
-</style>
