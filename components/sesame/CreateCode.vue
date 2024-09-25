@@ -1,9 +1,13 @@
 <script setup lang="ts">
-// import type { FormError, FormSubmitEvent } from '#ui/types'
 import sesame from "@capytale/activity.js/backend/capytale/sesame";
+
+const props = defineProps({
+  codelist: Object,
+  authenticated: Boolean,
+})
+
 import { useToast } from "primevue/usetoast";
 const toast = useToast();
-
 
 const durations = ref([
   { label: '1 h', value: '1' },
@@ -16,22 +20,10 @@ const durations = ref([
   { label: '7 jours', value: '168' }
 ])
 
-const authenticated = ref(false);
-
 const validity = ref(2)
 const classe = ref("")
 const noClasse = ref(false);
 const requireMail = ref(false);
-
-const getCount = async function () {
-  try {
-    const mycount = await sesame.countUsers()
-    authenticated.value = true;
-  } catch {
-    authenticated.value = false;
-  }
-}
-getCount();
 
 async function handleSubmit() {
   // console.log("validity:" + validity.value + " requireMail:" + requireMail.value + " classe:" + classe.value)
@@ -45,16 +37,24 @@ async function handleSubmit() {
   try {
     const ret = await sesame.createCode({ exp: d, require_mail: requireMail.value, classe: classe.value })
     toast.add({ severity: 'success', summary: 'Réussi', life: 4000, detail: `Code : "${ret.code}"` });
+    ret.code = ret.code.slice(0, 3) + " " + ret.code.slice(3, 6) + " " + ret.code.slice(6, 9),
+      ret.count = ret.max_count - ret.count + "/" + ret.max_count;
+    ret.exp = ret.exp.toLocaleString('fr-FR')
+    ret.require_mail = ret.require_mail ? '📧' : ''
+    props.codelist.push(ret);
+    //   isEmpty.value = (codelist.length == 0) ? true : false;
+    //   const element = document.getElementById("anchor");
+    //   element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+
   }
   catch (e) {
     toast.add({ severity: 'error', summary: 'Échec', detail: `${e}` });
   }
-  // useEvent('createCodeEvent', code);
 }
 </script>
 
 <template>
-  <template v-if="!authenticated">
+  <template v-if="!props.authenticated">
     <div class="vip">Vous devez être connecté avec le rôle enseignant pour voir le formulaire de création de code
       Sésame.
     </div>

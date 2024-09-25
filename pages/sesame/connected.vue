@@ -1,13 +1,38 @@
 <script setup>
-const colorMode = useColorMode()
-colorMode.preference = 'light'
+import sesame from "@capytale/activity.js/backend/capytale/sesame";
+const codelist = ref([]);
+const authenticated = ref(true);
+const isEmpty = ref(false);
+const getDataFromApi = async function () {
+  try {
+    const list = await sesame.listCodes()
+    // console.log(list.length)
+    const myList = list.map(obj => {
+      return {
+        ...obj,
+        code: obj.code.slice(0, 3) + " " + obj.code.slice(3, 6) + " " + obj.code.slice(6, 9),
+        count: obj.max_count - obj.count + "/" + obj.max_count,
+        exp: obj.exp.toLocaleString('fr-FR'),
+        require_mail: obj.require_mail ? '📧' : ''
+      };
+    });
+    authenticated.value = true;
+    codelist.value = myList;
+    // isEmpty.value = (list.length == 0) ? true : false;
+  } catch {
+    authenticated.value = false;
+  }
+}
+getDataFromApi();
+console.log("codelist", codelist)
+console.log("authenticated", authenticated)
 </script>
 
 <template>
   <div class="prose mx-6 max-w-6xl w-full mt-4">
     <h2>Créez un code Sésame pour que des élèves puissent créer un compte Capytale</h2>
 
-    <SesameCreateCode />
+    <SesameCreateCode :authenticated="authenticated" :codelist="codelist" />
 
     <p>Pour créer son compte, l'élève choisit "Connexion sans ENT"
       dans l'interface de connexion de <a href="https://capytale.fr">capytale.fr</a>.<br />
@@ -36,7 +61,7 @@ colorMode.preference = 'light'
       </li>
     </ul>
 
-    <SesameCodes />
+    <SesameCodes :authenticated="authenticated" :codelist="codelist" />
 
     <h2>Gérez les comptes de vos élèves</h2>
     <!-- <Eleves /> -->
