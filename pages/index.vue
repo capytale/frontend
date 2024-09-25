@@ -154,7 +154,7 @@ const nextSnap = () => {
 
     <section>
       <div class="flex flex-row items-center justify-around">
-        <img :src="'https://capytale2.ac-paris.fr/logo.svg'" class="w-40 mr-4 rounded-lg my-8" />
+        <img src="https://capytale2.ac-paris.fr/logo.svg" class="w-40 mr-4 rounded-lg my-8" />
         <div>
           <h1>Capytale</h1>
           <h2>
@@ -180,7 +180,7 @@ const nextSnap = () => {
 
     <section>
       <div class="flex flex-row items-center justify-around">
-        <img :src="'https://capytale2.ac-paris.fr/logo.svg'" class="w-40 mr-4 rounded-lg my-20" />
+        <img :src="'media/classe.png'" class="w-60 mr-4 rounded-lg my-20" />
         <div>
           <h2>Créer, distribuer et évaler des activités pédagogiques</h2>
         </div>
@@ -193,7 +193,7 @@ const nextSnap = () => {
 
     <section>
       <div class="flex flex-row items-center justify-around">
-        <img :src="'https://capytale2.ac-paris.fr/logo.svg'" class="w-40 mr-4 rounded-lg my-20" />
+        <img :src="'media/apps.png'" class="w-60 mr-4 my-20" />
         <div>
           <h2>Une sélection d'outils complète et cohérente</h2>
         </div>
