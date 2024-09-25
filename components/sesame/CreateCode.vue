@@ -33,12 +33,6 @@ const getCount = async function () {
 }
 getCount();
 
-// const validate = (state: any): FormError[] => {
-//   const errors = []
-//   if (!state.classe) errors.push({ path: 'classe', message: 'Obligatoire' })
-//   return errors
-// }
-//
 async function handleSubmit() {
   // console.log("validity:" + validity.value + " requireMail:" + requireMail.value + " classe:" + classe.value)
   const d = new Date()
@@ -55,7 +49,6 @@ async function handleSubmit() {
   catch (e) {
     toast.add({ severity: 'error', summary: 'Échec', detail: `${e}` });
   }
-  // console.log("code:", code)
   // useEvent('createCodeEvent', code);
 }
 </script>
