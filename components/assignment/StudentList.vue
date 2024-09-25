@@ -126,8 +126,10 @@ const filters = ref({
   hasTags: { value: false, matchMode: FilterMatchMode.EQUALS },
   fullname: { value: null, matchMode: FilterMatchMode.CONTAINS },
   classe: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  workflow: { value: null, matchMode: FilterMatchMode.CONTAINS },
 })
 
+const etats = ref([{ value: 100, label: "En cours" }, { value: 200, label: "Rendu" }, { value: 300, label: "Corrigé" }])
 
 const classList = computed(() => {
   if (my.assignments.tab == null) return []
@@ -227,7 +229,7 @@ const mathalea = ref(false)
           <Skeleton width="7rem"></Skeleton>
         </template>
       </Column>
-      <Column field="quantity" header="Mode">
+      <Column field="quantity" header="État">
         <template #body>
           <Skeleton width="4rem"></Skeleton>
         </template>
@@ -246,9 +248,9 @@ const mathalea = ref(false)
   </div>
   <template v-else>
     <DataTable :value="richTab" tableStyle="min-width: 50rem" v-model:selection="selectedNid" v-model:filters="filters"
-      :globalFilterFields="['hasTags', 'fullname', 'classe']" selectionMode="multiple" @rowSelect="onRowSelect()"
-      @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()" paginator :rows="40"
-      :rowsPerPageOptions="[10, 40, 60]" sortField="fullname"  :sortOrder="1"
+      :globalFilterFields="['hasTags', 'fullname', 'classe', 'workflow']" selectionMode="multiple"
+      @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()" paginator
+      :rows="40" :rowsPerPageOptions="[10, 40, 60]" sortField="fullname" :sortOrder="1"
       paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
       currentPageReportTemplate='{first} à {last} sur {totalRecords} &nbsp; &nbsp;' @rowSelectAll="onRowSelectAll()"
       :rowStyle="rowStyle" ref="dt">
@@ -268,7 +270,8 @@ const mathalea = ref(false)
             <Button v-tooltip.bottom="ttMessage(300)" @click="handleChangeWf(300)" label="Corrigé"
               icon="pi pi-check-square" class="mr-2" severity="success" outlined :disabled="!hasSelected" />
             <Button type="button" icon="pi pi-eye-slash" @click="toggle" severity="secondary" outlined
-              aria-haspopup="true" v-tooltip.top="{ value: 'Déplacer dans les archives', showDelay: 300, hideDelay: 100 }"
+              aria-haspopup="true"
+              v-tooltip.top="{ value: 'Déplacer dans les archives', showDelay: 300, hideDelay: 100 }"
               aria-controls="overlay_menu" />
             <Menu ref="menu" id="overlay_menu" :model="itemsA" :popup="true" />
           </template>
@@ -282,6 +285,8 @@ const mathalea = ref(false)
 
           <Select v-model="filters['classe'].value" :options="classList" optionLabel="classe" optionValue="classe"
             class="mr-2" placeholder="Filtrer par classe" style="min-width: 12rem" :showClear="true" />
+          <Select v-model="filters['workflow'].value" :options="etats" optionLabel="label" optionValue="value"
+            class="mr-2" placeholder="Filtrer par état" style="min-width: 12rem" :showClear="true" />
 
           <!-- <Button v-tooltip.bottom="'Télécharger'" icon="pi pi-download" class="mr-2" severity="secondary" /> -->
 
@@ -333,7 +338,7 @@ const mathalea = ref(false)
 
       </Column>
 
-      <Column field="workflow" header="Mode" style="max-width:10rem" sortable>
+      <Column field="workflow" header="État" style="max-width:10rem" sortable>
         <template #body="p">
           <span class="parent mr-1">
             <Button text v-tooltip.top="{ value: wficon(p.data.workflow).tt, showDelay: 300, hideDelay: 0 }">
