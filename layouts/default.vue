@@ -1,6 +1,7 @@
 <script setup>
 const user = useUserStore()
 const colorMode = useColorMode()
+const { path } = useRoute()
 const bgColor = computed(() => colorMode.value === 'light' ? 'background-color: var(--p-neutral-100)' : 'background-color: var(--p-gray-800)')
 
 user.getUser()
@@ -13,7 +14,7 @@ useHead({
 </script>
 
 <template>
-  <div>
+  <div class="scroller">
     <ConfirmDialog></ConfirmDialog>
     <Toast position="bottom-right" />
 
@@ -34,6 +35,13 @@ useHead({
 </template>
 
 <style>
+.scroller {
+  /* height: calc(100vh); */
+  /* overflow-y: scroll; */
+  scroll-snap-type: y proximity;
+}
+
+
 html,
 body,
 #__nuxt {

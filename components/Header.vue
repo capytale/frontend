@@ -24,7 +24,7 @@ const checked = computed({
 
 </script>
 <template>
-  <div class="navbar">
+  <div class="navbar sticky top-0 z-[1000]">
     <div class="navbarContainer flex-wrap">
       <span class="navbarLogo hidden lg:block order-1">
         <NuxtLink href="/"> CAPYTALE </NuxtLink>
