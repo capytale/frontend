@@ -62,9 +62,11 @@ const countWf = (n) => {
   return my.assignments.tab.filter((o) => o.workflow == n && o.tags.length == 0).length
 }
 
-// console.log(countWf(100))
-
 const handleArchive = (() => {
+  if (corbeilleTid() == null) {
+    toast.add({ severity: 'error', summary: 'Archivage impossible', detail: `L'étiquette spéciale nommée "Corbeille" doit être présente mais n'a pas été trouvée.` });
+    return
+  }
   if (selectedNid.value.length == 0) {
     toast.add({ severity: 'error', summary: 'Archivage impossible', detail: `Vous devez sélectionner au moins une copie à archiver.` });
     return
@@ -196,6 +198,7 @@ const itemsA = ref([
   }
 ])
 
+
 const archMessage = (a) => {
   if (a) return "Revenir aux copies non archivées"
   return "Consulter les archives"
@@ -257,26 +260,27 @@ const mathalea = ref(false)
 
       <Toolbar>
         <template #start>
-          <span class="mr-2">{{ nbselected() }}</span>
-          <template v-if="filters['hasTags'].value">
-            <Button label="Désarchiver" @click="handleUnArchive()" icon="pi pi-check-square" class="mr-2"
-              severity="secondary" outlined :disabled="!hasSelected" />
-          </template>
-          <template v-else>
-            <Button v-tooltip.bottom="ttMessage(100)" @click="handleChangeWf(100)" label="En cours" icon="pi pi-pencil"
-              class="mr-2" severity="info" outlined :disabled="!hasSelected" />
-            <Button v-tooltip.bottom="ttMessage(200)" @click="handleChangeWf(200)" label="Rendu" icon="pi pi-envelope"
-              class="mr-2" severity="warn" outlined :disabled="!hasSelected" />
-            <Button v-tooltip.bottom="ttMessage(300)" @click="handleChangeWf(300)" label="Corrigé"
-              icon="pi pi-check-square" class="mr-2" severity="success" outlined :disabled="!hasSelected" />
-            <Button type="button" icon="pi pi-eye-slash" @click="toggle" severity="secondary" outlined
-              aria-haspopup="true"
-              v-tooltip.top="{ value: 'Déplacer dans les archives', showDelay: 300, hideDelay: 100 }"
-              aria-controls="overlay_menu" />
-            <Menu ref="menu" id="overlay_menu" :model="itemsA" :popup="true" />
+          <template v-if="hasSelected">
+            <span class="mr-2">{{ nbselected() }}</span>
+            <template v-if="filters['hasTags'].value">
+              <Button label="Désarchiver" @click="handleUnArchive()" icon="pi pi-check-square" class="mr-2"
+                severity="secondary" outlined :disabled="!hasSelected" />
+            </template>
+            <template v-else>
+              <Button v-tooltip.bottom="ttMessage(100)" @click="handleChangeWf(100)" label="En cours"
+                icon="pi pi-pencil" class="mr-2" severity="info" outlined :disabled="!hasSelected" />
+              <Button v-tooltip.bottom="ttMessage(200)" @click="handleChangeWf(200)" label="Rendu" icon="pi pi-envelope"
+                class="mr-2" severity="warn" outlined :disabled="!hasSelected" />
+              <Button v-tooltip.bottom="ttMessage(300)" @click="handleChangeWf(300)" label="Corrigé"
+                icon="pi pi-check-square" class="mr-2" severity="success" outlined :disabled="!hasSelected" />
+              <Button type="button" icon="pi pi-eye-slash" severity="secondary" outlined aria-haspopup="true"
+                v-tooltip.top="{ value: 'Déplacer dans les archives', showDelay: 300, hideDelay: 100 }"
+                aria-controls="overlay_menu" @click="handleArchive" class="mr-10" />
+              <!-- <Menu ref="menu" id="overlay_menu" :model="itemsA" :popup="true" /> -->
+            </template>
           </template>
 
-          <IconField iconPosition="left" class="ml-10 mr-2">
+          <IconField iconPosition="left" class="mr-2">
             <InputIcon>
               <i class="pi pi-search" />
             </InputIcon>
@@ -350,10 +354,10 @@ const mathalea = ref(false)
             <div class="surprise">
               <Button :icon="nextOne(p.data.workflow).icon" :style="{ color: nextOne(p.data.workflow).color }"
                 v-tooltip.top="{ value: nextOne(p.data.workflow).tt, showDelay: 300, hideDelay: 0 }" severity="danger"
-                @click="chWf(p.data.sa_nid, nextOne(p.data.workflow).wf)" outlined rounded />
+                @click.stop="chWf(p.data.sa_nid, nextOne(p.data.workflow).wf)" outlined rounded />
               <Button :icon="nextTwo(p.data.workflow).icon" :style="{ color: nextTwo(p.data.workflow).color }"
                 v-tooltip.top="{ value: nextTwo(p.data.workflow).tt, showDelay: 300, hideDelay: 0 }" severity="danger"
-                @click="chWf(p.data.sa_nid, nextTwo(p.data.workflow).wf)" outlined rounded />
+                @click.stop="chWf(p.data.sa_nid, nextTwo(p.data.workflow).wf)" outlined rounded />
             </div>
           </span>
         </template>
