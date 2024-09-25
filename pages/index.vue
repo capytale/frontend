@@ -81,7 +81,7 @@ const cards_OLD = [
   {
     title: "Environnement simple et homogène",
     description:
-      "Tout pour les STIAM (Sciences, Technologie, Ingénierie, Arts et Mathématiques) pour les élèves su cycle 3 aux CPGE.",
+      "Tout pour les STIAM (Sciences, Technologie, Ingénierie, Arts et Mathématiques) pour les élèves du cycle 3 aux CPGE.",
     // icon: "i-heroicons-academic-cap",
     icon: "pi pi-cog",
   },
@@ -239,6 +239,10 @@ const nextSnap = () => {
 .scroller section {
   scroll-snap-align: start;
   /* padding: 2rem; */
+}
+
+section {
+  height: 100%;
 }
 
 .bottomRight {
