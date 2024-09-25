@@ -74,14 +74,14 @@ const cards_OLD = [
   {
     title: "Ressources éducatives libres",
     description:
-      "Une bibliothèque collaborative offrant des milliers de ressources pédagogiques sous licence Creative Commons By-SA. Accès via tous les ENT de France.<br>Des centaines de milliers d'utilisateurs.",
+      "Une bibliothèque collaborative offrant des milliers de ressources pédagogiques sous licence Creative Commons By-SA. Accès via tous les ENT de France.<br>Accès via tous les ENT de France pour des des centaines de milliers d'utilisateurs.",
     // icon: "i-heroicons-lock-open",
     icon: "pi pi-lock-open",
   },
   {
     title: "Environnement simple et homogène",
     description:
-      "Tout pour les STIAM (Sciences, Technologie, Ingénierie, Arts et Mathématiques) pour les élèves du cycle 3 aux CPGE.",
+      "Tout pour les STIAM (Sciences, Technologie, Ingénierie, Arts et Mathématiques) pour les élèves du cycle 3 jusqu'aux CPGE.",
     // icon: "i-heroicons-academic-cap",
     icon: "pi pi-cog",
   },
@@ -182,7 +182,7 @@ const nextSnap = () => {
       <div class="flex flex-row items-center justify-around">
         <img :src="'media/classe.png'" class="w-60 mr-4 rounded-lg my-20" />
         <div>
-          <h2>Créer, distribuer et évaler des activités pédagogiques</h2>
+          <h2>Créer, distribuer et évaluer des activités pédagogiques</h2>
         </div>
       </div>
       <CapyTimeline />
