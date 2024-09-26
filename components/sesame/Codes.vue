@@ -46,6 +46,7 @@ const filters = ref({
               </template>
             </Toolbar>
           </template>
+          <template #empty>Vous n'avez aucun code.</template>
           <Column field="code" header="Code Sésame"></Column>
           <Column field="require_mail" header=""></Column>
           <Column field="classe" sortable header="Classe"> </Column>
