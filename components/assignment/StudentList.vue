@@ -12,6 +12,8 @@ const toast = useToast();
 const my = useMyStore()
 const activites = useActivitiesStore()
 
+const tototo = defineModel({ required: true, type: Boolean })
+
 const props = defineProps<{
   nid: string,
   viewsVisible?: number
@@ -204,6 +206,22 @@ const mathalea = ref(false)
 
 
 <template>
+<Dialog v-model:visible="tototo" position="top" maximizable modal header="&nbsp;" :style="{ width: '90%' }" dismissableMask>
+  <template #header v-if="my.loadingAssignments">
+    <Skeleton shape="circle" size="4rem" class="mr-2 my-2"></Skeleton>
+    <Skeleton width="20rem" class="mb-2"></Skeleton>
+  </template>
+  <template #header v-else>
+    <span class="activity-title grow">
+      <img :src="my.assignments.icon" alt="icon" class="w-16 h-16 inline" />
+      {{ my.assignments.title }}</span>
+    <ButtonGroup>
+      <Button :severity="filters['hasTags'].value ? 'secondary' : 'primary'" @click="filters['hasTags'].value = false" size="small">
+      <span>Copies</span>
+      </Button>
+      <Button :severity="filters['hasTags'].value ? 'primary' : 'secondary'" label="Archives" @click="filters['hasTags'].value = true" size="small"></Button>
+    </ButtonGroup>
+  </template>
   <div v-if="my.loadingAssignments">
     <Card class="flex-2 my-10" v-if="false">
       <template #title>
@@ -246,12 +264,7 @@ const mathalea = ref(false)
   </div>
   <template v-else>
   <div class="flex flex-row justify-center mb-4">
-  <ButtonGroup>
-  <Button :severity="filters['hasTags'].value ? 'secondary' : 'primary'" @click="filters['hasTags'].value = false" size="small">
-  <span>Copies</span>
-  </Button>
-  <Button :severity="filters['hasTags'].value ? 'primary' : 'secondary'" label="Archives" @click="filters['hasTags'].value = true" size="small"></Button>
-  </ButtonGroup>
+
   </div>
     <DataTable :value="richTab" tableStyle="min-width: 50rem" v-model:selection="selectedNid" v-model:filters="filters"
       :globalFilterFields="['hasTags', 'fullname', 'classe']" selectionMode="multiple" @rowSelect="onRowSelect()"
@@ -377,6 +390,7 @@ const mathalea = ref(false)
     </DataTable>
     <AssignmentMathaleaList v-model="mathalea" v-if="my.mathalea" />
   </template>
+</Dialog>
 </template>
 
 <style scoped>
