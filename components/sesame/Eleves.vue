@@ -24,17 +24,25 @@ const classes = ref([
 const editingRows = ref([]);
 const onRowEditSave = (event) => {
   let { newData, index } = event;
-  let uid = props.usersList[index].uid
+  let old = props.usersList[index]
+  let uid = old.uid
 
-  if (props.usersList[index].lastname != newData.lastname) {
-    sesameApi.updateUser({ uid, lastname: newData.lastname })
+  const fields = ['lastname', 'firstname', 'classe']
+  for (const field of fields) {
+    if (old[field] != newData[field]) {
+      sesameApi.updateUser({ uid, [field]: newData[field] })
+    }
   }
-  if (props.usersList[index].firstname != newData.firstname) {
-    sesameApi.updateUser({ uid, firstname: newData.firstname })
-  }
-  if (props.usersList[index].classe != newData.classe) {
-    sesameApi.updateUser({ uid, classe: newData.classe })
-  }
+
+  // if (old.lastname != newData.lastname) {
+  //   sesameApi.updateUser({ uid, lastname: newData.lastname })
+  // }
+  // if (old.lastname != newData.firstname) {
+  //   sesameApi.updateUser({ uid, firstname: newData.firstname })
+  // }
+  // if (old.classe != newData.classe) {
+  //   sesameApi.updateUser({ uid, classe: newData.classe })
+  // }
   props.usersList[index] = newData;
 };
 console.log(props.usersList)
@@ -63,7 +71,7 @@ const nbselected = () => {
     <DataTable :value="props.usersList" v-model:selection="selectedUsers" v-model:filters="filters" sortField="classe"
       :sortOrder="-1" filterDisplay="menu" :globalFilterFields="['lastname', 'firstname', 'classe']"
       tableStyle="min-width: 50rem" stateStorage="local" stateKey="dt-state-demo-session"
-      v-model:editingRows="editingRows" editMode="row" dataKey="id" @row-edit-save="onRowEditSave" :pt="{
+      v-model:editingRows="editingRows" editMode="row" dataKey="uid" @row-edit-save="onRowEditSave" :pt="{
         table: { style: 'min-width: 50rem' },
         column: {
           bodycell: ({ state }) => ({
@@ -132,8 +140,7 @@ const nbselected = () => {
 .myclass {
   vertical-align: inherit !important;
 }
-
-.eleves .py-4 {
+.eleves .py-4{
   padding-bottom: 0px;
   padding-top: 0px;
 }
