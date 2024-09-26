@@ -15,9 +15,6 @@ const durations = ref([
   { label: '6 h', value: '6' },
   { label: '1 jour', value: '24' },
   { label: '2 jours', value: '48' },
-  { label: '3 jours', value: '72' },
-  { label: '5 jours', value: '120' },
-  { label: '7 jours', value: '168' }
 ])
 
 const validity = ref(2)
@@ -79,7 +76,7 @@ const emit = defineEmits(['closeSesameForm'])
           <div class="flex flex-row gap-10 my-4">
             <div class="card flex justify-center">
               <Checkbox inputId="requireMail" v-model="requireMail" :binary="true" />
-              <label for="requireMail" class="ml-2"> 📧 Obliger les élèves à saisir une adresse email </label>
+              <label for="requireMail" class="ml-2"> 📧 Obliger les élèves à saisir une adresse électronique</label>
             </div>
           </div>
           <div class="flex flex-row gap-10 my-4">
@@ -94,7 +91,7 @@ const emit = defineEmits(['closeSesameForm'])
     <p>
       <strong>Remarques importantes</strong>
     </p>
-    <Message severity="warn" icon="pi pi-exclamation-triangle">Les élèves qui disposent déjà d'un compte ne
+    <Message severity="warn" icon="pi pi-exclamation-triangle" class="mt-4">Les élèves qui disposent déjà d'un compte ne
       devraient
       pas en créer un second.
     </Message>
@@ -103,9 +100,9 @@ const emit = defineEmits(['closeSesameForm'])
       <li>Un compte élève créé à partir d'un code Sésame permet d'utiliser pleinement
         tous les services de Capytale, en lien avec tout enseignant.
       </li>
-      <li>Si l'élève saisit un courriel, ce sera son identifiant.
+      <li>Si l'élève renseigne une adresse électronique, ce sera son identifiant.
         En cas d'oubli de son mot de passe, il devra passer par la procédure de récupération par courriel.</li>
-      <li>S'il ne saisit pas pas de courriel, un identifiant sera généré.
+      <li>S'il ne renseigne pas pas d'adresse électronique, un identifiant sera généré.
         En cas d'oubli de son mot de passe, vous pourrez le réinitialiser.</li>
       <li>Les élèves à qui vous donnez un code ont plus de 15 ans ou créent leur compte avec le consentement d'un
         parent.
@@ -118,6 +115,10 @@ const emit = defineEmits(['closeSesameForm'])
 <style scoped>
 ul {
   list-style: disc;
-  margin: 1em;
+  margin: 1rem;
+}
+
+li {
+  margin-top: 0.3rem;
 }
 </style>

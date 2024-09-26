@@ -2,14 +2,15 @@
 import sesameApi from "@capytale/activity.js/backend/capytale/sesame";
 
 const codelist = ref([]);
-const authenticated = ref(true);
+const usersList = ref([])
+const authenticated = ref(false);
 const getDataFromApi = async function () {
   try {
     const list = await sesameApi.listCodes()
     const myList = list.map(obj => {
       return {
         ...obj,
-        code: obj.code.slice(0, 3) + " " + obj.code.slice(3, 6) + " " + obj.code.slice(6, 9),
+        // code: obj.code.slice(0, 3) + " " + obj.code.slice(3, 6) + " " + obj.code.slice(6, 9),
         count: obj.max_count - obj.count + "/" + obj.max_count,
         exp: obj.exp.toLocaleString('fr-FR'),
         require_mail: obj.require_mail ? '📧' : ''
@@ -21,13 +22,27 @@ const getDataFromApi = async function () {
     authenticated.value = false;
   }
 }
+const getStudentListFromApi = async function () {
+  try {
+    const list = await sesameApi.listUsers()
+    usersList.value = list
+    console.log(usersList)
+    authenticated.value = true;
+    return true;
+  } catch {
+    authenticated.value = false;
+    return false
+  }
+}
+
+getStudentListFromApi()
 getDataFromApi();
 </script>
 
 <template>
   <div class="prose mx-6 max-w-6xl w-full mt-4">
 
-    <Tabs value="0">
+    <Tabs value="2">
       <TabList>
         <Tab value="1">Mes codes</Tab>
         <Tab value="2">Mes élèves</Tab>
@@ -40,7 +55,7 @@ getDataFromApi();
           <SesameCodes :authenticated="authenticated" :codelist="codelist" />
         </TabPanel>
         <TabPanel value="2">
-          <!-- <Eleves /> -->
+          <SesameEleves :authenticated="authenticated" :usersList="usersList" />
         </TabPanel>
         <TabPanel value="3">
           <div class="faq">
@@ -78,9 +93,6 @@ getDataFromApi();
         </TabPanel>
       </TabPanels>
     </Tabs>
-
-
-
 
   </div>
 </template>
