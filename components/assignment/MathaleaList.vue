@@ -13,7 +13,7 @@
       <Column field="evalAuto" header="Éval auto" bodyStyle="text-align: center;"></Column>
       <Column v-for="(e, idx) in evals" :key="e.label" :header="e.label" :field="idx.toString()">
         <template #body="slotProps">
-          <Tag :style="getStyle(slotProps.data[idx], e.scoreMax)">
+          <Tag :style="getScoreStyle(slotProps.data[idx], e.scoreMax)">
             <span>{{ slotProps.data[idx] !== null ? slotProps.data[idx] : '-' }} / {{ e.scoreMax }}</span>
           </Tag>
         </template>
@@ -23,6 +23,7 @@
 </template>
 
 <script lang="ts" setup>
+import { getScoreStyle } from '~/utils/evaluation';
 const my = useMyStore()
 const visible = defineModel<boolean>()
 

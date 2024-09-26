@@ -1,5 +1,6 @@
 <script setup>
 import { richContentToPlainText } from '~/utils/sanitization';
+import { getScoreStyle } from '~/utils/evaluation';
 import { useToast } from "primevue/usetoast";
 const toast = useToast();
 
@@ -41,7 +42,7 @@ const toggle = (event) => {
     <Column field="label" header="Exercice"></Column>
     <Column field="score" header="Note">
     <template #body="slotProps">
-      <Tag :style="getStyle(slotProps.data.score, slotProps.data.scoreMax)" outlined>
+      <Tag :style="getScoreStyle(slotProps.data.score, slotProps.data.scoreMax)" outlined>
       <span>{{ slotProps.data.score !== null ?  slotProps.data.score : "-" }} / {{ slotProps.data.scoreMax }}</span>
       </Tag> 
     </template>

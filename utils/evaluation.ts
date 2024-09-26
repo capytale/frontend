@@ -18,7 +18,7 @@ function interpolColors(s: number, c1: Color, c2: Color): Color {
 /**
  * Retourne un style css pour afficher une couleur en fonction d'un score
  */
-export function getStyle(score: number | null, scoreMax: number): string {
+export function getScoreStyle(score: number | null, scoreMax: number): string {
   if ((score == null) || (scoreMax == 0)) return 'background-color: AliceBlue; color: DarkGray;'
   /** score normalisé entre 0 et 2 */
   const normalizedScore = 2 * score / scoreMax;
