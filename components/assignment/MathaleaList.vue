@@ -13,7 +13,7 @@
       <Column field="evalAuto" header="Éval auto" bodyStyle="text-align: center;"></Column>
       <Column v-for="(e, idx) in evals" :key="e.label" :header="e.label" :field="idx.toString()">
         <template #body="slotProps">
-          <Tag :style="getStyle(slotProps.data[idx], e.scoreMax)" severity="secondary">
+          <Tag :style="getScoreStyle(slotProps.data[idx], e.scoreMax)">
             <span>{{ slotProps.data[idx] !== null ? slotProps.data[idx] : '-' }} / {{ e.scoreMax }}</span>
           </Tag>
         </template>
@@ -23,6 +23,7 @@
 </template>
 
 <script lang="ts" setup>
+import { getScoreStyle } from '~/utils/evaluation';
 const my = useMyStore()
 const visible = defineModel<boolean>()
 
@@ -42,17 +43,6 @@ const data = my.mathalea.students.map((el, idx) => {
   // })
   return { name, evalProf, evalAuto, ...evals }
 })
-
-const getStyle = function (score, scoreMax) {
-  // Couleurs de  ff0000 -> ffff00 -> 00ff00
-  // pour Score/scoreMax de 
-  //              0      -> 0.5    -> 1
-  const r = Math.min(255, 510 - parseInt(510 * score / scoreMax));
-  const g = Math.min(255, parseInt(510 * score / scoreMax));
-  const idle = ''
-  if (score != null) return "background-color: #" + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + "00"
-  return idle
-}
 
 const dt = ref()
 const exportCSV = () => {
