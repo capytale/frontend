@@ -5,6 +5,7 @@ import { FilterMatchMode } from '@primevue/core/api';
 const props = defineProps({
   usersList: Object,
   authenticated: Boolean,
+  classes: Array,
 })
 
 const filters = ref({
@@ -13,13 +14,6 @@ const filters = ref({
   firstname: { value: null, matchMode: FilterMatchMode.CONTAINS },
   classe: { value: null, matchMode: FilterMatchMode.IN },
 });
-
-const classes = ref([
-  { name: '3e2' },
-  { name: 'classeA' },
-  { name: 'Tle 3' }
-])
-
 
 const editingRows = ref([]);
 const onRowEditSave = (event) => {
@@ -33,19 +27,8 @@ const onRowEditSave = (event) => {
       sesameApi.updateUser({ uid, [field]: newData[field] })
     }
   }
-
-  // if (old.lastname != newData.lastname) {
-  //   sesameApi.updateUser({ uid, lastname: newData.lastname })
-  // }
-  // if (old.lastname != newData.firstname) {
-  //   sesameApi.updateUser({ uid, firstname: newData.firstname })
-  // }
-  // if (old.classe != newData.classe) {
-  //   sesameApi.updateUser({ uid, classe: newData.classe })
-  // }
   props.usersList[index] = newData;
 };
-console.log(props.usersList)
 
 const selectedUsers = ref([]);
 
@@ -116,7 +99,7 @@ const nbselected = () => {
           <InputText v-model="data[field]" fluid />
         </template>
         <template #filter="{ filterModel, filterCallback }">
-          <MultiSelect v-model="filterModel.value" @change="filterCallback()" :options="classes" optionLabel="name"
+          <MultiSelect v-model="filterModel.value" @change="filterCallback()" :options="props.classes" optionLabel="name"
             optionValue="name" placeholder="Choisir" style="min-width: 14rem" :maxSelectedLabels="1" class="smallit">
             <template #option="slotProps">
               <span>{{ slotProps.option.name }}</span>

@@ -4,6 +4,7 @@ import sesameApi from "@capytale/activity.js/backend/capytale/sesame";
 const codelist = ref([]);
 const usersList = ref([])
 const authenticated = ref(false);
+const classes = ref([])
 const getDataFromApi = async function () {
   try {
     const list = await sesameApi.listCodes()
@@ -26,13 +27,21 @@ const getStudentListFromApi = async function () {
   try {
     const list = await sesameApi.listUsers()
     usersList.value = list
-    console.log(usersList)
+    classes.value = distinctClasses(list)
     authenticated.value = true;
     return true;
   } catch {
     authenticated.value = false;
     return false
   }
+}
+
+const distinctClasses = function (list) {
+  const classes = new Set()
+  list.forEach(user => {
+    classes.add({name: user.classe})
+  })
+  return Array.from(classes)
 }
 
 getStudentListFromApi()
@@ -55,7 +64,7 @@ getDataFromApi();
           <SesameCodes :authenticated="authenticated" :codelist="codelist" />
         </TabPanel>
         <TabPanel value="2">
-          <SesameEleves :authenticated="authenticated" :usersList="usersList" />
+          <SesameEleves :authenticated="authenticated" :usersList="usersList" :classes="classes" />
         </TabPanel>
         <TabPanel value="3">
           <div class="faq">
