@@ -99,8 +99,9 @@ const nbselected = () => {
           <InputText v-model="data[field]" fluid />
         </template>
         <template #filter="{ filterModel, filterCallback }">
-          <MultiSelect v-model="filterModel.value" @change="filterCallback()" :options="props.classes" optionLabel="name"
-            optionValue="name" placeholder="Choisir" style="min-width: 14rem" :maxSelectedLabels="1" class="smallit">
+          <MultiSelect v-model="filterModel.value" @change="filterCallback()" :options="props.classes"
+            optionLabel="name" optionValue="name" placeholder="Choisir" style="min-width: 14rem" :maxSelectedLabels="1"
+            class="smallit">
             <template #option="slotProps">
               <span>{{ slotProps.option.name }}</span>
             </template>
@@ -123,7 +124,8 @@ const nbselected = () => {
 .myclass {
   vertical-align: inherit !important;
 }
-.eleves .py-4{
+
+.eleves .py-4 {
   padding-bottom: 0px;
   padding-top: 0px;
 }
