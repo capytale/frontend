@@ -19,24 +19,7 @@ const classes = ref([
   { name: 'Tle 3' }
 ])
 
-
-const editingRows = ref([]);
-const onRowEditSave = (event) => {
-  let { newData, index } = event;
-
-  // sesame.updateUser({ uid, [props.field]: val })
-  props.usersList[index] = newData;
-  console.log("newData, index", newData, index)
-};
 console.log(props.usersList)
-
-const selectedUsers = ref([]);
-
-const nbselected = () => {
-  if (selectedUsers.value.length == 0) return " "
-  if (selectedUsers.value.length == 1) return "1 élément sélectionné "
-  return selectedUsers.value.length + " éléments sélectionnés "
-}
 </script>
 
 <template>
@@ -48,25 +31,14 @@ const nbselected = () => {
       Vous pouvez modifier les nom, prénom et classe de vos élèves dans le tableau ci-dessous.
       Vous pouvez aussi modifier le mot de passe pour les élèves qui n'ont pas saisi d'adresse
       email à la création de leur compte.
+
     </p>
 
-
-    <DataTable :value="props.usersList" v-model:selection="selectedUsers" v-model:filters="filters" sortField="classe"
-      :sortOrder="-1" filterDisplay="menu" :globalFilterFields="['lastname', 'firstname', 'classe']"
-      tableStyle="min-width: 50rem" stateStorage="local" stateKey="dt-state-demo-session"
-      v-model:editingRows="editingRows" editMode="row" dataKey="id" @row-edit-save="onRowEditSave" :pt="{
-        table: { style: 'min-width: 50rem' },
-        column: {
-          bodycell: ({ state }) => ({
-            style: state['d_editing'] && 'padding-top: 0.75rem; padding-bottom: 0.75rem'
-          })
-        }
-      }">
+    <DataTable v-model:filters="filters" :value="props.usersList" sortField="classe" :sortOrder="-1" filterDisplay="row"
+      :globalFilterFields="['lastname', 'firstname', 'classe']" tableStyle="min-width: 50rem" stateStorage="local"
+      stateKey="dt-state-demo-session">
       <template #header>
         <Toolbar>
-          <template #start>
-            <span class="mr-2">{{ nbselected() }}</span>
-          </template>
           <template #end>
             <IconField>
               <InputIcon> <i class="pi pi-search" /> </InputIcon>
@@ -75,19 +47,19 @@ const nbselected = () => {
           </template>
         </Toolbar>
       </template>
-      <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+      <!-- <DataTable :value="props.usersList" tableStyle="min-width: 50rem"> -->
       <Column field="lastname" header="Nom">
-        <template #editor="{ data, field }">
-          <InputText v-model="data[field]" fluid />
+        <template #body="p">
+          <SesameUserForm :data="p.data" :field="'lastname'" />
         </template>
         <template #filter="{ filterModel, filterCallback }">
           <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Rechercher"
             class="smallit" />
         </template>
       </Column>
-      <Column field="firstname" header="Prénom">
-        <template #editor="{ data, field }">
-          <InputText v-model="data[field]" fluid />
+      <Column field="firstname" header="Prenom">
+        <template #body="p">
+          <SesameUserForm :data="p.data" :field="'firstname'" />
         </template>
         <template #filter="{ filterModel, filterCallback }">
           <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Rechercher"
@@ -95,8 +67,8 @@ const nbselected = () => {
         </template>
       </Column>
       <Column field="classe" sortable header="Classe">
-        <template #editor="{ data, field }">
-          <InputText v-model="data[field]" fluid />
+        <template #body="p">
+          <SesameUserForm :data="p.data" :field="'classe'" />
         </template>
         <template #filter="{ filterModel, filterCallback }">
           <MultiSelect v-model="filterModel.value" @change="filterCallback()" :options="classes" optionLabel="name"
@@ -109,9 +81,17 @@ const nbselected = () => {
         </template>
       </Column>
       <Column field="username" sortable header="Identifiant"></Column>
-      <Column :rowEditor="true" style="width: 10%; min-width: 8rem" bodyStyle="text-align:center"></Column>
+      <Column header="PWD">
+        <template #body="p">
+          <SesameUserForm :data="p.data" :field="'classe'" />
+        </template>
+      </Column>
+      <Column field="uid">
+        <template #body="p">
+          <i @click="delCode(p.data.uid)" class="pi pi-trash text-red-500 cursor-pointer" />
+        </template>
+      </Column>
     </DataTable>
-
   </template>
 </template>
 
