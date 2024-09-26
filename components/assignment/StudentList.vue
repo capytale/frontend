@@ -62,11 +62,9 @@ const countWf = (n) => {
   return my.assignments.tab.filter((o) => o.workflow == n && o.tags.length == 0).length
 }
 
+// console.log(countWf(100))
+
 const handleArchive = (() => {
-  if (corbeilleTid() == null) {
-    toast.add({ severity: 'error', summary: 'Archivage impossible', detail: `L'étiquette spéciale nommée "Corbeille" doit être présente mais n'a pas été trouvée.` });
-    return
-  }
   if (selectedNid.value.length == 0) {
     toast.add({ severity: 'error', summary: 'Archivage impossible', detail: `Vous devez sélectionner au moins une copie à archiver.` });
     return
@@ -128,10 +126,8 @@ const filters = ref({
   hasTags: { value: false, matchMode: FilterMatchMode.EQUALS },
   fullname: { value: null, matchMode: FilterMatchMode.CONTAINS },
   classe: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  workflow: { value: null, matchMode: FilterMatchMode.CONTAINS },
 })
 
-const etats = ref([{ value: 100, label: "En cours" }, { value: 200, label: "Rendu" }, { value: 300, label: "Corrigé" }])
 
 const classList = computed(() => {
   if (my.assignments.tab == null) return []
@@ -198,7 +194,6 @@ const itemsA = ref([
   }
 ])
 
-
 const archMessage = (a) => {
   if (a) return "Revenir aux copies non archivées"
   return "Consulter les archives"
@@ -232,7 +227,7 @@ const mathalea = ref(false)
           <Skeleton width="7rem"></Skeleton>
         </template>
       </Column>
-      <Column field="quantity" header="État">
+      <Column field="quantity" header="Mode">
         <template #body>
           <Skeleton width="4rem"></Skeleton>
         </template>
@@ -250,37 +245,43 @@ const mathalea = ref(false)
     </DataTable>
   </div>
   <template v-else>
+  <div class="flex flex-row justify-center mb-4">
+  <ButtonGroup>
+  <Button :severity="filters['hasTags'].value ? 'secondary' : 'primary'" @click="filters['hasTags'].value = false" size="small">
+  <span>Copies</span>
+  </Button>
+  <Button :severity="filters['hasTags'].value ? 'primary' : 'secondary'" label="Archives" @click="filters['hasTags'].value = true" size="small"></Button>
+  </ButtonGroup>
+  </div>
     <DataTable :value="richTab" tableStyle="min-width: 50rem" v-model:selection="selectedNid" v-model:filters="filters"
-      :globalFilterFields="['hasTags', 'fullname', 'classe', 'workflow']" selectionMode="multiple"
-      @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()" paginator
-      :rows="40" :rowsPerPageOptions="[10, 40, 60]" sortField="fullname" :sortOrder="1"
+      :globalFilterFields="['hasTags', 'fullname', 'classe']" selectionMode="multiple" @rowSelect="onRowSelect()"
+      @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()" paginator :rows="10"
+      :rowsPerPageOptions="[10, 20, 50]" sortField="fullname"  :sortOrder="1"
       paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
       currentPageReportTemplate='{first} à {last} sur {totalRecords} &nbsp; &nbsp;' @rowSelectAll="onRowSelectAll()"
       :rowStyle="rowStyle" ref="dt">
 
       <Toolbar>
         <template #start>
-          <template v-if="hasSelected">
-            <span class="mr-2">{{ nbselected() }}</span>
-            <template v-if="filters['hasTags'].value">
-              <Button label="Désarchiver" @click="handleUnArchive()" icon="pi pi-check-square" class="mr-2"
-                severity="secondary" outlined :disabled="!hasSelected" />
-            </template>
-            <template v-else>
-              <Button v-tooltip.bottom="ttMessage(100)" @click="handleChangeWf(100)" label="En cours"
-                icon="pi pi-pencil" class="mr-2" severity="info" outlined :disabled="!hasSelected" />
-              <Button v-tooltip.bottom="ttMessage(200)" @click="handleChangeWf(200)" label="Rendu" icon="pi pi-envelope"
-                class="mr-2" severity="warn" outlined :disabled="!hasSelected" />
-              <Button v-tooltip.bottom="ttMessage(300)" @click="handleChangeWf(300)" label="Corrigé"
-                icon="pi pi-check-square" class="mr-2" severity="success" outlined :disabled="!hasSelected" />
-              <Button type="button" icon="pi pi-eye-slash" severity="secondary" outlined aria-haspopup="true"
-                v-tooltip.top="{ value: 'Déplacer dans les archives', showDelay: 300, hideDelay: 100 }"
-                aria-controls="overlay_menu" @click="handleArchive" class="mr-10" />
-              <!-- <Menu ref="menu" id="overlay_menu" :model="itemsA" :popup="true" /> -->
-            </template>
+          <span class="mr-2">{{ nbselected() }}</span>
+          <template v-if="filters['hasTags'].value">
+            <Button label="Désarchiver" @click="handleUnArchive()" icon="pi pi-check-square" class="mr-2"
+              severity="secondary" outlined :disabled="!hasSelected" />
+          </template>
+          <template v-else>
+            <Button v-tooltip.bottom="ttMessage(100)" @click="handleChangeWf(100)" label="En cours" icon="pi pi-pencil"
+              class="mr-2" severity="info" outlined :disabled="!hasSelected" />
+            <Button v-tooltip.bottom="ttMessage(200)" @click="handleChangeWf(200)" label="Rendu" icon="pi pi-envelope"
+              class="mr-2" severity="warn" outlined :disabled="!hasSelected" />
+            <Button v-tooltip.bottom="ttMessage(300)" @click="handleChangeWf(300)" label="Corrigé"
+              icon="pi pi-check-square" class="mr-2" severity="success" outlined :disabled="!hasSelected" />
+            <Button type="button" icon="pi pi-eye-slash" @click="toggle" severity="secondary" outlined
+              aria-haspopup="true" v-tooltip.top="{ value: 'Déplacer dans les archives', showDelay: 300, hideDelay: 100 }"
+              aria-controls="overlay_menu" />
+            <Menu ref="menu" id="overlay_menu" :model="itemsA" :popup="true" />
           </template>
 
-          <IconField iconPosition="left" class="mr-2">
+          <IconField iconPosition="left" class="ml-10 mr-2">
             <InputIcon>
               <i class="pi pi-search" />
             </InputIcon>
@@ -289,8 +290,6 @@ const mathalea = ref(false)
 
           <Select v-model="filters['classe'].value" :options="classList" optionLabel="classe" optionValue="classe"
             class="mr-2" placeholder="Filtrer par classe" style="min-width: 12rem" :showClear="true" />
-          <Select v-model="filters['workflow'].value" :options="etats" optionLabel="label" optionValue="value"
-            class="mr-2" placeholder="Filtrer par état" style="min-width: 12rem" :showClear="true" />
 
           <!-- <Button v-tooltip.bottom="'Télécharger'" icon="pi pi-download" class="mr-2" severity="secondary" /> -->
 
@@ -342,7 +341,7 @@ const mathalea = ref(false)
 
       </Column>
 
-      <Column field="workflow" header="État" style="max-width:10rem" sortable>
+      <Column field="workflow" header="Mode" style="max-width:10rem" sortable>
         <template #body="p">
           <span class="parent mr-1">
             <Button text v-tooltip.top="{ value: wficon(p.data.workflow).tt, showDelay: 300, hideDelay: 0 }">
@@ -354,10 +353,10 @@ const mathalea = ref(false)
             <div class="surprise">
               <Button :icon="nextOne(p.data.workflow).icon" :style="{ color: nextOne(p.data.workflow).color }"
                 v-tooltip.top="{ value: nextOne(p.data.workflow).tt, showDelay: 300, hideDelay: 0 }" severity="danger"
-                @click.stop="chWf(p.data.sa_nid, nextOne(p.data.workflow).wf)" outlined rounded />
+                @click="chWf(p.data.sa_nid, nextOne(p.data.workflow).wf)" outlined rounded />
               <Button :icon="nextTwo(p.data.workflow).icon" :style="{ color: nextTwo(p.data.workflow).color }"
                 v-tooltip.top="{ value: nextTwo(p.data.workflow).tt, showDelay: 300, hideDelay: 0 }" severity="danger"
-                @click.stop="chWf(p.data.sa_nid, nextTwo(p.data.workflow).wf)" outlined rounded />
+                @click="chWf(p.data.sa_nid, nextTwo(p.data.workflow).wf)" outlined rounded />
             </div>
           </span>
         </template>
