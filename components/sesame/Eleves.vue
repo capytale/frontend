@@ -1,4 +1,5 @@
 <script setup>
+import sesameApi from "@capytale/activity.js/backend/capytale/sesame";
 import { FilterMatchMode } from '@primevue/core/api';
 
 const props = defineProps({
@@ -23,10 +24,18 @@ const classes = ref([
 const editingRows = ref([]);
 const onRowEditSave = (event) => {
   let { newData, index } = event;
+  let uid = props.usersList[index].uid
 
-  // sesame.updateUser({ uid, [props.field]: val })
+  if (props.usersList[index].lastname != newData.lastname) {
+    sesameApi.updateUser({ uid, lastname: newData.lastname })
+  }
+  if (props.usersList[index].firstname != newData.firstname) {
+    sesameApi.updateUser({ uid, firstname: newData.firstname })
+  }
+  if (props.usersList[index].classe != newData.classe) {
+    sesameApi.updateUser({ uid, classe: newData.classe })
+  }
   props.usersList[index] = newData;
-  console.log("newData, index", newData, index)
 };
 console.log(props.usersList)
 
