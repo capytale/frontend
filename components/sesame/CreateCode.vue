@@ -79,7 +79,7 @@ const emit = defineEmits(['closeSesameForm'])
               <label for="requireMail" class="ml-2"> 📧 Obliger les élèves à saisir une adresse électronique</label>
             </div>
           </div>
-          <div class="flex flex-row gap-10 my-4">
+          <div class="flex flex-row gap-2 my-4">
             <Button label="Créer le code Sésame" @click="() => { handleSubmit(); $emit('closeSesameForm') }" />
             <Button type="button" label="Annuler" severity="secondary" @click="$emit('closeSesameForm')"></Button>
           </div>

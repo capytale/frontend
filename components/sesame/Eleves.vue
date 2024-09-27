@@ -30,13 +30,28 @@ const onRowEditSave = (event) => {
   props.usersList[index] = newData;
 };
 
-const selectedUsers = ref([]);
+const classe = ref("")
+const handleClasseEdit = () => {
+  const uids = [...selectedUsers.value.map((o) => o.uid)]
+  console.log("uids", uids)
+  console.log("classe.value", classe.value)
+  console.log("sesameApi.updateMultiUsers({ uids, classe: classe.value })")
+  sesameApi.updateMultiUsers({ uids, classe: classe.value })
+  classe.value = ""
+  toggleClasseEdit()
+}
 
+const selectedUsers = ref([]);
 const nbselected = () => {
-  if (selectedUsers.value.length == 0) return " "
+  if (selectedUsers.value.length == 0) return null
   if (selectedUsers.value.length == 1) return "1 élément sélectionné "
   return selectedUsers.value.length + " éléments sélectionnés "
 }
+
+const ClassEditDialog = ref(false);
+const toggleClasseEdit = () => {
+  ClassEditDialog.value = !ClassEditDialog.value
+};
 </script>
 
 <template>
@@ -49,7 +64,6 @@ const nbselected = () => {
       Vous pouvez aussi modifier le mot de passe pour les élèves qui n'ont pas saisi d'adresse
       email à la création de leur compte.
     </p>
-
 
     <DataTable :value="props.usersList" v-model:selection="selectedUsers" v-model:filters="filters" sortField="classe"
       :sortOrder="-1" filterDisplay="menu" :globalFilterFields="['lastname', 'firstname', 'classe']"
@@ -65,7 +79,11 @@ const nbselected = () => {
       <template #header>
         <Toolbar>
           <template #start>
-            <span class="mr-2">{{ nbselected() }}</span>
+            <div v-if="nbselected()">
+              <span class="mr-2">{{ nbselected() }}</span>
+              <Button @click="toggleClasseEdit" label="Modifier la classe" icon="pi pi-pencil" class="mr-2"
+                severity="primary" outlined v-tooltip.bottom="'Modifier tous les éléments sélectionnés'" />
+            </div>
           </template>
           <template #end>
             <IconField>
@@ -106,7 +124,6 @@ const nbselected = () => {
               <span>{{ slotProps.option.name }}</span>
             </template>
           </MultiSelect>
-          <!-- <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Rechercher" /> -->
         </template>
       </Column>
       <Column field="username" sortable header="Identifiant"></Column>
@@ -114,19 +131,25 @@ const nbselected = () => {
     </DataTable>
 
   </template>
+
+  <Dialog v-model:visible="ClassEditDialog" :style="{ width: '750px' }" header="Modifier" :modal="true">
+    <Card class="my-4">
+      <template #content>
+        <div class="flex flex-col gap-2">
+          <label for="classe">Nom de la classe à appliquer aux élèves séléctionnés</label>
+          <InputText id="classe" v-model="classe" />
+        </div>
+        <div class="flex flex-row gap-2 my-4">
+          <Button label="Valider" @click="handleClasseEdit" />
+          <Button type="button" label="Annuler" severity="secondary" @click="toggleClasseEdit"></Button>
+        </div>
+      </template>
+    </Card>
+  </Dialog>
 </template>
 
 <style>
 .smallit {
   width: 8em;
-}
-
-.myclass {
-  vertical-align: inherit !important;
-}
-
-.eleves .py-4 {
-  padding-bottom: 0px;
-  padding-top: 0px;
 }
 </style>
