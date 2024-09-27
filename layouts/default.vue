@@ -16,6 +16,7 @@ useHead({
 <template>
   <div class="scroller">
     <ConfirmDialog></ConfirmDialog>
+    <ArchiveBuilderJobsPanel />
     <Toast position="bottom-right" />
 
     <div class="appContainer" :style="bgColor">
