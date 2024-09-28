@@ -1,6 +1,7 @@
 <script setup>
 import sesameApi from "@capytale/activity.js/backend/capytale/sesame";
 import { FilterMatchMode } from '@primevue/core/api';
+import { formatPrettyDateTime } from '~/utils/format';
 
 const props = defineProps({
   usersList: Object,
@@ -21,14 +22,24 @@ const onRowEditSave = (event) => {
   let old = props.usersList[index]
   let uid = old.uid
 
+  if (passwd.value != "") {
+    console.log("passwd: ", passwd.value)
+    // sesameApi.updateUser({ uid, [field]: newData[field] })
+    passwd.value = ""
+  }
+
+
   const fields = ['lastname', 'firstname', 'classe']
   for (const field of fields) {
     if (old[field] != newData[field]) {
-      sesameApi.updateUser({ uid, [field]: newData[field] })
+      console.log(`updateUser({ ${uid}, [${field}]: ${newData[field]} })`)
+      // sesameApi.updateUser({ uid, [field]: newData[field] })
     }
   }
   props.usersList[index] = newData;
 };
+
+const passwd = ref("")
 
 const classe = ref("")
 const handleClasseEdit = () => {
@@ -126,7 +137,24 @@ const toggleClasseEdit = () => {
           </MultiSelect>
         </template>
       </Column>
-      <Column field="username" sortable header="Identifiant"></Column>
+      <Column field="username" sortable header="Identifiant">
+        <template #body="p">
+          {{ p.data.has_mail ? '*email*' : p.data.username }}
+        </template>
+      </Column>
+      <Column field="has_mail" header="Mot de passe">
+        <template #body="p">
+          {{ p.data.has_mail ? '🚫' : '••••••' }}
+        </template>
+        <template #editor="{ data, field }">
+          <Password v-model="passwd" fluid :disabled="data[field]" />
+        </template>
+      </Column>
+      <Column field="validity.grace" sortable header="Expiration">
+        <template #body="p">
+          {{ formatPrettyDateTime( p.data.validity.grace, false ) }}
+        </template>
+      </Column>
       <Column :rowEditor="true" style="width: 10%; min-width: 8rem" bodyStyle="text-align:center"></Column>
     </DataTable>
 

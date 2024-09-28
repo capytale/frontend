@@ -35,11 +35,12 @@ const getStudentListFromApi = async function () {
     return false
   }
 }
+console.log("usersList", usersList)
 
 const distinctClasses = function (list) {
   const classes = new Set()
   list.forEach(user => {
-    classes.add({name: user.classe})
+    classes.add({ name: user.classe })
   })
   return Array.from(classes)
 }
@@ -49,7 +50,7 @@ getDataFromApi();
 </script>
 
 <template>
-  <div class="prose mx-6 max-w-6xl w-full mt-4">
+  <div class="prose mx-6 w-full mt-4">
 
     <Tabs value="2">
       <TabList>

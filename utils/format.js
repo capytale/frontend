@@ -17,7 +17,8 @@ export const formatDateTime = (date) => {
 };
 
 // formate la date et l'heure 	12/09 à 19:28 ou 	12/09/22 à 19:28
-export const formatPrettyDateTime = (date) => {
+// si full = false pas d'heure: 12/09         ou  12/09/22
+export const formatPrettyDateTime = (date, full = true) => {
   const optionsDay = {
     month: "2-digit",
     day: "2-digit",
@@ -29,32 +30,35 @@ export const formatPrettyDateTime = (date) => {
     hour: "2-digit",
     minute: "2-digit",
   };
-  return new Date(date).toLocaleDateString("fr-FR", optionsDay) + " à " + new Date(date).toLocaleTimeString("fr-FR", optionsHour);
+  if (full) {
+    return new Date(date).toLocaleDateString("fr-FR", optionsDay) + " à " + new Date(date).toLocaleTimeString("fr-FR", optionsHour);
+  }
+  return new Date(date).toLocaleDateString("fr-FR", optionsDay)
 };
 
 
 // formate un tmiestamp en date relaive : il ya ... secondes, minutes, heures, jours, mois, ans
 export function timeElapsed(ts) {
-    var now = new Date().getTime();
-    var difference = now - ts;
-    var secondes = Math.floor(difference / 1000);
-    var minutes = Math.floor(secondes / 60);
-    var heures = Math.floor(minutes / 60);
-    var jours = Math.floor(heures / 24);
-    var mois = Math.floor(jours / 30);
-    var ans = Math.floor(mois / 12);
+  var now = new Date().getTime();
+  var difference = now - ts;
+  var secondes = Math.floor(difference / 1000);
+  var minutes = Math.floor(secondes / 60);
+  var heures = Math.floor(minutes / 60);
+  var jours = Math.floor(heures / 24);
+  var mois = Math.floor(jours / 30);
+  var ans = Math.floor(mois / 12);
 
-    if (ans > 1) return ans + " ans"
-    if (ans > 0) return ans + " an"
-    if (mois > 0) return mois + " mois"
-    if (jours > 1) return jours + " jours"
-    if (jours > 0) return jours + " jour"
-    if (heures > 1) return heures + " heures"
-    if (heures > 0) return heures + " heure"
-    if (minutes > 1) return minutes + " minutes"
-    if (minutes > 0) return minutes + " minute"
-    if (secondes > 1) return secondes + " secondes"
-    return "1 seconde" 
+  if (ans > 1) return ans + " ans"
+  if (ans > 0) return ans + " an"
+  if (mois > 0) return mois + " mois"
+  if (jours > 1) return jours + " jours"
+  if (jours > 0) return jours + " jour"
+  if (heures > 1) return heures + " heures"
+  if (heures > 0) return heures + " heure"
+  if (minutes > 1) return minutes + " minutes"
+  if (minutes > 0) return minutes + " minute"
+  if (secondes > 1) return secondes + " secondes"
+  return "1 seconde"
 }
 
 // Renvoie l'url de icône correspondant au type id
