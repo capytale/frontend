@@ -2,6 +2,7 @@
 import sesameApi from "@capytale/activity.js/backend/capytale/sesame";
 import { FilterMatchMode } from '@primevue/core/api';
 import { formatPrettyDateTime } from '~/utils/format';
+const toast = useToast();
 
 const props = defineProps({
   usersList: Object,
@@ -24,7 +25,7 @@ const onRowEditSave = (event) => {
 
   if (passwd.value != "") {
     console.log("passwd: ", passwd.value)
-    // sesameApi.updateUser({ uid, [field]: newData[field] })
+    sesameApi.updateUser({ uid, password: passwd.value })
     passwd.value = ""
   }
 
@@ -33,24 +34,11 @@ const onRowEditSave = (event) => {
   for (const field of fields) {
     if (old[field] != newData[field]) {
       console.log(`updateUser({ ${uid}, [${field}]: ${newData[field]} })`)
-      // sesameApi.updateUser({ uid, [field]: newData[field] })
+      sesameApi.updateUser({ uid, [field]: newData[field] })
     }
   }
   props.usersList[index] = newData;
 };
-
-const passwd = ref("")
-
-const classe = ref("")
-const handleClasseEdit = () => {
-  const uids = [...selectedUsers.value.map((o) => o.uid)]
-  console.log("uids", uids)
-  console.log("classe.value", classe.value)
-  console.log("sesameApi.updateMultiUsers({ uids, classe: classe.value })")
-  sesameApi.updateMultiUsers({ uids, classe: classe.value })
-  classe.value = ""
-  toggleClasseEdit()
-}
 
 const selectedUsers = ref([]);
 const nbselected = () => {
@@ -59,10 +47,43 @@ const nbselected = () => {
   return selectedUsers.value.length + " éléments sélectionnés "
 }
 
-const ClassEditDialog = ref(false);
+const classEditDialog = ref(false);
 const toggleClasseEdit = () => {
-  ClassEditDialog.value = !ClassEditDialog.value
+  classEditDialog.value = !classEditDialog.value
 };
+const classe = ref("")
+const handleClasseEdit = () => {
+  const uids = [...selectedUsers.value.map((o) => o.uid)]
+  try {
+    sesameApi.updateMultiUsers({ uids, classe: classe.value })
+    props.usersList.forEach((o) => {
+      if (uids.includes(o.uid)) {
+        o.classe = classe.value
+      }
+    })
+  } catch (e) {
+    toast.add({ severity: 'error', summary: 'Échec', detail: `nid = ${selectedNid.value} - ${e}` });
+  }
+  classe.value = ""
+  toggleClasseEdit()
+}
+
+const passwdEditDialog = ref(false);
+const togglePasswdEdit = () => {
+  passwdEditDialog.value = !passwdEditDialog.value
+};
+const passwd = ref("")
+const handlePasswdEdit = () => {
+  const uids = [...selectedUsers.value.map((o) => o.uid)]
+  try {
+    sesameApi.updateMultiUsers({ uids, password: passwd.value })
+  } catch (e) {
+    toast.add({ severity: 'error', summary: 'Échec', detail: `nid = ${selectedNid.value} - ${e}` });
+  }
+  passwd.value = ""
+  togglePasswdEdit()
+}
+
 </script>
 
 <template>
@@ -70,11 +91,15 @@ const toggleClasseEdit = () => {
     <div class="vip">Vous devez être connecté avec le rôle enseignant pour voir la liste des codes Sésame valides.</div>
   </template>
   <template v-else>
-    <p>
-      Vous pouvez modifier les nom, prénom et classe de vos élèves dans le tableau ci-dessous.
-      Vous pouvez aussi modifier le mot de passe pour les élèves qui n'ont pas saisi d'adresse
-      email à la création de leur compte.
-    </p>
+    <ul>
+      <li>
+        Vous pouvez modifier les nom, prénom et classe de vos élèves dans le tableau ci-dessous.
+      </li>
+      <li>
+        Vous pouvez aussi modifier le mot de passe pour les élèves qui n'ont pas saisi d'adresse
+        email à la création de leur compte.
+      </li>
+    </ul>
 
     <DataTable :value="props.usersList" v-model:selection="selectedUsers" v-model:filters="filters" sortField="classe"
       :sortOrder="-1" filterDisplay="menu" :globalFilterFields="['lastname', 'firstname', 'classe']"
@@ -94,6 +119,8 @@ const toggleClasseEdit = () => {
               <span class="mr-2">{{ nbselected() }}</span>
               <Button @click="toggleClasseEdit" label="Modifier la classe" icon="pi pi-pencil" class="mr-2"
                 severity="primary" outlined v-tooltip.bottom="'Modifier tous les éléments sélectionnés'" />
+              <Button @click="togglePasswdEdit" label="Modifier le mot de passe" icon="pi pi-pencil" class="mr-2"
+                severity="primary" outlined v-tooltip.bottom="'Modifier tous les éléments sélectionnés'" />
             </div>
           </template>
           <template #end>
@@ -105,7 +132,7 @@ const toggleClasseEdit = () => {
         </Toolbar>
       </template>
       <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-      <Column field="lastname" header="Nom">
+      <Column field="lastname" sortable header="Nom">
         <template #editor="{ data, field }">
           <InputText v-model="data[field]" fluid />
         </template>
@@ -114,7 +141,7 @@ const toggleClasseEdit = () => {
             class="smallit" />
         </template>
       </Column>
-      <Column field="firstname" header="Prénom">
+      <Column field="firstname" sortable header="Prénom">
         <template #editor="{ data, field }">
           <InputText v-model="data[field]" fluid />
         </template>
@@ -137,7 +164,7 @@ const toggleClasseEdit = () => {
           </MultiSelect>
         </template>
       </Column>
-      <Column field="username" sortable header="Identifiant">
+      <Column field="username" sortable header="Nom d'utilisateur">
         <template #body="p">
           {{ p.data.has_mail ? '*email*' : p.data.username }}
         </template>
@@ -152,7 +179,7 @@ const toggleClasseEdit = () => {
       </Column>
       <Column field="validity.grace" sortable header="Expiration">
         <template #body="p">
-          {{ formatPrettyDateTime( p.data.validity.grace, false ) }}
+          {{ formatPrettyDateTime(p.data.validity.grace, false) }}
         </template>
       </Column>
       <Column :rowEditor="true" style="width: 10%; min-width: 8rem" bodyStyle="text-align:center"></Column>
@@ -160,7 +187,7 @@ const toggleClasseEdit = () => {
 
   </template>
 
-  <Dialog v-model:visible="ClassEditDialog" :style="{ width: '750px' }" header="Modifier" :modal="true">
+  <Dialog v-model:visible="classEditDialog" :style="{ width: '750px' }" header="Modifier" :modal="true">
     <Card class="my-4">
       <template #content>
         <div class="flex flex-col gap-2">
@@ -170,6 +197,20 @@ const toggleClasseEdit = () => {
         <div class="flex flex-row gap-2 my-4">
           <Button label="Valider" @click="handleClasseEdit" />
           <Button type="button" label="Annuler" severity="secondary" @click="toggleClasseEdit"></Button>
+        </div>
+      </template>
+    </Card>
+  </Dialog>
+  <Dialog v-model:visible="passwdEditDialog" :style="{ width: '750px' }" header="Modifier" :modal="true">
+    <Card class="my-4">
+      <template #content>
+        <div class="flex flex-col gap-2">
+          <label for="passwd">Mote de pass</label>
+          <InputText id="passwd" v-model="passwd" />
+        </div>
+        <div class="flex flex-row gap-2 my-4">
+          <Button label="Valider" @click="handlePasswdEdit" />
+          <Button type="button" label="Annuler" severity="secondary" @click="togglePasswdEdit"></Button>
         </div>
       </template>
     </Card>
