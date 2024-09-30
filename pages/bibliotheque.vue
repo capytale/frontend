@@ -224,14 +224,16 @@ const displayFull = async (nid) => {
           <Column field="abstract" header="Description">
             <template #body="p">
               <template v-if="abstractObj(p.data.abstract).truncated">
-                <p>{{ abstractObj(p.data.abstract).abstract }}
-                  <span @click="toggle" @click.stop="displayFull(p.data.nid)" class="text-blue-500 font-bold">[...]</span>
-                </p>
-                <Popover ref="op">
-                  <div class="w-96">
-                    {{ p.data.abstractFull }}
-                  </div>
-                </Popover>
+                <Inplace @open="displayFull(p.data.nid)">
+                  <template #display>{{ abstractObj(p.data.abstract).abstract }}
+                    <span class="text-blue-500 font-bold">[...]</span>
+                  </template>
+                  <template #content>
+                    <p class="m-0">
+                      {{ p.data.abstractFull }}
+                    </p>
+                  </template>
+                </Inplace>
               </template>
               <template v-else>
                 <p>{{ p.data.abstract }}</p>
