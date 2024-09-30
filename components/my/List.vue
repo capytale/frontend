@@ -162,8 +162,9 @@ const getTagName = (obj) => {
 }
 
 const corbeilleTid = () => {
-  if (!tags.tags.find(o => o.label === 'Corbeille')) return null
-  return tags.tags.find(o => o.label === 'Corbeille').id
+  const corbeilleTag = tags.tags.find(o => o.label === 'Corbeille')
+  if (!corbeilleTag) return null
+  return corbeilleTag.id
 }
 
 const myactivities = computed(() => {
@@ -172,10 +173,11 @@ const myactivities = computed(() => {
     return activitiesByTag[tid] || []
   } else { // no tag selected : show all activities except those in the trash
     if (!activites.activities.data) return []
+    const corbTid = corbeilleTid();
     return activites.activities.data.filter(o => {
       if (!o.tags) return true
       for (let tag of o.tags) {
-        if (tag === corbeilleTid()) return false
+        if (tag === corbTid) return false
       }
       return true
     })
