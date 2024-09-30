@@ -82,7 +82,10 @@ async function zipActivities(ids: number[], control: JobControl): Promise<Blob |
             const friendlyType = typesMap[a.activityType] == null ? a.activityType : typesMap[a.activityType].name;
             itemDescription += ` (${friendlyType}) ${a.title.value}`;
             const archiver = archiverApi.getArchiverFor(a);
-            if (archiver != null) {
+            if (archiver == null) {
+                itemDescription += ' (Non archivable)';
+                control.report(i, { status: 'unsupported' });
+            } else {
                 const folder = checkFolder(usedFolder, archiver.mainFileName)
                 for (const f of archiver.files) {
                     if (control.aborted) return null;
@@ -90,8 +93,8 @@ async function zipActivities(ids: number[], control: JobControl): Promise<Blob |
                     const data = await f.dataPromise;
                     await zipWriter.add(path, getReader(data));
                 }
+                control.report(i, { status: 'done' });
             }
-            control.report(i, { status: 'done' });
         } catch (error) {
             itemDescription += ' (Erreur)';
             control.report(i, { status: 'error' });
@@ -122,13 +125,15 @@ const wfMap: { [key: string]: string } = {
 async function zipAssigments(actId: number, ids: number[], control: JobControl): Promise<Blob | null> {
     if (!Array.isArray(ids) || ids.length === 0) return null;
     const len = ids.length;
-    control.setCount(len + 1);
-    const activityBunch: ActivityBunch = await loadBunch(actId);
-    if (!archiverApi.isArchivable(activityBunch.activityType)) {
-        throw new Error("Type d'activité non archivable");
+    const ab: ActivityBunch = await loadBunch(actId);
+    control.setCount(1);
+    control.report(0, { title: ab.title.value, type: ab.activityType });
+    const archiver = archiverApi.getArchiverFor(ab);
+    if (archiver == null) {
+        control.report(0, { status: 'unsupported' });
+        return null;
     }
-    const archiver = archiverApi.getArchiverFor(activityBunch);
-    if (archiver == null) return null;
+    control.setCount(len + 1);
     const isFolderModel = archiver.assignmentModel == 'folder';
     const zipWriter = new zip.ZipWriter(new zip.BlobWriter('application/zip'));
     const d = new Date();
@@ -158,6 +163,7 @@ async function zipAssigments(actId: number, ids: number[], control: JobControl):
     });
     const dParser = new DOMParser();
     if (control.aborted) return null;
+    control.report(0, { status: 'done' });
     let i = 1;
     for (const ap of iter(loadBunch, ids)) {
         if (control.aborted) return null;
@@ -176,7 +182,7 @@ async function zipAssigments(actId: number, ids: number[], control: JobControl):
                     state += ' (' + doc.documentElement.textContent + ')';
                 }
             }
-            const studentDesc = `${student.lastname} ${student.firstname} (${student.classe})` 
+            const studentDesc = `${student.lastname} ${student.firstname} (${student.classe})`
             control.report(i, { title: studentDesc, type: a.activityType });
             itemDescription += ` : ${studentDesc} : ${state}`;
             const archiver = archiverApi.getArchiverFor(a);
@@ -199,7 +205,7 @@ async function zipAssigments(actId: number, ids: number[], control: JobControl):
                     await zipWriter.add(fileName, getReader(data));
                 }
             }
-            control.report(i, { status: 'done' });              
+            control.report(i, { status: 'done' });
         } catch (error) {
             itemDescription += ' (Erreur)';
             control.report(i, { status: 'error' });
