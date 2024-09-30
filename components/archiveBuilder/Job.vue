@@ -32,6 +32,7 @@ function getStatusDelta(status: Report['status']): number {
     if (status === 'started') return 0.5;
     if (status === 'done') return 1;
     if (status === 'error') return 1;
+    if (status === 'unsupported') return 1;
     return 0;
 }
 
