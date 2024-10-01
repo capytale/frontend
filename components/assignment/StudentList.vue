@@ -12,7 +12,7 @@ const toast = useToast();
 const my = useMyStore()
 const activites = useActivitiesStore()
 
-const tototo = defineModel({ required: true, type: Boolean })
+const tototo = defineModel({ required: true, type: Boolean });
 
 const props = defineProps<{
   nid: string,
@@ -64,9 +64,11 @@ const countWf = (n) => {
   return my.assignments.tab.filter((o) => o.workflow == n && o.tags.length == 0).length
 }
 
-// console.log(countWf(100))
-
 const handleArchive = (() => {
+  if (corbeilleTid() == null) {
+    toast.add({ severity: 'error', summary: 'Archivage impossible', detail: `L'étiquette spéciale nommée "Corbeille" doit être présente mais n'a pas été trouvée.` });
+    return
+  }
   if (selectedNid.value.length == 0) {
     toast.add({ severity: 'error', summary: 'Archivage impossible', detail: `Vous devez sélectionner au moins une copie à archiver.` });
     return
@@ -128,8 +130,10 @@ const filters = ref({
   hasTags: { value: false, matchMode: FilterMatchMode.EQUALS },
   fullname: { value: null, matchMode: FilterMatchMode.CONTAINS },
   classe: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  workflow: { value: null, matchMode: FilterMatchMode.CONTAINS },
 })
 
+const etats = ref([{ value: 100, label: "En cours" }, { value: 200, label: "Rendu" }, { value: 300, label: "Corrigé" }])
 
 const classList = computed(() => {
   if (my.assignments.tab == null) return []
@@ -196,6 +200,7 @@ const itemsA = ref([
   }
 ])
 
+
 const archMessage = (a) => {
   if (a) return "Revenir aux copies non archivées"
   return "Consulter les archives"
@@ -206,191 +211,199 @@ const mathalea = ref(false)
 
 
 <template>
-<Dialog v-model:visible="tototo" position="top" maximizable modal header="&nbsp;" :style="{ width: '90%' }" dismissableMask>
-  <template #header v-if="my.loadingAssignments">
-    <Skeleton shape="circle" size="4rem" class="mr-2 my-2"></Skeleton>
-    <Skeleton width="20rem" class="mb-2"></Skeleton>
-  </template>
-  <template #header v-else>
-    <span class="activity-title grow">
-      <img :src="my.assignments.icon" alt="icon" class="w-16 h-16 inline" />
-      {{ my.assignments.title }}</span>
-    <ButtonGroup>
-      <Button :severity="filters['hasTags'].value ? 'secondary' : 'primary'" @click="filters['hasTags'].value = false" size="small">
-      <span>Copies</span>
-      </Button>
-      <Button :severity="filters['hasTags'].value ? 'primary' : 'secondary'" label="Archives" @click="filters['hasTags'].value = true" size="small"></Button>
-    </ButtonGroup>
-  </template>
-  <div v-if="my.loadingAssignments">
-    <Card class="flex-2 my-10" v-if="false">
-      <template #title>
-        <Skeleton shape="circle" size="4rem" class="mr-2 my-2"></Skeleton>
-        <Skeleton width="20rem" class="mb-2"></Skeleton>
-      </template>
-    </Card>
-    <DataTable :value="nbFake">
-      <Column field="code" header="Dernière modif.">
-        <template #body>
-          <Skeleton width="10rem"></Skeleton>
-        </template>
-      </Column>
-      <Column field="name" header="Élève">
-        <template #body>
-          <Skeleton width="10rem"></Skeleton>
-        </template>
-      </Column>
-      <Column field="category" header="Classe">
-        <template #body>
-          <Skeleton width="7rem"></Skeleton>
-        </template>
-      </Column>
-      <Column field="quantity" header="Mode">
-        <template #body>
-          <Skeleton width="4rem"></Skeleton>
-        </template>
-      </Column>
-      <Column field="quantity" header="Appréciation">
-        <template #body>
-          <Skeleton width="10rem" height="4rem"></Skeleton>
-        </template>
-      </Column>
-      <Column field="quantity" header="Évaluation">
-        <template #body>
-          <Skeleton width="10rem" height="4rem"></Skeleton>
-        </template>
-      </Column>
-    </DataTable>
-  </div>
-  <template v-else>
-  <div class="flex flex-row justify-center mb-4">
+  <Dialog v-model:visible="tototo" position="top" maximizable modal header="&nbsp;" :style="{ width: '90%' }"
+    dismissableMask>
+    <template #header v-if="my.loadingAssignments">
+      <Skeleton shape="circle" size="4rem" class="mr-2 my-2"></Skeleton>
+      <Skeleton width="20rem" class="mb-2"></Skeleton>
+    </template>
+    <template #header v-else>
+      <span class="activity-title grow">
+        <img :src="my.assignments.icon" alt="icon" class="w-16 h-16 inline" />
+        {{ my.assignments.title }}</span>
+      <ToggleButton v-model="filters['hasTags'].value" v-tooltip.bottom="archMessage(filters['hasTags'].value)"
+        class="mr-2">
+        <div v-if="filters['hasTags'].value">
+          <font-awesome icon="archive" /> Quitter les archives
+        </div>
+        <div v-else>
+          <font-awesome icon="archive" /> Voir les archives
+        </div>
+      </ToggleButton>
 
-  </div>
-    <DataTable :value="richTab" tableStyle="min-width: 50rem" v-model:selection="selectedNid" v-model:filters="filters"
-      :globalFilterFields="['hasTags', 'fullname', 'classe']" selectionMode="multiple" @rowSelect="onRowSelect()"
-      @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()" paginator :rows="10"
-      :rowsPerPageOptions="[10, 20, 50]" sortField="fullname"  :sortOrder="1"
-      paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-      currentPageReportTemplate='{first} à {last} sur {totalRecords} &nbsp; &nbsp;' @rowSelectAll="onRowSelectAll()"
-      :rowStyle="rowStyle" ref="dt">
+    </template>
 
-      <Toolbar>
-        <template #start>
-          <span class="mr-2">{{ nbselected() }}</span>
-          <template v-if="filters['hasTags'].value">
-            <Button label="Désarchiver" @click="handleUnArchive()" icon="pi pi-check-square" class="mr-2"
-              severity="secondary" outlined :disabled="!hasSelected" />
+    <div v-if="my.loadingAssignments">
+      <Card class="flex-2 my-10" v-if="false">
+        <template #title>
+          <Skeleton shape="circle" size="4rem" class="mr-2 my-2"></Skeleton>
+          <Skeleton width="20rem" class="mb-2"></Skeleton>
+        </template>
+      </Card>
+      <DataTable :value="nbFake">
+        <Column field="code" header="Dernière modif.">
+          <template #body>
+            <Skeleton width="10rem"></Skeleton>
           </template>
-          <template v-else>
-            <Button v-tooltip.bottom="ttMessage(100)" @click="handleChangeWf(100)" label="En cours" icon="pi pi-pencil"
-              class="mr-2" severity="info" outlined :disabled="!hasSelected" />
-            <Button v-tooltip.bottom="ttMessage(200)" @click="handleChangeWf(200)" label="Rendu" icon="pi pi-envelope"
-              class="mr-2" severity="warn" outlined :disabled="!hasSelected" />
-            <Button v-tooltip.bottom="ttMessage(300)" @click="handleChangeWf(300)" label="Corrigé"
-              icon="pi pi-check-square" class="mr-2" severity="success" outlined :disabled="!hasSelected" />
-            <Button type="button" icon="pi pi-eye-slash" @click="toggle" severity="secondary" outlined
-              aria-haspopup="true" v-tooltip.top="{ value: 'Déplacer dans les archives', showDelay: 300, hideDelay: 100 }"
-              aria-controls="overlay_menu" />
-            <Menu ref="menu" id="overlay_menu" :model="itemsA" :popup="true" />
+        </Column>
+        <Column field="name" header="Élève">
+          <template #body>
+            <Skeleton width="10rem"></Skeleton>
           </template>
+        </Column>
+        <Column field="category" header="Classe">
+          <template #body>
+            <Skeleton width="7rem"></Skeleton>
+          </template>
+        </Column>
+        <Column field="quantity" header="État">
+          <template #body>
+            <Skeleton width="4rem"></Skeleton>
+          </template>
+        </Column>
+        <Column field="quantity" header="Appréciation">
+          <template #body>
+            <Skeleton width="10rem" height="4rem"></Skeleton>
+          </template>
+        </Column>
+        <Column field="quantity" header="Évaluation">
+          <template #body>
+            <Skeleton width="10rem" height="4rem"></Skeleton>
+          </template>
+        </Column>
+      </DataTable>
+    </div>
+    <template v-else>
+      <DataTable :value="richTab" tableStyle="min-width: 50rem" v-model:selection="selectedNid"
+        v-model:filters="filters" :globalFilterFields="['hasTags', 'fullname', 'classe', 'workflow']"
+        selectionMode="multiple" @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()"
+        @rowUnselectAll="onRowUnselectAll()" paginator :rows="40" :rowsPerPageOptions="[10, 40, 60]"
+        sortField="fullname" :sortOrder="1"
+        paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+        currentPageReportTemplate='{first} à {last} sur {totalRecords} &nbsp; &nbsp;' @rowSelectAll="onRowSelectAll()"
+        :rowStyle="rowStyle" ref="dt">
 
-          <IconField iconPosition="left" class="ml-10 mr-2">
-            <InputIcon>
-              <i class="pi pi-search" />
-            </InputIcon>
-            <InputText v-model="filters['fullname'].value" placeholder="Rechercher parmi les élèves" />
-          </IconField>
+        <Toolbar>
+          <template #start>
+            <template v-if="hasSelected">
+              <span class="mr-2">{{ nbselected() }}</span>
+              <template v-if="filters['hasTags'].value">
+                <Button label="Désarchiver" @click="handleUnArchive()" icon="pi pi-check-square" class="mr-2"
+                  severity="secondary" outlined :disabled="!hasSelected" />
+              </template>
+              <template v-else>
+                <Button v-tooltip.bottom="ttMessage(100)" @click="handleChangeWf(100)" icon="pi pi-pencil" class="mr-2"
+                  severity="info" outlined :disabled="!hasSelected" />
+                <Button v-tooltip.bottom="ttMessage(200)" @click="handleChangeWf(200)" icon="pi pi-envelope"
+                  class="mr-2" severity="warn" outlined :disabled="!hasSelected" />
+                <Button v-tooltip.bottom="ttMessage(300)" @click="handleChangeWf(300)" icon="pi pi-check-square"
+                  class="mr-2" severity="success" outlined :disabled="!hasSelected" />
+                <Button type="button" severity="secondary" outlined aria-haspopup="true"
+                  v-tooltip.top="{ value: 'Déplacer dans les archives', showDelay: 300, hideDelay: 100 }"
+                  aria-controls="overlay_menu" @click="handleArchive" class="mr-10">
+                  <font-awesome icon="archive" />
+                </Button>
+                <!-- <Menu ref="menu" id="overlay_menu" :model="itemsA" :popup="true" /> -->
+              </template>
+            </template>
 
-          <Select v-model="filters['classe'].value" :options="classList" optionLabel="classe" optionValue="classe"
-            class="mr-2" placeholder="Filtrer par classe" style="min-width: 12rem" :showClear="true" />
+            <IconField iconPosition="left" class="mr-2">
+              <InputIcon>
+                <i class="pi pi-search" />
+              </InputIcon>
+              <InputText v-model="filters['fullname'].value" placeholder="Rechercher parmi les élèves" />
+            </IconField>
 
-          <!-- <Button v-tooltip.bottom="'Télécharger'" icon="pi pi-download" class="mr-2" severity="secondary" /> -->
+            <Select v-model="filters['classe'].value" :options="classList" optionLabel="classe" optionValue="classe"
+              class="mr-2" placeholder="Filtrer par classe" style="min-width: 12rem" :showClear="true" />
+            <Select v-model="filters['workflow'].value" :options="etats" optionLabel="label" optionValue="value"
+              class="mr-2" placeholder="Filtrer par état" style="min-width: 12rem" :showClear="true" />
 
-        </template>
-        <template #end>
-          <Button v-if="my.mathalea" v-tooltip="'Détails des résultats'" @click="mathalea = true" text>
-            <img :src="my.assignments.icon" class="h-10" />
-          </Button>
-          <Button icon="pi pi-download" class="mr-2" severity="secondary" disabled
-            v-tooltip.bottom="'Télécharger les copies\n(bientôt disponible)'" />
-          <Button icon="pi pi-file-excel" @click="exportCSV($event)" outlined class="mr-2"
-            v-tooltip.bottom="'Télécharger au format csv'" />
-          <ToggleButton v-model="filters['hasTags'].value" v-tooltip.bottom="archMessage(filters['hasTags'].value)"
-            onLabel="Quitter les archives" offLabel="Archives" offIcon="pi pi-eye-slash" class="mr-2" />
-        </template>
+            <!-- <Button v-tooltip.bottom="'Télécharger'" icon="pi pi-download" class="mr-2" severity="secondary" /> -->
 
-      </Toolbar>
-
-      <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-
-      <Column field="changed" header="Dernière modif." style="width:10rem" sortable>
-        <template #body="p">
-          <MyTableChanged :data="p.data" />
-        </template>
-      </Column>
-
-      <Column field="fullname" header="Élève" style="width:16rem" sortable>
-        <template #body="p">
-          <AssignmentStudent :data="p.data" :nid="nid" />
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <InputText v-model="filterModel.value" type="text" style="width: 100%" @input="filterCallback()"
-            placeholder="Rechercher" />
-        </template>
-      </Column>
-
-      <Column field="classe" header="Classe" style="max-width:10rem" sortable>
-        <template #filter="{ filterModel, filterCallback }">
-          <!-- <template v-if="classList.length > 0"> -->
-          <!--   <Select v-model="filterModel.value" @change="filterCallback()" :options="classList" optionLabel="classe" -->
-          <!--     placeholder="Rechercher"> -->
-          <!--   </Select> -->
-          <!-- </template> -->
-          <!-- <template v-else> -->
-          <InputText v-model="filterModel.value" type="text" style="width: 100%" @input="filterCallback()"
-            placeholder="Rechercher" />
-          <!-- </template> -->
-        </template>
-
-      </Column>
-
-      <Column field="workflow" header="Mode" style="max-width:10rem" sortable>
-        <template #body="p">
-          <span class="parent mr-1">
-            <Button text v-tooltip.top="{ value: wficon(p.data.workflow).tt, showDelay: 300, hideDelay: 0 }">
-              <i v-if="!my.assignments.is_in_time_range" class="pi pi-lock pr-1"
-                style="color: red; font-size: 1.1rem;"></i>
-              <i :class="wficon(p.data.workflow).icon"
-                :style="{ color: wficon(p.data.workflow).color, 'font-size': '1.1rem' }"></i>
+          </template>
+          <template #end>
+            <Button v-if="my.mathalea" v-tooltip="'Détails des résultats'" @click="mathalea = true" text>
+              <img :src="my.assignments.icon" class="h-10" />
             </Button>
-            <div class="surprise">
-              <Button :icon="nextOne(p.data.workflow).icon" :style="{ color: nextOne(p.data.workflow).color }"
-                v-tooltip.top="{ value: nextOne(p.data.workflow).tt, showDelay: 300, hideDelay: 0 }" severity="danger"
-                @click="chWf(p.data.sa_nid, nextOne(p.data.workflow).wf)" outlined rounded />
-              <Button :icon="nextTwo(p.data.workflow).icon" :style="{ color: nextTwo(p.data.workflow).color }"
-                v-tooltip.top="{ value: nextTwo(p.data.workflow).tt, showDelay: 300, hideDelay: 0 }" severity="danger"
-                @click="chWf(p.data.sa_nid, nextTwo(p.data.workflow).wf)" outlined rounded />
-            </div>
-          </span>
-        </template>
-      </Column>
+            <Button icon="pi pi-download" class="mr-2" severity="secondary" disabled
+              v-tooltip.bottom="'Télécharger les copies\n(bientôt disponible)'" />
+            <Button icon="pi pi-file-excel" @click="exportCSV($event)" outlined class="mr-2"
+              v-tooltip.bottom="'Télécharger au format csv'" />
+          </template>
 
-      <Column field="appreciation" header="Appréciation">
-        <template #body="p">
-          <AssignmentAppreciation :key="p.data.sa_nid" :data="p.data" />
-        </template>
-      </Column>
+        </Toolbar>
 
-      <Column field="evaluation" header="Évaluation">
-        <template #body="p">
-          <AssignmentEvaluation :key="p.data.sa_nid" :data="p.data" />
-        </template>
-      </Column>
+        <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
 
-    </DataTable>
-    <AssignmentMathaleaList v-model="mathalea" v-if="my.mathalea" />
-  </template>
-</Dialog>
+        <Column field="changed" header="Dernière modif." style="width:10rem" sortable>
+          <template #body="p">
+            <MyTableChanged :data="p.data" />
+          </template>
+        </Column>
+
+        <Column field="fullname" header="Élève" style="width:16rem" sortable>
+          <template #body="p">
+            <AssignmentStudent :data="p.data" :nid="nid" />
+          </template>
+          <template #filter="{ filterModel, filterCallback }">
+            <InputText v-model="filterModel.value" type="text" style="width: 100%" @input="filterCallback()"
+              placeholder="Rechercher" />
+          </template>
+        </Column>
+
+        <Column field="classe" header="Classe" style="max-width:10rem" sortable>
+          <template #filter="{ filterModel, filterCallback }">
+            <!-- <template v-if="classList.length > 0"> -->
+            <!--   <Select v-model="filterModel.value" @change="filterCallback()" :options="classList" optionLabel="classe" -->
+            <!--     placeholder="Rechercher"> -->
+            <!--   </Select> -->
+            <!-- </template> -->
+            <!-- <template v-else> -->
+            <InputText v-model="filterModel.value" type="text" style="width: 100%" @input="filterCallback()"
+              placeholder="Rechercher" />
+            <!-- </template> -->
+          </template>
+
+        </Column>
+
+        <Column field="workflow" header="État" style="max-width:10rem" sortable>
+          <template #body="p">
+            <span class="parent mr-1">
+              <Button text v-tooltip.top="{ value: wficon(p.data.workflow).tt, showDelay: 300, hideDelay: 0 }">
+                <i v-if="!my.assignments.is_in_time_range" class="pi pi-lock pr-1"
+                  style="color: red; font-size: 1.1rem;"></i>
+                <i :class="wficon(p.data.workflow).icon"
+                  :style="{ color: wficon(p.data.workflow).color, 'font-size': '1.1rem' }"></i>
+              </Button>
+              <div class="surprise">
+                <Button :icon="nextOne(p.data.workflow).icon" :style="{ color: nextOne(p.data.workflow).color }"
+                  v-tooltip.top="{ value: nextOne(p.data.workflow).tt, showDelay: 300, hideDelay: 0 }" severity="danger"
+                  @click.stop="chWf(p.data.sa_nid, nextOne(p.data.workflow).wf)" outlined rounded />
+                <Button :icon="nextTwo(p.data.workflow).icon" :style="{ color: nextTwo(p.data.workflow).color }"
+                  v-tooltip.top="{ value: nextTwo(p.data.workflow).tt, showDelay: 300, hideDelay: 0 }" severity="danger"
+                  @click.stop="chWf(p.data.sa_nid, nextTwo(p.data.workflow).wf)" outlined rounded />
+              </div>
+            </span>
+          </template>
+        </Column>
+
+        <Column field="appreciation" header="Appréciation">
+          <template #body="p">
+            <AssignmentAppreciation :key="p.data.sa_nid" :data="p.data" />
+          </template>
+        </Column>
+
+        <Column field="evaluation" header="Évaluation">
+          <template #body="p">
+            <AssignmentEvaluation :key="p.data.sa_nid" :data="p.data" />
+          </template>
+        </Column>
+
+      </DataTable>
+      <AssignmentMathaleaList v-model="mathalea" v-if="my.mathalea" />
+    </template>
+  </Dialog>
 </template>
 
 <style scoped>
@@ -426,3 +439,4 @@ const mathalea = ref(false)
   display: inline;
 }
 </style>
+
