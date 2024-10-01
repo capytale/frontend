@@ -225,8 +225,12 @@ const displayFull = async (nid) => {
             <template #body="p">
               <template v-if="abstractObj(p.data.abstract).truncated">
                 <Inplace @open="displayFull(p.data.nid)">
-                  <template #display>{{ abstractObj(p.data.abstract).abstract }}
-                    <span class="text-blue-500 font-bold">[...]</span>
+                  <template #display>
+                    <div
+                      v-tooltip.top="{ value: 'Cliquer pour afficher l\'intégralité de la description', showDelay: 100, hideDelay: 300 }">
+                      {{ abstractObj(p.data.abstract).abstract }}
+                      <span class="text-blue-500 font-bold">[...]</span>
+                    </div>
                   </template>
                   <template #content>
                     <p class="m-0">
