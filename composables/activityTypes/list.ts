@@ -14,13 +14,13 @@ const unknownType: ActivityType = {
   id: 'unknown',
   name: 'Inconnu',
   icon: { path: unknownLogo, style: {} },
-  plainIcon: { path: unknownLogo, style: {} },
   helpUrl: '',
   summary: '',
   description: '',
   bundle: '',
   available: false,
   detailedEvaluation: false,
+  exportable: false,
 };
 
 const status = shallowRef<'loading' | 'loaded' | 'error'>('loading');
