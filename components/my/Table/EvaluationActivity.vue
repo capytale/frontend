@@ -44,18 +44,10 @@ const testAssignments = () => {
     <div v-if="props.data.extra">
       <Button @click="testAssignments" severity="primary"
         v-tooltip.top="{ value: details, showDelay: 400, hideDelay: 0 }" text> {{ nbViews }} </Button>
-      <Dialog v-model:visible="visible" position="top" maximizable modal header="&nbsp;" :style="{ width: '90%' }"
-        dismissableMask>
-        <template #header v-if="my.loadingAssignments">
-          <Skeleton shape="circle" size="4rem" class="mr-2 my-2"></Skeleton>
-          <Skeleton width="20rem" class="mb-2"></Skeleton>
-        </template>
-        <template #header v-else>
-          <img :src="my.assignments.icon" alt="icon" class="w-16 h-16" />
-          <span class="activity-title">{{ my.assignments.title }}</span>
-        </template>
-        <AssignmentStudentList :nid="props.data.nid" :viewsVisible="parseInt(data.viewsDetails.visible)" />
-      </Dialog>
+
+        <div v-if="visible">
+        <AssignmentStudentList v-model="visible" :nid="props.data.nid" :viewsVisible="parseInt(data.viewsDetails.visible)" />
+        </div>
     </div>
     <div v-else>
       <!-- Chargement des détails -->
