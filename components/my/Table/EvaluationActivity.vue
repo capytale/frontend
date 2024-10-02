@@ -12,17 +12,18 @@ const pluriel = (s) => {
   return s > 1 ? 's' : ''
 }
 
+const arch = computed(() => (arch.value = props.data.viewsTotal - props.data.viewsDetails.visible))
+
 const details = computed(() => {
   if (!props.isTeacher) return null
 
-  const arch = props.data.viewsTotal - props.data.viewsDetails.visible
   const a = props.data.viewsDetails["100"]
   const b = props.data.viewsDetails["200"]
   const c = props.data.viewsDetails["300"]
   return a + " copie" + pluriel(a) + " en cours\n"
     + b + " copie" + pluriel(b) + " rendue" + pluriel(b) + "\n"
     + c + " copie" + pluriel(c) + " corrigée" + pluriel(c) + "\n\n"
-    + arch + " archivée" + pluriel(arch)
+    + arch.value + " archivée" + pluriel(arch.value)
 })
 const nbViews = computed(() => {
   if (!props.isTeacher) return null
@@ -43,11 +44,14 @@ const testAssignments = () => {
     <!-- vue teacher -->
     <div v-if="props.data.extra">
       <Button @click="testAssignments" severity="primary"
-        v-tooltip.top="{ value: details, showDelay: 400, hideDelay: 0 }" text> {{ nbViews }} </Button>
+        v-tooltip.top="{ value: details, showDelay: 400, hideDelay: 0 }" text
+        :disabled="data.viewsDetails.visible == 0 && arch == 0"> {{ nbViews }}
+      </Button>
 
-        <div v-if="visible">
-        <AssignmentStudentList v-model="visible" :nid="props.data.nid" :viewsVisible="parseInt(data.viewsDetails.visible)" />
-        </div>
+      <div v-if="visible">
+        <AssignmentStudentList v-model="visible" :nid="props.data.nid"
+          :viewsVisible="parseInt(data.viewsDetails.visible)" />
+      </div>
     </div>
     <div v-else>
       <!-- Chargement des détails -->
