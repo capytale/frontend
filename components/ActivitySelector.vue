@@ -101,6 +101,12 @@ const openedGroup = ref<{ title: string; activities: string[] }>();
 const dispGroups = computed(() => {
   return search.value.length == 0 && catChoice.value == 'all';
 });
+
+
+const showFlash = ref(false);
+const goFlash = (url) => {
+  window.location.href = url;
+};
 </script>
 
 <template>
@@ -115,6 +121,7 @@ const dispGroups = computed(() => {
           <InputText v-model="search" class="rech" placeholder="Rechercher parmi les types d'activité" size="100" />
         </IconField>
         <div class="flex flex-row gap-4">
+          <Button label=" ⚡ Flash" @click="showFlash = true" severity="primary" />
           <!--Select v-model="catChoice" :options="cats" option-label="label" option-value="value" :ui="inputstyle" /-->
           <!--Select v-model="matChoice" :options="mats" option-label="label" option-value="value" :ui="inputstyle" /-->
         </div>
@@ -161,6 +168,58 @@ const dispGroups = computed(() => {
         .sort((a, b) => b.score - a.score)" :key="index" :type="item.item.type"></ActiCard>
     </div>
   </template>
+
+  <Dialog v-model:visible="showFlash" modal class="md:w-5/6 xl:w-10/12" dismissableMask>
+    <template #header>
+      <div class="text-lg font-bold">
+        ⚡ Activités Flash
+      </div>
+    </template>
+    <Message class="mb-4"> Les applications listées ici ne sont pas complètement intégrées dans Capytale : elles ne
+      permettent pas de sauvegarder, de partager ou de diffuser des contenus à la classe.<br />
+      Elles sont proposées en test pour vous permettre de nous faire des retours sur leur intérêt pédagogique.
+    </Message>
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+      <Card class="cursor-pointer hover:shadow-md" :dt="{ 'body.padding': '1.5rem 1.5rem 0.5rem 1.5rem' }"
+        :pt="{ body: 'pc-body' }">
+        <template #content>
+          <div class="flex flex-row gap-4 justify-start items-center w-full" @click="console.log('LINUX')">
+            <img
+              src="https://capytale2.ac-paris.fr/web/modules/custom/capytale_activity/src/Activity/logo/logo_linux.svg"
+              class="w-24" />
+            <div>
+              <div class="text-lg font-semibold"> Console Linux </div>
+              <div class="text-base">GNU/Linux : découvrir la ligne de commande.</div>
+            </div>
+          </div>
+        </template>
+        <template #footer>
+          <div class="flex flex-row justify-end gap-2 mt-2">
+            <Button label="Démarrer" @click="goFlash('/p/v86')" severity="primary" />
+          </div>
+        </template>
+      </Card>
+      <Card class="cursor-pointer hover:shadow-md" :dt="{ 'body.padding': '1.5rem 1.5rem 0.5rem 1.5rem' }"
+        :pt="{ body: 'pc-body' }">
+        <template #content>
+          <div class="flex flex-row gap-4 justify-start items-center w-full" @click="console.log('LINUX')">
+            <img
+              src="https://capytale2.ac-paris.fr/web/modules/custom/capytale_activity/src/Activity/logo/logo_pixeludo.svg"
+              class="w-24" />
+            <div>
+              <div class="text-lg font-semibold"> Pixeludo </div>
+              <div class="text-base">Jouer avec les déplacements relatifs </div>
+            </div>
+          </div>
+        </template>
+        <template #footer>
+          <div class="flex flex-row justify-end gap-2 mt-2">
+            <Button label="Démarrer" @click="goFlash('/p/pixeludo')" severity="primary" />
+          </div>
+        </template>
+      </Card>
+    </div>
+  </Dialog>
 </template>
 
 <style>
