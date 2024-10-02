@@ -1,7 +1,7 @@
 type Report = {
     type?: string | null,
     title?: string | null,
-    status?: 'pending' | 'started' | 'done' | 'error' | 'unsupported';
+    status?: 'pending' | 'started' | 'done' | 'error' | 'unsupported' | 'forbidden';
 }
 type ReportHandler = (i: number, r?: Report) => void;
 
@@ -53,4 +53,4 @@ function jobControl(watcher: JobWatcher): [JobControl, () => void] {
     ];
 }
 
-export { jobControl, type JobControl, type JobWatcher, type Report };
+export { jobControl, type JobControl, type JobWatcher, type Report, type ReportHandler };

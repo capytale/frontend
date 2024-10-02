@@ -24,20 +24,19 @@ const title = computed(() => {
 
 <template>
     <div>
-        <div class="flex justify-between items-center">
-            <h2 class="text-xl font-bold">Création de l'archive zip</h2>
-        </div>
         <div class="mt-4">
             <p>{{ title }}</p>
-            <ul class="h-24 overflow-scroll mb-2">
+            <ul class="h-20 overflow-scroll my-4 p-2 border-2">
                 <li v-for="item in dialogRef?.data.notExportable" :key="item.nid">
                     {{ item.title }} ({{ atl.getTypeInfo(item.type).name }})
                 </li>
             </ul>
         </div>
         <div>Voulez-vous exporter les autres éléments sélectionnés ?</div>
-        <Button label="Continuer" icon="pi pi-check" @click="() => dialogRef?.close(true)" />
-        <Button label="Annuler" icon="pi pi-check" @click="() => dialogRef?.close(false)" />
+        <div class="flex justify-end gap-2 mt-4">
+            <Button label="Annuler" @click="() => dialogRef?.close(false)" severity="secondary" />
+            <Button label="Continuer" @click="() => dialogRef?.close(true)" />
+        </div>
     </div>
 
 </template>

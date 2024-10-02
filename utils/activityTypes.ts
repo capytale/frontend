@@ -32,4 +32,4 @@ function loadActivityIndex(forceReload: boolean = false): Promise<ActivityIndex>
     return Promise.resolve(index);
 }
 
-export { loadActivityIndex };
+export { loadActivityIndex, type ActivityIndex };

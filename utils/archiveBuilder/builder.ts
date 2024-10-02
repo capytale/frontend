@@ -1,6 +1,9 @@
 // Ce module contient la logique qui permet de générer l'export des activités sous forme de fichier zip.
 
 import "@capytale/activity.js/activity/activityBunch/all";
+import "@capytale/activity.js/activity/activityBunch/uni";
+
+
 import archiverApi from "@capytale/activity.js/activity/archiver/all";
 
 import loadBunch from "@capytale/activity.js/backend/capytale/activityBunch";
@@ -8,11 +11,12 @@ import evalApi from "@capytale/activity.js/backend/capytale/evaluation";
 import type ActivityBunch from "@capytale/activity.js/activity/activityBunch/base";
 import type { ArchiveFileData } from "@capytale/activity.js/activity/archiver/base";
 
-import iter from "@capytale/activity.js/activity/iterator";
+import iterator from "@capytale/activity.js/util/iterator";
+
 import * as zip from "@zip.js/zip.js";
 
-import { loadActivityIndex } from "~/utils/activityTypes";
-import { type JobControl } from "./jobControl";
+import { loadActivityIndex, type ActivityIndex } from "~/utils/activityTypes";
+import { type JobControl, type ReportHandler, type Report } from "./jobControl";
 
 function checkFolder(usedFolder: string[], n: string, ext?: string): string {
     let to = ext ? n + '.' + ext : n;
@@ -35,12 +39,12 @@ function getReader(data: ArchiveFileData): zip.Reader<any> {
     return new zip.TextReader('Erreur');
 }
 
-type Report = {
+type ReportFile = {
     push(...items: string[]): void;
     toString(): string;
 }
 
-function createReport(): Report {
+function createReportFile(): ReportFile {
     const lines: string[] = [];
     return {
         push(...items: string[]) {
@@ -52,6 +56,47 @@ function createReport(): Report {
     };
 }
 
+type ItemReport = {
+    readonly title?: Report['title'];
+    readonly type?: Report['type'];
+    readonly status?: Report['status'];
+    add(r: Report): void;
+    toString(index: ActivityIndex | null): string;
+}
+
+function createItemReport(): ItemReport {
+    let title: Report['title'];
+    let type: Report['type'];
+    let status: Report['status'] = 'pending';
+    return {
+        get title() { return title },
+        get type() { return type },
+        get status() { return status },
+        add(r) {
+            if (r.title != null) title = r.title;
+            if (r.type != null) type = r.type;
+            if (r.status != null) status = r.status;
+        },
+        toString(index) {
+            let _title = title ?? '…';
+            let _type: string = '';
+            if (type != null) {
+                if ((index != null) && (index[type] != null)) _type = index[type].name;
+                else _type = type;
+                _type = ` (${_type})`;
+            }
+            let _status = '';
+            if (status === 'error') _status = ' (erreur)';
+            else if (status === 'unsupported') _status = ' (non supporté)';
+            else if (status === 'forbidden') _status = ' (accès interdit)';
+            return `${_title}${_type}${_status}`;
+        }
+    };
+}
+
+export type ActivityInfo = { nid: number, type?: string, title?: string }
+
+
 /**
  * Crée un fichier zip contenant les activités sélectionnées.
  * 
@@ -59,32 +104,35 @@ function createReport(): Report {
  * @param cb une fonction de callback qui reçoit un message à chaque étape
  * @returns 
  */
-async function zipActivities(ids: number[], control: JobControl): Promise<Blob | null> {
+async function zipActivities(ids: (number | ActivityInfo)[], control: JobControl): Promise<Blob | null> {
     const typesMap = await loadActivityIndex();
     if (!Array.isArray(ids) || ids.length === 0) return null;
+    ids = ids.map((id) => typeof id === 'object' ? id : { nid: id });
     const len = ids.length;
     control.setCount(len);
     const zipWriter = new zip.ZipWriter(new zip.BlobWriter('application/zip'));
     const usedFolder: string[] = [];
     const d = new Date();
-    let report = createReport();
-    report.push('Archive créée le ' + d.toLocaleString(), '');
+    let reportFile = createReportFile();
+    reportFile.push('Archive créée le ' + d.toLocaleString(), '');
     if (control.aborted) return null;
     let i = 0;
-    for (const ap of iter(loadBunch, ids)) {
+    for (const [id, ap] of iterator(ids as ActivityInfo[], (id) => loadBunch(id.nid))) {
         if (control.aborted) return null;
-        control.report(i)
-        let itemDescription: string = `${i + 1}/${len}`;
+        const itemReport = createItemReport();
+        function report(r?: Report) {
+            control.report(i, r);
+            if (r != null) itemReport.add(r);
+        }
+        report(id);
         try {
-            control.report(i, { status: 'started' });
+            report({ status: 'started' });
             const a = await ap;
-            control.report(i, { title: a.title.value, type: a.activityType });
-            const friendlyType = typesMap[a.activityType] == null ? a.activityType : typesMap[a.activityType].name;
-            itemDescription += ` (${friendlyType}) ${a.title.value}`;
+            report({ title: a.title.value, type: a.activityType });
+            itemReport.add({ title: a.title.value, type: a.activityType });
             const archiver = archiverApi.getArchiverFor(a);
             if (archiver == null) {
-                itemDescription += ' (Non archivable)';
-                control.report(i, { status: 'unsupported' });
+                report({ status: 'unsupported' });
             } else {
                 const folder = checkFolder(usedFolder, archiver.mainFileName)
                 for (const f of archiver.files) {
@@ -93,17 +141,18 @@ async function zipActivities(ids: number[], control: JobControl): Promise<Blob |
                     const data = await f.dataPromise;
                     await zipWriter.add(path, getReader(data));
                 }
-                control.report(i, { status: 'done' });
+                report({ status: 'done' });
             }
-        } catch (error) {
-            itemDescription += ' (Erreur)';
-            control.report(i, { status: 'error' });
+        } catch (e) {
+            if (((e as Error).name === 'api_error')
+                || ((e as Error).name === 'status_error')) report({ status: 'forbidden' });
+            else report({ status: 'error' });
         }
-        report.push(itemDescription);
+        reportFile.push(`${i + 1}/${len} ` + itemReport.toString(typesMap));
         ++i;
     }
     const fileName = checkFolder(usedFolder, 'rapport', 'txt');
-    await zipWriter.add(fileName, new zip.TextReader(report.toString()));
+    await zipWriter.add(fileName, new zip.TextReader(reportFile.toString()));
     return zipWriter.close() as Promise<Blob>;
 }
 
@@ -113,6 +162,17 @@ const wfMap: { [key: string]: string } = {
     'corrected': 'corrigé',
     'unknown': '???',
 };
+
+export type AssignmentInfo = { nid: number, firstname?: string, lastname?: string }
+
+type AssignmentReport = {
+    firstname?: string;
+    lastname?: string;
+    classe?: string;
+    wf?: keyof typeof wfMap;
+    grade?: string | null;
+    status?: Report['status'];
+}
 
 /**
  * Crée un fichier zip contenant les copies des élèves pour une activité donnée.
@@ -137,8 +197,8 @@ async function zipAssigments(actId: number, ids: number[], control: JobControl):
     const isFolderModel = archiver.assignmentModel == 'folder';
     const zipWriter = new zip.ZipWriter(new zip.BlobWriter('application/zip'));
     const d = new Date();
-    const report = createReport();
-    report.push('Archive créée le ' + d.toLocaleString(), '');
+    const reportFile = createReportFile();
+    reportFile.push('Archive créée le ' + d.toLocaleString(), '');
     const usedFolder: string[] = [];
     if (!isFolderModel) {
         try {
@@ -154,10 +214,10 @@ async function zipAssigments(actId: number, ids: number[], control: JobControl):
             throw new Error("Erreur lors de l'ajout des fichiers de l'activité");
         }
     }
-    const saList = await evalApi.listSa(actId).then((list) => {
+    const saList = await evalApi.listSa(actId, 'all').then((list) => {
         const saList: { [uid: number]: (typeof list)[number] } = {};
         for (const sa of list) {
-            saList[sa.uid] = sa;
+            saList[sa.nid] = sa;
         }
         return saList;
     });
@@ -165,26 +225,35 @@ async function zipAssigments(actId: number, ids: number[], control: JobControl):
     if (control.aborted) return null;
     control.report(0, { status: 'done' });
     let i = 1;
-    for (const ap of iter(loadBunch, ids)) {
+    for (const [id, ap] of iterator(ids, (id) => loadBunch(id))) {
         if (control.aborted) return null;
-        control.report(i);
-        let itemDescription: string = `${i}/${len}`;
+        const itemReport = createItemReport();
+        function report(ar?: AssignmentReport) {
+            const r: Report = { type: null };
+            if (ar == null) {
+                control.report(i, r);
+            } else {
+                if (ar.firstname != null) {
+                    let state = wfMap[ar.wf ?? 'unknown'];
+                    if (ar.wf === 'corrected' && ar.grade != null) {
+                        const doc = dParser.parseFromString(ar.grade, 'text/html');
+                        state += ' (' + doc.documentElement.textContent + ')';
+                    }
+                    r.title = `${ar.firstname} ${ar.lastname} (${ar.classe}) : ${state}`;
+                }
+                if (ar.status != null) r.status = ar.status;
+                control.report(i, r);
+                itemReport.add(r);
+            }
+        }
+        report();
         try {
             control.report(i, { status: 'started' });
             const a = await ap;
             const student = saList[a.mainNode.nid];
-            const wf = a.assignmentNode?.workflow ?? 'unknown';
-            let state = wfMap[wf];
-            if (wf === 'corrected') {
-                let grade = a.assignmentNode?.grading?.value;
-                if (grade != null) {
-                    const doc = dParser.parseFromString(grade, 'text/html');
-                    state += ' (' + doc.documentElement.textContent + ')';
-                }
-            }
-            const studentDesc = `${student.lastname} ${student.firstname} (${student.classe})`
-            control.report(i, { title: studentDesc, type: a.activityType });
-            itemDescription += ` : ${studentDesc} : ${state}`;
+            const wf = a.assignmentNode?.workflow;
+            const grade = a.assignmentNode?.grading?.value;
+            report({ firstname: student.firstname, lastname: student.lastname, classe: student.classe, wf, grade });
             const archiver = archiverApi.getArchiverFor(a);
             if (archiver != null) {
                 let fileName = student.lastname + "_" + student.firstname;
@@ -205,16 +274,15 @@ async function zipAssigments(actId: number, ids: number[], control: JobControl):
                     await zipWriter.add(fileName, getReader(data));
                 }
             }
-            control.report(i, { status: 'done' });
+            report({ status: 'done' });
         } catch (error) {
-            itemDescription += ' (Erreur)';
-            control.report(i, { status: 'error' });
+            report({ status: 'error' });
         }
-        report.push(itemDescription);
+        reportFile.push(`${i}/${len} ` + itemReport.toString(null));
         ++i;
     }
     const fileName = checkFolder(usedFolder, 'rapport', 'txt');
-    await zipWriter.add(fileName, new zip.TextReader(report.toString()));
+    await zipWriter.add(fileName, new zip.TextReader(reportFile.toString()));
     return zipWriter.close() as Promise<Blob>;
 };
 

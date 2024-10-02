@@ -23,10 +23,11 @@ function getSeverity(): string {
 }
 
 function getMessage(): string {
-    if ((p.jobItem.title == null) || (p.jobItem.type == null)) return '…';
-    let label = `${p.jobItem.title}`;
+    if (p.jobItem.title == null) return '…';
+    let label = p.jobItem.title;
     if (p.jobItem.status === 'error') label += ' (erreur)';
-    if (p.jobItem.status === 'unsupported') label += ' (non supporté)';
+    else if (p.jobItem.status === 'unsupported') label += ' (non supporté)';
+    else if (p.jobItem.status === 'forbidden') label += ' (accès interdit)';
     return label;
 }
 </script>

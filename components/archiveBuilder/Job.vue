@@ -55,6 +55,7 @@ watchEffect(() => {
 
 function getCancelLabel(): string {
     if (p.jobStore.aborted) return 'Annulation';
+    if (p.jobStore.finished) return 'Terminé';
     return 'Annuler';
 }
 
@@ -70,7 +71,11 @@ function getCancelLabel(): string {
                 </div>
             </template>
         </div>
-        <Button @click="p.jobStore.cancelJob" :disabled="p.jobStore.aborted">{{ getCancelLabel() }}</Button>
+        <div class="flex justify-end gap-2 mt-4">
+            <Button @click="p.jobStore.cancelJob" :disabled="p.jobStore.aborted || p.jobStore.finished" severity="danger">{{
+                getCancelLabel()
+                }}</Button>
+        </div>
     </div>
 </template>
 

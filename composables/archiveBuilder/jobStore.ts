@@ -1,8 +1,8 @@
 import { shallowRef, readonly, reactive, computed } from 'vue';
 import { jobControl, type JobControl, type Report } from "~/utils/archiveBuilder/jobControl";
 
-const doneDelay = 1000;
-const errorDelay = 3000;
+const doneDelay = 5000;
+const errorDelay = 10000;
 function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -13,6 +13,7 @@ type JobStore = ReturnType<(typeof readonly<{
     log: ReturnType<typeof reactive<Report[]>>;
     error: ReturnType<typeof shallowRef<any>>;
     aborted: ReturnType<typeof shallowRef<boolean>>;
+    finished: ReturnType<typeof shallowRef<boolean>>;
     cancelJob: () => void;
 }>)>
 
@@ -30,12 +31,14 @@ async function createJob(execute: (control: JobControl) => Promise<void>) {
     const log = reactive<Report[]>([]);
     const error = shallowRef<any>();
     const aborted = shallowRef<boolean>(false);
+    const finished = shallowRef<boolean>(false);
 
     const [control, abort] = jobControl({
         setCount(count: number) {
             total.value = count;
         },
         report(i, r?) {
+            console.log('report', i, r);
             current.value = i;
             if (r == null) r = {};
             if (r.status == null) r.status = 'pending';
@@ -61,13 +64,15 @@ async function createJob(execute: (control: JobControl) => Promise<void>) {
         log,
         error,
         aborted,
+        finished,
         cancelJob,
     });
 
     jobStoreList[jobId] = jobStore;
     try {
         await execute(control);
-        await sleep(doneDelay);
+        finished.value = true;
+        if (!aborted.value) await sleep(doneDelay);
         delete jobStoreList[jobId];
     }
     catch (e) {
