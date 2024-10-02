@@ -102,11 +102,16 @@ const commonItems = ref([
         acceptClass: 'p-button-danger',
         accept: async () => {
           try {
-            await activites.deleteActivity([props.data.nid])
-            toast.add({ severity: 'success', summary: 'Suppression effectuée', life: 2000 });
+            const notDeleted = await activites.deleteActivity([props.data.nid])
+            console.log("notDeleted: ", notDeleted)
+            if (notDeleted.length == 0) {
+              toast.add({ severity: 'success', summary: 'Suppression effectuée', life: 2000 });
+            } else {
+              toast.add({ severity: 'warn', summary: 'Échec de la suppression', detail: `Vous n'avez pas le droit de supprimer cet élément` });
+            }
           }
           catch (e) {
-            toast.add({ severity: 'error', summary: 'Échec de la suppression : ', detail: `nid = ${props.data.nid} - ${e}` });
+            toast.add({ severity: 'error', summary: 'Échec de la suppression', detail: `nid = ${selectedNid.value} - ${e}` });
           }
         },
       });

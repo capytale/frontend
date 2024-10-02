@@ -54,18 +54,19 @@ export const useActivitiesStore = defineStore('activities', {
       }
     },
 
-    async deleteActivity(nids: Array) {
-      for (let nid of nids) {
-        // console.log("deleteActivity", nid)
-        this.activities.data = this.activities.data.filter((item) => item.nid !== nid);
-      }
-      await httpClient.postJsonAsync(
+    async deleteActivity(nids: Array<number[]>) {
+      const { deleted, notDeleted } = await httpClient.postGetJsonAsync<{ deleted: number[], notDeleted: number[] }>(
         myActivitiesApiEp,
         { action: "delete", nids }
       );
+      for (let nid of deleted) {
+        // console.log("deleteActivity", nid)
+        this.activities.data = this.activities.data.filter((item) => item.nid !== nid);
+      }
+      return notDeleted
     },
 
-    async cloneActivity(nid: number|string): Promise<{ nid: number | string, title: string }> {
+    async cloneActivity(nid: number | string): Promise<{ nid: number | string, title: string }> {
       let r
       try {
         r = await httpClient.postGetJsonAsync<any>(
