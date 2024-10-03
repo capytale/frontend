@@ -180,7 +180,7 @@ const goFlash = (url) => {
       Elles sont proposées en test pour vous permettre de nous faire des retours sur leur intérêt pédagogique.
     </Message>
     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-      <Card class="cursor-pointer hover:shadow-md" :dt="{ 'body.padding': '1.5rem 1.5rem 0.5rem 1.5rem' }"
+      <Card class="hover:shadow-md" :dt="{ 'body.padding': '1.5rem 1.5rem 0.5rem 1.5rem' }"
         :pt="{ body: 'pc-body' }">
         <template #content>
           <div class="flex flex-row gap-4 justify-start items-center w-full">
@@ -199,7 +199,7 @@ const goFlash = (url) => {
           </div>
         </template>
       </Card>
-      <Card class="cursor-pointer hover:shadow-md" :dt="{ 'body.padding': '1.5rem 1.5rem 0.5rem 1.5rem' }"
+      <Card class="hover:shadow-md" :dt="{ 'body.padding': '1.5rem 1.5rem 0.5rem 1.5rem' }"
         :pt="{ body: 'pc-body' }">
         <template #content>
           <div class="flex flex-row gap-4 justify-start items-center w-full">
