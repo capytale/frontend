@@ -1,5 +1,6 @@
 <script setup>
 import { FilterMatchMode } from '@primevue/core/api';
+import { useArchiveBuilder } from "~/composables/archiveBuilder/builder";
 
 const user = useUserStore()
 const activites = useActivitiesStore()
@@ -148,6 +149,18 @@ const handleMoveToFolderMultiple = async () => {
   await activites.moveActivities(selectedNid.value, folder)
 }
 
+const archiveBuilder = useArchiveBuilder();
+
+function handleDownload() {
+  let sel;
+  if (selectedNid.value.length > 0) {
+    sel = selectedNid.value;
+  } else {
+    sel = myactivities.value;
+  }
+  sel = sel.map((o) => ({ nid: o.nid, type: o.type, title: o.title }));
+  archiveBuilder.exportActivities(sel);
+}
 
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -170,8 +183,9 @@ const getTagName = (obj) => {
 }
 
 const corbeilleTid = () => {
-  if (!tags.tags.find(o => o.label === 'Corbeille')) return null
-  return tags.tags.find(o => o.label === 'Corbeille').id
+  const corbeilleTag = tags.tags.find(o => o.label === 'Corbeille')
+  if (!corbeilleTag) return null
+  return corbeilleTag.id
 }
 
 const myactivities = computed(() => {
@@ -180,10 +194,11 @@ const myactivities = computed(() => {
     return activitiesByTag[tid] || []
   } else { // no tag selected : show all activities except those in the trash
     if (!activites.activities.data) return []
+    const corbTid = corbeilleTid();
     return activites.activities.data.filter(o => {
       if (!o.tags) return true
       for (let tag of o.tags) {
-        if (tag === corbeilleTid()) return false
+        if (tag === corbTid) return false
       }
       return true
     })
@@ -265,8 +280,8 @@ const nbselected = () => {
                       </div>
                     </Popover>
                   </div>
-                  <Button v-tooltip.bottom="'Télécharger\n(bientôt disponible)'" icon="pi pi-download" class="mr-2"
-                    severity="secondary" disabled />
+                  <Button v-tooltip.bottom="'Télécharger'" icon="pi pi-download" class="mr-2" severity="secondary"
+                    @click="handleDownload" />
                   <!-- <Button v-tooltip.bottom="'CSV'" icon="pi pi-file-excel" class="mr-2" severity="secondary" /> -->
                 </template>
 

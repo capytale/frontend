@@ -4,6 +4,7 @@ const colorMode = useColorMode()
 const { path } = useRoute()
 const bgColor = computed(() => colorMode.value === 'light' ? 'background-color: var(--p-neutral-100)' : 'background-color: var(--p-gray-800)')
 
+
 user.getUser()
 
 useHead({
@@ -15,7 +16,9 @@ useHead({
 
 <template>
   <div class="scroller">
-    <ConfirmDialog></ConfirmDialog>
+    <ConfirmDialog />
+    <DynamicDialog />
+    <ArchiveBuilderJobsPanel />
     <Toast position="bottom-right" />
 
     <div class="appContainer" :style="bgColor">

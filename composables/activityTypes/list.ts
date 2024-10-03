@@ -1,6 +1,12 @@
-import { shallowRef, readonly, computed } from 'vue';
+import { shallowRef, readonly, computed, customRef } from 'vue';
 
-import typeApi, { type ActivityType } from '@capytale/activity.js/backend/capytale/activityType';
+import { type ActivityType } from '@capytale/activity.js/backend/capytale/activityType';
+
+import { loadActivityIndex } from '~/utils/activityTypes';
+
+type ActivityIndex = {
+  [t: string]: ActivityType;
+};
 
 const unknownLogo = '/web/modules/custom/capytale_activity/src/Activity/logo/logo_false.svg';
 
@@ -8,48 +14,50 @@ const unknownType: ActivityType = {
   id: 'unknown',
   name: 'Inconnu',
   icon: { path: unknownLogo, style: {} },
-  plainIcon: { path: unknownLogo, style: {} },
   helpUrl: '',
   summary: '',
   description: '',
   bundle: '',
   available: false,
   detailedEvaluation: false,
+  exportable: false,
 };
 
 const status = shallowRef<'loading' | 'loaded' | 'error'>('loading');
 
 const error = shallowRef<any>();
 
-const typeDico = shallowRef<{ [t: string]: ActivityType }>({});
-
 const list = shallowRef<string[]>([]);
+
+const index = shallowRef<ActivityIndex>({});
 
 let fetchPromise: Promise<void> | null = null;
 
-function reload(): void {
-  if (fetchPromise != null) return;
-  status.value = 'loading';
-  error.value = null;
-  fetchPromise = typeApi.getList()
-    .then((ta) => {
-      const dd: { [t: string]: ActivityType } = {};
-      const tl: string[] = [];
-      for (const t of ta) {
-        dd[t.id] = t;
-        tl.push(t.id);
-      }
-      typeDico.value = dd;
-      list.value = tl;
-      status.value = 'loaded';
-    })
-    .catch((e) => {
-      error.value = e;
-      status.value = 'error';
-    })
-    .finally(() => {
-      fetchPromise = null;
-    });
+/**
+ * Charge la liste des types d'activité.
+ * 
+ * @param forceReload force le rechargement de la liste des types d'activité même si elle est déjà chargée
+ */
+function load(forceReload: boolean = false): void {
+  if (forceReload || (status.value !== 'loaded')) {
+    if (fetchPromise != null) return;
+    status.value = 'loading';
+    error.value = null;
+    fetchPromise = loadActivityIndex(forceReload)
+      .then((ta) => {
+        const ll = Object.keys(ta);
+        list.value = ll;
+        index.value = ta;
+        status.value = 'loaded';
+      })
+      .catch((e) => {
+        error.value = e;
+        status.value = 'error';
+      })
+      .finally(() => {
+        fetchPromise = null;
+      });
+  }
 }
 
 /**
@@ -61,7 +69,7 @@ function reload(): void {
  * @returns une valeur réactive contenant les informations sur le type
  */
 function getTypeInfo(type: string): ActivityType {
-  if (typeExists(type)) return typeDico.value[type];
+  if (typeExists(type)) return index.value[type];
   else return unknownType;
 }
 
@@ -88,7 +96,7 @@ function getCreateUrl(type: string): string {
  * @returns valeur réactive indiquant si le type existe
  */
 function typeExists(type: string): boolean {
-  return !!typeDico.value[type];
+  return !!index.value[type];
 }
 
 /**
@@ -107,7 +115,7 @@ const availableTypes = computed(() => list.value.filter(t => getTypeInfo(t)?.ava
 
 function buildStore() {
   return readonly({
-    reload,
+    load,
     /**
      * Liste complète des types d'activité. Y compris les types non disponibles
      * pour l'utilisateur courant.
@@ -141,9 +149,15 @@ function buildStore() {
 type Store = ReturnType<typeof buildStore>;
 let store: Store | null = null;
 
-function useActivityTypesList(): Store {
-  if (status.value !== 'loaded') reload();
-  return store || (store = buildStore());
+/**
+ * Fournit un objet réactif contenant les informations sur les types d'activité.
+ * 
+ * @param lazy retarde le chargement depuis le backend
+ * @returns 
+ */
+function useActivityTypesList(lazy: boolean = false): Store {
+  if (!lazy) load();
+  return store ?? (store = buildStore());
 }
 
 export { useActivityTypesList };
