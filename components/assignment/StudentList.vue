@@ -221,8 +221,8 @@ const exportable = computed(() => {
 
 const exportBuilder = useArchiveBuilder();
 
-/** gère le téléchargement de toutes les copies */
-function handleDownloadAll() {
+/** gère le téléchargement des copies sélectionnées */
+function handleDownloadSel() {
   // Détermine les copies à exporter en fonction de la sélection ou du filtre 'hasTags' (vue des archives)
   if ((selectedNid.value) && (selectedNid.value.length > 0)) {
     const sel = selectedNid.value.map((o) => o.sa_nid);
@@ -230,8 +230,8 @@ function handleDownloadAll() {
   }
 }
 
-/** gère le téléchargement des copies sélectionnées */
-function handleDownloadSel() {
+/** gère le téléchargement de toutes les copies */
+function handleDownloadAll() {
   // Détermine les copies à exporter en fonction de la sélection ou du filtre 'hasTags' (vue des archives)
   let sel;
   if (filters.value['hasTags'].value) {
@@ -242,7 +242,6 @@ function handleDownloadSel() {
   sel = sel.map((o) => o.sa_nid);
   exportBuilder.exportAssignments({ nid: parseInt(props.nid), type: my.assignments.type }, sel);
 }
-
 </script>
 
 
@@ -341,7 +340,7 @@ function handleDownloadSel() {
                     <font-awesome icon="archive" />
                   </Button>
                   <Button v-if="exportable" icon="pi pi-download" severity="secondary" outlined
-                    @click="handleDownloadAll" v-tooltip.bottom="'Télécharger les copies sélectionnées'" />
+                    @click="handleDownloadSel" v-tooltip.bottom="'Télécharger les copies sélectionnées'" />
                 </div>
 
               </template>

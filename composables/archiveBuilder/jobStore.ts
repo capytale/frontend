@@ -38,7 +38,6 @@ async function createJob(execute: (control: JobControl) => Promise<void>) {
             total.value = count;
         },
         report(i, r?) {
-            console.log('report', i, r);
             current.value = i;
             if (r == null) r = {};
             if (r.status == null) r.status = 'pending';
