@@ -72,8 +72,9 @@ function getCancelLabel(): string {
             </template>
         </div>
         <div class="flex justify-end gap-2 mt-4">
-            <Button @click="p.jobStore.cancelJob" :disabled="p.jobStore.aborted || p.jobStore.finished" severity="danger">{{
-                getCancelLabel()
+            <Button @click="p.jobStore.cancelJob" :disabled="p.jobStore.aborted || p.jobStore.finished"
+                :severity="p.jobStore.finished ? 'primary' : 'danger'">{{
+                    getCancelLabel()
                 }}</Button>
         </div>
     </div>

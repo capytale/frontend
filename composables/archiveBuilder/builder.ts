@@ -81,7 +81,9 @@ function useArchiveBuilder() {
                 },
                 props: {
                     blockScroll: true,
-                    header: 'Création de l\'export zip'
+                    header: 'Création de l\'export zip',
+                    dismissableMask: true,
+                    modal: true,
 
                 },
                 onClose: (opt) => {

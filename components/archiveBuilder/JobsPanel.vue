@@ -22,4 +22,8 @@ const panelStore = usePanelStore();
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+div {
+    z-index: 3000;
+}
+</style>
