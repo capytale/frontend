@@ -8,7 +8,6 @@ const codeForm = async () => {
   if (/^[a-f0-9]{4}-[0-9]+$/i.test(value.value)) {
     try {
       const url = await httpClient.postGetJsonAsync("/web/c-hdls/api/code-form", { action: "codeForm", code: value.value })
-      console.log("url", url)
       invalid.value = false
       location.href = url
       return
@@ -42,8 +41,8 @@ const clear = () => {
         <label for="code" class="text-xs">Code (ex : a1bc-12345678)</label>
         <div class="flex flex-wrap align-items-center gap-2">
           <!-- <FloatLabel> -->
-            <!-- <label for="code">Code (ex : a1bc-12345678)</label> -->
-            <InputText id="code" v-model="value" :invalid="invalid" @keydown.enter="codeForm" autofocus />
+          <!-- <label for="code">Code (ex : a1bc-12345678)</label> -->
+          <InputText id="code" v-model="value" :invalid="invalid" @keydown.enter="codeForm" autofocus />
           <!-- </FloatLabel> -->
           <Button type="submit" label="Go !" @click="codeForm" />
         </div>

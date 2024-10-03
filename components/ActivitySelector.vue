@@ -183,7 +183,7 @@ const goFlash = (url) => {
       <Card class="cursor-pointer hover:shadow-md" :dt="{ 'body.padding': '1.5rem 1.5rem 0.5rem 1.5rem' }"
         :pt="{ body: 'pc-body' }">
         <template #content>
-          <div class="flex flex-row gap-4 justify-start items-center w-full" @click="console.log('LINUX')">
+          <div class="flex flex-row gap-4 justify-start items-center w-full">
             <img
               src="https://capytale2.ac-paris.fr/web/modules/custom/capytale_activity/src/Activity/logo/logo_linux.svg"
               class="w-24" />
@@ -202,7 +202,7 @@ const goFlash = (url) => {
       <Card class="cursor-pointer hover:shadow-md" :dt="{ 'body.padding': '1.5rem 1.5rem 0.5rem 1.5rem' }"
         :pt="{ body: 'pc-body' }">
         <template #content>
-          <div class="flex flex-row gap-4 justify-start items-center w-full" @click="console.log('LINUX')">
+          <div class="flex flex-row gap-4 justify-start items-center w-full">
             <img
               src="https://capytale2.ac-paris.fr/web/modules/custom/capytale_activity/src/Activity/logo/logo_pixeludo.svg"
               class="w-24" />
