@@ -7,6 +7,8 @@ const maxNbFake = 10;
 import { useToast } from "primevue/usetoast";
 import { FilterMatchMode } from '@primevue/core/api';
 import { useMyStore } from '@/stores/my'
+import { useArchiveBuilder } from "~/composables/archiveBuilder/builder";
+import { useActivityTypesList } from "~/composables/activityTypes/list";
 
 const toast = useToast();
 const my = useMyStore()
@@ -207,6 +209,40 @@ const archMessage = (a) => {
 }
 
 const mathalea = ref(false)
+
+const atl = useActivityTypesList()
+
+/** Indique si le type de cette activité peut-être exporté en zip */
+const exportable = computed(() => {
+  if (my.assignments.type == null) return false;
+  const typeInfo = atl.getTypeInfo(my.assignments.type)
+  return typeInfo.exportable
+})
+
+const exportBuilder = useArchiveBuilder();
+
+/** gère le téléchargement de toutes les copies */
+function handleDownloadAll() {
+  // Détermine les copies à exporter en fonction de la sélection ou du filtre 'hasTags' (vue des archives)
+  if ((selectedNid.value) && (selectedNid.value.length > 0)) {
+    const sel = selectedNid.value.map((o) => o.sa_nid);
+    exportBuilder.exportAssignments({ nid: parseInt(props.nid), type: my.assignments.type }, sel);
+  }
+}
+
+/** gère le téléchargement des copies sélectionnées */
+function handleDownloadSel() {
+  // Détermine les copies à exporter en fonction de la sélection ou du filtre 'hasTags' (vue des archives)
+  let sel;
+  if (filters.value['hasTags'].value) {
+    sel = richTab.value.filter((o) => o.hasTags);
+  } else {
+    sel = richTab.value.filter((o) => !o.hasTags);
+  }
+  sel = sel.map((o) => o.sa_nid);
+  exportBuilder.exportAssignments({ nid: parseInt(props.nid), type: my.assignments.type }, sel);
+}
+
 </script>
 
 
@@ -292,18 +328,22 @@ const mathalea = ref(false)
                   severity="secondary" outlined :disabled="!hasSelected" />
               </template>
               <template v-else>
-                <Button v-tooltip.bottom="ttMessage(100)" @click="handleChangeWf(100)" icon="pi pi-pencil" class="mr-2"
-                  severity="info" outlined :disabled="!hasSelected" />
-                <Button v-tooltip.bottom="ttMessage(200)" @click="handleChangeWf(200)" icon="pi pi-envelope"
-                  class="mr-2" severity="warn" outlined :disabled="!hasSelected" />
-                <Button v-tooltip.bottom="ttMessage(300)" @click="handleChangeWf(300)" icon="pi pi-check-square"
-                  class="mr-2" severity="success" outlined :disabled="!hasSelected" />
-                <Button type="button" severity="secondary" outlined aria-haspopup="true"
-                  v-tooltip.top="{ value: 'Déplacer dans les archives', showDelay: 300, hideDelay: 100 }"
-                  aria-controls="overlay_menu" @click="handleArchive" class="mr-10">
-                  <font-awesome icon="archive" />
-                </Button>
-                <!-- <Menu ref="menu" id="overlay_menu" :model="itemsA" :popup="true" /> -->
+                <div class="mr-6 flex flex-wrap gap-1.5">
+                  <Button v-tooltip.bottom="ttMessage(100)" @click="handleChangeWf(100)" icon="pi pi-pencil"
+                    severity="info" outlined :disabled="!hasSelected" />
+                  <Button v-tooltip.bottom="ttMessage(200)" @click="handleChangeWf(200)" icon="pi pi-envelope"
+                    severity="warn" outlined :disabled="!hasSelected" />
+                  <Button v-tooltip.bottom="ttMessage(300)" @click="handleChangeWf(300)" icon="pi pi-check-square"
+                    severity="success" outlined :disabled="!hasSelected" />
+                  <Button type="button" severity="secondary" outlined aria-haspopup="true"
+                    v-tooltip.top="{ value: 'Déplacer dans les archives', showDelay: 300, hideDelay: 100 }"
+                    aria-controls="overlay_menu" @click="handleArchive">
+                    <font-awesome icon="archive" />
+                  </Button>
+                  <Button v-if="exportable" icon="pi pi-download" severity="secondary" outlined
+                    @click="handleDownloadAll" v-tooltip.bottom="'Télécharger les copies sélectionnées'" />
+                </div>
+
               </template>
             </template>
 
@@ -326,8 +366,9 @@ const mathalea = ref(false)
             <Button v-if="my.mathalea" v-tooltip="'Détails des résultats'" @click="mathalea = true" text>
               <img :src="my.assignments.icon" class="h-10" />
             </Button>
-            <Button icon="pi pi-download" class="mr-2" severity="secondary" disabled
-              v-tooltip.bottom="'Télécharger les copies\n(bientôt disponible)'" />
+            <Button icon="pi pi-download" class="mr-2" severity="secondary" @click="handleDownloadAll"
+              v-tooltip.bottom="exportable ? 'Télécharger toutes les copies' : 'Cette activité n\'est pas encore exportable'"
+              :disabled="!exportable" outlined />
             <Button icon="pi pi-file-excel" @click="exportCSV($event)" outlined class="mr-2"
               v-tooltip.bottom="'Télécharger au format csv'" />
           </template>
@@ -439,4 +480,3 @@ const mathalea = ref(false)
   display: inline;
 }
 </style>
-
