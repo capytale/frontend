@@ -18,26 +18,37 @@ const filters = ref({
 });
 
 const editingRows = ref([]);
-const onRowEditSave = (event) => {
+const onRowEditSave = async (event) => {
   let { newData, index } = event;
   let old = props.usersList[index]
   let uid = old.uid
 
-  if (passwd.value != "") {
-    console.log("passwd: ", passwd.value)
-    sesameApi.updateUser({ uid, password: passwd.value })
-    passwd.value = ""
-  }
+  try {
 
+    props.usersList[index] = newData;
 
-  const fields = ['lastname', 'firstname', 'classe']
-  for (const field of fields) {
-    if (old[field] != newData[field]) {
-      console.log(`updateUser({ ${uid}, [${field}]: ${newData[field]} })`)
-      sesameApi.updateUser({ uid, [field]: newData[field] })
+    const data = { uid, }
+    if (pwd.value != "") {
+      data['pwd'] = pwd.value
+      pwd.value = ""
+    }
+    const fields = ['lastname', 'firstname', 'classe']
+    for (const field of fields) {
+      if (old[field] != newData[field]) {
+        data[field] = newData[field]
+      }
+    }
+    // console.log("onRowEditSave", data)
+    await sesameApi.updateUser(data)
+  } catch (e) {
+    console.log("onRowEditSave", e.payload)
+    props.usersList[index] = old
+    if (e.payload && e.payload.code == 3) {
+      toast.add({ severity: 'error', summary: 'Échec', detail: "Le mot de passe doit contenir au moins 3 types de caractères parmi les types de caractères suivants : lettres minuscules, lettres majuscules, chiffres, caractères spéciaux. La longueur du mot de passe doit être d'au moins 12 caractères." });
+    } else {
+      toast.add({ severity: 'error', summary: 'Échec', detail: `uid = ${uid} - ${e}` });
     }
   }
-  props.usersList[index] = newData;
 };
 
 const selectedUsers = ref([]);
@@ -68,21 +79,7 @@ const handleClasseEdit = () => {
   toggleClasseEdit()
 }
 
-const passwdEditDialog = ref(false);
-const togglePasswdEdit = () => {
-  passwdEditDialog.value = !passwdEditDialog.value
-};
-const passwd = ref("")
-const handlePasswdEdit = () => {
-  const uids = [...selectedUsers.value.map((o) => o.uid)]
-  try {
-    sesameApi.updateMultiUsers({ uids, password: passwd.value })
-  } catch (e) {
-    toast.add({ severity: 'error', summary: 'Échec', detail: `nid = ${selectedNid.value} - ${e}` });
-  }
-  passwd.value = ""
-  togglePasswdEdit()
-}
+const pwd = ref("")
 
 </script>
 
@@ -119,8 +116,8 @@ const handlePasswdEdit = () => {
               <span class="mr-2">{{ nbselected() }}</span>
               <Button @click="toggleClasseEdit" label="Modifier la classe" icon="pi pi-pencil" class="mr-2"
                 severity="primary" outlined v-tooltip.bottom="'Modifier tous les éléments sélectionnés'" />
-              <Button @click="togglePasswdEdit" label="Modifier le mot de passe" icon="pi pi-pencil" class="mr-2"
-                severity="primary" outlined v-tooltip.bottom="'Modifier tous les éléments sélectionnés'" />
+              <!-- <Button @click="togglepwdEdit" label="Modifier le mot de passe" icon="pi pi-pencil" class="mr-2" -->
+              <!--   severity="primary" outlined v-tooltip.bottom="'Modifier tous les éléments sélectionnés'" /> -->
             </div>
           </template>
           <template #end>
@@ -174,7 +171,7 @@ const handlePasswdEdit = () => {
           {{ p.data.has_mail ? '🚫' : '••••••' }}
         </template>
         <template #editor="{ data, field }">
-          <Password v-model="passwd" fluid :disabled="data[field]" />
+          <Password v-model="pwd" fluid :disabled="data[field]" />
         </template>
       </Column>
       <Column field="validity.grace" sortable header="Expiration">
@@ -197,20 +194,6 @@ const handlePasswdEdit = () => {
         <div class="flex flex-row gap-2 my-4">
           <Button label="Valider" @click="handleClasseEdit" />
           <Button type="button" label="Annuler" severity="secondary" @click="toggleClasseEdit"></Button>
-        </div>
-      </template>
-    </Card>
-  </Dialog>
-  <Dialog v-model:visible="passwdEditDialog" :style="{ width: '750px' }" header="Modifier" :modal="true">
-    <Card class="my-4">
-      <template #content>
-        <div class="flex flex-col gap-2">
-          <label for="passwd">Mote de pass</label>
-          <InputText id="passwd" v-model="passwd" />
-        </div>
-        <div class="flex flex-row gap-2 my-4">
-          <Button label="Valider" @click="handlePasswdEdit" />
-          <Button type="button" label="Annuler" severity="secondary" @click="togglePasswdEdit"></Button>
         </div>
       </template>
     </Card>
