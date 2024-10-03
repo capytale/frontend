@@ -14,10 +14,10 @@ const backToLegacy = () => {
 }
 
 const checked = computed({
-  get () {
+  get() {
     return colorMode.value === 'dark'
   },
-  set () {
+  set() {
     colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
   }
 })
@@ -35,9 +35,13 @@ const checked = computed({
       </div>
 
       <div class="activityMenu grow justify-end order-3">
-        <Button type="button" label="Interface classique" icon="pi pi-chevron-left" @click="backToLegacy" severity="info"
-          text aria-haspopup="true" aria-controls="overlay_menu" class="mr-4" />
+        <Button type="button" label="Interface classique" icon="pi pi-chevron-left" @click="backToLegacy"
+          severity="info" text aria-haspopup="true" aria-controls="overlay_menu" class="mr-4" />
 
+        <NuxtLink to="/sesame"
+          v-if="user.user.data && user.user.data.provider == 'mail' && user.user.data.profil == 'teacher'" class="mr-4">
+          Sesame
+        </NuxtLink>
         <i :class="checked ? 'pi pi-sun' : 'pi pi-sun text-yellow-400'"></i>
         <ToggleSwitch v-model="checked" @change="checked = !checked" style="transform: scale(0.7)" class="-mx-1"
           v-tooltip.top="{ value: 'Mode clair/sombre', showDelay: 300, hideDelay: 100 }"
