@@ -18,7 +18,7 @@ const label = computed(() => labelGetter(props.data))
 const items = computed(() => itemsGetter(props.data))
 const wfStatus = computed(() => wfStatusGetter(props.data))
 
-let url 
+let url
 const itemsGetter = ((obj) => {
   url = window.location.origin + `/web/c/${obj.code}`
   return [
@@ -49,8 +49,8 @@ const itemsGetter = ((obj) => {
 })
 
 const labelGetter = ((obj) => {
-  const b = obj.tr_beg
-  const e = obj.tr_end
+  const b = obj.tr_beg + "Z"
+  const e = obj.tr_end + "Z"
   const strPeriode = `Libre pour les élèves du ${formatDateTime(b)} au ${formatDateTime(e)}`
   const strC = " et en lecture seule en dehors"
   const strL = " et non accessible en dehors"
@@ -196,13 +196,13 @@ const wfStatusGetter = ((obj) => {
     <template v-else>
       <div class="flex flex-row gap-2 items-center">
         <div v-if="props.status_clonable">
-            <i class="pi pi-lock" style="font-size: 1.3rem; color: red"></i>
+          <i class="pi pi-lock" style="font-size: 1.3rem; color: red"></i>
         </div>
         <div v-else>
           <i :class="wfStatus.icon + ' ml-2'" :style="'font-size: 1.3rem; color: ' + wfStatus.color"
             v-tooltip.top="{ value: wfStatus.label, showDelay: 400, hideDelay: 0 }"></i>
           <span class="whitespace-nowrap ml-2">{{ props.data.whoami == 'as' ? 'Associé par ' : 'Apprenant de ' }}{{
-            props.data.boss ? props.data.boss : 'inconnu'}}</span>
+            props.data.boss ? props.data.boss : 'inconnu' }}</span>
         </div>
       </div>
     </template>

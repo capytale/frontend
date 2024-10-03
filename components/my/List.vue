@@ -101,11 +101,19 @@ const handleDelete = function () {
     acceptClass: 'p-button-danger',
     accept: async () => {
       try {
-        await activites.deleteActivity([...selectedNid.value.map((o) => o.nid)])
-        toast.add({ severity: 'success', summary: 'Suppression effectuée', life: 2000 });
+        const notDeleted = await activites.deleteActivity([...selectedNid.value.map((o) => o.nid)])
+        console.log("notDeleted: ", notDeleted)
+        if (notDeleted.length == 0) {
+          toast.add({ severity: 'success', summary: 'Suppression effectuée', life: 2000 });
+        } else {
+          if (selectedNid.value.length == 1) {
+            toast.add({ severity: 'warn', summary: 'Échec de la suppression', detail: `Vous n'avez pas le droit de supprimer cet élément` });
+          } else
+            toast.add({ severity: 'warn', summary: 'Échec de la suppression', detail: `Vous n'avez pas le droit de supprimer certains éléments` });
+        }
       }
       catch (e) {
-        toast.add({ severity: 'error', summary: 'Échec de la suppression : ', detail: `nid = ${selectedNid.value} - ${e}` });
+        toast.add({ severity: 'error', summary: 'Échec de la suppression', detail: `nid = ${selectedNid.value} - ${e}` });
       }
     },
   });
@@ -127,10 +135,10 @@ const handleBulkArchive = function () {
     accept: async () => {
       try {
         await activites.bulkArchive([...selectedNid.value.map((o) => o.nid)], corbeilleTid())
-        toast.add({ severity: 'success', summary: 'Suppression effectuée', life: 2000 });
+        toast.add({ severity: 'success', summary: 'Archivage effectué', life: 2000 });
       }
       catch (e) {
-        toast.add({ severity: 'error', summary: 'Échec de la suppression : ', detail: `nid = ${selectedNid.value} - ${e}` });
+        toast.add({ severity: 'error', summary: 'Échec de l\'archivage', detail: `nid = ${selectedNid.value} - ${e}` });
       }
     },
   });
@@ -259,15 +267,16 @@ const nbselected = () => {
                       @click="foldersToggle" />
                     <Popover ref="opFolders">
                       <div class="gap-3 w-25rem">
-                        <Tree id="folder" v-model:selectionKeys="selectedFolder" :value="tags.tags" selectionMode="single"
-                          class="w-full md:w-30rem scroll">
+                        <Tree id="folder" v-model:selectionKeys="selectedFolder" :value="tags.tags"
+                          selectionMode="single" class="w-full md:w-30rem scroll">
                           <template #default="slotProps">
-                            <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label
+                            <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{
+                              slotProps.node.label
                             }}
                           </template>
                         </Tree>
-                        <Button v-if="selectedFolder && Object.keys(selectedFolder).length" type="button" label="Déplacer"
-                          class="w-full" @click="handleMoveToFolderMultiple" />
+                        <Button v-if="selectedFolder && Object.keys(selectedFolder).length" type="button"
+                          label="Déplacer" class="w-full" @click="handleMoveToFolderMultiple" />
                       </div>
                     </Popover>
                   </div>
@@ -309,7 +318,7 @@ const nbselected = () => {
               </Toolbar>
             </template>
 
-            <Column selectionMode="multiple" ></Column>
+            <Column selectionMode="multiple"></Column>
 
             <Column :class="cols.type ? '' : 'hidden'" field="type" header="Type" sortable>
               <template #body="p">
@@ -349,7 +358,8 @@ const nbselected = () => {
               </template>
             </Column>
 
-            <Column v-if="isTeacher" :class="cols.bib ? '' : 'hidden'" field="bib" header="Bib." style="min-width: 5rem">
+            <Column v-if="isTeacher" :class="cols.bib ? '' : 'hidden'" field="bib" header="Bib."
+              style="min-width: 5rem">
               <template #body="p">
                 <MyTableBib :data="p.data" />
               </template>
@@ -379,6 +389,7 @@ const nbselected = () => {
 .titlecol {
   width: 20rem;
 }
+
 .mydataTable {
   background-color: var(--p-surface-700);
   color: var(--p-on-surface-700);
