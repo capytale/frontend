@@ -109,6 +109,18 @@ const nextSnap = () => {
           </template>
         </Card>
       </div>
+
+      <center class="mt-10 mb-10">
+        <video width="640" height="480"
+          poster="https://pia.ac-paris.fr/portail/upload/docs/video/mp4/2024-06/24_06_gipticmaths_2024-06-06_15-16-4_454.mp4.associated/th-854x480-24_06_gipticmaths_2024-06-06_15-16-4_454.mp4.jpg"
+          controls>
+          <source
+            src="https://pia.ac-paris.fr/portail/upload/docs/video/mp4/2024-06/24_06_gipticmaths_2024-06-06_15-16-4_454.mp4"
+            type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </center>
+
       <span @click="nextSnap" class="slidedown-icon bg-primary text-primary-contrast flex items-center justify-center">
         <i class="pi pi-arrow-circle-down" style="font-size: 1.5rem" />
       </span>
