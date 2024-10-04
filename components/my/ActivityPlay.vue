@@ -1,24 +1,45 @@
 <script setup>
 import httpClient from '@capytale/activity.js/backend/capytale/http'
+
+const defaultErrorMessage = "Ce code n'est pas valide."
+
 const value = ref(null);
 const invalid = ref(false)
-const message = ref("Ce code n'est pas valide.");
+const message = ref(defaultErrorMessage);
+
+let locked = false;
 
 const codeForm = async () => {
-  if (/^[a-f0-9]{4}-[0-9]+$/i.test(value.value)) {
+  let code = value.value;
+  if (code == null) return;
+  code = code.trim();
+  if (code.length === 0) return;
+  if (value.value !== code) {
+    value.value = code;
+  }
+  let alreadyUnlocked = false;
+  if (/^[a-f0-9]{4}-[0-9]+$/i.test(code)) {
+    if (locked) return;
+    locked = true;
     try {
-      const url = await httpClient.postGetJsonAsync("/web/c-hdls/api/code-form", { action: "codeForm", code: value.value })
+      const url = await httpClient.postGetJsonAsync("/web/c-hdls/api/code-form", { action: "codeForm", code })
       invalid.value = false
-      location.href = url
-      return
+      await nextTick()
+      window.location.assign(url)
     } catch (e) {
       console.error(e)
       message.value = e.message
       invalid.value = true
-    };
+      locked = false
+      alreadyUnlocked = true
+    } finally {
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      if (!alreadyUnlocked) locked = false
+    }
+  } else {
+    message.value = defaultErrorMessage
+    invalid.value = true
   }
-  invalid.value = true
-  return
 }
 
 const clear = () => {
