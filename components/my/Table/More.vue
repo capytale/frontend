@@ -2,6 +2,8 @@
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 
+import meApi from "@capytale/activity.js/backend/capytale/me";
+
 const activites = useActivitiesStore()
 // activites.getActivities()
 
@@ -40,7 +42,16 @@ const actItems = ref([
 const actMoodleItem = ref([
   {
     label: 'Copier l\'URL d\'intégration dans Moodle',
-    icon: 'pi pi-link'
+    icon: 'pi pi-link',
+    command: async () => {
+      const me = await meApi.getMeAsync()
+      let provider = '';
+      if ((me.provider !== 'mail') && (me.provider !== 'sesame')) {
+        provider = '/' + me.provider;
+      }
+      navigator.clipboard.writeText(`${window.location.origin}/web/c/${props.data.code}${provider}`);
+      toast.add({ severity: 'info', summary: 'URL copiée', life: 2000 });
+    }
   },
 ])
 
