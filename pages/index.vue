@@ -6,6 +6,7 @@ const cards = [
       "Soutenu par le ministère de l'éducation.<br/>Des partenariats avec des enseignants développeurs et l’Edtech.<br/>Hébergé sur sur une infrastructure académique et respectueux du RGPD.",
     // icon: "heroicons:user-group",
     icon: "pi pi-users",
+    img: "media/men.jpg"
   },
   {
     title: "Ressources éducatives libres",
@@ -13,6 +14,7 @@ const cards = [
       "Une bibliothèque collaborative offrant des milliers de ressources pédagogiques sous licence Creative Commons By-SA. Accès via tous les ENT de France.<br>Accès via tous les ENT de France pour des des centaines de milliers d'utilisateurs.",
     // icon: "i-heroicons-lock-open",
     icon: "pi pi-lock-open",
+    img: "media/library.png"
   },
   {
     title: "Environnement simple et homogène",
@@ -20,12 +22,14 @@ const cards = [
       "Tout pour les STIAM (Sciences, Technologie, Ingénierie, Arts et Mathématiques) pour les élèves du cycle 3 jusqu'aux CPGE.",
     // icon: "i-heroicons-academic-cap",
     icon: "pi pi-cog",
+    img: "media/students.png"
   },
   {
     title: "Fluidité pédagogique",
     description: "Conçu pour simplifier les échanges entre les enseignants et les élèves.<br/>Fonctionne simplement dans le navigateur de tout ordinateur, tablette ou téléphone.",
     // icon: "i-heroicons-arrows-right-left",
     icon: "pi pi-arrow-right-arrow-left",
+    img: "media/classroom.png"
   },
 ];
 
@@ -54,42 +58,8 @@ const nextSnap = () => {
 
 <template>
   <article>
-    <!-- <div class="bottomRight"> -->
-    <!--   <span @click="nextSnap" -->
-    <!--     class="slidedown-icon h-8 w-8 bg-primary text-primary-contrast rounded-full inline-flex items-center justify-center"> -->
-    <!--     <i :class="upDownIcon" /> -->
-    <!--   </span> -->
-    <!-- </div> -->
-
-    <!-- <section> -->
-    <!--   <div class="flex flex-row items-center justify-around"> -->
-    <!--     <img :src="'https://capytale2.ac-paris.fr/logo.svg'" class="w-40 mr-4 rounded-lg my-16" /> -->
-    <!--     <div> -->
-    <!--       <h1>Capytale</h1> -->
-    <!--       <h2> -->
-    <!--         Activités numériques et de programmation pour la classe -->
-    <!--       </h2> -->
-    <!--     </div> -->
-    <!--   </div> -->
-    <!--   <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 mb-32"> -->
-    <!--     <Card v-for="(c, index) of cards_OLD" key="index"> -->
-    <!--       <template #content> -->
-    <!--         <div class="flex flex-row align-center"> -->
-    <!--           <i :class="c.icon" class="mt-2 mr-2 text-gray-500"></i> -->
-    <!--           <div class="font-semibold">{{ c.title }}</div> -->
-    <!--         </div> -->
-    <!--         <div class="mt-2 text-gray-500" v-html="c.description"></div> -->
-    <!--       </template> -->
-    <!--     </Card> -->
-    <!--   </div> -->
-    <!--   <span @click="nextSnap" -->
-    <!--     class="slidedown-icon h-8 w-8 bg-primary text-primary-contrast rounded-full inline-flex items-center justify-center"> -->
-    <!--     <i :class="upDownIcon" /> -->
-    <!--   </span> -->
-    <!-- </section> -->
-
     <section>
-      <div class="flex flex-row items-center justify-around">
+      <div class="flex flex-row items-center justify-between">
         <img src="https://capytale2.ac-paris.fr/logo.svg" class="w-40 mr-4 rounded-lg my-8" />
         <div>
           <h1>Capytale</h1>
@@ -97,7 +67,34 @@ const nextSnap = () => {
             Activités numériques et de programmation pour la classe
           </h2>
         </div>
+        <div class="flex flex-row items-center justify-around gap-2">
+          <div class="myflex">
+            <NuxtLink href="/my">
+              <Message severity="secondary" icon="pi pi-folder-open" class="border">
+                Mes activités
+              </Message>
+            </NuxtLink>
+            <NuxtLink href="/bibliotheque">
+              <Message severity="secondary" icon="pi pi-book" class="border">
+                <span>Bibliothèque</span>
+              </Message>
+            </NuxtLink>
+          </div>
+          <div class="myflex">
+            <a href="https://groupes.renater.fr/sympa/subscribe/capytale" target="_blank">
+              <Message severity="secondary" icon="pi pi-envelope" class="border">
+                <span>Liste de discussion</span>
+              </Message>
+            </a>
+            <a href="https://capytale2.ac-paris.fr/wiki" target="_blank">
+              <Message severity="secondary" icon="pi pi-info-circle" class="border">
+                <span>Documentation</span>
+              </Message>
+            </a>
+          </div>
+        </div>
       </div>
+
       <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-8 mb-4">
         <Card v-for="(c, index) of cards" key="index">
           <template #content>
@@ -105,21 +102,31 @@ const nextSnap = () => {
               <i :class="c.icon" class="mt-2 mr-2 text-gray-500"></i>
               <div class="font-semibold">{{ c.title }}</div>
             </div>
-            <div class="mt-2 text-gray-500" v-html="c.description"></div>
+            <div class="flex flex-row">
+              <div class="mt-2 text-gray-500" v-html="c.description"></div>
+              <img :src="c.img" class="w-40 mr-4 rounded-lg" />
+            </div>
           </template>
         </Card>
       </div>
 
-      <center class="mt-10 mb-10">
-        <video width="640" height="480"
-          poster="https://pia.ac-paris.fr/portail/upload/docs/video/mp4/2024-06/24_06_gipticmaths_2024-06-06_15-16-4_454.mp4.associated/th-854x480-24_06_gipticmaths_2024-06-06_15-16-4_454.mp4.jpg"
-          controls>
-          <source
-            src="https://pia.ac-paris.fr/portail/upload/docs/video/mp4/2024-06/24_06_gipticmaths_2024-06-06_15-16-4_454.mp4"
-            type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      </center>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-8 mb-4">
+        <center class="mt-10 mb-10">
+          <video width="640" height="480" :poster="'media/posterVideoPres.png'" controls>
+            <source src="https://video.ac-paris.fr/mp4/2023-05/rev_-_capytale_-_marion_sarfati_hd.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </center>
+        <center class="mt-10 mb-10">
+          <video width="640" height="480" :poster="'media/posterVideoClasse.png'" controls>
+            <source
+              src="https://pia.ac-paris.fr/portail/upload/docs/video/mp4/2024-06/24_06_gipticmaths_2024-06-06_15-16-4_454.mp4"
+              type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </center>
+      </div>
 
       <span @click="nextSnap" class="slidedown-icon bg-primary text-primary-contrast flex items-center justify-center">
         <i class="pi pi-arrow-circle-down" style="font-size: 1.5rem" />
@@ -157,6 +164,16 @@ const nextSnap = () => {
 
 
 <style scoped>
+.border {
+  border: 1px solid var(--p-message-secondary-color);
+}
+
+.myflex {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}
+
 @keyframes slidedown-icon {
   0% {
     transform: translateY(0);
