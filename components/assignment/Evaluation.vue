@@ -39,7 +39,11 @@ const toggle = (event) => {
   </div>
   <Popover ref="op" v-if="my.mathalea">
     <DataTable :value="my.mathalea.evaluations.map((el, idx) => ({ ...el, score: st[idx].score }))">
-      <Column field="label" header="Exercice"></Column>
+      <Column field="label" header="Exercice">
+        <template #body="slotProps">
+          {{ slotProps.data.label }}: {{ slotProps.data.title }}
+        </template>
+      </Column>
       <Column field="score" header="Note">
         <template #body="slotProps">
           <Tag :style="getScoreStyle(slotProps.data.score, slotProps.data.scoreMax)" outlined>
