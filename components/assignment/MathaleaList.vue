@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model:visible="visible" modal dismissableMask maximizable>
+  <Dialog v-model:visible="visible" modal dismissableMask maximizable style="max-width: 90%">
     <template #header>
       <h2>Évaluations
         <Button icon="pi pi-external-link" label="CSV" @click="exportCSV" text />
@@ -55,5 +55,9 @@ const exportCSV = () => {
 <style scoped>
 .infott {
   cursor: help;
+}
+
+.limitSize {
+  max-width: 10%;
 }
 </style>
