@@ -1,6 +1,8 @@
 import { resolve } from 'path';
 import Lara from '@primevue/themes/lara';
 import { definePreset } from '@primevue/themes';
+//import 'dotenv/config';
+
 
 const capyPreset = definePreset(Lara, {
   primitive: {
@@ -35,7 +37,11 @@ const capyPreset = definePreset(Lara, {
   }
 });
 
-const baseUrl = '/~';
+let baseUrl = '/~';
+if (process.env.BASE_URL) {
+  baseUrl = process.env.BASE_URL;
+}
+
 
 export default defineNuxtConfig({
   ssr: false,

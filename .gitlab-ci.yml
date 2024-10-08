@@ -9,6 +9,7 @@ build:
     - when: always
   image: node:20
   script:
+    - eval echo \${${CI_COMMIT_BRANCH}_env} > .env
     - npm install
     - npm run generate
   artifacts:
