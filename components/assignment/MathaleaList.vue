@@ -13,7 +13,8 @@
       <Column field="evalAuto" header="Éval auto" bodyStyle="text-align: center;"></Column>
       <Column v-for="(e, idx) in evals" :key="e.label" :header="e.label" :field="idx.toString()">
         <template #body="slotProps">
-          <Tag :style="getScoreStyle(slotProps.data[idx], e.scoreMax)">
+          <Tag :style="getScoreStyle(slotProps.data[idx], e.scoreMax)"
+            v-tooltip.top="{ value: e.title, showDelay: 400, hideDelay: 0 }" class="infott">
             <span>{{ slotProps.data[idx] !== null ? slotProps.data[idx] : '-' }} / {{ e.scoreMax }}</span>
           </Tag>
         </template>
@@ -28,7 +29,7 @@ const my = useMyStore()
 const visible = defineModel<boolean>()
 
 const evals = my.mathalea.evaluations.map((e, i) => {
-  return { label: e.label, scoreMax: e.scoreMax }
+  return { label: e.label, scoreMax: e.scoreMax, title: e.label + ": " + e.title }
 })
 
 const data = my.mathalea.students.map((el, idx) => {
@@ -51,4 +52,8 @@ const exportCSV = () => {
 
 </script>
 
-<style></style>
+<style scoped>
+.infott {
+  cursor: help;
+}
+</style>
