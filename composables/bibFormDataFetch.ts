@@ -1,9 +1,9 @@
-import httpClient from '@capytale/activity.js/backend/capytale/http'
+import { loadBibMetaData } from '@/utils/bibMetaData'
 
 let bibIndexingElementsCache
 export function fetchBibIndexingElements() {
   return useAsyncData('idxKey', async () => {
-    bibIndexingElementsCache = await httpClient.getJsonAsync<any>("/web/c-hdls/api/my-bib-form-indexing-elements")
+    bibIndexingElementsCache = await loadBibMetaData()
     bibIndexingElementsCache.themes = unflatten(bibIndexingElementsCache.themes)
     return bibIndexingElementsCache
   },
