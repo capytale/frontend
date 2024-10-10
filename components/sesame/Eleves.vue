@@ -108,7 +108,9 @@ const pwd = ref("")
             style: state['d_editing'] && 'padding-top: 0.75rem; padding-bottom: 0.75rem'
           })
         }
-      }">
+      }" paginator :rows="40" :rowsPerPageOptions="[10, 40, 100]"
+      paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+      currentPageReportTemplate="{first} à {last} sur {totalRecords}">
       <template #header>
         <Toolbar>
           <template #start>
