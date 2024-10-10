@@ -1,4 +1,4 @@
-import { shallowRef, readonly, triggerRef, type ShallowRef } from 'vue';
+import { shallowRef, readonly, type ShallowRef } from 'vue';
 
 import httpClient from '@capytale/activity.js/backend/capytale/http';
 
@@ -14,20 +14,26 @@ export type BibActivityDetail = {
   nom: string | null;
   abstract: string | null;
   abstract_truncated: boolean;
-  abstractFullStatus?: 'requested' | 'present';
-  abstractFull?: string | null;
   nb_clone: number;
   enseignement: string[];
   niveau: string[];
 }
 
+export type BibActivityFullAbstract = {
+  status?: 'requested' | 'present' | 'error';
+  error?: any;
+  fullAbstract?: string;
+}
+
 const status = shallowRef<'loading' | 'loaded' | 'error'>('loading');
 const error = shallowRef<any>();
-const index: {
-  [nid: number]: ShallowRef<BibActivityDetail | null>;
-} = {};
-const nids = shallowRef<number[]>([]);
+const list = shallowRef<BibActivityDetail[]>([]);
 let fetchPromise: Promise<void> | null = null;
+
+/**
+ * Index des full abstracts chargés à la demande.
+ */
+const fullAbstracts: { [nid: number]: ShallowRef<BibActivityFullAbstract | undefined> } = {};
 
 /**
  * Charge les activités de la bibliothèque.
@@ -42,17 +48,22 @@ function load(forceReload: boolean = false): void {
     fetchPromise = httpClient.getJsonAsync<BibActivityDetail[]>(bibEp)
       .then((l) => {
         l ??= [];
-        const _nids: number[] = [];
-        for (const a of l) {
-          _nids.push(a.nid);
-          let sr = index[a.nid];
-          if (sr == null) {
-            sr = shallowRef(a);
-            index[a.nid] = sr;
+        for (let i = 0; i < l.length; ++i) {
+          const a = l[i];
+          if (a.abstract != null) {
+            if (a.abstract_truncated) {
+              // On tronque à partir du dernier espace
+              const i = a.abstract.lastIndexOf(' ');
+              if ((i > 0) && (a.abstract.length - i <= 60)) {
+                a.abstract = a.abstract.substring(0, i);
+              }
+              // On ajoute une entrée dans le dictionnaire des abstracts complets
+              // qui seront chargés à la demande
+              fullAbstracts[a.nid] = shallowRef();
+            }
           }
-          sr.value = a;
         }
-        nids.value = _nids;
+        list.value = l;
         status.value = 'loaded';
       })
       .catch((e) => {
@@ -65,46 +76,47 @@ function load(forceReload: boolean = false): void {
   }
 }
 
-function getDetails(nid: number) {
-  let sr = index[nid];
-  if (sr == null) {
-    sr = shallowRef(null);
-    index[nid] = sr;
-  }
-  return sr.value;
-}
-
 async function loadFullAbstract(nid: number): Promise<void> {
-  const sr = index[nid];
+  const sr = fullAbstracts[nid];
   if (sr == null) return;
-  if (sr.value == null) return;
-  if (sr.value.abstractFullStatus === 'requested') return;
-  if (sr.value.abstractFullStatus === 'present') return;
-  sr.value.abstractFullStatus = 'requested';
-  triggerRef(sr);
+  let fa = sr.value;
+  if (fa == null) {
+    fa = { status: undefined };
+  }
+  if (fa.status === 'requested') return;
+  if (fa.status === 'present') return;
+  sr.value = { status: 'requested' };
   try {
     const dt = await httpClient.getJsonAsync<{ abstract: string }>(fullAbstractEp + nid)
-    let fa = dt?.abstract ?? null;
-    sr.value.abstractFull = fa;
-    sr.value.abstractFullStatus = 'present';
-    triggerRef(sr);
+    let fa = dt?.abstract ?? '';
+    sr.value = { status: 'present', fullAbstract: fa };
   } catch (e) {
-    sr.value.abstractFullStatus = undefined;
-    triggerRef(sr);
-    throw e;
+    sr.value = { status: 'error', error: e };
   }
+}
+
+function getFullAbstract(nid: number): BibActivityFullAbstract {
+  let sr = fullAbstracts[nid];
+  if (sr == null) return { status: undefined };
+  let fa = sr.value;
+  if (fa == null) {
+    fa = { status: undefined };
+    sr.value = fa;
+  }
+  return fa;
 }
 
 function buildStore() {
   return readonly({
+    get list() { return list.value; },
     load,
-    nids,
-    getDetails,
+    getFullAbstract,
     loadFullAbstract,
     status,
     error,
-  });
-}
+  })
+};
+
 
 type Store = ReturnType<typeof buildStore>;
 let store: Store | null = null;
