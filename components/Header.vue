@@ -40,7 +40,7 @@ const checked = computed({
 
         <NuxtLink to="/sesame"
           v-if="user.user.data && user.user.data.provider == 'mail' && user.user.data.profil == 'teacher'" class="mr-4">
-          Sesame
+          Sésame
         </NuxtLink>
         <i :class="checked ? 'pi pi-sun' : 'pi pi-sun text-yellow-400'"></i>
         <ToggleSwitch v-model="checked" @change="checked = !checked" style="transform: scale(0.7)" class="-mx-1"

@@ -48,9 +48,26 @@ getDataFromApi();
 </script>
 
 <template>
-  <div class="prose mx-6 w-full mt-4">
+  <div class="mx-6 w-full mt-4">
 
-    <Tabs value="2">
+
+    <h1 class="mb-6">
+      Sésame : Capytale pour les établissements sans ENT public.
+    </h1>
+
+    <p>
+      Capytale offre à chaque enseignant la possibilité de créer un compte avec son adresse professionnelle : @ac-***.fr
+      ou @aefe.fr.
+    </p>
+    <p>
+      Lorsqu'il est connecté, l'enseignant peut générer puis distribuer à sa classe un code sésame à neuf caractères
+      pour
+      que les élèves puissent à leur tour créer un compte Capytale.
+    </p>
+    <p>
+      Pour plus d'informations, consultez la FAQ
+    </p>
+    <Tabs value="2" class="mt-6">
       <TabList>
         <Tab value="1">Mes codes</Tab>
         <Tab value="2">Mes élèves</Tab>
@@ -68,6 +85,12 @@ getDataFromApi();
         <TabPanel value="3">
           <div class="faq">
             <h2>FAQ</h2>
+
+
+            <video width="640" height="480" :poster="'media/posterVideoSesame.png'" controls class="my-6">
+              <source src="https://capytale2.ac-paris.fr/f/sesame-ui/sesame.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
             <ul>
               <li>
                 <span class="question">Comment les élèves vont-ils se connecter ?</span>
