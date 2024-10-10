@@ -100,8 +100,8 @@ const pwd = ref("")
 
     <DataTable :value="props.usersList" v-model:selection="selectedUsers" v-model:filters="filters" sortField="classe"
       :sortOrder="-1" filterDisplay="menu" :globalFilterFields="['lastname', 'firstname', 'classe']"
-      tableStyle="min-width: 50rem" stateStorage="local" stateKey="dt-state-demo-session"
-      v-model:editingRows="editingRows" editMode="row" dataKey="uid" @row-edit-save="onRowEditSave" :pt="{
+      tableStyle="min-width: 50rem" v-model:editingRows="editingRows" editMode="row" dataKey="uid"
+      @row-edit-save="onRowEditSave" :pt="{
         table: { style: 'min-width: 50rem' },
         column: {
           bodycell: ({ state }) => ({
@@ -131,7 +131,7 @@ const pwd = ref("")
         </Toolbar>
       </template>
       <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-      <Column field="lastname" sortable header="Nom">
+      <Column field="lastname" sortable header="Nom" :showFilterMatchModes="false">
         <template #editor="{ data, field }">
           <InputText v-model="data[field]" fluid />
         </template>
@@ -140,7 +140,7 @@ const pwd = ref("")
             class="smallit" />
         </template>
       </Column>
-      <Column field="firstname" sortable header="Prénom">
+      <Column field="firstname" sortable header="Prénom" :showFilterMatchModes="false">
         <template #editor="{ data, field }">
           <InputText v-model="data[field]" fluid />
         </template>
@@ -149,7 +149,7 @@ const pwd = ref("")
             class="smallit" />
         </template>
       </Column>
-      <Column field="classe" sortable header="Classe">
+      <Column field="classe" sortable header="Classe" :showFilterMatchModes="false">
         <template #editor="{ data, field }">
           <InputText v-model="data[field]" fluid />
         </template>
