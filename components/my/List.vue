@@ -166,6 +166,7 @@ const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   title: { value: null, matchMode: FilterMatchMode.CONTAINS },
   type: { value: null, matchMode: FilterMatchMode.IN },
+  whoami: { value: null, matchMode: FilterMatchMode.EQUALS },
 });
 
 const activeTag = useActiveTagStore()
@@ -209,6 +210,19 @@ const nbselected = () => {
   return selectedNid.value.length + " éléments sélectionnés "
 }
 
+const iAm = [
+  { label: 'Créateur', code: 'cr', img: '/web/modules/custom/capytale_ui/assets/owner-color.svg' },
+  { label: 'Apprenant', code: 'ap', img: '/web/modules/custom/capytale_ui/assets/student-color.svg' },
+  { label: 'Associé', code: 'as', img: '/web/modules/custom/capytale_ui/assets/associate-color.svg' },
+]
+
+const getIAmLabel = (code) => {
+  return iAm.find(o => o.code == code).label
+}
+const getIAmImg = (code) => {
+  return iAm.find(o => o.code == code).img
+}
+
 // TODO : ajouter skeletons dans le cas où activites.activities.pending
 </script>
 
@@ -234,7 +248,7 @@ const nbselected = () => {
             paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
             currentPageReportTemplate='{first} à {last} sur {totalRecords} &nbsp; &nbsp;' @rowSelect="onRowSelect()"
             @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()" @rowSelectAll="onRowSelectAll()"
-            :globalFilterFields="['title', 'type']" class="mydatatable">
+            :globalFilterFields="['title', 'type', 'whoami']" class="mydatatable">
 
 
             <template #header>
@@ -296,6 +310,7 @@ const nbselected = () => {
                   </template>
 
                   <div class="flex gap-2 justify-content-end">
+
                     <TypeFilterSelect v-model="filters['type'].value" :activities="myactivities" />
 
                     <IconField iconPosition="left">
@@ -304,6 +319,29 @@ const nbselected = () => {
                       </InputIcon>
                       <InputText v-model="filters['title'].value" placeholder="Rechercher dans le titre" />
                     </IconField>
+
+                    <Select v-model="filters['whoami'].value" :options="iAm" optionLabel="label" optionValue="code"
+                      placeholder="Je suis" showClear checkmark :highlightOnSelect="false" class="w-full jesuis">
+                      <template #value="slotProps">
+                        <div v-if="slotProps.value" class="flex items-center">
+                          <img :src="getIAmImg(slotProps.value)" class="mr-2" style="width: 18px" />
+                          <div class="mr-4">{{ getIAmLabel(slotProps.value) }}</div>
+                        </div>
+                        <span v-else>
+                          {{ slotProps.placeholder }}
+                        </span>
+                      </template>
+                      <template #option="slotProps">
+                        <div class="flex items-center">
+                          <img :src="slotProps.option.img" class="mr-2" style="width: 18px" />
+                          <div>{{ slotProps.option.label }}</div>
+                        </div>
+                      </template>
+                      <template #header>
+                        <div class="font-medium p-3">Choisir un rôle</div>
+                      </template>
+                    </Select>
+
                     <Button label="Colonnes" icon="pi pi-arrow-down" outlined @click="colsChoiceToggle" v-if="false" />
                     <Popover ref="colsChoice" v-if="false">
                       <div v-for="(v, k) in cols" :key="k" class="m-2">
@@ -333,7 +371,7 @@ const nbselected = () => {
               </template>
             </Column>
 
-            <Column v-if="isTeacher" :class="cols.evaluation ? '' : 'hidden'" field="evaluation" header="Évaluation"
+            <Column v-if="isTeacher" :class="cols.evaluation ? '' : 'hidden'" field="whoami" header="Évaluation"
               style="max-width: 12rem">
               <template #body="p">
                 <MyTableEvaluation :data="p.data" :isTeacher="isTeacher" />
@@ -393,5 +431,9 @@ const nbselected = () => {
 .mydataTable {
   background-color: var(--p-surface-700);
   color: var(--p-on-surface-700);
+}
+
+.jesuis li {
+  padding-left: 0px;
 }
 </style>
