@@ -19,13 +19,12 @@ const filters = ref({
 
 const editingRows = ref([]);
 const onRowEditSave = async (event) => {
-  let { newData, index } = event;
-  let old = props.usersList[index]
-  let uid = old.uid
+  let { data: old, newData } = event;
+  let uid = newData.uid
+
+  console.log("newdata", old, newData)
 
   try {
-
-    props.usersList[index] = newData;
 
     const data = { uid, }
     if (pwd.value != "") {
@@ -36,9 +35,10 @@ const onRowEditSave = async (event) => {
     for (const field of fields) {
       if (old[field] != newData[field]) {
         data[field] = newData[field]
+        old[field] = newData[field]
       }
     }
-    // console.log("onRowEditSave", data)
+    console.log("onRowEditSave", data)
     await sesameApi.updateUser(data)
   } catch (e) {
     console.log("onRowEditSave", e.payload)
@@ -108,7 +108,7 @@ const pwd = ref("")
             style: state['d_editing'] && 'padding-top: 0.75rem; padding-bottom: 0.75rem'
           })
         }
-      }" paginator :rows="40" :rowsPerPageOptions="[10, 40, 100]"
+      }" paginator :rows="40" :rowsPerPageOptions="[1, 10, 40, 100]"
       paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
       currentPageReportTemplate="{first} à {last} sur {totalRecords}">
       <template #header>
@@ -165,7 +165,7 @@ const pwd = ref("")
       </Column>
       <Column field="username" sortable header="Nom d'utilisateur">
         <template #body="p">
-          {{ p.data.has_mail ? '*email*' : p.data.username }}
+          {{ p.data.has_mail ? '*email*' : p.data.username }} - {{ p.data.uid }}
         </template>
       </Column>
       <Column field="has_mail" header="Mot de passe">
