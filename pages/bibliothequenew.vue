@@ -114,8 +114,8 @@ const clearFilter = () => {
     <template v-else>
       <div class="card">
 
-        <DataTable v-model:filters="filters" :value="bibStore.list as any[]" paginator :rows="10"
-          :rowsPerPageOptions="[5, 10, 20, 50]" dataKey="nid" :filterDisplay="advancedSearch ? 'row' : undefined"
+        <DataTable v-model:filters="filters" :value="bibStore.list as any[]" paginator :rows="200"
+          :rowsPerPageOptions="[5, 10, 20, 50, 200]" dataKey="nid" :filterDisplay="advancedSearch ? 'row' : undefined"
           sortField="changed" :sortOrder="-1" :globalFilterFields="['title', 'abstract', 'auteur']">
           <template #header>
             <div class="flex flex-col xl:flex-row items-start lg:items-center min-h-24 justify-between">
