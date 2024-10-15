@@ -33,7 +33,7 @@ let fetchPromise: Promise<void> | null = null;
 /**
  * Index des full abstracts chargés à la demande.
  */
-const fullAbstracts: { [nid: number]: ShallowRef<BibActivityFullAbstract | undefined> } = {};
+const fullAbstracts: { [nid: number]: ShallowRef<BibActivityFullAbstract> | true } = {};
 
 /**
  * Charge les activités de la bibliothèque.
@@ -52,14 +52,9 @@ function load(forceReload: boolean = false): void {
           const a = l[i];
           if (a.abstract != null) {
             if (a.abstract_truncated) {
-              // On tronque à partir du dernier espace
-              const i = a.abstract.lastIndexOf(' ');
-              if ((i > 0) && (a.abstract.length - i <= 60)) {
-                a.abstract = a.abstract.substring(0, i);
-              }
               // On ajoute une entrée dans le dictionnaire des abstracts complets
               // qui seront chargés à la demande
-              fullAbstracts[a.nid] = shallowRef();
+              fullAbstracts[a.nid] = true;
             }
           }
         }
@@ -76,13 +71,20 @@ function load(forceReload: boolean = false): void {
   }
 }
 
+function getFullAbstractRef(nid: number): ShallowRef<BibActivityFullAbstract> | undefined {
+  let sr = fullAbstracts[nid];
+  if (sr == null) return;
+  if (sr === true) {
+    sr = shallowRef<BibActivityFullAbstract>({ status: undefined });
+    fullAbstracts[nid] = sr;
+  }
+  return sr;
+}
+
 async function loadFullAbstract(nid: number): Promise<void> {
-  const sr = fullAbstracts[nid];
+  const sr = getFullAbstractRef(nid);
   if (sr == null) return;
   let fa = sr.value;
-  if (fa == null) {
-    fa = { status: undefined };
-  }
   if (fa.status === 'requested') return;
   if (fa.status === 'present') return;
   sr.value = { status: 'requested' };
@@ -96,14 +98,9 @@ async function loadFullAbstract(nid: number): Promise<void> {
 }
 
 function getFullAbstract(nid: number): BibActivityFullAbstract {
-  let sr = fullAbstracts[nid];
+  const sr = getFullAbstractRef(nid);
   if (sr == null) return { status: undefined };
-  let fa = sr.value;
-  if (fa == null) {
-    fa = { status: undefined };
-    sr.value = fa;
-  }
-  return fa;
+  return sr.value;
 }
 
 function buildStore() {
