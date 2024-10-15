@@ -185,7 +185,11 @@ const clearFilter = () => {
               <Select v-model="filterModel.value" @change="filterCallback()"
                 :options="metaDataStore.niveauCodes as any[]" placeholder="Choisir" style="min-width: 8rem"
                 :showClear="false">
-                <template #option="p">{{ p.option }}</template>
+                <template #value="p">
+                  <template v-if="p.value">{{ metaDataStore.getNiveauLabel(p.value) }}</template>
+                  <template v-else>{{ p.placeholder }}</template>
+                </template>
+                <template #option="p">{{ metaDataStore.getNiveauLabel(p.option) }}</template>
               </Select>
             </template>
           </Column>
@@ -200,7 +204,11 @@ const clearFilter = () => {
               <Select v-model="filterModel.value" @change="filterCallback()"
                 :options="metaDataStore.enseignementCodes as any[]" placeholder="Choisir" style="min-width: 8rem"
                 :showClear="false">
-                <template #option="p">{{ p.option }}</template>
+                <template #value="p">
+                  <template v-if="p.value">{{ metaDataStore.getEnseignementLabel(p.value) }}</template>
+                  <template v-else>{{ p.placeholder }}</template>
+                </template>
+                <template #option="p">{{ metaDataStore.getEnseignementLabel(p.option) }}</template>
               </Select>
             </template>
           </Column>

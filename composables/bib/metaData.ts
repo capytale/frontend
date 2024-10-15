@@ -46,13 +46,11 @@ function load(forceReload: boolean = false): void {
 }
 
 function getEnseignementLabel(key: string): string {
-  return enseignementsIndex.value[key] ?? '';
+  return enseignementsIndex.value[key] ?? key;
 }
 
 function getNiveauLabel(key: string): string {
-  const l = niveauxIndex.value[key];
-  console.log('getNiveauLabel', niveauxIndex.value, key, l);
-  return l ?? '';
+  return niveauxIndex.value[key] ?? key;
 }
 
 function buildStore() {
