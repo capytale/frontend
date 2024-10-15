@@ -156,7 +156,7 @@ const clearFilter = () => {
             </template>
           </Column>
 
-          <Column field="title" header="Titre">
+          <Column field="title" header="Titre" class="overflow-hidden max-w-prose">
             <template #body="p">
               <BibViewActivity :data="p.data" />
               <!--         <!-- <a :href="playerUrl(p.data.nid)" class="font-bold">{{ p.data.title }}</a> -->
