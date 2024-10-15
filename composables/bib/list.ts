@@ -2,8 +2,7 @@ import { shallowRef, readonly, type ShallowRef } from 'vue';
 
 import httpClient from '@capytale/activity.js/backend/capytale/http';
 
-const bibEp = "/web/c-hdls/api/bib?new";
-const fullAbstractEp = "/web/c-hdls/api/bib/full-descr/";
+const bibEp = "/web/c-hdls/api/bibliotheque";
 
 export type BibActivityDetail = {
   nid: number;
@@ -110,8 +109,8 @@ async function loadFullAbstract(nid: number): Promise<void> {
   if (fa.status === 'present') return;
   sr.value = { status: 'requested' };
   try {
-    const dt = await httpClient.getJsonAsync<{ abstract: string }>(fullAbstractEp + nid)
-    let fa = dt?.abstract ?? '';
+    let fa = await httpClient.getJsonAsync<string>(`${bibEp}/${nid}/abstract`)
+    fa = fa ?? '';
     sr.value = { status: 'present', fullAbstract: fa };
   } catch (e) {
     sr.value = { status: 'error', error: e };
