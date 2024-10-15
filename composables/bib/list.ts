@@ -12,6 +12,7 @@ export type BibActivityDetail = {
   changed: number;
   prenom: string | null;
   nom: string | null;
+  auteur?: string;
   abstract: string | null;
   abstract_truncated: boolean;
   nb_clone: number;
@@ -35,6 +36,25 @@ let fetchPromise: Promise<void> | null = null;
  */
 const fullAbstracts: { [nid: number]: ShallowRef<BibActivityFullAbstract> | true } = {};
 
+function buildAuthor(a: BibActivityDetail): string {
+  let nom = a.nom;
+  if (nom == null || nom == '') nom = null;
+  else nom.trim();
+  let prenom = a.prenom;
+  if (prenom == null || prenom == '') prenom = null;
+  else prenom.trim();
+  let r = '';
+  if (nom == null) {
+    return '';
+  } else {
+    if (prenom == null) return nom;
+    else return prenom + ' ' + nom;
+  }
+
+
+  return r;
+}
+
 /**
  * Charge les activités de la bibliothèque.
  * 
@@ -57,6 +77,7 @@ function load(forceReload: boolean = false): void {
               fullAbstracts[a.nid] = true;
             }
           }
+          a.auteur = buildAuthor(a);
         }
         list.value = l;
         status.value = 'loaded';
