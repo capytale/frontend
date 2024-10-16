@@ -96,7 +96,7 @@ const close = () => {
         <div>
           <h2>{{ model?.title }}</h2>
         </div>
-        <div class="flex flex-nowrap gap-3 items-stretch">
+        <div class="flex flex-nowrap gap-3 items-center shrink-0">
           <Button v-if="cloneStage === 'cloned'" @click="goToClone" label="Voir le clone"
             :icon="patience ? 'pi pi-spin pi-spinner' : 'pi pi-external-link'"
             v-tooltip.bottom="{ value: `Ouvrir l'activité\n'${cloneTitle}'`, showDelay: 300, hideDelay: 100 }" />
