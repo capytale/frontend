@@ -19,24 +19,30 @@ export const useMyStore = defineStore('my', {
     async getAssignments(nid: string) {
       this.mathalea = false
       this.loadingAssignments = true
+      // console.log("A")
+      // const rawAssignments = await fetch("/web/c-hdls/api/assignments/524040")
+      // console.log("A'")
+      // this.assignments = await rawAssignments.json()
+      // console.log("B")
       this.assignments = await httpClient.getJsonAsync<any>("/web/c-hdls/api/assignments/" + nid)
-      if(this.assignments.icon.includes('mathalea')) {
+      if (this.assignments.icon.includes('mathalea')) {
         this.mathalea = await evalApi.listEvals(nid)
-      }        
+      }
+      // console.log("C")
       this.loadingAssignments = false
     },
     async saveAppr(nid, appr: any) {
-      // console.log("saveAppr", nid, appr._rawValue)
+      console.log("saveAppr", nid, appr)
       await httpClient.postJsonAsync(
         myActivitiesApiEp,
-        { action: "saveAppr", nid, appr: appr._rawValue }
+        { action: "saveAppr", nid, appr: appr }
       );
     },
     async saveEval(nid, evalu: any) {
       // console.log("saveEval", nid, evalu)
       await httpClient.postJsonAsync(
         myActivitiesApiEp,
-        { action: "saveEval", nid, evalu: evalu._rawValue }
+        { action: "saveEval", nid, evalu: evalu }
       );
     },
     async changeSaWf(sa_nid: string | Array, newWorkflow: string) {

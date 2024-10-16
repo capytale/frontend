@@ -14,7 +14,7 @@ const toast = useToast();
 const my = useMyStore()
 const activites = useActivitiesStore()
 
-const tototo = defineModel({ required: true, type: Boolean });
+const displayDialog = defineModel({ required: true, type: Boolean });
 
 const props = defineProps<{
   nid: string,
@@ -51,7 +51,6 @@ const handleChangeWf = ((wf) => {
   selectedNid.value = []
   hasSelected.value = false
 })
-
 
 const tags = useTagsStore()
 const corbeilleTid = () => {
@@ -122,11 +121,6 @@ const chWf = ((sa_nid, wf) => {
   activites.changeMyVueCount(props.nid, countWf(100), countWf(200), countWf(300), countWf(0))
 })
 
-const nbFake = computed(() => {
-  if (props.viewsVisible == null) return new Array(defaultNbFake)
-  else return new Array(Math.min(props.viewsVisible, maxNbFake))
-})
-
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   hasTags: { value: false, matchMode: FilterMatchMode.EQUALS },
@@ -148,7 +142,6 @@ const classList = computed(() => {
   return classes
 })
 
-
 // Ajoute un champ à copy my.assignments.tab qui permet de savoir s'il y a des tags ou non
 const richTab = computed(() => {
   if (my.assignments.tab == null) return []
@@ -165,7 +158,6 @@ const ttMessage = ((wf) => {
   if (wf == 200) return prefix + "Rendu"
   if (wf == 300) return prefix + "Corrigé"
 })
-// console.log(classList.value)
 
 const nbselected = () => {
   if (selectedNid.value === undefined) return "0 copie sélectionnée"
@@ -180,9 +172,7 @@ const rowStyle = (data) => {
 };
 
 const dt = ref();
-const exportCSV = () => {
-  dt.value.exportCSV();
-}
+const exportCSV = () => { dt.value.exportCSV(); }
 
 const menu = ref();
 const toggle = (event) => {
@@ -201,7 +191,6 @@ const itemsA = ref([
     }
   }
 ])
-
 
 const archMessage = (a) => {
   if (a) return "Revenir aux copies non archivées"
@@ -242,11 +231,17 @@ function handleDownloadAll() {
   sel = sel.map((o) => o.sa_nid);
   exportBuilder.exportAssignments({ nid: parseInt(props.nid), type: my.assignments.type }, sel);
 }
+
+const save = (x) => {
+  console.log(x)
+  // my.saveEval(richTab.sa_nid, richTab.evaluation)
+}
+
 </script>
 
 
 <template>
-  <Dialog v-model:visible="tototo" position="top" maximizable modal header="&nbsp;" :style="{ width: '90%' }"
+  <Dialog v-model:visible="displayDialog" position="top" maximizable modal header="&nbsp;" :style="{ width: '90%' }"
     dismissableMask>
     <template #header v-if="my.loadingAssignments">
       <Skeleton shape="circle" size="4rem" class="mr-2 my-2"></Skeleton>
@@ -269,50 +264,14 @@ function handleDownloadAll() {
     </template>
 
     <div v-if="my.loadingAssignments">
-      <Card class="flex-2 my-10" v-if="false">
-        <template #title>
-          <Skeleton shape="circle" size="4rem" class="mr-2 my-2"></Skeleton>
-          <Skeleton width="20rem" class="mb-2"></Skeleton>
-        </template>
-      </Card>
-      <DataTable :value="nbFake">
-        <Column field="code" header="Dernière modif.">
-          <template #body>
-            <Skeleton width="10rem"></Skeleton>
-          </template>
-        </Column>
-        <Column field="name" header="Élève">
-          <template #body>
-            <Skeleton width="10rem"></Skeleton>
-          </template>
-        </Column>
-        <Column field="category" header="Classe">
-          <template #body>
-            <Skeleton width="7rem"></Skeleton>
-          </template>
-        </Column>
-        <Column field="quantity" header="État">
-          <template #body>
-            <Skeleton width="4rem"></Skeleton>
-          </template>
-        </Column>
-        <Column field="quantity" header="Appréciation">
-          <template #body>
-            <Skeleton width="10rem" height="4rem"></Skeleton>
-          </template>
-        </Column>
-        <Column field="quantity" header="Évaluation">
-          <template #body>
-            <Skeleton width="10rem" height="4rem"></Skeleton>
-          </template>
-        </Column>
-      </DataTable>
+      <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="transparent" animationDuration=".5s"
+        aria-label="Custom ProgressSpinner" />
     </div>
     <template v-else>
       <DataTable :value="richTab" tableStyle="min-width: 50rem" v-model:selection="selectedNid"
         v-model:filters="filters" :globalFilterFields="['hasTags', 'fullname', 'classe', 'workflow']"
         selectionMode="multiple" @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()"
-        @rowUnselectAll="onRowUnselectAll()" paginator :rows="40" :rowsPerPageOptions="[10, 40, 60]"
+        @rowUnselectAll="onRowUnselectAll()" paginator :rows="100" :rowsPerPageOptions="[10, 40, 60]"
         sortField="fullname" :sortOrder="1"
         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
         currentPageReportTemplate='{first} à {last} sur {totalRecords} &nbsp; &nbsp;' @rowSelectAll="onRowSelectAll()"
@@ -342,14 +301,11 @@ function handleDownloadAll() {
                   <Button v-if="exportable" icon="pi pi-download" severity="secondary" outlined
                     @click="handleDownloadSel" v-tooltip.bottom="'Télécharger les copies sélectionnées'" />
                 </div>
-
               </template>
             </template>
 
             <IconField iconPosition="left" class="mr-2">
-              <InputIcon>
-                <i class="pi pi-search" />
-              </InputIcon>
+              <InputIcon> <i class="pi pi-search" /> </InputIcon>
               <InputText v-model="filters['fullname'].value" placeholder="Rechercher parmi les élèves" />
             </IconField>
 
@@ -357,10 +313,8 @@ function handleDownloadAll() {
               class="mr-2" placeholder="Filtrer par classe" style="min-width: 12rem" :showClear="true" />
             <Select v-model="filters['workflow'].value" :options="etats" optionLabel="label" optionValue="value"
               class="mr-2" placeholder="Filtrer par état" style="min-width: 12rem" :showClear="true" />
-
-            <!-- <Button v-tooltip.bottom="'Télécharger'" icon="pi pi-download" class="mr-2" severity="secondary" /> -->
-
           </template>
+
           <template #end>
             <Button v-if="my.mathalea" v-tooltip="'Détails des résultats'" @click="mathalea = true" text>
               <img :src="my.assignments.icon" class="h-10" />
@@ -394,17 +348,9 @@ function handleDownloadAll() {
 
         <Column field="classe" header="Classe" style="max-width:10rem" sortable>
           <template #filter="{ filterModel, filterCallback }">
-            <!-- <template v-if="classList.length > 0"> -->
-            <!--   <Select v-model="filterModel.value" @change="filterCallback()" :options="classList" optionLabel="classe" -->
-            <!--     placeholder="Rechercher"> -->
-            <!--   </Select> -->
-            <!-- </template> -->
-            <!-- <template v-else> -->
             <InputText v-model="filterModel.value" type="text" style="width: 100%" @input="filterCallback()"
               placeholder="Rechercher" />
-            <!-- </template> -->
           </template>
-
         </Column>
 
         <Column field="workflow" header="État" style="max-width:10rem" sortable>
@@ -428,13 +374,13 @@ function handleDownloadAll() {
           </template>
         </Column>
 
-        <Column field="appreciation" header="Appréciation">
+        <Column field="appreciation" header="Appréciation" style="width:30%">
           <template #body="p">
             <AssignmentAppreciation :key="p.data.sa_nid" :data="p.data" />
           </template>
         </Column>
 
-        <Column field="evaluation" header="Évaluation">
+        <Column field="evaluation" header="Évaluation" style="width:10%">
           <template #body="p">
             <AssignmentEvaluation :key="p.data.sa_nid" :data="p.data" />
           </template>
