@@ -8,12 +8,6 @@ import { useRoute } from 'vue-router';
 const bibStore = useBibList();
 const metaDataStore = useBibMetaData();
 
-const products = ref(new Array(10));
-
-const route = useRoute()
-// console.log("location", route.query)
-// TODO: faire en sorte que les recherces avancées génèrent une url copiable.
-
 const advancedSearch = ref(false)
 
 const filters = ref()
@@ -36,80 +30,19 @@ const clearFilter = () => {
   initFilters();
 };
 
+const previewedActivity = ref<{ nid: number, title: string }>();
+
 </script>
 
 <template>
+  <BibActivityPreview v-model="previewedActivity" />
   <div v-if="bibStore.status == 'error'">
     <p>Impossible de charger les activités.</p> {{ bibStore.error }}
   </div>
   <template v-else>
     <template v-if="bibStore.status == 'loading'">
-      <!-- ################################################################# -->
-      <!-- ######################## Skeleton BEGIN ######################### -->
-      <!-- ################################################################# -->
-      <DataTable :value="products" paginator :rows="10">
-        <template #header>
-          <Toolbar>
-            <template #start>
-              <div class="titre">Bibliothèque entre enseignants</div>
-            </template>
-            <template #end>
-              <div class="flex justify-content-end">
-                <Skeleton width="20rem" height="3rem"></Skeleton>
-                <Skeleton width="20rem" height="3rem"></Skeleton>
-                <div class="flex items-center rech-avancee">
-                  <Skeleton width="20rem" height="3rem"></Skeleton>
-                </div>
-                <Button type="button" label="Annuler" class="invisible" />
-              </div>
-            </template>
-          </Toolbar>
-        </template>
-        <Column header="" style="width:5rem">
-          <template #body>
-            <Skeleton width="3rem" height="3rem"></Skeleton>
-          </template>
-        </Column>
-        <Column header="Titre">
-          <template #body>
-            <Skeleton width="10rem" class="mb-2"></Skeleton>
-          </template>
-        </Column>
-        <Column header="Description">
-          <template #body>
-            <Skeleton width="40rem" height="4rem"></Skeleton>
-          </template>
-        </Column>
-        <Column header="Niveau">
-          <template #body>
-            <Skeleton width="5rem"></Skeleton>
-          </template>
-        </Column>
-        <Column header="Enseignement">
-          <template #body>
-            <Skeleton width="10rem"></Skeleton>
-          </template>
-        </Column>
-        <Column header="Nb. clone">
-          <template #body>
-            <Skeleton width="4rem"></Skeleton>
-          </template>
-        </Column>
-        <Column header="Dernière modif." style="max-width:10rem" sortable>
-          <template #body>
-            <Skeleton width="5rem" class="mb-2"></Skeleton>
-          </template>
-        </Column>
-        <Column header="Auteur">
-          <template #body>
-            <Skeleton width="5rem" class="mb-2"></Skeleton>
-            <Skeleton width="7rem" class="mb-2"></Skeleton>
-          </template>
-        </Column>
-      </DataTable>
-      <!-- ################################################################# -->
-      <!-- ######################## Skeleton END ########################### -->
-      <!-- ################################################################# -->
+      <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="transparent" animationDuration=".5s"
+        aria-label="Custom ProgressSpinner" />
     </template>
     <template v-else>
       <div class="card">
@@ -158,9 +91,7 @@ const clearFilter = () => {
 
           <Column field="title" header="Titre" class="overflow-hidden max-w-prose">
             <template #body="p">
-              <BibViewActivity :data="p.data" />
-              <!--         <!-- <a :href="playerUrl(p.data.nid)" class="font-bold">{{ p.data.title }}</a> -->
-              <!--         <!-- <BibComments :data="p.data" /> -->
+              <a @click="() => { previewedActivity = p.data }" class="tablelink">{{ p.data.title }}</a>
             </template>
             <template #filter="{ filterModel, filterCallback }">
               <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Rechercher" />
@@ -262,5 +193,10 @@ const clearFilter = () => {
 
 .invisible {
   visibility: hidden;
+}
+
+.tablelink {
+  color: var(--p-primary-color);
+  cursor: pointer;
 }
 </style>
