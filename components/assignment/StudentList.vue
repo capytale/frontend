@@ -264,14 +264,13 @@ const save = (x) => {
     </template>
 
     <div v-if="my.loadingAssignments">
-      <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="transparent" animationDuration=".5s"
-        aria-label="Custom ProgressSpinner" />
+      <div>Chargement...</div>
     </div>
     <template v-else>
       <DataTable :value="richTab" tableStyle="min-width: 50rem" v-model:selection="selectedNid"
         v-model:filters="filters" :globalFilterFields="['hasTags', 'fullname', 'classe', 'workflow']"
         selectionMode="multiple" @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()"
-        @rowUnselectAll="onRowUnselectAll()" paginator :rows="100" :rowsPerPageOptions="[10, 40, 60]"
+        @rowUnselectAll="onRowUnselectAll()" paginator :rows="40" :rowsPerPageOptions="[10, 40, 60]"
         sortField="fullname" :sortOrder="1"
         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
         currentPageReportTemplate='{first} à {last} sur {totalRecords} &nbsp; &nbsp;' @rowSelectAll="onRowSelectAll()"
