@@ -1,54 +1,14 @@
-<script setup>
-import { useMyStore } from '@/stores/my'
-import { useBibStore } from '@/stores/bib'
+<script setup lang="ts">
+import { useBibList } from '@/composables/bib/list';
+import { useBibMetaData } from '@/composables/bib/metaData';
 import { FilterMatchMode } from '@primevue/core/api';
 import { useRoute } from 'vue-router';
-import httpClient from '@capytale/activity.js/backend/capytale/http'
 // import Dialog from 'primevue/dialog';
 
-const bib = useBibStore()
-
-const products = ref(new Array(20));
-
-const route = useRoute()
-// console.log("location", route.query)
-// TODO: faire en sorte que les recherces avancées génèrent une url copiable.
-
-if (bib.bib == null || bib.bib.status != 'pending') {
-  bib.getBib()
-}
-const abstractObj = ((html) => {
-  var txt = document.createElement("textarea");
-  txt.innerHTML = html;
-  if (txt.value.includes('+…+')) return { abstract: txt.value.replace('+…+', ''), truncated: true }
-  return { abstract: txt.value, truncated: false }
-})
+const bibStore = useBibList();
+const metaDataStore = useBibMetaData();
 
 const advancedSearch = ref(false)
-const xunion = (a, b) => [...new Set([...a, ...b])];
-const list_niveaux = (() => {
-  let set = []
-  for (let item in bib.bib.data) {
-    let a = String(bib.bib.data[item].niveau).split(', ')
-    if (a[0] != "null") set = xunion(set, a)
-  }
-  // console.log("set", set)
-  return set
-})
-const list_enseignements = (() => {
-  let set = []
-  for (let item in bib.bib.data) {
-    let a = String(bib.bib.data[item].enseignement).split(', ')
-    if (a[0] != "null") set = xunion(set, a)
-  }
-  // console.log("set", set)
-  return set
-})
-
-
-const spacing = ((str) => {
-  return str.split(',').join(', ')
-})
 
 const filters = ref()
 
@@ -70,111 +30,30 @@ const clearFilter = () => {
   initFilters();
 };
 
-const op = ref();
-const toggle = (event) => {
-  op.value.toggle(event);
-}
-const displayFull = async (nid) => {
-  const full = await httpClient.getJsonAsync("/web/c-hdls/api/bib/full-descr/" + nid)
-  // console.log("displayFull", full)
-  let item = bib.bib.data.find(item => item.nid === nid)
-  item.abstractFull = full.abstract
-}
+const previewedActivity = ref<{ nid: number, title: string }>();
 
-
-
-
-// const playerUrl = function (nid) {
-//   return `/web/c-act/n/${nid}/play/view`
-// }
 </script>
 
 <template>
-  <div v-if="bib.bib == null">
-    <p>Chargement des actvités...</p>
-  </div>
-  <div v-else-if="bib.bib.status == 'error'">
-    <p>Impossible de charger les activités.</p> {{ bib.bib.status }}
+  <BibActivityPreview v-model="previewedActivity" />
+  <div v-if="bibStore.status == 'error'">
+    <p>Impossible de charger les activités.</p> {{ bibStore.error }}
   </div>
   <template v-else>
-    <template v-if="bib.bib.data == null">
-      <!-- ################################################################# -->
-      <!-- ######################## Skeleton BEGIN ######################### -->
-      <!-- ################################################################# -->
-      <DataTable :value="products" paginator :rows="10">
-        <template #header>
-          <Toolbar>
-            <template #start>
-              <div class="titre">Bibliothèque entre enseignants</div>
-            </template>
-            <template #end>
-              <div class="flex justify-content-end">
-                <Skeleton width="20rem" height="3rem"></Skeleton>
-                <Skeleton width="20rem" height="3rem"></Skeleton>
-                <div class="flex items-center rech-avancee">
-                  <Skeleton width="20rem" height="3rem"></Skeleton>
-                </div>
-                <Button type="button" label="Annuler" class="invisible" />
-              </div>
-            </template>
-          </Toolbar>
-        </template>
-        <Column header="" style="width:5rem">
-          <template #body>
-            <Skeleton width="3rem" height="3rem"></Skeleton>
-          </template>
-        </Column>
-        <Column header="Titre">
-          <template #body>
-            <Skeleton width="10rem" class="mb-2"></Skeleton>
-          </template>
-        </Column>
-        <Column header="Description">
-          <template #body>
-            <Skeleton width="40rem" height="4rem"></Skeleton>
-          </template>
-        </Column>
-        <Column header="Niveau">
-          <template #body>
-            <Skeleton width="5rem"></Skeleton>
-          </template>
-        </Column>
-        <Column header="Enseignement">
-          <template #body>
-            <Skeleton width="10rem"></Skeleton>
-          </template>
-        </Column>
-        <Column header="Nb. clone">
-          <template #body>
-            <Skeleton width="4rem"></Skeleton>
-          </template>
-        </Column>
-        <Column header="Dernière modif." style="max-width:10rem" sortable>
-          <template #body>
-            <Skeleton width="5rem" class="mb-2"></Skeleton>
-          </template>
-        </Column>
-        <Column header="Auteur">
-          <template #body>
-            <Skeleton width="5rem" class="mb-2"></Skeleton>
-            <Skeleton width="7rem" class="mb-2"></Skeleton>
-          </template>
-        </Column>
-      </DataTable>
-      <!-- ################################################################# -->
-      <!-- ######################## Skeleton END ########################### -->
-      <!-- ################################################################# -->
+    <template v-if="bibStore.status == 'loading'">
+      <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="transparent" animationDuration=".5s"
+        aria-label="Custom ProgressSpinner" />
     </template>
     <template v-else>
       <div class="card">
 
-        <DataTable v-model:filters="filters" :value="bib.bib.data" paginator :rows="10"
-          :rowsPerPageOptions="[5, 10, 20, 50]" dataKey="id" :filterDisplay='advancedSearch ? "row" : ""'
+        <DataTable v-model:filters="filters" :value="bibStore.list as any[]" paginator :rows="10"
+          :rowsPerPageOptions="[5, 10, 20, 50]" dataKey="nid" :filterDisplay="advancedSearch ? 'row' : undefined"
           sortField="changed" :sortOrder="-1" :globalFilterFields="['title', 'abstract', 'auteur']">
           <template #header>
             <div class="flex flex-col xl:flex-row items-start lg:items-center min-h-24 justify-between">
               <div class="titre self-start">Bibliothèque entre enseignants
-                ({{ bib.bib.data.length }} activités)
+                ({{ bibStore.list.length }} activités)
               </div>
               <div class="flex flex-col md:flex-row gap-2 justify-content-end self-start">
                 <TypeFilterSelect v-model="filters['type'].value" />
@@ -204,44 +83,24 @@ const displayFull = async (nid) => {
             </div>
           </template>
 
-          <Column field="icon" header="" style="min-width:5rem">
+          <Column field="icon" header="">
             <template #body="p">
               <MyTableType :data="p.data" />
             </template>
           </Column>
 
-          <Column field="title" header="Titre">
+          <Column field="title" header="Titre" class="overflow-hidden max-w-prose">
             <template #body="p">
-              <BibViewActivity :data="p.data" />
-              <!--         <!-- <a :href="playerUrl(p.data.nid)" class="font-bold">{{ p.data.title }}</a> -->
-              <!--         <!-- <BibComments :data="p.data" /> -->
+              <a @click="() => { previewedActivity = p.data }" class="tablelink">{{ p.data.title }}</a>
             </template>
             <template #filter="{ filterModel, filterCallback }">
               <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Rechercher" />
             </template>
           </Column>
 
-          <Column field="abstract" header="Description">
+          <Column field="abstract" header="Description" class="overflow-hidden max-w-prose">
             <template #body="p">
-              <template v-if="abstractObj(p.data.abstract).truncated">
-                <Inplace @open="displayFull(p.data.nid)">
-                  <template #display>
-                    <div
-                      v-tooltip.top="{ value: 'Cliquer pour afficher l\'intégralité de la description', showDelay: 100, hideDelay: 300 }">
-                      {{ abstractObj(p.data.abstract).abstract }}
-                      <span class="text-blue-500 font-bold">[...]</span>
-                    </div>
-                  </template>
-                  <template #content>
-                    <p class="m-0">
-                      {{ p.data.abstractFull }}
-                    </p>
-                  </template>
-                </Inplace>
-              </template>
-              <template v-else>
-                <p>{{ p.data.abstract }}</p>
-              </template>
+              <BibAbstract :data="p.data" />
             </template>
             <template #filter="{ filterModel, filterCallback }">
               <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Rechercher" />
@@ -249,30 +108,38 @@ const displayFull = async (nid) => {
           </Column>
           <Column field="niveau" header="Niveau" :showFilterMenu="false">
             <template #body="p">
-              {{ p.data.niveau }}
-              <!-- ** {{ spacing(p.data.niveau) }} -->
+              <p v-for="n of p.data.niveau" :key="n">
+                {{ metaDataStore.getNiveauLabel(n) }}
+              </p>
             </template>
             <template #filter="{ filterModel, filterCallback }">
-              <Select v-model="filterModel.value" @change="filterCallback()" :options="list_niveaux()"
-                placeholder="Choisir" style="min-width: 8rem" :showClear="false">
-                <template #option="slotProps">
-                  {{ slotProps.option }}
+              <Select v-model="filterModel.value" @change="filterCallback()"
+                :options="metaDataStore.niveauCodes as any[]" placeholder="Choisir" style="min-width: 8rem"
+                :showClear="false">
+                <template #value="p">
+                  <template v-if="p.value">{{ metaDataStore.getNiveauLabel(p.value) }}</template>
+                  <template v-else>{{ p.placeholder }}</template>
                 </template>
+                <template #option="p">{{ metaDataStore.getNiveauLabel(p.option) }}</template>
               </Select>
             </template>
           </Column>
 
           <Column field="enseignement" header="Enseignement" :showFilterMenu="false">
             <template #body="p">
-              {{ p.data.enseignement }}
-              <!-- ** {{ spacing(p.data.enseignement) }} -->
+              <p v-for="e of p.data.enseignement" :key="e">
+                {{ metaDataStore.getEnseignementLabel(e) }}
+              </p>
             </template>
             <template #filter="{ filterModel, filterCallback }">
-              <Select v-model="filterModel.value" @change="filterCallback()" :options="list_enseignements()"
-                placeholder="Choisir" style="min-width: 8rem" :showClear="false">
-                <template #option="slotProps">
-                  {{ slotProps.option }}
+              <Select v-model="filterModel.value" @change="filterCallback()"
+                :options="metaDataStore.enseignementCodes as any[]" placeholder="Choisir" style="min-width: 8rem"
+                :showClear="false">
+                <template #value="p">
+                  <template v-if="p.value">{{ metaDataStore.getEnseignementLabel(p.value) }}</template>
+                  <template v-else>{{ p.placeholder }}</template>
                 </template>
+                <template #option="p">{{ metaDataStore.getEnseignementLabel(p.option) }}</template>
               </Select>
             </template>
           </Column>
@@ -326,5 +193,10 @@ const displayFull = async (nid) => {
 
 .invisible {
   visibility: hidden;
+}
+
+.tablelink {
+  color: var(--p-primary-color);
+  cursor: pointer;
 }
 </style>
