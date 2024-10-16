@@ -83,7 +83,7 @@ const previewedActivity = ref<{ nid: number, title: string }>();
             </div>
           </template>
 
-          <Column field="icon" header="" style="min-width:5rem">
+          <Column field="icon" header="">
             <template #body="p">
               <MyTableType :data="p.data" />
             </template>

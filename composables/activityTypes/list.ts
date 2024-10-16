@@ -23,6 +23,14 @@ const unknownType: ActivityType = {
   exportable: false,
 };
 
+function buildUnknownType(type: string): ActivityType {
+  return {
+    ...unknownType,
+    id: type,
+    name: type,
+  };
+}
+
 const status = shallowRef<'loading' | 'loaded' | 'error'>('loading');
 
 const error = shallowRef<any>();
@@ -63,14 +71,21 @@ function load(forceReload: boolean = false): void {
 /**
  * Fournit les infos sur le type d'activité.
  * Renvoie une valeur réactive.
- * Tant que la liste des types n'est pas chargée depuis le backend, renvoie unknownType.
+ * Tant que la liste des types n'est pas chargée depuis le backend renvoie null.
  * 
  * @param type le type d'activité
  * @returns une valeur réactive contenant les informations sur le type
  */
-function getTypeInfo(type: string): ActivityType {
-  if (typeExists(type)) return index.value[type];
-  else return unknownType;
+function getTypeInfo(type: string): ActivityType | null {
+  if (typeExists(type)) {
+    return index.value[type];
+  } else {
+    if (status.value === 'loaded') {
+      return buildUnknownType(type);
+    } else {
+      return null;
+    }
+  }
 }
 
 /**
