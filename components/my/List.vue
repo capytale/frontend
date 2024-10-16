@@ -251,7 +251,7 @@ const getIAmImg = (code) => {
             :globalFilterFields="['title', 'type', 'whoami']" class="mydatatable">
 
 
-            <template #header>
+            <template #header class="hdr">
               <Toolbar>
                 <template #start v-if="!showToolbar">
                   <h2 class="ml-8"> Mes activités </h2>
@@ -428,9 +428,32 @@ const getIAmImg = (code) => {
   width: 20rem;
 }
 
-.mydataTable {
-  background-color: var(--p-surface-700);
-  color: var(--p-on-surface-700);
+.mydatatable {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.mydatatable>*:nth-child(1) {
+  order: 1;
+}
+
+.mydatatable>*:nth-child(2) {
+  order: 3;
+}
+
+.mydatatable>*:nth-child(3) {
+  order: 2;
+
+  &>* {
+    border-radius: 0;
+    background-color: var(--p-surface-100);
+
+    .dark & {
+      background-color: var(--p-surface-800);
+      border-bottom: 1px solid var(--p-surface-700);
+    }
+  }
 }
 
 .jesuis li {
