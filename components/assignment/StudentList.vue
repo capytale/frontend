@@ -273,8 +273,8 @@ const save = (x) => {
         @rowUnselectAll="onRowUnselectAll()" paginator :rows="40" :rowsPerPageOptions="[10, 40, 60]"
         sortField="fullname" :sortOrder="1"
         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-        currentPageReportTemplate='{first} à {last} sur {totalRecords} &nbsp; &nbsp;' @rowSelectAll="onRowSelectAll()"
-        :rowStyle="rowStyle" ref="dt">
+        currentPageReportTemplate='Copies {first} à {last} sur {totalRecords} &nbsp; &nbsp;'
+        @rowSelectAll="onRowSelectAll()" :rowStyle="rowStyle" ref="dt" class="mydatatable">
 
         <Toolbar>
           <template #start>
@@ -422,5 +422,33 @@ const save = (x) => {
 
 .parent:hover .surprise {
   display: inline;
+}
+
+.mydatatable {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.mydatatable>*:nth-child(1) {
+  order: 1;
+}
+
+.mydatatable>*:nth-child(2) {
+  order: 3;
+}
+
+.mydatatable>*:nth-child(3) {
+  order: 2;
+
+  &>* {
+    border-radius: 0;
+    background-color: var(--p-surface-100);
+
+    .dark & {
+      background-color: var(--p-surface-800);
+      border-bottom: 1px solid var(--p-surface-700);
+    }
+  }
 }
 </style>

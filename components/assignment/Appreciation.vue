@@ -29,7 +29,8 @@ const save = () => {
 
 <template>
   <!-- <Textarea v-model="value" rows="2" cols="20" @blur="save" autoResize class="w-full h-full" /> -->
-  <div contenteditable="true" @blur="save" ref="divRef" class="editable">
+  <div contenteditable="true" @blur="save" ref="divRef" class="editable whitespace-pre-wrap"
+    v-tooltip.top="{ value: 'Cliquer pour modifier. Quitter pour enregistrer.', showDelay: 300, hideDelay: 0 }">
     {{ value }}
   </div>
 </template>
