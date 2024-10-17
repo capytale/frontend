@@ -2,7 +2,7 @@
 import { useBibList } from '@/composables/bib/list';
 import { useBibMetaData } from '@/composables/bib/metaData';
 import { FilterMatchMode } from '@primevue/core/api';
-const userStore = useUserStore()
+const userStore = useCurrentUserStore()
 userStore.getUser()
 
 const bibStore = useBibList();

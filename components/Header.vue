@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const colorMode = useColorMode()
-const userStore = useUserStore()
+const userStore = useCurrentUserStore()
 const $route = useRoute();
 
 const backToLegacy = () => {

@@ -1,6 +1,5 @@
 <script setup>
-import { useUserStore } from '@/stores/user'
-const userStore = useUserStore()
+const userStore = useCurrentUserStore()
 userStore.getUser()
 
 const props = defineProps({

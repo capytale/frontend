@@ -1,5 +1,5 @@
 <script setup>
-const userStore = useUserStore()
+const userStore = useCurrentUserStore()
 const colorMode = useColorMode()
 const { path } = useRoute()
 const bgColor = computed(() => colorMode.value === 'light' ? 'background-color: var(--p-neutral-100)' : 'background-color: var(--p-gray-800)')

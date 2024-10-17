@@ -1,6 +1,6 @@
 import { loadCurrentUser, type CurrentUser } from "@/utils/currentUser";
 
-export const useUserStore = defineStore('user', {
+export const useCurrentUserStore = defineStore('user', {
   state: () => ({
     user: false
   }) as {

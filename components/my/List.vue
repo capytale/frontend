@@ -2,7 +2,7 @@
 import { FilterMatchMode } from '@primevue/core/api';
 import { useArchiveBuilder } from "~/composables/archiveBuilder/builder";
 
-const userStore = useUserStore()
+const userStore = useCurrentUserStore()
 const activites = useActivitiesStore()
 const tags = useTagsStore()
 

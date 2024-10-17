@@ -3,7 +3,7 @@ document.title = "Capytale"
 const sideMenu = useSideMenuStore()
 const activites = useActivitiesStore()
 const tags = useTagsStore()
-const userStore = useUserStore()
+const userStore = useCurrentUserStore()
 
 activites.getActivities()
 tags.getAllTags()
