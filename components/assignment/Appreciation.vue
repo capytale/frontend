@@ -12,34 +12,36 @@ const props = defineProps({
 
 const divRef = ref()
 const value = computed(() => richContentToPlainText(props.data.appreciation))
+console.log(props.data.sa_nid, value)
 
-const save = () => {
+const save = async () => {
   const appr = divRef.value.innerText
-  my.saveAppr(props.data.sa_nid, appr)
-
-  // TODO : faire en fonction du retour de la requête
-  const response = { ok: true }
-  if (response.ok) {
-    toast.add({ severity: 'success', summary: 'Appréciation enregistrée ', life: 2000 });
-  } else {
-    toast.add({ severity: 'error', summary: 'Échec enregistrelent de l\'appréciation : ', detail: "nid = " });
+  if (value != appr && !(value == null && appr == "\n")) {
+    try {
+      await my.saveAppr(props.data.sa_nid, appr)
+      toast.add({ severity: 'success', summary: 'Appréciation enregistrée ', life: 2000 });
+    } catch (e) {
+      toast.add({ severity: 'error', summary: 'Échec enregistrement de l\'appréciation' });
+    }
   }
 }
 </script>
 
 <template>
-  <!-- <Textarea v-model="value" rows="2" cols="20" @blur="save" autoResize class="w-full h-full" /> -->
   <div contenteditable="true" @blur="save" ref="divRef" class="editable whitespace-pre-wrap"
-    v-tooltip.top="{ value: 'Cliquer pour modifier. Quitter pour enregistrer.', showDelay: 300, hideDelay: 0 }">
-    {{ value }}
-  </div>
+    v-tooltip.top="{ value: 'Cliquer pour modifier. Quitter pour enregistrer.', showDelay: 300, hideDelay: 0 }">{{ value
+    }}</div>
 </template>
 
 <style scoped>
 .editable {
   border: 1px solid #ccc;
   padding: 5px;
-  min-height: 50px;
+  min-height: 2rem;
   border-radius: 5px;
+}
+
+.editable:empty::before {
+  content: "​";
 }
 </style>

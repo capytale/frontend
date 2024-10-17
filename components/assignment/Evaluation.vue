@@ -13,16 +13,16 @@ const props = defineProps({
 
 const value = ref(richContentToPlainText(props.data.evaluation))
 
-const save = () => {
+const save = async () => {
   const appr = divRef.value.innerText
-  my.saveEval(props.data.sa_nid, appr)
+  if (value != appr && !(value == null && appr == "\n")) {
+    try {
+      await my.saveEval(props.data.sa_nid, appr)
 
-  // TODO : faire en fonction du retour de la requête
-  const response = { ok: true }
-  if (response.ok) {
-    toast.add({ severity: 'success', summary: 'Évaluation enregistrée', life: 2000 });
-  } else {
-    toast.add({ severity: 'error', summary: 'Échec enregistrelent de l\'évaluation : ', detail: "nid = " });
+      toast.add({ severity: 'success', summary: 'Évaluation enregistrée', life: 2000 });
+    } catch (e) {
+      toast.add({ severity: 'error', summary: 'Échec enregistrement de l\'évaluation' });
+    }
   }
 }
 
@@ -39,10 +39,9 @@ const divRef = ref()
 
 <template>
   <div class="flex flex-row gap-2">
-    <div contenteditable="true" @blur="save" ref="divRef" class="editable"
-      v-tooltip.top="{ value: 'Cliquer pour modifier. Quitter pour enregistrer.', showDelay: 300, hideDelay: 0 }">
-      {{ value }}
-    </div>
+    <div contenteditable="true" @blur="save" ref="divRef" class="editable whitespace-pre-wrap"
+      v-tooltip.top="{ value: 'Cliquer pour modifier. Quitter pour enregistrer.', showDelay: 300, hideDelay: 0 }">{{
+        value }}</div>
     <Button v-if="my.mathalea" @click="toggle" label="Détails" class="self-center" />
   </div>
   <Popover ref="op" v-if="my.mathalea">
@@ -68,8 +67,12 @@ const divRef = ref()
 .editable {
   border: 1px solid #ccc;
   padding: 5px;
-  min-height: 50px;
+  min-height: 2rem;
   min-width: 10rem;
   border-radius: 5px;
+}
+
+.editable:empty::before {
+  content: "​";
 }
 </style>
