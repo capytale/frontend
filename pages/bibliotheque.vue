@@ -2,8 +2,8 @@
 import { useBibList } from '@/composables/bib/list';
 import { useBibMetaData } from '@/composables/bib/metaData';
 import { FilterMatchMode } from '@primevue/core/api';
-import { useRoute } from 'vue-router';
-// import Dialog from 'primevue/dialog';
+const user = useUserStore()
+const isTeacher = user.user.data.roles.includes('teacher')
 
 const bibStore = useBibList();
 const metaDataStore = useBibMetaData();
@@ -49,13 +49,14 @@ const previewedActivity = ref<{ nid: number, title: string }>();
 
         <DataTable v-model:filters="filters" :value="bibStore.list as any[]" paginator :rows="10"
           :rowsPerPageOptions="[5, 10, 20, 50]" dataKey="nid" :filterDisplay="advancedSearch ? 'row' : undefined"
-          sortField="changed" :sortOrder="-1" :globalFilterFields="['title', 'abstract', 'auteur']">
+          sortField="changed" :sortOrder="-1" :globalFilterFields="['title', 'abstract', 'auteur']" class="mydatatable"
+          paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+          currentPageReportTemplate='Activités partagées {first} à {last} sur {totalRecords} &nbsp; &nbsp;'>
           <template #header>
             <div class="flex flex-col xl:flex-row items-start lg:items-center min-h-24 justify-between">
-              <div class="titre self-start">Bibliothèque entre enseignants
-                ({{ bibStore.list.length }} activités)
-              </div>
-              <div class="flex flex-col md:flex-row gap-2 justify-content-end self-start">
+              <div v-if="isTeacher" class="titre">Bibliothèque entre enseignants </div>
+              <div v-else class="titre">Bibliothèque pour tous</div>
+              <div class="flex flex-col md:flex-row gap-2 justify-content-end">
                 <TypeFilterSelect v-model="filters['type'].value" />
                 <IconField iconPosition="left">
                   <InputIcon>
@@ -198,5 +199,33 @@ const previewedActivity = ref<{ nid: number, title: string }>();
 .tablelink {
   color: var(--p-primary-color);
   cursor: pointer;
+}
+
+.mydatatable {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.mydatatable>*:nth-child(1) {
+  order: 1;
+}
+
+.mydatatable>*:nth-child(2) {
+  order: 3;
+}
+
+.mydatatable>*:nth-child(3) {
+  order: 2;
+
+  &>* {
+    border-radius: 0;
+    background-color: var(--p-surface-100);
+
+    .dark & {
+      background-color: var(--p-surface-800);
+      border-bottom: 1px solid var(--p-surface-700);
+    }
+  }
 }
 </style>
