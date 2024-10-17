@@ -246,9 +246,9 @@ const getIAmImg = (code) => {
             :value="myactivities" dataKey="nid" sortField="changed" tableStyle="min-width: 50rem" :sortOrder="-1"
             paginator :rows="10" :rowsPerPageOptions="[10, 20, 50]"
             paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-            currentPageReportTemplate='{first} à {last} sur {totalRecords} &nbsp; &nbsp;' @rowSelect="onRowSelect()"
-            @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()" @rowSelectAll="onRowSelectAll()"
-            :globalFilterFields="['title', 'type', 'whoami']" class="mydatatable">
+            currentPageReportTemplate='Activités {first} à {last} sur {totalRecords} &nbsp; &nbsp;'
+            @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()"
+            @rowSelectAll="onRowSelectAll()" :globalFilterFields="['title', 'type', 'whoami']" class="mydatatable">
 
 
             <template #header class="hdr">
