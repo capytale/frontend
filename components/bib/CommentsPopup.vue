@@ -1,7 +1,7 @@
 <script setup>
 import { useUserStore } from '@/stores/user'
-const user = useUserStore()
-user.getUser()
+const userStore = useUserStore()
+userStore.getUser()
 
 const props = defineProps({
   data: Object,
@@ -9,8 +9,11 @@ const props = defineProps({
 })
 
 const addComment = ref(false);
-const hasAlreadyCommented = ref(false);
-hasAlreadyCommented.value = props.data.comments && user.user.data && props.data.comments.find(c => c.uid == user.user.data.uid) != null
+const hasAlreadyCommented = computed(
+  () => props.data.comments
+    && userStore.isAuthenticated
+    && props.data.comments.some(c => c.uid == userStore.user.uid)
+)
 
 const rating = ref(null);
 const ratingComite = ref(null);
@@ -53,9 +56,10 @@ const detailIconSize = "font-size: 1.5rem"
 </script>
 
 <template>
-  <Badge :value="initials(user.user.data.firstname, user.user.data.lastname)" size="xlarge" severity="success"></Badge>
+  <Badge :value="initials(userStore.user.data.firstname, userStore.user.data.lastname)" size="xlarge"
+    severity="success"></Badge>
 
-  {{ user.user.data.firstname }} {{ user.user.data.lastname }}
+  {{ userStore.user.data.firstname }} {{ userStore.user.data.lastname }}
 
   <div v-if="!hasAlreadyCommented && !addComment">
     <Button label="Ajouter un commentaire" @click="addComment = true" class="my-6" />
@@ -79,7 +83,8 @@ const detailIconSize = "font-size: 1.5rem"
           <Checkbox v-model="signalChecked" inputId="signaler" :binary="true" @change="rating = null" />
           <label for="signaler" class="ml-2">Demander la dépublication </label>
           <i class="pi pi-info-circle" @click="info = true"></i>
-          <Dialog v-model:visible="info" modal header="Demander la dépublication" :style="{ width: '45rem' }" dismissableMask>
+          <Dialog v-model:visible="info" modal header="Demander la dépublication" :style="{ width: '45rem' }"
+            dismissableMask>
             <div class="my-6">
               <p>Pour cette activité, vous estimez que le contenu :</p>
               <ul>

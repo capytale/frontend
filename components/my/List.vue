@@ -2,12 +2,9 @@
 import { FilterMatchMode } from '@primevue/core/api';
 import { useArchiveBuilder } from "~/composables/archiveBuilder/builder";
 
-const user = useUserStore()
+const userStore = useUserStore()
 const activites = useActivitiesStore()
 const tags = useTagsStore()
-
-const isTeacher = user.user.data.roles.includes('teacher')
-
 
 const activitiesByTag = {};
 
@@ -238,7 +235,7 @@ const getIAmImg = (code) => {
         <p>Impossible de charger les activités.</p>
       </div>
       <template v-else>
-        <MyWelcomeNewbie v-if="activites.activities.data.length == 0" :isTeacher="isTeacher" />
+        <MyWelcomeNewbie v-if="activites.activities.data.length == 0" :isTeacher="userStore.isTeacher" />
 
         <template v-else>
 
@@ -371,10 +368,10 @@ const getIAmImg = (code) => {
               </template>
             </Column>
 
-            <Column v-if="isTeacher" :class="cols.evaluation ? '' : 'hidden'" field="whoami" header="Évaluation"
+            <Column v-if="userStore.isTeacher" :class="cols.evaluation ? '' : 'hidden'" field="whoami" header="Évaluation"
               style="max-width: 12rem">
               <template #body="p">
-                <MyTableEvaluation :data="p.data" :isTeacher="isTeacher" />
+                <MyTableEvaluation :data="p.data" :isTeacher="userStore.isTeacher" />
               </template>
             </Column>
             <Column v-else :class="cols.evaluation ? '' : 'hidden'" field="evaluation" header="Évaluation"
@@ -392,11 +389,11 @@ const getIAmImg = (code) => {
 
             <Column :class="cols.code ? '' : 'hidden'" field="code" header="Partage" style="min-width: 13rem">
               <template #body="p">
-                <MyTableShare :data="p.data" :isTeacher="isTeacher" />
+                <MyTableShare :data="p.data" :isTeacher="userStore.isTeacher" />
               </template>
             </Column>
 
-            <Column v-if="isTeacher" :class="cols.bib ? '' : 'hidden'" field="bib" header="Bib."
+            <Column v-if="userStore.isTeacher" :class="cols.bib ? '' : 'hidden'" field="bib" header="Bib."
               style="min-width: 5rem">
               <template #body="p">
                 <MyTableBib :data="p.data" />
@@ -411,7 +408,7 @@ const getIAmImg = (code) => {
 
             <Column v-if="cols.more" field="more" header="">
               <template #body="p">
-                <MyTableMore :data="p.data" :isTeacher="isTeacher" />
+                <MyTableMore :data="p.data" :isTeacher="userStore.isTeacher" />
               </template>
             </Column>
 

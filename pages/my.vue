@@ -3,7 +3,7 @@ document.title = "Capytale"
 const sideMenu = useSideMenuStore()
 const activites = useActivitiesStore()
 const tags = useTagsStore()
-const user = useUserStore()
+const userStore = useUserStore()
 
 activites.getActivities()
 tags.getAllTags()
@@ -41,11 +41,14 @@ const gutter = computed(() => {
 })
 
 const isReady = computed(() => {
+  const acti = activites.activities.status === 'success'
+  const tagsReady = tags.status === 'success'
+  const user = userStore.isLoaded
   return {
-    acti: activites.activities.status === 'success',
-    tags: tags.status === 'success',
-    user: user.user.status === 'success',
-    all: activites.activities.status === 'success' && tags.status === 'success' && user.user.status === 'success'
+    acti,
+    tags: tagsReady,
+    user,
+    all: acti && tagsReady && user,
   }
 })
 

@@ -2,8 +2,8 @@
 import { useBibList } from '@/composables/bib/list';
 import { useBibMetaData } from '@/composables/bib/metaData';
 import { FilterMatchMode } from '@primevue/core/api';
-const user = useUserStore()
-const isTeacher = user.user.data.roles.includes('teacher')
+const userStore = useUserStore()
+userStore.getUser()
 
 const bibStore = useBibList();
 const metaDataStore = useBibMetaData();
@@ -41,12 +41,10 @@ const previewedActivity = ref<{ nid: number, title: string }>();
   </div>
   <template v-else>
     <template v-if="bibStore.status == 'loading'">
-      <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="transparent" animationDuration=".5s"
-        aria-label="Custom ProgressSpinner" />
+      <div>Chargement…</div>
     </template>
     <template v-else>
       <div class="card">
-
         <DataTable v-model:filters="filters" :value="bibStore.list as any[]" paginator :rows="10"
           :rowsPerPageOptions="[5, 10, 20, 50]" dataKey="nid" :filterDisplay="advancedSearch ? 'row' : undefined"
           sortField="changed" :sortOrder="-1" :globalFilterFields="['title', 'abstract', 'auteur']" class="mydatatable"
@@ -54,8 +52,9 @@ const previewedActivity = ref<{ nid: number, title: string }>();
           currentPageReportTemplate='Activités partagées {first} à {last} sur {totalRecords} &nbsp; &nbsp;'>
           <template #header>
             <div class="flex flex-col xl:flex-row items-start lg:items-center min-h-24 justify-between">
-              <div v-if="isTeacher" class="titre">Bibliothèque entre enseignants </div>
-              <div v-else class="titre">Bibliothèque pour tous</div>
+              <div v-if="userStore.isTeacher" class="titre">Bibliothèque entre enseignants </div>
+              <div v-else-if="userStore.isStudent" class="titre">Bibliothèque pour tous</div>
+              <div v-else class="titre">…</div>
               <div class="flex flex-col md:flex-row gap-2 justify-content-end">
                 <TypeFilterSelect v-model="filters['type'].value" />
                 <IconField iconPosition="left">

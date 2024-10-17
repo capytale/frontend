@@ -1,9 +1,5 @@
 <script setup>
 import { useBibStore } from '@/stores/bib'
-import { useUserStore } from '@/stores/user'
-
-const user = useUserStore()
-user.getUser()
 
 const props = defineProps({
   data: Object,

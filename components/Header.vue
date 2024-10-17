@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const colorMode = useColorMode()
-const user = useUserStore()
+const userStore = useUserStore()
 const $route = useRoute();
 
 const backToLegacy = () => {
@@ -30,8 +30,8 @@ const checked = computed({
         <NuxtLink href="/"> CAPYTALE </NuxtLink>
       </span>
       <div class="capytaleMenu order-4 md:order-2">
-        <NuxtLink v-if="user.user.data" to="/my"><span class="px-2">Mes activités</span></NuxtLink>
-        <NuxtLink v-if="user.user.data" to="/bibliotheque"><span class="px-2">La bibliothèque</span></NuxtLink>
+        <NuxtLink v-if="userStore.isAuthenticated" to="/my"><span class="px-2">Mes activités</span></NuxtLink>
+        <NuxtLink v-if="userStore.isAuthenticated" to="/bibliotheque"><span class="px-2">La bibliothèque</span></NuxtLink>
       </div>
 
       <div class="activityMenu grow justify-end order-3">
@@ -39,7 +39,7 @@ const checked = computed({
           severity="info" text aria-haspopup="true" aria-controls="overlay_menu" class="mr-4" />
 
         <NuxtLink to="/sesame"
-          v-if="user.user.data && user.user.data.provider == 'mail' && user.user.data.profil == 'teacher'" class="mr-4">
+          v-if="userStore.isAuthenticated && userStore.user?.provider === 'mail' && userStore.isTeacher" class="mr-4">
           Sésame
         </NuxtLink>
         <i :class="checked ? 'pi pi-sun' : 'pi pi-sun text-yellow-400'"></i>
