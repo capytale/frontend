@@ -26,6 +26,8 @@ const events = ref([
   },
 ]);
 
+const publicUrl = usePublicUrl();
+
 </script>
 
 <template>
@@ -50,7 +52,8 @@ const events = ref([
       </Card>
     </template>
     <template #content="slotProps">
-      <img :src="slotProps.item.img" class="image mt-6 mb-4">
+      <img :src="publicUrl(slotProps.item.img)" class="image mt-6 mb-4">
+      <img :src="null" class="image mt-6 mb-4">
     </template>
   </Timeline>
 </template>

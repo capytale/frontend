@@ -53,6 +53,8 @@ const nextSnap = () => {
   window.scrollTo({ top: nextSnap, behavior: "smooth" });
 };
 
+const publicUrl = usePublicUrl();
+
 </script>
 
 
@@ -104,7 +106,7 @@ const nextSnap = () => {
             </div>
             <div class="flex flex-row">
               <div class="mt-2 text-gray-500" v-html="c.description"></div>
-              <img :src="c.img" class="w-40 mr-4 rounded-lg" />
+              <img :src="publicUrl(c.img)" class="w-40 mr-4 rounded-lg" />
             </div>
           </template>
         </Card>
@@ -113,13 +115,13 @@ const nextSnap = () => {
 
       <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-8 mb-4">
         <center class="mt-10 mb-10">
-          <video width="640" height="480" :poster="'media/posterVideoPres.png'" controls>
+          <video width="640" height="480" :poster="publicUrl('media/posterVideoPres.png')" controls>
             <source src="https://video.ac-paris.fr/mp4/2023-05/rev_-_capytale_-_marion_sarfati_hd.mp4" type="video/mp4">
             Your browser does not support the video tag.
           </video>
         </center>
         <center class="mt-10 mb-10">
-          <video width="640" height="480" :poster="'media/posterVideoClasse.png'" controls>
+          <video width="640" height="480" :poster="publicUrl('media/posterVideoClasse.png')" controls>
             <source
               src="https://pia.ac-paris.fr/portail/upload/docs/video/mp4/2024-06/24_06_gipticmaths_2024-06-06_15-16-4_454.mp4"
               type="video/mp4">
@@ -135,7 +137,7 @@ const nextSnap = () => {
 
     <section>
       <div class="flex flex-row items-center justify-around">
-        <img :src="'media/classe.png'" class="w-60 mr-4 rounded-lg my-20" />
+        <img :src="publicUrl('media/classe.png')" class="w-60 mr-4 rounded-lg my-20" />
         <div>
           <h2>Créer, distribuer et évaluer des activités pédagogiques</h2>
         </div>
@@ -148,7 +150,7 @@ const nextSnap = () => {
 
     <section>
       <div class="flex flex-row items-center justify-around">
-        <img :src="'media/apps.png'" class="w-60 mr-4 my-20" />
+        <img :src="publicUrl('media/apps.png')" class="w-60 mr-4 my-20" />
         <div>
           <h2>Une sélection d'outils complète et cohérente</h2>
         </div>
