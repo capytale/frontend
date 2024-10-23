@@ -17,6 +17,7 @@ export type BibActivityDetail = {
   nb_clone: number;
   enseignement: string[];
   niveau: string[];
+  for_all: boolean;
 }
 
 export type BibActivityFullAbstract = {
