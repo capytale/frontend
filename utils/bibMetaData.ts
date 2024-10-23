@@ -8,15 +8,14 @@ type MetaDataItem = {
 };
 
 type ModuleItem = {
-    name: string;
-    tid: string;
+    id: number;
+    label: string;
 }
 
 type ThemeItem = {
-    key: string;
+    id: number;
     label: string;
-    id: string;
-    parentid: string;
+    parentid?: number;
 }
 
 type BibMetaData = {

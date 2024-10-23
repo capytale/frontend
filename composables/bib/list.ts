@@ -1,6 +1,7 @@
 import { shallowRef, readonly, type ShallowRef } from 'vue';
 
-import httpClient from '@capytale/activity.js/backend/capytale/http';
+import httpClient from "@capytale/activity.js/backend/capytale/http";
+import { ApiError } from "@capytale/activity.js/api/http/error";
 
 const bibEp = "/web/c-hdls/api/bibliotheque";
 
@@ -34,7 +35,7 @@ let fetchPromise: Promise<void> | null = null;
 /**
  * Index des full abstracts chargés à la demande.
  */
-const fullAbstracts: { [nid: number]: ShallowRef<BibActivityFullAbstract> | true } = {};
+const fullAbstracts: { [nid: number]: ShallowRef<BibActivityFullAbstract> } = {};
 
 function buildAuthor(a: BibActivityDetail): string {
   let nom = a.nom;
@@ -70,13 +71,6 @@ function load(forceReload: boolean = false): void {
         l ??= [];
         for (let i = 0; i < l.length; ++i) {
           const a = l[i];
-          if (a.abstract != null) {
-            if (a.abstract_truncated) {
-              // On ajoute une entrée dans le dictionnaire des abstracts complets
-              // qui seront chargés à la demande
-              fullAbstracts[a.nid] = true;
-            }
-          }
           a.auteur = buildAuthor(a);
         }
         list.value = l;
@@ -92,10 +86,9 @@ function load(forceReload: boolean = false): void {
   }
 }
 
-function getFullAbstractRef(nid: number): ShallowRef<BibActivityFullAbstract> | undefined {
+function getFullAbstractRef(nid: number): ShallowRef<BibActivityFullAbstract> {
   let sr = fullAbstracts[nid];
-  if (sr == null) return;
-  if (sr === true) {
+  if (sr == null) {
     sr = shallowRef<BibActivityFullAbstract>({ status: undefined });
     fullAbstracts[nid] = sr;
   }
@@ -104,7 +97,6 @@ function getFullAbstractRef(nid: number): ShallowRef<BibActivityFullAbstract> | 
 
 async function loadFullAbstract(nid: number): Promise<void> {
   const sr = getFullAbstractRef(nid);
-  if (sr == null) return;
   let fa = sr.value;
   if (fa.status === 'requested') return;
   if (fa.status === 'present') return;
@@ -120,8 +112,48 @@ async function loadFullAbstract(nid: number): Promise<void> {
 
 function getFullAbstract(nid: number): BibActivityFullAbstract {
   const sr = getFullAbstractRef(nid);
-  if (sr == null) return { status: undefined };
   return sr.value;
+}
+
+function remove(nid: number): void {
+  const l = list.value;
+  const i = l.findIndex((a) => a.nid === nid);
+  if (i >= 0) {
+    l.splice(i, 1);
+    delete fullAbstracts[nid];
+    triggerRef(list);
+  }
+}
+
+async function refresh(nid: number): Promise<void> {
+  if (status.value !== 'loaded') return;
+  try {
+    const data = await httpClient.getJsonAsync<BibActivityDetail>(`${bibEp}/${nid}`);
+    if (data == null) {
+      remove(nid);
+    } else {
+      data.auteur = buildAuthor(data);
+      const l = list.value;
+      const i = l.findIndex((a) => a.nid === nid);
+      if (i >= 0) {
+        l[i] = data;
+        console.log(l);
+        const sr = getFullAbstractRef(nid);
+        sr.value = { status: undefined };
+        triggerRef(list);
+      } else {
+        l.push(data);
+        triggerRef(list);
+      }
+    }
+  } catch (error) {
+    if (!(error instanceof ApiError)) throw error;
+    // Une erreur ici signifie que l'activité n'existe pas ou n'est plus dans la bibliothèque
+    // On la retire de la liste
+    remove(nid);
+  }
+
+
 }
 
 function buildStore() {
@@ -130,6 +162,7 @@ function buildStore() {
     load,
     getFullAbstract,
     loadFullAbstract,
+    refresh,
     status,
     error,
   })
