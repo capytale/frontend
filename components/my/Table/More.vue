@@ -32,16 +32,6 @@ const actItems = ref([
     command: () => {
       cloningVisible.value = true
     }
-
-    // command: async () => {
-    //   try {
-    //     const c = await activites.cloneActivity(props.data.nid)
-    //     toast.add({ severity: 'success', summary: 'Clonage réussi', life: 4000, detail: `Titre du clone : "${c.title}"` });
-    //   }
-    //   catch (e) {
-    //     toast.add({ severity: 'error', summary: 'Échec du clonage : ', detail: `nid = ${props.data.nid} - ${e}` });
-    //   }
-    // }
   }
 ])
 const actMoodleItem = ref([
@@ -105,8 +95,8 @@ const commonItems = ref([
   { separator: true },
   {
     label: 'Supprimer',
-    icon: 'pi pi-times-circle',
-    class: 'redImportant',
+    icon: 'pi pi-times-circle text-red-500',
+    class: "text-red-500",
     command: async () => {
       confirm.require({
         message: 'Vous vous apprêtez à supprimer DÉFINITIVEMENT.',
@@ -160,7 +150,15 @@ const toggle = (event) => {
   <div class="card flex justify-content-center">
     <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" severity="secondary" link aria-haspopup="true"
       v-tooltip.top="{ value: 'Plus', showDelay: 300, hideDelay: 100 }" aria-controls="overlay_menu" />
-    <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
+    <Menu ref="menu" id="overlay_menu" :model="items" :popup="true">
+      <template #item="{ item, props }">
+        <a v-ripple class="flex items-center" v-bind="props.action">
+          <span :class="item.icon" />
+          <span :class="item.class">{{ item.label }}</span>
+        </a>
+      </template>
+    </Menu>
+
   </div>
 
   <MyActivityEdit v-model="paramVisible" :data="props.data" />
