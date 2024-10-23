@@ -79,8 +79,9 @@ export const useActivitiesStore = defineStore('activities', {
       } catch (e) {
         // console.log("error", e)
       }
-      // console.log("le clone : ", r.changed, r.code, r.nid, r.title, r.type)
+      // console.log("le clone : ", r.changed, r.code, r.nid, r.title, r.type, r.tags)
       // On ajoute le clone au store
+      console.log("r", r)
       r.access_tr_mode = "none"
       r.aid = r.nid
       r.appreciation = ""
@@ -96,7 +97,7 @@ export const useActivitiesStore = defineStore('activities', {
       r.status_clonable = 1
       r.status_shared = "0"
       r.status_web = "0"
-      r.tags = []
+      r.tags = r.tags.map((tag) => tag.target_id) // il faut modifier un peu
       r.views_hidden = 0
       r.views_total = 0
       r.whoami = "cr"
