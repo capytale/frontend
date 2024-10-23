@@ -12,7 +12,8 @@ const props = defineProps({
   isTeacher: Boolean,
 })
 
-const visible = ref(false);
+const paramVisible = ref(false);
+const cloningVisible = ref(false);
 
 const confirm = useConfirm();
 const toast = useToast();
@@ -22,21 +23,25 @@ const actItems = ref([
     label: 'Paramètres',
     icon: 'pi pi-cog',
     command: () => {
-      visible.value = true
+      paramVisible.value = true
     }
   },
   {
     label: 'Cloner',
     icon: 'pi pi-clone',
-    command: async () => {
-      try {
-        const c = await activites.cloneActivity(props.data.nid)
-        toast.add({ severity: 'success', summary: 'Clonage réussi', life: 4000, detail: `Titre du clone : "${c.title}"` });
-      }
-      catch (e) {
-        toast.add({ severity: 'error', summary: 'Échec du clonage : ', detail: `nid = ${props.data.nid} - ${e}` });
-      }
+    command: () => {
+      cloningVisible.value = true
     }
+
+    // command: async () => {
+    //   try {
+    //     const c = await activites.cloneActivity(props.data.nid)
+    //     toast.add({ severity: 'success', summary: 'Clonage réussi', life: 4000, detail: `Titre du clone : "${c.title}"` });
+    //   }
+    //   catch (e) {
+    //     toast.add({ severity: 'error', summary: 'Échec du clonage : ', detail: `nid = ${props.data.nid} - ${e}` });
+    //   }
+    // }
   }
 ])
 const actMoodleItem = ref([
@@ -130,8 +135,6 @@ const commonItems = ref([
   }
 ]);
 
-// watch(() => props.data.mode, (now, before) => console.log("now, before : ", now, before))
-
 const items = computed(() => {
   if (props.isTeacher) {
     if (props.data.whoami == 'ap') {
@@ -160,7 +163,11 @@ const toggle = (event) => {
     <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
   </div>
 
-  <MyActivityEdit v-model="visible" :data="props.data" />
+  <MyActivityEdit v-model="paramVisible" :data="props.data" />
+  <Dialog v-model:visible="cloningVisible" :style="{ width: '750px' }" header="Choisissez le titre du clone"
+    :modal="true">
+    <MyCloningForm :data="props.data" @closeCloningForm="cloningVisible = false" />
+  </Dialog>
 </template>
 
 <style scoped>

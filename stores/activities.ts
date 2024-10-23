@@ -66,12 +66,15 @@ export const useActivitiesStore = defineStore('activities', {
       return notDeleted
     },
 
-    async cloneActivity(nid: number | string): Promise<{ nid: number | string, title: string }> {
+    async cloneActivity(nid: number | string, title?: string): Promise<{ nid: number | string, title: string }> {
       let r
+      if (title === undefined) {
+        title = ""
+      }
       try {
         r = await httpClient.postGetJsonAsync<any>(
           myActivitiesApiEp,
-          { action: "clone", nid }
+          { action: "clone", nid, title }
         )
       } catch (e) {
         // console.log("error", e)
