@@ -1,20 +1,16 @@
+import type { Me } from '@capytale/activity.js/api/me/backend';
 import httpClient from '@capytale/activity.js/backend/capytale/http';
 
 const apiEp = "/web/c-hdls/api/my-bib-form-indexing-elements";
 
 type MetaDataItem = {
-    key: string;
-    value: string;
+    id: number;
+    label: string;
 };
 
-type ModuleItem = {
-    id: number;
-    label: string;
-}
+type ModuleItem = MetaDataItem;
 
-type ThemeItem = {
-    id: number;
-    label: string;
+type ThemeItem = MetaDataItem & {
     parentid?: number;
 }
 

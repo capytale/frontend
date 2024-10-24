@@ -61,12 +61,12 @@ function load(forceReload: boolean = false): void {
         const { enseignements, niveaux, themes, modules: mods } = l;
         const ei: MetaDataIndex = {};
         for (let i = 0; i < enseignements.length; ++i) {
-          ei[enseignements[i].key] = enseignements[i].value;
+          ei[enseignements[i].id] = enseignements[i].label;
         }
         enseignementsIndex.value = ei;
         const ni: MetaDataIndex = {};
         for (let i = 0; i < niveaux.length; ++i) {
-          ni[niveaux[i].key] = niveaux[i].value;
+          ni[niveaux[i].id] = niveaux[i].label;
         }
         niveauxIndex.value = ni;
         themesTree.value = buildTree(themes);
