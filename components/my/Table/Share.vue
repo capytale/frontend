@@ -49,9 +49,7 @@ const itemsGetter = ((obj) => {
 })
 
 const labelGetter = ((obj) => {
-  const b = obj.tr_beg + "Z"
-  const e = obj.tr_end + "Z"
-  const strPeriode = `Libre pour les élèves du ${formatDateTime(b)} au ${formatDateTime(e)}`
+  const strPeriode = `Libre pour les élèves du ${formatDateTime(obj.tr_beg)} au ${formatDateTime(obj.tr_end)}`
   const strC = " et en lecture seule en dehors"
   const strL = " et non accessible en dehors"
 
