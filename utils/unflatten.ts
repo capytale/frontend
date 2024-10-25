@@ -1,20 +1,3 @@
-import { loadBibMetaData } from '@/utils/bibMetaData'
-
-let bibIndexingElementsCache
-export function fetchBibIndexingElements() {
-  return useAsyncData('idxKey', async () => {
-    bibIndexingElementsCache = await loadBibMetaData()
-    bibIndexingElementsCache.themes = unflatten(bibIndexingElementsCache.themes)
-    return bibIndexingElementsCache
-  },
-    {
-      getCachedData() {
-        return bibIndexingElementsCache
-      }
-    }
-  )
-}
-
 /**
 * Convert a flat array of objects with id/parentid properties to a nested hierarchy.
 * @param  {Array} array   The flat array to convert.
@@ -33,7 +16,7 @@ export function fetchBibIndexingElements() {
 *   }
 * ]
 */
-export const unflatten = function(array: any[], parent?: any, tree?: any) {
+export function unflatten(array: any[], parent?: any, tree?: any) {
   tree = typeof tree !== 'undefined' ? tree : [];
   parent = typeof parent !== 'undefined' ? parent : { id: 0 };
   var children = array.filter(function(child: any) { return child.parentid == parent.id; });
