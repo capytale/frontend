@@ -1,81 +1,99 @@
-import { shallowRef, readonly } from 'vue';
-
 import { loadBibMetaData, type BibMetaData } from '@/utils/bibMetaData';
 
-type MetaDataIndex = {[key: string]: string};
-type ModuleIndex = {[key: number]: string};
-
-type TreeNode = {
-  key: string;
+type ThemeItem = {
   label: string;
-  children?: TreeNode[];
+  parentId?: number;
 }
 
-const status = shallowRef<'loading' | 'loaded' | 'error'>('loading');
-const error = shallowRef<any>();
-const enseignementsIndex = shallowRef<MetaDataIndex>({});
-const niveauxIndex = shallowRef<MetaDataIndex>({});
-const themesTree = shallowRef<TreeNode[]>([]);
-const modules = shallowRef<BibMetaData['modules']>([]);
+const store = shallowReactive({
+  load,
+  enseignementCodes: [] as string[],
+  getEnseignementLabel(key: string): string { return key; },
+  niveauCodes: [] as string[],
+  getNiveauLabel(key: string): string { return key; },
+  modulesCodes: [] as number[],
+  getModuleLabel(key: number): string { return key.toString(); },
+  themesCodes: [] as number[],
+  getThemeLabel(key: number): string { return key.toString(); },
+  getThemeItem(key: number): ThemeItem | undefined { return undefined; },
+  status: 'loading' as 'loading' | 'loaded' | 'error',
+  error: null as any,
+}); 
+
+
+function buildIndex<TK extends string | number>(list: { id: TK, label: string }[]): [
+  codes: TK[],
+  labelGetter: (key: TK) => string
+] {
+  const index: Partial<{ [key in TK]: string }> = {};
+  const codes: TK[] = [];
+  for (let i = 0; i < list.length; ++i) {
+    const { id, label } = list[i];
+    index[id] = label;
+    codes.push(id);
+  }
+  return [
+    markRaw(codes),
+    (key: TK) => index[key] ?? key.toString()
+  ];
+}
+
+function buildThemeIndex(list: BibMetaData['themes']): [
+  codes: number[],
+  itemGetter: (key: number) => ThemeItem | undefined,
+  labelGetter: (key: number) => string
+] {
+  const index: { [key: number]: ThemeItem } = {};
+  const codes: number[] = [];
+  for (let i = 0; i < list.length; ++i) {
+    const { id, label, parentId } = list[i];
+    index[list[i].id] = { label, parentId };
+    codes.push(id);
+  }
+  return [
+    markRaw(codes),
+    (key: number) => index[key],
+    (key: number) => index[key]?.label ?? key.toString()
+  ];
+}
+
 let fetchPromise: Promise<void> | null = null;
 
-function buildTree(flat: BibMetaData['themes']): TreeNode[] {
-  const tree: TreeNode[] = [];
-  const map: {[key: number]: TreeNode} = {};
-  for (let i = 0; i < flat.length; ++i) {
-    const { id, label, parentid } = flat[i];
-    map[id] = { key: id.toString(), label };
-  }
-  for (let i = 0; i < flat.length; ++i) {
-    const { id, parentid } = flat[i];
-    const node = map[id];
-    if (parentid == null) {
-      tree.push(node);
-    } else {
-      const parent = map[parentid];
-      if (parent == null) {
-        console.error(`Parent ${parentid} not found for ${id}`);
-        tree.push(node);
-      } else {
-        if (parent.children == null) parent.children = [];
-        parent.children.push(node);
-      }
-    }
-  }
-  return tree;
-}
-
-
 /**
- * Charge les activités de la bibliothèque.
+ * Charge les items d'indexation de la bibliothèque.
  * 
  * @param forceReload force le rechargement
  */
 function load(forceReload: boolean = false): void {
-  if (forceReload || (status.value !== 'loaded')) {
+  if (forceReload || (store.status !== 'loaded')) {
     if (fetchPromise != null) return;
-    status.value = 'loading';
-    error.value = null;
+    store.status = 'loading';
+    store.error = null;
     fetchPromise = loadBibMetaData(forceReload)
       .then((l) => {
-        const { enseignements, niveaux, themes, modules: mods } = l;
-        const ei: MetaDataIndex = {};
-        for (let i = 0; i < enseignements.length; ++i) {
-          ei[enseignements[i].id] = enseignements[i].label;
-        }
-        enseignementsIndex.value = ei;
-        const ni: MetaDataIndex = {};
-        for (let i = 0; i < niveaux.length; ++i) {
-          ni[niveaux[i].id] = niveaux[i].label;
-        }
-        niveauxIndex.value = ni;
-        themesTree.value = buildTree(themes);
-        modules.value = mods;
-        status.value = 'loaded';
+        const { enseignements, niveaux, themes, modules } = l;
+        [
+          store.enseignementCodes,
+          store.getEnseignementLabel,
+        ] = buildIndex(enseignements);
+        [
+          store.niveauCodes,
+          store.getNiveauLabel,
+        ] = buildIndex(niveaux);
+        [
+          store.modulesCodes,
+          store.getModuleLabel,
+        ] = buildIndex(modules);
+        [
+          store.themesCodes,
+          store.getThemeItem,
+          store.getThemeLabel,
+        ] = buildThemeIndex(themes);
+        store.status = 'loaded';
       })
       .catch((e) => {
-        error.value = e;
-        status.value = 'error';
+        store.error = e;
+        store.status = 'error';
       })
       .finally(() => {
         fetchPromise = null;
@@ -83,31 +101,6 @@ function load(forceReload: boolean = false): void {
   }
 }
 
-function getEnseignementLabel(key: string): string {
-  return enseignementsIndex.value[key] ?? key;
-}
-
-function getNiveauLabel(key: string): string {
-  return niveauxIndex.value[key] ?? key;
-}
-
-function buildStore() {
-  return readonly({
-    load,
-    get enseignementCodes() { return Object.keys(enseignementsIndex.value); },
-    getEnseignementLabel,
-    get niveauCodes() { return Object.keys(niveauxIndex.value); },
-    getNiveauLabel,
-    themesTree,
-    modules,
-    status,
-    error,
-  })
-};
-
-
-type Store = ReturnType<typeof buildStore>;
-let store: Store | null = null;
 
 /**
  * Fournit un objet réactif.
@@ -115,9 +108,9 @@ let store: Store | null = null;
  * @param lazy retarde le chargement depuis le backend
  * @returns 
  */
-function useBibMetaData(lazy: boolean = false): Store {
+function useBibMetaData(lazy: boolean = false) {
   if (!lazy) load();
-  return store ?? (store = buildStore());
+  return store;
 }
 
 export { useBibMetaData };

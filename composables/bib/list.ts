@@ -137,7 +137,6 @@ async function refresh(nid: number): Promise<void> {
       const i = l.findIndex((a) => a.nid === nid);
       if (i >= 0) {
         l[i] = data;
-        console.log(l);
         const sr = getFullAbstractRef(nid);
         sr.value = { status: undefined };
         triggerRef(list);

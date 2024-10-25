@@ -1,69 +1,79 @@
-<script setup>
-import Dialog from 'primevue/dialog'
+<script setup lang="ts">
 import { PrimeIcons as PI } from '@primevue/core/api'
-import { ref } from "vue";
 
-const visible = ref(false);
-const props = defineProps({
-  data: Object,
-})
+const p = defineProps<{
+  data: {
+    status_shared: string;
+    status_web: string;
+    whoami: string;
+    extra: boolean;
+  }
+}>()
+
+const emit = defineEmits(['click'])
+
+function handleClick() {
+  emit('click')
+}
 
 const activites = useActivitiesStore()
-activites.getAllDetails(props.data)
+activites.getAllDetails(p.data)
 
-const shareClass = computed(() => shareClassGetter(props.data))
-
-const shareClassGetter = ((obj) => {
-  return obj.status_shared == "0" ? " unshared " : " shared "
+const shared = computed(() => {
+  return p.data.status_shared == '1';
 })
 
+const toolTip = computed(() => {
+  if (p.data.status_shared == '1') {
+    if (p.data.status_web == '1') {
+      return 'Partagé avec tous. Cliquez pour paramétrer'
+    } else {
+      return 'Partagé entre enseignants. Cliquez pour paramétrer'
+    }
+  } else {
+    return 'Cliquez pour partager'
+  }
+});
+
+const sharedIconClass = computed(() => {
+  if (p.data.status_shared == '1') {
+    if (p.data.status_web == '1') {
+      return PI.GLOBE
+    } else {
+      return PI.CLONE
+    }
+  }
+})
 </script>
 
 <template>
-  <div v-if="!props.data.extra">
+  <div v-if="!p.data.extra">
     <i class="pi pi-spin pi-spinner"></i>
   </div>
   <div v-else class="bib">
-    <div v-if="props.data.whoami != 'ap'">
-      <button @click="visible = true">
-        <div v-if="props.data.status_shared == '1' && props.data.status_web == '1'"
-            v-tooltip.top="{ value: 'Partagé avec tous. Cliquez pour paramétrer', showDelay: 300, hideDelay: 100 }" >
-          <i :class="PI.GLOBE + shareClass + ' globe'" />
-          <i :class="PI.SHARE_ALT + shareClass" />
-        </div>
-        <div v-else-if="props.data.status_shared == '1' && props.data.status_web == '0'"
-            v-tooltip.top="{ value: 'Partagé entre enseignants. Cliquez pour paramétrer', showDelay: 300, hideDelay: 100 }" >
-          <i :class="PI.CLONE + shareClass + ' globe'" />
-          <i :class="PI.SHARE_ALT + shareClass" />
-        </div>
-        <div v-else>
-          <i :class="PI.SHARE_ALT + shareClass"
-            v-tooltip.top="{ value: 'Cliquez pour partager', showDelay: 300, hideDelay: 100 }" />
+    <div v-if="p.data.whoami != 'ap'">
+      <button @click.stop="handleClick">
+        <div v-tooltip.top="{ value: toolTip, showDelay: 300, hideDelay: 100 }" :class="{ shared: shared }">
+          <i v-if="sharedIconClass" :class="sharedIconClass" class="globe" />
+          <i :class="PI.SHARE_ALT" />
         </div>
       </button>
     </div>
-
-
-    <Dialog v-model:visible="visible" :header="props.data.title" modal :pt="{ mask: { style: 'backdrop-filter: blur(2px)' } }"
-      :style="{ width: '75%' }" maximizable dismissableMask>
-      <MyBibForm :nid="props.data.nid" @closeBibForm="visible = false" />
-    </Dialog>
   </div>
 </template>
 
 <style scoped>
-.shared {
+.shared i {
   color: green;
   font-weight: bold;
   font-size: 1.0rem
 }
 
-.unshared {
+i {
   color: var(--p-surface400);
 }
 
 .globe {
-  /* font-size: 0.5em; */
   position: relative;
   bottom: 0.9em;
   left: 0.5em;
@@ -74,11 +84,4 @@ const shareClassGetter = ((obj) => {
   align-items: center;
   justify-content: center;
 }
-
-/* .p-dialog .p-dialog-header { */
-/*   background: var(--gray-200); */
-/* } */
-/* .p-dialog-content { */
-/*   background: var(--gray-100); */
-/* } */
 </style>

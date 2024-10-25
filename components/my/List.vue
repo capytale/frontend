@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { FilterMatchMode } from '@primevue/core/api';
 import { useArchiveBuilder } from "~/composables/archiveBuilder/builder";
 
@@ -19,6 +19,11 @@ activites.activities.data.forEach(activity => {
   }
 });
 
+/**
+ * L'activité dont le formulaire Bib est ouvert
+ * Undefined si aucun formulaire n'est ouvert
+ */
+const bibFormActivity = ref < { nid: number, title: string } | undefined > ()
 
 const selectedFolder = ref(null)
 const opTags = ref();
@@ -224,6 +229,7 @@ const getIAmImg = (code) => {
 </script>
 
 <template>
+  <BibMetaDataModal v-model="bibFormActivity" />
   <Card class="flex-1">
 
     <template #content>
@@ -368,8 +374,8 @@ const getIAmImg = (code) => {
               </template>
             </Column>
 
-            <Column v-if="userStore.isTeacher" :class="cols.evaluation ? '' : 'hidden'" field="whoami" header="Évaluation"
-              style="max-width: 12rem">
+            <Column v-if="userStore.isTeacher" :class="cols.evaluation ? '' : 'hidden'" field="whoami"
+              header="Évaluation" style="max-width: 12rem">
               <template #body="p">
                 <MyTableEvaluation :data="p.data" :isTeacher="userStore.isTeacher" />
               </template>
@@ -396,7 +402,7 @@ const getIAmImg = (code) => {
             <Column v-if="userStore.isTeacher" :class="cols.bib ? '' : 'hidden'" field="bib" header="Bib."
               style="min-width: 5rem">
               <template #body="p">
-                <MyTableBib :data="p.data" />
+                <MyTableBib :data="p.data" @click="bibFormActivity = p.data" />
               </template>
             </Column>
 

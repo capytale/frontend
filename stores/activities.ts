@@ -3,6 +3,20 @@ import httpClient from '@capytale/activity.js/backend/capytale/http'
 // Definit le endpoint de l'API
 const myActivitiesApiEp = "/web/c-hdls/api/my-activities"
 
+function metaDataEp(nid: number | string) {
+  return `/web/c-hdls/api/metadata/${nid}`
+}
+
+type ActivityMetadata = {
+  status_shared: boolean;
+  status_web: boolean;
+  abstract: string;
+  enseignements: string[];
+  niveaux: string[];
+  modules: number[];
+  themes: number[];
+}
+
 export const useActivitiesStore = defineStore('activities', {
   state: () => ({
     activities: [],
@@ -13,11 +27,42 @@ export const useActivitiesStore = defineStore('activities', {
       this.activities = await fetchMyActivities()
 
     },
-    async getMetadata(nid) {
-      // console.log("getMetadata", nid)
-      // console.log("this.activities : ", this.activities.data[0])
-      const metadata = await httpClient.getJsonAsync("/web/c-hdls/api/metadata/" + nid)
-      this.activities.data = this.activities.data.map(el => el.nid == nid ? { ...el, ...metadata } : el);
+    getMetadata(nid: number | string) {
+      return httpClient.getJsonAsync<ActivityMetadata>(metaDataEp(nid));
+    },
+
+    async putMetaData(
+      nid: number | string,
+      data: ActivityMetadata
+    ) {
+      const act = this.getActivity(nid);
+      let currentShared: boolean | undefined;
+      let currentWeb: boolean | undefined;
+      if (act != null) {
+        // optimistic update
+        currentShared = act.status_shared;
+        currentWeb = act.status_web;
+        act.status_shared = data.status_shared;
+        act.status_web = data.status_web;
+      }
+      try {
+        await httpClient.putJsonAsync(
+          metaDataEp(nid),
+          data
+        );
+      } catch (e) {
+        // Rollback
+        if (act != null) {
+          act.status_shared = currentShared!;
+          act.status_web = currentWeb!;
+        }
+        throw e;
+      }
+    },
+
+
+    getActivity(nid: number | string) {
+      return this.activities.data.find((a) => a.nid == nid)
     },
 
     getAllDetails(activity: any) {
@@ -185,25 +230,6 @@ export const useActivitiesStore = defineStore('activities', {
         { action: "replaceTags", nids, tids }
       );
     },
-
-
-    async bibIndexActivity(nid: number,
-      share: number,
-      web: number,
-      resume: string,
-      selEnseignements: any[],
-      selNiveaux: any[],
-      selModules: any[],
-      selThemes: any[],
-    ) {
-      const indexElements = { nid, share, web, resume, selEnseignements, selNiveaux, selModules, selThemes }
-      // console.log("bibIndexActivity : ", indexElements)
-      await httpClient.postJsonAsync(
-        myActivitiesApiEp,
-        { action: "bibIndex", indexElements }
-      );
-    },
-
   },
 })
 

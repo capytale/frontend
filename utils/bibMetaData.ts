@@ -4,21 +4,24 @@ import httpClient from '@capytale/activity.js/backend/capytale/http';
 const apiEp = "/web/c-hdls/api/my-bib-form-indexing-elements";
 
 type MetaDataItem = {
+    id: string;
+    label: string;
+};
+
+type TaxonomyItem = {
     id: number;
     label: string;
 };
 
-type ModuleItem = MetaDataItem;
-
-type ThemeItem = MetaDataItem & {
-    parentid?: number;
+type TaxonomyTreeItem = TaxonomyItem & {
+    parentId?: number;
 }
 
 type BibMetaData = {
     enseignements: MetaDataItem[];
     niveaux: MetaDataItem[];
-    themes: ThemeItem[];
-    modules: ModuleItem[];
+    themes: TaxonomyTreeItem[];
+    modules: TaxonomyItem[];
 }
 
 let fetchPromise: Promise<BibMetaData> | null = null;
