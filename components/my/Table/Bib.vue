@@ -19,8 +19,10 @@ function handleClick() {
 const activites = useActivitiesStore()
 activites.getAllDetails(p.data)
 
+const show = computed(() => (p.data.whoami != 'ap'));
+
 const shared = computed(() => {
-  return p.data.status_shared == '1';
+  return p.data.status_shared == '1' || p.data.status_web == '1';
 })
 
 const toolTip = computed(() => {
@@ -47,11 +49,11 @@ const sharedIconClass = computed(() => {
 </script>
 
 <template>
-  <div v-if="!p.data.extra">
-    <i class="pi pi-spin pi-spinner"></i>
-  </div>
-  <div v-else class="bib">
-    <div v-if="p.data.whoami != 'ap'">
+  <template v-if="show">
+    <div v-if="!p.data.extra">
+      <Skeleton />
+    </div>
+    <div v-else class="bib">
       <button @click.stop="handleClick">
         <div v-tooltip.top="{ value: toolTip, showDelay: 300, hideDelay: 100 }" :class="{ shared: shared }">
           <i v-if="sharedIconClass" :class="sharedIconClass" class="globe" />
@@ -59,7 +61,7 @@ const sharedIconClass = computed(() => {
         </div>
       </button>
     </div>
-  </div>
+  </template>
 </template>
 
 <style scoped>
