@@ -32,6 +32,23 @@ const clearFilter = () => {
 
 const previewedActivity = ref<{ nid: number, title: string }>();
 
+const chooseBib = [
+{ val: 'ens', label: 'entre enseignants' },
+{ val: 'all', label: 'pour tous' }
+];
+
+const chosenBib = ref<(typeof chooseBib)[number]['val']>('ens');
+
+const displayedActivities = computed(() => {
+  if (userStore.isTeacher) {
+    if (chosenBib.value == 'all') {
+      return bibStore.list.filter((v) => v.for_all);
+    }
+  }
+  return bibStore.list;
+});
+
+
 </script>
 
 <template>
@@ -45,14 +62,14 @@ const previewedActivity = ref<{ nid: number, title: string }>();
     </template>
     <template v-else>
       <div class="card">
-        <DataTable v-model:filters="filters" :value="bibStore.list as any[]" paginator :rows="10"
+        <DataTable v-model:filters="filters" :value="displayedActivities as any[]" paginator :rows="10"
           :rowsPerPageOptions="[5, 10, 20, 50]" dataKey="nid" :filterDisplay="advancedSearch ? 'row' : undefined"
           sortField="changed" :sortOrder="-1" :globalFilterFields="['title', 'abstract', 'auteur']" class="mydatatable"
           paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
           currentPageReportTemplate='Activités partagées {first} à {last} sur {totalRecords} &nbsp; &nbsp;'>
           <template #header>
             <div class="flex flex-col xl:flex-row items-start lg:items-center min-h-24 justify-between">
-              <div v-if="userStore.isTeacher" class="titre">Bibliothèque entre enseignants </div>
+              <div v-if="userStore.isTeacher" class="titre">Bibliothèque <Select v-model="chosenBib" :options="chooseBib" option-label="label" option-value="val"  /> </div>
               <div v-else-if="userStore.isStudent" class="titre">Bibliothèque pour tous</div>
               <div v-else class="titre">…</div>
               <div class="flex flex-col md:flex-row gap-2 justify-content-end">
