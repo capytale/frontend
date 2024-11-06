@@ -39,7 +39,7 @@ const divRef = ref()
 
 <template>
   <div class="flex flex-row gap-2">
-    <div contenteditable="true" @blur="save" ref="divRef" class="editable whitespace-pre-wrap"
+    <div contenteditable="true" @click.stop @blur="save" ref="divRef" class="editable whitespace-pre-wrap"
       v-tooltip.top="{ value: 'Cliquer pour modifier. Quitter pour enregistrer.', showDelay: 300, hideDelay: 0 }">{{
         value }}</div>
     <Button v-if="my.mathalea" @click="toggle" label="Détails" class="self-center" />

@@ -28,7 +28,7 @@ const save = async () => {
 </script>
 
 <template>
-  <div contenteditable="true" @blur="save" ref="divRef" class="editable whitespace-pre-wrap"
+  <div contenteditable="true" @click.stop @blur="save" ref="divRef" class="editable whitespace-pre-wrap"
     v-tooltip.top="{ value: 'Cliquer pour modifier. Quitter pour enregistrer.', showDelay: 300, hideDelay: 0 }">{{ value
     }}</div>
 </template>
