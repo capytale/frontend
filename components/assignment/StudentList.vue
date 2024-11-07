@@ -9,6 +9,7 @@ import { FilterMatchMode } from '@primevue/core/api';
 import { useMyStore } from '@/stores/my'
 import { useArchiveBuilder } from "~/composables/archiveBuilder/builder";
 import { useActivityTypesList } from "~/composables/activityTypes/list";
+import { formatDateTime } from '~/utils/format';
 
 const toast = useToast();
 const my = useMyStore()
@@ -171,8 +172,30 @@ const rowStyle = (data) => {
   }
 };
 
+function customExportFunction(o) {
+  switch (o.field) {
+    case 'changed':
+      return formatDateTime(o.data * 1000)
+    case 'workflow':
+      console.log("o.data: ", o.data)
+      switch (o.data) {
+        case "100":
+          return "En cours"
+        case "200":
+          return "Rendu"
+        case "300":
+          return "Corrigé"
+        default:
+          return String(o.data)
+      }
+    default:
+      return String(o.data)
+  }
+}
 const dt = ref();
-const exportCSV = () => { dt.value.exportCSV(); }
+const exportCSV = () => {
+  dt.value.exportCSV();
+}
 
 const menu = ref();
 const toggle = (event) => {
@@ -271,7 +294,7 @@ const save = (x) => {
         v-model:filters="filters" :globalFilterFields="['hasTags', 'fullname', 'classe', 'workflow']"
         selectionMode="multiple" @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()"
         @rowUnselectAll="onRowUnselectAll()" paginator :rows="40" :rowsPerPageOptions="[10, 40, 60]"
-        sortField="fullname" :sortOrder="1"
+        sortField="fullname" :sortOrder="1" :exportFunction="customExportFunction"
         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
         currentPageReportTemplate='Copies {first} à {last} sur {totalRecords} &nbsp; &nbsp;'
         @rowSelectAll="onRowSelectAll()" :rowStyle="rowStyle" ref="dt" class="mydatatable">
