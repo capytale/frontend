@@ -28,20 +28,16 @@ const testSet = computed(() => {
 </script>
 
 <template>
-  <div v-for="tag in testSet" :key="workingTags.nid + tag">
-    <span class="parent mr-1">
-      <span class="etiquette">
-        <i class="pi pi-tag mr-2" :style="'color:' + getName(tag).color"></i>
-        <span class="whitespace-nowrap"
-          :class="props.data.tags.includes(tag) ? (workingTags.tags.includes(tag) ? '' : 'line-through') : 'italic'">
-          {{ getName(tag).label }}{{ props.data.tags.includes(tag) ? (workingTags.tags.includes(tag) ? '' : '') : '*' }}
-        </span>
-      </span>
-      <div class="poubelle" v-tooltip.top="{ value: 'Désétiqueter', showDelay: 300, hideDelay: 0 }">
-        <Button icon="pi pi-times" severity="danger" @click="delTag(workingTags.nid, tag)" text rounded />
-      </div>
+<div class="flex flex-row justify-between items-center">
+  <div>
+    <span class="whitespace-nowrap flex flex-row items-center" v-for="tag in testSet" :key="workingTags.nid + tag"
+      :class="props.data.tags.includes(tag) ? (workingTags.tags.includes(tag) ? '' : 'line-through') : 'italic'">
+      <i class="pi pi-tag mr-2" :style="'color:' + getName(tag).color"></i>
+      {{ getName(tag).label }}{{ props.data.tags.includes(tag) ? (workingTags.tags.includes(tag) ? '' : '') : '*' }}
     </span>
   </div>
+  <Button v-if="false" icon="pi pi-pencil" severity="secondary" text rounded aria-label="Éditer" class="self-center" size="small" @click="editItem" />
+</div>
 </template>
 
 

@@ -5,19 +5,26 @@ import { useArchiveBuilder } from "~/composables/archiveBuilder/builder";
 const userStore = useCurrentUserStore()
 const activites = useActivitiesStore()
 const tags = useTagsStore()
+type Activity = { tags?: string[] }; 
 
-const activitiesByTag = {};
+const activitiesByTag: { [key: string]: Activity[] } = {};
 
-activites.activities.data.forEach(activity => {
-  if (activity.tags) {
-    activity.tags.forEach(tag => {
-      if (!activitiesByTag[tag]) {
-        activitiesByTag[tag] = [];
-      }
-      activitiesByTag[tag].push(activity);
-    });
-  }
-});
+const createActivitiesByTag = () => {
+  if (Object.keys(activitiesByTag).length > 0)
+    Object.keys(activitiesByTag).forEach(key => delete activitiesByTag[key]);
+  activites.activities.data.forEach((activity: Activity) => {
+    if (activity.tags) {
+      activity.tags.forEach(tag => {
+        if (!activitiesByTag[tag]) {
+          activitiesByTag[tag] = [];
+        }
+        activitiesByTag[tag].push(activity);
+      });
+    }
+  });
+}
+
+createActivitiesByTag()
 
 /**
  * L'activité dont le formulaire Bib est ouvert
@@ -43,6 +50,7 @@ const replaceTags = async () => {
   selectedNid.value.forEach((o) => {
     o.tags = tmpTags.value.find((p) => p.nid === o.nid).tags
   })
+  createActivitiesByTag()
   tmpTags.value = []
   opTags2.value.hide()
   selectedNid.value = []
