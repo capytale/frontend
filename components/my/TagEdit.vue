@@ -103,15 +103,15 @@ const toggle = (event) => {
   menu.value.toggle(event);
 };
 
-const save = () => {
+const save = async () => {
   if (newTag.value) {
-    tagstore.createTag(label.value, Object.keys(selectedTag.value)[0] || 0)
+    await tagstore.createTag(label.value, Object.keys(selectedTag.value)[0] || 0)
   } else {
-    tagstore.setTagLabel(props.slotProps.node.id, label.value)
+    await tagstore.setTagLabel(props.slotProps.node.id, label.value)
     if (wantSubTag.value.length > 0 && Object.keys(selectedTag.value).length == 1) {
-      tagstore.setTagParent(props.slotProps.node.id, Object.keys(selectedTag.value)[0])
+      await tagstore.setTagParent(props.slotProps.node.id, Object.keys(selectedTag.value)[0])
     } else {
-      tagstore.setTagParent(props.slotProps.node.id, 0)
+      await tagstore.setTagParent(props.slotProps.node.id, 0)
     }
   }
   editVisible.value = false;
