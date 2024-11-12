@@ -24,11 +24,11 @@ useHead({
     <div class="appContainer" :style="bgColor">
       <Header></Header>
       <div class="flex">
-        <div class="container mx-auto">
-          <div class="mb-8">
+        <div class="container mx-auto flex flex-col">
+          <div class="mb-8 grow shrink-0">
             <slot />
           </div>
-          <div class="mb-8">
+          <div class="pb-8 shrink-0">
             <Footer></Footer>
           </div>
         </div>
@@ -57,8 +57,8 @@ body,
 }
 
 
-.azppContainer {
-  height: 100%;
+.appContainer {
+  height: 100vh;
   display: grid;
   grid-template-rows: 60px 1fr;
   overflow: hidden;
