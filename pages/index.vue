@@ -1,4 +1,5 @@
-<script setup>
+<script setup lang="ts">
+
 const cards = [
   {
     title: "Commun numérique",
@@ -61,13 +62,15 @@ const publicUrl = usePublicUrl();
 <template>
   <article>
     <section>
-      <div class="flex flex-row items-center justify-between">
-        <img src="https://capytale2.ac-paris.fr/logo.svg" class="w-40 mr-4 rounded-lg my-8" />
+      <div class="flex flex-row items-center justify-between gap-4">
+        <div class="flex flex-row items-center gap-4">
+          <img src="https://capytale2.ac-paris.fr/logo.svg" class="w-40 mr-4 rounded-lg my-8" />
         <div>
           <h1>Capytale</h1>
           <h2>
             Activités numériques et de programmation pour la classe
           </h2>
+        </div>
         </div>
         <div class="flex flex-row items-center justify-around gap-2">
           <div class="myflex">
@@ -112,22 +115,21 @@ const publicUrl = usePublicUrl();
         </Card>
       </div>
 
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-8 mb-4">
-        <center class="mt-10 mb-10">
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-8 mb-4">
+        <div class="mt-10 mb-10 flex justify-center">
           <video width="640" height="480" :poster="publicUrl('media/posterVideoPres.png')" controls>
             <source src="https://video.ac-paris.fr/mp4/2023-05/rev_-_capytale_-_marion_sarfati_hd.mp4" type="video/mp4">
             Your browser does not support the video tag.
           </video>
-        </center>
-        <center class="mt-10 mb-10">
+        </div>
+        <div class="mt-10 mb-10 flex justify-center">
           <video width="640" height="480" :poster="publicUrl('media/posterVideoClasse.png')" controls>
             <source
               src="https://pia.ac-paris.fr/portail/upload/docs/video/mp4/2024-06/24_06_gipticmaths_2024-06-06_15-16-4_454.mp4"
               type="video/mp4">
             Your browser does not support the video tag.
           </video>
-        </center>
+        </div>
       </div>
 
       <span @click="nextSnap" class="slidedown-icon bg-primary text-primary-contrast flex items-center justify-center">

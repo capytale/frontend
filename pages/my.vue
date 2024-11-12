@@ -57,7 +57,11 @@ const tagsLogo = ref("pi pi-tags")
 </script>
 
 <template>
-  <div class="flex flex-col">
+  <div v-if="!userStore.isAuthenticated" class="mt-12 flex flex-col items-center gap-8">
+Vous devez vous connecter pour accéder à vos activités.
+<EntButton />
+  </div>
+  <div v-else class="flex flex-col">
     <div class="flex flex-col md:flex-row gap-4 my-4">
       <MyActivityPlay />
       <MyActivityAdd />

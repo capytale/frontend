@@ -52,6 +52,11 @@ const displayedActivities = computed(() => {
 </script>
 
 <template>
+  <div v-if="!userStore.isAuthenticated" class="mt-12 flex flex-col items-center gap-8">
+Vous devez vous connecter pour accéder à la bibliothèque.
+<EntButton />
+  </div>
+<template v-else>
   <BibActivityPreview v-model="previewedActivity" />
   <div v-if="bibStore.status == 'error'">
     <p>Impossible de charger les activités.</p> {{ bibStore.error }}
@@ -187,6 +192,7 @@ const displayedActivities = computed(() => {
       </div>
     </template>
   </template>
+</template>
 </template>
 
 <style scoped>
