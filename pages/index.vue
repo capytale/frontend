@@ -97,16 +97,16 @@ const publicUrl = usePublicUrl();
         </div>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-8 mb-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-8 mb-4">
         <Card v-for="(c, index) of cards" key="index">
           <template #content>
             <div class="flex flex-row align-center">
               <i :class="c.icon" class="mt-2 mr-2 text-gray-500"></i>
               <div class="font-semibold">{{ c.title }}</div>
             </div>
-            <div class="flex flex-row">
+            <div class="flex flex-row justify-between items-center gap-4">
               <div class="mt-2 text-gray-500" v-html="c.description"></div>
-              <img :src="publicUrl(c.img)" class="w-40 mr-4 rounded-lg" />
+              <img :src="publicUrl(c.img)" class="w-40 rounded-lg" />
             </div>
           </template>
         </Card>
