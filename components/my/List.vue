@@ -7,24 +7,6 @@ const activites = useActivitiesStore()
 const tags = useTagsStore()
 type Activity = { tags?: string[] }; 
 
-const activitiesByTag: { [key: string]: Activity[] } = {};
-
-const createActivitiesByTag = () => {
-  if (Object.keys(activitiesByTag).length > 0)
-    Object.keys(activitiesByTag).forEach(key => delete activitiesByTag[key]);
-  activites.activities.data.forEach((activity: Activity) => {
-    if (activity.tags) {
-      activity.tags.forEach(tag => {
-        if (!activitiesByTag[tag]) {
-          activitiesByTag[tag] = [];
-        }
-        activitiesByTag[tag].push(activity);
-      });
-    }
-  });
-}
-
-createActivitiesByTag()
 
 /**
  * L'activité dont le formulaire Bib est ouvert
@@ -50,7 +32,6 @@ const replaceTags = async () => {
   selectedNid.value.forEach((o) => {
     o.tags = tmpTags.value.find((p) => p.nid === o.nid).tags
   })
-  createActivitiesByTag()
   tmpTags.value = []
   opTags2.value.hide()
   selectedNid.value = []
@@ -202,7 +183,12 @@ const corbeilleTid = () => {
 const myactivities = computed(() => {
   const tid = getTidFromStore(activeTag.tid)
   if (tid) { // user has selected a tag
-    return activitiesByTag[tid] || []
+    return activites.activities.data.filter(o => {
+      if (!o.tags) return false
+      for (let tag of o.tags) {
+        if (tag === tid) return true
+      }
+    })
   } else { // no tag selected : show all activities except those in the trash
     if (!activites.activities.data) return []
     const corbTid = corbeilleTid();
