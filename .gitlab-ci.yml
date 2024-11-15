@@ -26,8 +26,11 @@ deploy:
     - if: $CI_COMMIT_BRANCH == "main"
       when: manual
     - when: on_success
-  image: tjaisson/rsync
+  image: tjaisson/cap-deploy
+  variables:
+    GIT_STRATEGY: none
   script:
+    - pre-compress .output/public/
     - mkdir -p ~/.ssh/
     - mv $SSH_PRIVATE_KEY ~/.ssh/id_rsa
     - chmod a-r-w-x,u+r ~/.ssh/id_rsa
