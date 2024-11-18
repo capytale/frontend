@@ -4,8 +4,6 @@ const privateTagsApiEp = "/web/c-hdls/api/private-tags"
 
 export const useTagsStore = defineStore('tags', {
   state: () => ({
-    // tags: {},
-    // flatTags: {},
     data: {},
   }),
   getters: {
@@ -14,13 +12,6 @@ export const useTagsStore = defineStore('tags', {
     status: (state) => state.data.status,
   },
   actions: {
-    async getTags() {
-      this.tags = await fetchTags()
-    },
-    async getFlatTags() {
-      this.flatTags = await fetchFlatTags()
-    },
-
     async getAllTags() {
       this.data = await fetchAllTags()
     },

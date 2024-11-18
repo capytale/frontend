@@ -1,4 +1,5 @@
 import httpClient from '@capytale/activity.js/backend/capytale/http'
+import type { Tag } from '~/types/tags'
 
 let myActivitiesCache: { property: object }
 // renvoie {data, pending, error, status}
@@ -29,40 +30,14 @@ export function fetchAssignments(nid: string) {
 }
 
 
-let myTagsCache
-export function fetchTags() {
-  return useLazyAsyncData('tagsKey', async () => {
-    myTagsCache = await httpClient.getJsonAsync<any>("/web/c-hdls/api/get-private-tags-flat-list")
-    return unflatten(myTagsCache)
-  },
-    {
-      getCachedData() {
-        return myTagsCache
-      }
-    }
-  )
-}
-
-let myFlatTagsCache
-export function fetchFlatTags() {
-  return useLazyAsyncData('flatTagsKey', async () => {
-    myFlatTagsCache = await httpClient.getJsonAsync<any>("/web/c-hdls/api/get-private-tags-flat-list")
-    return myFlatTagsCache
-  },
-    {
-      getCachedData() {
-        return myFlatTagsCache
-      }
-    }
-  )
-}
 
 
-let myAllTagsCache
+let myAllTagsCache: { tags: Tag[], flatTags: Tag[] }
 export function fetchAllTags() {
   return useLazyAsyncData('alltagsKey', async () => {
-    myTagsCache = await httpClient.getJsonAsync<any>("/web/c-hdls/api/get-private-tags-flat-list")
-    return { tags: unflatten(myTagsCache), flatTags: myTagsCache }
+    const dt = (await httpClient.getJsonAsync<Tag[]>("/web/c-hdls/api/get-private-tags-flat-list"))!
+    myAllTagsCache = { tags: unflatten(dt), flatTags: dt }
+    return myAllTagsCache
   },
     {
       getCachedData() {

@@ -1,3 +1,5 @@
+import type { Tag, TagTreeNode } from "~/types/tags";
+
 /**
 * Convert a flat array of objects with id/parentid properties to a nested hierarchy.
 * @param  {Array} array   The flat array to convert.
@@ -16,9 +18,11 @@
 *   }
 * ]
 */
-export function unflatten(array: any[], parent?: any, tree?: any) {
-  tree = typeof tree !== 'undefined' ? tree : [];
-  parent = typeof parent !== 'undefined' ? parent : { id: 0 };
+
+
+export function unflatten(array: Tag[], parent?: any, tree?: TagTreeNode[]): TagTreeNode[] {
+  tree ??= [] as TagTreeNode[];
+  parent ??= { id: 0 };
   var children = array.filter(function(child: any) { return child.parentid == parent.id; });
   if (children.length > 0) {
     if (parent.id == 0) {
