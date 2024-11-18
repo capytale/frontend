@@ -59,6 +59,7 @@ Vous devez vous connecter pour accéder à vos activités.
 <EntButton />
   </div>
   <div v-else class="flex flex-col">
+    <NuxtPage />
     <div class="flex flex-col md:flex-row gap-4 my-4">
       <MyActivityPlay />
       <MyActivityAdd />

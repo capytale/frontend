@@ -34,8 +34,9 @@ const nbViews = computed(() => {
     return props.data.viewsDetails.visible > 1 ? props.data.viewsDetails.visible + ' copies' : props.data.viewsDetails.visible + ' copie'
 })
 
-const testAssignments = () => {
-  visible.value = true
+const testAssignments = async () => {
+  // visible.value = true
+  await navigateTo(`/my/${props.data.nid}`, )
 }
 </script>
 
