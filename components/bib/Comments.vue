@@ -1,5 +1,7 @@
 <script setup>
-import { useBibStore } from '@/stores/bib'
+
+// ATTENTION /!\ : useBibStore est un store qui n'existe plus.
+//import { useBibStore } from '@/stores/bib'
 
 const props = defineProps({
   data: Object,
