@@ -5,19 +5,8 @@ import { useArchiveBuilder } from "~/composables/archiveBuilder/builder";
 const userStore = useCurrentUserStore()
 const activites = useActivitiesStore()
 const tags = useTagsStore()
+type Activity = { tags?: string[] }; 
 
-const activitiesByTag = {};
-
-activites.activities.data.forEach(activity => {
-  if (activity.tags) {
-    activity.tags.forEach(tag => {
-      if (!activitiesByTag[tag]) {
-        activitiesByTag[tag] = [];
-      }
-      activitiesByTag[tag].push(activity);
-    });
-  }
-});
 
 /**
  * L'activité dont le formulaire Bib est ouvert
@@ -194,7 +183,12 @@ const corbeilleTid = () => {
 const myactivities = computed(() => {
   const tid = getTidFromStore(activeTag.tid)
   if (tid) { // user has selected a tag
-    return activitiesByTag[tid] || []
+    return activites.activities.data.filter(o => {
+      if (!o.tags) return false
+      for (let tag of o.tags) {
+        if (tag === tid) return true
+      }
+    })
   } else { // no tag selected : show all activities except those in the trash
     if (!activites.activities.data) return []
     const corbTid = corbeilleTid();
