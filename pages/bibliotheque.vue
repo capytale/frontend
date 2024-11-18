@@ -5,22 +5,24 @@ import { FilterMatchMode } from '@primevue/core/api';
 const userStore = useCurrentUserStore()
 userStore.getUser()
 
+const q = useRoute().query
+
 const bibStore = useBibList();
 const metaDataStore = useBibMetaData();
 
-const advancedSearch = ref(false)
+const advancedSearch = ref(q != null);
 
 const filters = ref()
 
 const initFilters = () => {
   filters.value = {
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    title: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    abstract: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    niveau: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    enseignement: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    auteur: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    type: { value: null, matchMode: FilterMatchMode.IN },
+    title: { value: q.titre, matchMode: FilterMatchMode.CONTAINS },
+    abstract: { value: q.desc, matchMode: FilterMatchMode.CONTAINS },
+    niveau: { value: q.niveau, matchMode: FilterMatchMode.CONTAINS },
+    enseignement: { value: q.enseignement, matchMode: FilterMatchMode.CONTAINS },
+    auteur: { value: q.auteur, matchMode: FilterMatchMode.CONTAINS },
+    type: { value: q.type, matchMode: FilterMatchMode.IN },
   };
 };
 
