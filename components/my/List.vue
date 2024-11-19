@@ -4,7 +4,9 @@ import { useArchiveBuilder } from "~/composables/archiveBuilder/builder";
 
 const userStore = useCurrentUserStore()
 const activites = useActivitiesStore()
-const tags = useTagsStore()
+const { data: tags } = useTagsStore()
+const { status } = await useLazyAsyncData('tags', () => tagsStore.getAllTags())
+// Mettre une condition sur le status par sécurité
 type Activity = { tags?: string[] }; 
 
 
@@ -179,6 +181,8 @@ const corbeilleTid = () => {
   if (!corbeilleTag) return null
   return corbeilleTag.id
 }
+console.log(corbeilleTid());
+
 
 const myactivities = computed(() => {
   const tid = getTidFromStore(activeTag.tid)
@@ -239,180 +243,7 @@ const getIAmImg = (code) => {
 
         <template v-else>
 
-          <DataTable v-model:filters="filters" v-model:selection="selectedNid" selectionMode="multiple"
-            :value="myactivities" dataKey="nid" sortField="changed" tableStyle="min-width: 50rem" :sortOrder="-1"
-            paginator :rows="10" :rowsPerPageOptions="[10, 20, 50]"
-            paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-            currentPageReportTemplate='Activités {first} à {last} sur {totalRecords} &nbsp; &nbsp;'
-            @rowSelect="onRowSelect()" @rowUnselect="onRowUnselect()" @rowUnselectAll="onRowUnselectAll()"
-            @rowSelectAll="onRowSelectAll()" :globalFilterFields="['title', 'type', 'whoami']" class="mydatatable">
 
-
-            <template #header class="hdr">
-              <Toolbar>
-                <template #start v-if="!showToolbar">
-                  <h2 class="ml-8"> Mes activités </h2>
-                </template>
-                <template #start v-if="showToolbar">
-                  <span class="ml-8 mr-2">{{ nbselected() }}</span>
-
-                  <Button v-tooltip.bottom="'Supprimer'" @click="handleDelete()" icon="pi pi-times-circle" class="mr-2"
-                    severity="danger" outlined />
-                  <Button v-tooltip.bottom="'Archiver toutes les copies et mettre le compteur de copies à 0'"
-                    @click="handleBulkArchive()" icon="pi pi-eye-slash" class="mr-2" outlined severity="secondary" />
-
-                  <div class="card flex justify-content-center">
-                    <Button v-tooltip.bottom="'Étiqueter'" icon="pi pi-tags" class="mr-2" @click="tagsToggle2"
-                      severity="secondary" outlined />
-                    <Popover ref="opTags2" @hide="cancelModif">
-                      <MyTagsTree v-if="tmpTags.length === 0" v-model:selection="selectedNid" :tags="tags.tags" />
-                      <MyTagsTree v-else v-model:selection="tmpTags" :tags="tags.tags" />
-                      <div class="flex flex-row justify-between gap-2">
-                        <Button label="Annuler" @click="cancelModif" class="mt-4" severity="secondary" size="small" />
-                        <Button label="Appliquer" @click="replaceTags" class="mt-4" size="small" />
-                      </div>
-                    </Popover>
-                  </div>
-                  <div class="card flex justify-content-center" v-if="false">
-                    <Button v-tooltip.bottom="'Déplacer'" icon="pi pi-folder-open" class="mr-2" severity="secondary"
-                      @click="foldersToggle" />
-                    <Popover ref="opFolders">
-                      <div class="gap-3 w-25rem">
-                        <Tree id="folder" v-model:selectionKeys="selectedFolder" :value="tags.tags"
-                          selectionMode="single" class="w-full md:w-30rem scroll">
-                          <template #default="slotProps">
-                            <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{
-                              slotProps.node.label
-                            }}
-                          </template>
-                        </Tree>
-                        <Button v-if="selectedFolder && Object.keys(selectedFolder).length" type="button"
-                          label="Déplacer" class="w-full" @click="handleMoveToFolderMultiple" />
-                      </div>
-                    </Popover>
-                  </div>
-                  <Button v-tooltip.bottom="'Télécharger'" icon="pi pi-download" class="mr-2" severity="secondary"
-                    @click="handleDownload" />
-                  <!-- <Button v-tooltip.bottom="'CSV'" icon="pi pi-file-excel" class="mr-2" severity="secondary" /> -->
-                </template>
-
-                <template #end>
-                  <template v-if="getTidFromStore(activeTag.tid)">
-                    <span class="text-red-500 font-bold">Filtre par étiquette :</span>
-                    <Button removable class="removable pr-2 mr-1" text @click="activeTag.tid = {}"
-                      v-tooltip.top="{ value: 'Supprimer', showDelay: 400, hideDelay: 0 }">
-                      {{ getTagName(activeTag.tid) }}
-                      <i class="pi pi-times px-2" style="color:red"></i>
-                    </Button>
-                  </template>
-
-                  <div class="flex gap-2 justify-content-end">
-
-                    <TypeFilterSelect v-model="filters['type'].value" :activities="myactivities" />
-
-                    <IconField iconPosition="left">
-                      <InputIcon>
-                        <i class="pi pi-search" />
-                      </InputIcon>
-                      <InputText v-model="filters['title'].value" placeholder="Rechercher dans le titre" />
-                    </IconField>
-
-                    <Select v-model="filters['whoami'].value" :options="iAm" optionLabel="label" optionValue="code"
-                      placeholder="Je suis" showClear checkmark :highlightOnSelect="false" class="w-full jesuis">
-                      <template #value="slotProps">
-                        <div v-if="slotProps.value" class="flex items-center">
-                          <img :src="getIAmImg(slotProps.value)" class="mr-2" style="width: 18px" />
-                          <div class="mr-4">{{ getIAmLabel(slotProps.value) }}</div>
-                        </div>
-                        <span v-else>
-                          {{ slotProps.placeholder }}
-                        </span>
-                      </template>
-                      <template #option="slotProps">
-                        <div class="flex items-center">
-                          <img :src="slotProps.option.img" class="mr-2" style="width: 18px" />
-                          <div>{{ slotProps.option.label }}</div>
-                        </div>
-                      </template>
-                      <template #header>
-                        <div class="font-medium p-3">Choisir un rôle</div>
-                      </template>
-                    </Select>
-
-                    <Button label="Colonnes" icon="pi pi-arrow-down" outlined @click="colsChoiceToggle" v-if="false" />
-                    <Popover ref="colsChoice" v-if="false">
-                      <div v-for="(v, k) in cols" :key="k" class="m-2">
-                        <Checkbox v-model="cols[k]" :binary="true" :inputId="'rech' + k" />
-                        <label :for="'rech' + k" class="ml-2">{{ k }}</label>
-                      </div>
-                    </Popover>
-                  </div>
-
-                </template>
-
-              </Toolbar>
-            </template>
-
-            <Column selectionMode="multiple"></Column>
-
-            <Column :class="cols.type ? '' : 'hidden'" field="type" header="Type" sortable>
-              <template #body="p">
-                <MyTableType :data="p.data" />
-              </template>
-            </Column>
-
-            <Column :class="cols.title ? '' : 'hidden'" field="title" header="Titre" sortable
-              style="min-width: 15rem; max-width: 20rem;">
-              <template #body="p">
-                <MyTableTitle :data="p.data" />
-              </template>
-            </Column>
-
-            <Column v-if="userStore.isTeacher" :class="cols.evaluation ? '' : 'hidden'" field="whoami"
-              header="Évaluation" style="max-width: 12rem">
-              <template #body="p">
-                <MyTableEvaluation :data="p.data" :isTeacher="userStore.isTeacher" />
-              </template>
-            </Column>
-            <Column v-else :class="cols.evaluation ? '' : 'hidden'" field="evaluation" header="Évaluation"
-              style="max-width:20rem">
-              <template #body="p">
-                <MyTableEvaluation :data="p.data" />
-              </template>
-            </Column>
-
-            <Column :class="cols.changed ? '' : 'hidden'" field="changed" header="Dernier accès" sortable>
-              <template #body="p">
-                <MyTableChanged :data="p.data" />
-              </template>
-            </Column>
-
-            <Column :class="cols.code ? '' : 'hidden'" field="code" header="Partage" style="min-width: 13rem">
-              <template #body="p">
-                <MyTableShare :data="p.data" :isTeacher="userStore.isTeacher" />
-              </template>
-            </Column>
-
-            <Column v-if="userStore.isTeacher" :class="cols.bib ? '' : 'hidden'" field="bib" header="Bib."
-              style="min-width: 5rem">
-              <template #body="p">
-                <MyTableBib :data="p.data" @click="bibFormActivity = p.data" />
-              </template>
-            </Column>
-
-            <Column :class="cols.tags ? '' : 'hidden'" field="tags" header="Étiquettes" style="">
-              <template #body="p">
-                <MyTableTags :tmp="tmpTags.find(o => o.nid === p.data.nid)" :data="p.data" />
-              </template>
-            </Column>
-
-            <Column v-if="cols.more" field="more" header="">
-              <template #body="p">
-                <MyTableMore :data="p.data" :isTeacher="userStore.isTeacher" />
-              </template>
-            </Column>
-
-          </DataTable>
         </template>
       </template>
     </template>

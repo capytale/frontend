@@ -2,11 +2,14 @@
 document.title = "Capytale"
 const sideMenu = useSideMenuStore()
 const activites = useActivitiesStore()
-const tags = useTagsStore()
 const userStore = useCurrentUserStore()
-
 activites.getActivities()
-tags.getAllTags()
+
+// const tags = useTagsStore()
+// tags.getAllTags()
+const tagsStore = useTagsStore()
+const { status: tagsStatus } = await useLazyAsyncData('tags', () => tagsStore.getAllTags())
+
 
 // Possible interaction dynamique avec le viewport pour auto-hide du menu
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
@@ -42,7 +45,9 @@ const gutter = computed(() => {
 
 const isReady = computed(() => {
   const acti = activites.activities.status === 'success'
-  const tagsReady = tags.status === 'success'
+  const tagsReady = tagsStatus.value === 'success'
+  // console.log("tagsReady: ", tagsStatus.value) ;
+  
   const user = userStore.isLoaded
   return {
     acti,
@@ -57,6 +62,8 @@ const tagsLogo = ref("pi pi-tags")
 </script>
 
 <template>
+  <pre>{{ tagsStatus }}</pre>
+  <pre>{{ isReady }}</pre>
   <div v-if="!userStore.isAuthenticated" class="mt-12 flex flex-col items-center gap-8">
 Vous devez vous connecter pour accéder à vos activités.
 <EntButton />
@@ -67,35 +74,8 @@ Vous devez vous connecter pour accéder à vos activités.
       <MyActivityAdd />
     </div>
     <MyListSkeleton v-if="!isReady.all" />
-    <Splitter v-else @resizeend="handleResize" class="relative" :gutterSize="gutter">
-      <SplitterPanel :size="size[0]" v-show="sideMenu.visible && sideState !== 'empty'">
-        <SideMenu v-if="isReady.tags" />
-      </SplitterPanel>
-      <SplitterPanel :size="size[1]">
-        <div class="flex flex-row overflow-scroll">
-          <div>
-            <div v-if="!sideMenu.visible && sideState !== 'empty'"
-              class="mt-16 h-14 w-14 flex justify-center items-center absolute -top-10 left-4 z-[99]"
-              @mouseover="tagsLogo = 'pi-thumbtack rotate'" @mouseleave="tagsLogo = 'pi-tags'">
-              <div class="parent">
-                <i :class="'parent pi ' + tagsLogo + ' p-4 rounded-full border-2 border-blue-500 pointer'"
-                  style="font-size: 1.5rem; background-color: var(--p-card-background)" @click="sideMenu.visible = true"
-                  v-tooltip.right="{ value: 'Épingler le menu des étiquettes', showDelay: 300, hideDelay: 0 }"></i>
-                <div class="absolute z-[100] p-card zzz">
-                  <div class="positionner">
-                    <div class="tagWrapper p-card absolute surprise mx-20 my-40">
-                      <SideMenu v-if="isReady.tags" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- <MyListSkeleton v-if="!isReady.all" /> -->
-          <MyList />
-        </div>
-      </SplitterPanel>
-    </Splitter>
+   <MyList v-else />
+
   </div>
 </template>
 

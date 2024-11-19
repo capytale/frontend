@@ -53,7 +53,9 @@ const handleChangeWf = ((wf) => {
   hasSelected.value = false
 })
 
-const tags = useTagsStore()
+//const tags = useTagsStore()
+const tagsStore = useTagsStore()
+const tags = await useLazyAsyncData('tags', () => tagsStore.getAllTags())
 const corbeilleTid = () => {
   if (!tags.tags.find(o => o.label === 'Corbeille')) return null
   return tags.tags.find(o => o.label === 'Corbeille').id

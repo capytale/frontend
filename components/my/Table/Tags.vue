@@ -1,7 +1,9 @@
 <script setup>
 import { useTagsStore } from '@/stores/tags'
 
-const tags = useTagsStore()
+//const tags = useTagsStore()
+const tagsStore = useTagsStore()
+const tags = await useLazyAsyncData('tags', () => tagsStore.getAllTags())
 const activites = useActivitiesStore()
 
 const props = defineProps({

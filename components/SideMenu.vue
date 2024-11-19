@@ -1,7 +1,9 @@
 <script setup>
 const sideMenu = useSideMenuStore()
 const activeTag = useActiveTagStore()
-const tags = useTagsStore()
+//const tags = useTagsStore()
+const tagsStore = useTagsStore()
+const tags = await useLazyAsyncData('tags', () => tagsStore.getAllTags())
 
 const createTagVisible = ref(false);
 
@@ -43,12 +45,12 @@ const pinLogo = ref("pi pi-thumbtack");
       <div v-if="tags.status === 'pending'">loading......</div>
       <template v-else>
         <Tree id="folders" v-model:expandedKeys="activeTag.expanded" v-model:selectionKeys="activeTag.tid"
-          selectionMode="single" :value="tags.tags" class="w-full md:w-30rem" :filter="checked"
+          selectionMode="single" :value="tagsStore.data.tags" class="w-full md:w-30rem" :filter="checked"
           :filterMode="strictSearch ? 'strict' : 'lenient'" :dt="{ 'padding': '0' }">
           <template #default="slotProps">
             <div class="primary-nav left centerize">
 
-              <MyTagEdit :slotProps="slotProps" :tags="tags.tags" />
+              <MyTagEdit :slotProps="slotProps" :tags="tagsStore.data.tags" />
             </div>
           </template>
         </Tree>

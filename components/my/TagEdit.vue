@@ -1,6 +1,10 @@
 <script setup>
 const my = useMyStore()
-const tagstore = useTagsStore()
+//const tags = useTagsStore()
+const tagsstore = useTagsStore()
+// Besoin de gérer les cas loading et erreurs ?
+await useLazyAsyncData('tags', () => tagsStore.getAllTags())
+
 
 const toast = useToast();
 const confirm = useConfirm();

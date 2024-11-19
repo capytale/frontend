@@ -1,10 +1,11 @@
 import httpClient from '@capytale/activity.js/backend/capytale/http'
+import type { Tag } from '~/types/tags'
 
 const privateTagsApiEp = "/web/c-hdls/api/private-tags"
 
 export const useTagsStore = defineStore('tags', {
   state: () => ({
-    data: {},
+    data: {} as { tags: Tag[], flatTags: Tag[] },
   }),
   getters: {
     tags: (state) => state.data.data?.tags || [],
@@ -13,7 +14,12 @@ export const useTagsStore = defineStore('tags', {
   },
   actions: {
     async getAllTags() {
-      this.data = await fetchAllTags()
+      //this.data = await fetchAllTags()
+      if (!this.data.tags) {
+        const dt = (await httpClient.getJsonAsync<Tag[]>("/web/c-hdls/api/get-private-tags-flat-list"))!
+        this.data = { tags: dt, flatTags: dt }
+      }
+      return this.data
     },
     async createTag(label, parentId) {
       let newTid

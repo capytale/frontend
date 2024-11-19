@@ -4,7 +4,9 @@ const props = defineProps({
   required: true
 })
 const my = useMyStore()
-const tags = useTagsStore()
+//const tags = useTagsStore()
+const tagsStore = useTagsStore()
+const tags = await useLazyAsyncData('tags', () => tagsStore.getAllTags())
 const corbeilleTid = () => {
   return tags.tags.find(o => o.label === 'Corbeille').id
 }

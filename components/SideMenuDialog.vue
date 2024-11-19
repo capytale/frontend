@@ -1,5 +1,7 @@
 <script setup>
-const tags = useTagsStore()
+//const tags = useTagsStore()
+const tagsStore = useTagsStore()
+const tags = await useLazyAsyncData('tags', () => tagsStore.getAllTags())
 
 const label = ref('');
 const wantSubTag = ref(false);
@@ -8,10 +10,10 @@ const selectedTag = ref(null);
 const save = () => {
 
   if (wantSubTag.value.length == 0) {
-    tags.createTag(label.value, 0)
+    tagsStore.createTag(label.value, 0)
   } else {
     const parentId = selectedTag.value ? Object.keys(selectedTag.value).shift() : 0
-    tags.createTag(label.value, parentId)
+    tagsStore.createTag(label.value, parentId)
   }
   visible.value = false;
 }
@@ -60,7 +62,7 @@ const visible = defineModel('visible')
       <label for="checked" class="ml-2">Imbriquer l'étiquette sous : </label>
     </div>
     <div class="flex align-items-center gap-3 mb-5">
-      <Tree id="folders" v-model:selectionKeys="selectedTag" :value="tags.tags" selectionMode="single"
+      <Tree id="folders" v-model:selectionKeys="selectedTag" :value="tagsStore.data.tags" selectionMode="single"
         class="w-full md:w-30rem" @nodeSelect="onNodeSelect" @nodeUnselect="onNodeUnselect">
         <template #default="slotProps">
           <i class="pi pi-folder" :style="'color:' + slotProps.node.color"></i> {{ slotProps.node.label }}
