@@ -1,27 +1,28 @@
 import httpClient from '@capytale/activity.js/backend/capytale/http'
 import evalApi from "@capytale/activity.js/backend/capytale/evaluation"
+import type { EvaluationList } from "@capytale/activity.js/activity/evaluation/evaluation"
+import type { Assignments } from "~/types/assignments"
 
 // Definit le endpoint de l'API
 const myActivitiesApiEp = "/web/c-hdls/api/my-activities"
 const assignmentsApiEp = "/web/c-hdls/api/assignments"
 
 export const useMyStore = defineStore('my', () => {
-  const assignments = ref([])
-  const mathalea = ref(false)
+  const assignments = ref<Assignments>()
+  const mathalea = ref<EvaluationList>()
   const loadingAssignments = ref(false)
 
   const getAssignments = async (nid: string) => {
-    mathalea.value = false
+    mathalea.value = undefined
     loadingAssignments.value = true
-    assignments.value = await httpClient.getJsonAsync<any>("/web/c-hdls/api/assignments/" + nid)
+    assignments.value = (await httpClient.getJsonAsync<Assignments>("/web/c-hdls/api/assignments/" + nid))!
     if (assignments.value.icon.includes('mathalea')) {
-      mathalea.value = await evalApi.listEvals(nid)
+      mathalea.value = await evalApi.listEvals(nid as any) // TODO ça ira mieux bientôt...
     }
-    // console.log("C")
     loadingAssignments.value = false
   }
 
-  const saveAppr = async (nid, appr) => {
+  const saveAppr = async (nid: string, appr: string) => {
     console.log("saveAppr", nid, appr)
     await httpClient.postJsonAsync(
       myActivitiesApiEp,
@@ -29,7 +30,7 @@ export const useMyStore = defineStore('my', () => {
     );
   }
 
-  const saveEval = async (nid, evalu) => {
+  const saveEval = async (nid: string, evalu: string) => {
     // console.log("saveEval", nid, evalu)
     await httpClient.postJsonAsync(
       myActivitiesApiEp,
@@ -37,13 +38,14 @@ export const useMyStore = defineStore('my', () => {
     );
   }
 
-  const changeSaWf = async (sa_nid: string | Array, newWorkflow: string) => {
+  const changeSaWf = async (sa_nid: string | string[], newWorkflow: "100" | "200" | "300") => {
     // console.log("saveSaWf0", sa_nid, newWorkflow)
     let nids
     if (Array.isArray(sa_nid)) {
       nids = [...sa_nid.map((o) => o.sa_nid)]
+
       for (let o of sa_nid) {
-        assignments.value.tab = assignments.value.tab.map(el => el.sa_nid == o.sa_nid ? { ...el, workflow: newWorkflow } : el);
+        assignments.value!.tab.find(el => el.sa_nid == o)!.workflow = newWorkflow
       }
     } else {
       nids = sa_nid.split()
