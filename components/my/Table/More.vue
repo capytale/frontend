@@ -5,7 +5,6 @@ import { useToast } from "primevue/usetoast";
 import meApi from "@capytale/activity.js/backend/capytale/me";
 
 const activites = useActivitiesStore()
-// activites.getActivities()
 
 const props = defineProps({
   data: Object,

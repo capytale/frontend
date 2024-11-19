@@ -18,14 +18,17 @@ export const useActivitiesStore = defineStore('activities', () => {
   const status = ref<Status>("idle")
 
   const getActivities = async () => {
-    status.value = "loading"
+    if (status.value == "success") return
+    if (status.value == "loading") return
     try {
+      status.value = "loading"
       activities.value = await fetchActivities()
       status.value = "success"
     } catch (e) {
       status.value = "error"
     }
   }
+  getActivities()
 
   const getMetadata = (nid: number | string) => {
     return httpClient.getJsonAsync<ActivityMetadata>(metaDataEp(nid));

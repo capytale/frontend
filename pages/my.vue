@@ -5,10 +5,6 @@ const activites = useActivitiesStore()
 const tags = useTagsStore()
 const userStore = useCurrentUserStore()
 
-activites.getActivities()
-
-tags.getAllTags()
-
 // Possible interaction dynamique avec le viewport pour auto-hide du menu
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 
