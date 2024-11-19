@@ -7,6 +7,8 @@ userStore.getUser()
 
 const q = useRoute().query
 
+// await navigateTo('/bibliotheque?toto=titi')
+
 const bibStore = useBibList();
 const metaDataStore = useBibMetaData();
 
