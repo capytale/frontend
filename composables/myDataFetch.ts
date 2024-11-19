@@ -28,21 +28,3 @@ export function fetchAssignments(nid: string) {
     }
   )
 }
-
-
-
-
-let myAllTagsCache: { tags: Tag[], flatTags: Tag[] }
-export function fetchAllTags() {
-  return useLazyAsyncData('alltagsKey', async () => {
-    const dt = (await httpClient.getJsonAsync<Tag[]>("/web/c-hdls/api/get-private-tags-flat-list"))!
-    myAllTagsCache = { tags: unflatten(dt), flatTags: dt }
-    return myAllTagsCache
-  },
-    {
-      getCachedData() {
-        return myAllTagsCache
-      }
-    }
-  )
-}

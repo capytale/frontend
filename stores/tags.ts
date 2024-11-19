@@ -1,54 +1,60 @@
-import httpClient from '@capytale/activity.js/backend/capytale/http'
+import type { Tag } from '~/types/tags'
+import { fetchPrivateTags, createTag } from '~/api/tags'
 
-const privateTagsApiEp = "/web/c-hdls/api/private-tags"
 
 export const useTagsStore = defineStore('tags', {
   state: () => ({
-    data: {},
+    data: undefined as { tags: Tag[], flatTags: Tag[] } | undefined,
+    status: "idle" as "idle" | "loading" | "success" | "error"
   }),
   getters: {
-    tags: (state) => state.data.data?.tags || [],
-    flatTags: (state) => state.data.data?.flatTags || [],
-    status: (state) => state.data.status,
+    tags: (state) => state.data?.tags || [],
+    flatTags: (state) => state.data?.flatTags || [],
   },
   actions: {
     async getAllTags() {
-      this.data = await fetchAllTags()
+      if (!this.data) {
+        try {
+          this.status = "loading"
+          const dt = await fetchPrivateTags()
+          this.data = { tags: unflatten(dt), flatTags: dt }
+          this.status = "success"
+        } catch (e) {
+          this.status = "error"
+          this.data = undefined
+        }
+      }
     },
-    async createTag(label, parentId) {
-      let newTid
+    async createTag(label: string, parentId: number) {
       try {
-        newTid = await httpClient.postGetJsonAsync(
-          privateTagsApiEp,
-          { action: "create", tagValues: label, parentId }
-        )
+        const newTid = await createTag(label, parentId)
+        this.data!.flatTags.push({ id: newTid, color: "#FF0000", key: newTid, label, parentid: parentId })
+        this.data!.tags = unflatten(this.data!.flatTags)
       } catch (e) {
         // console.log("error", e)
       }
       // console.log("newTid: ", newTid)
-      this.data.data.flatTags = [...this.data.data.flatTags, { id: newTid, color: "#FF0000", key: newTid, label, parentid: parentId }]
-      this.data.data.tags = unflatten(this.data.data.flatTags)
     },
-    async hasChildren(tid) {
-      return this.data.data.flatTags.some(el => el.parentid == tid)
+    async hasChildren(tid: number | string) {
+      return this.data?.flatTags.some(el => el.parentid == tid)
     },
-    async destroyTag(tid) {
+    async destroyTag(tid: number | string) {
 
 
       // On retire le tag de toutes les activités qui le contiennent
       const activites = useActivitiesStore()
 
       // get all children of the tag
-      const getChildren = (data, id) => {
-        const children = data.filter(o => o.parentid == id)
-        return children.concat(...children.map(c => getChildren(data, c.id)))
+      const getChildren:(id: number) => Tag[] = (id: number) => {
+        const children = this.data?.flatTags.filter(o => o.parentid == id)
+        return children!.concat(...children!.map(c => getChildren(c.id)))
       }
       // untag all activities that have the tag or its children
       activites.activities.data = activites.activities.data.map(a => {
         a.tags = a.tags.filter(t => t != tid)
         return a
       })
-      for (const child of getChildren(this.data.data.flatTags, tid)) {
+      for (const child of getChildren(tid)) {
         console.log("del: ", child.id)
         activites.activities.data = activites.activities.data.map(a => {
           a.tags = a.tags.filter(t => t != child.id)
@@ -62,32 +68,32 @@ export const useTagsStore = defineStore('tags', {
         }
         return o.id != id
       })
-      this.data.data.flatTags = filterData(this.data.data.flatTags, tid)
-      this.data.data.tags = unflatten(this.data.data.flatTags)
+      this.data.flatTags = filterData(this.data.flatTags, tid)
+      this.data.tags = unflatten(this.data.flatTags)
       await httpClient.postJsonAsync(
         privateTagsApiEp,
         { action: "destroy", tid }
       );
     },
     async setTagLabel(tid, label) {
-      this.data.data.flatTags = this.data.data.flatTags.map(el => el.id == tid ? { ...el, label: label } : el);
-      this.data.data.tags = unflatten(this.data.data.flatTags)
+      this.data.flatTags = this.data.flatTags.map(el => el.id == tid ? { ...el, label: label } : el);
+      this.data.tags = unflatten(this.data.flatTags)
       await httpClient.postJsonAsync(
         privateTagsApiEp,
         { action: "rename", tid, label }
       );
     },
     async setTagParent(tid, parentId) {
-      this.data.data.flatTags = this.data.data.flatTags.map(el => el.id == tid ? { ...el, parentid: parentId } : el);
-      this.data.data.tags = unflatten(this.data.data.flatTags)
+      this.data.flatTags = this.data.flatTags.map(el => el.id == tid ? { ...el, parentid: parentId } : el);
+      this.data.tags = unflatten(this.data.flatTags)
       await httpClient.postJsonAsync(
         privateTagsApiEp,
         { action: "setParent", tid, parentId }
       );
     },
     async setTagColor(tid: number, color: string) {
-      this.data.data.flatTags = this.data.data.flatTags.map(el => el.id == tid ? { ...el, color: color } : el);
-      this.data.data.tags = unflatten(this.data.data.flatTags)
+      this.data.flatTags = this.data.flatTags.map(el => el.id == tid ? { ...el, color: color } : el);
+      this.data.tags = unflatten(this.data.flatTags)
       await httpClient.postJsonAsync(
         privateTagsApiEp,
         { action: "setColor", tid, color }
