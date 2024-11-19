@@ -23,11 +23,11 @@ const visible = ref(false);
 // index des types déjà utilisés avec leur nombre d'occurences
 type NbUsedIndex = { [key: string]: number }
 const existingTypeIndex = computed<NbUsedIndex | null>(() => {
-  if (!activites.activities.data) return null;
+  if (!activites.activities) return null;
   if (atf.status !== "loaded") return null;
   if (nbShortcuts === atf.favoriteTypes.length) return null;
   const ti: NbUsedIndex = {};
-  for (const act of activites.activities.data) {
+  for (const act of activites.activities) {
     let t = act.type;
     const info = atl.getTypeInfo(t);
     if ((info.replacedBy != null) && atl.typeIsAvailable(info.replacedBy)) {
@@ -100,9 +100,6 @@ const shortcutList = computed(() => {
     return shortcutList3.value.concat(Array(nbShortcuts - shortcutList3.value.length).fill(null));
   }
 });
-
-
-
 </script>
 
 <template>

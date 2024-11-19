@@ -183,16 +183,16 @@ const corbeilleTid = () => {
 const myactivities = computed(() => {
   const tid = getTidFromStore(activeTag.tid)
   if (tid) { // user has selected a tag
-    return activites.activities.data.filter(o => {
+    return activites.activities.filter(o => {
       if (!o.tags) return false
       for (let tag of o.tags) {
         if (tag === tid) return true
       }
     })
   } else { // no tag selected : show all activities except those in the trash
-    if (!activites.activities.data) return []
+    if (!activites.activities) return []
     const corbTid = corbeilleTid();
-    return activites.activities.data.filter(o => {
+    return activites.activities.filter(o => {
       if (!o.tags) return true
       for (let tag of o.tags) {
         if (tag === corbTid) return false
@@ -228,14 +228,14 @@ const getIAmImg = (code) => {
 
     <template #content>
 
-      <div v-if="activites.activities.pending">
+      <div v-if="activites.status === 'loading'">
         <p>Chargement des activités...</p>
       </div>
-      <div v-else-if="activites.activities.status == 'error'">
+      <div v-else-if="activites.status == 'error'">
         <p>Impossible de charger les activités.</p>
       </div>
       <template v-else>
-        <MyWelcomeNewbie v-if="activites.activities.data.length == 0" :isTeacher="userStore.isTeacher" />
+        <MyWelcomeNewbie v-if="activites.activities!.length == 0" :isTeacher="userStore.isTeacher" />
 
         <template v-else>
 

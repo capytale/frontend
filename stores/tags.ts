@@ -50,13 +50,13 @@ export const useTagsStore = defineStore('tags', {
         return children!.concat(...children!.map(c => getChildren(c.id)))
       }
       // untag all activities that have the tag or its children
-      activites.activities.data = activites.activities.data.map(a => {
+      activites.activities = activites.activities.map(a => {
         a.tags = a.tags.filter(t => t != tid)
         return a
       })
       for (const child of getChildren(tid)) {
         console.log("del: ", child.id)
-        activites.activities.data = activites.activities.data.map(a => {
+        activites.activities = activites.activities.map(a => {
           a.tags = a.tags.filter(t => t != child.id)
           return a
         })

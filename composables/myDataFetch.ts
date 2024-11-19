@@ -1,11 +1,13 @@
 import httpClient from '@capytale/activity.js/backend/capytale/http'
+import type { Activity } from '~/types/activities'
 import type { Tag } from '~/types/tags'
 
-let myActivitiesCache: { property: object }
+// let myActivitiesCache: { property: object }
 // renvoie {data, pending, error, status}
+let myActivitiesCache: Activity[] | null
 export function fetchMyActivities() {
   return useLazyAsyncData('activKey', async () => {
-    return myActivitiesCache = await httpClient.getJsonAsync<any>("/web/c-hdls/api/all-activities")
+    return myActivitiesCache = await httpClient.getJsonAsync<Activity[]>("/web/c-hdls/api/all-activities")
   },
     {
       getCachedData() {

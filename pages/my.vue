@@ -6,6 +6,7 @@ const tags = useTagsStore()
 const userStore = useCurrentUserStore()
 
 activites.getActivities()
+
 tags.getAllTags()
 
 // Possible interaction dynamique avec le viewport pour auto-hide du menu
@@ -31,7 +32,7 @@ const handleResize = (event) => {
 const size = [20, 80]
 
 const sideState = computed(() => {
-  if (activites.activities.data?.length === 0) return "empty";
+  if (activites.activities?.length === 0) return "empty";
   if (bplgAndSmaller.value) return "collapsed";
   return "visible";
 })
@@ -41,7 +42,7 @@ const gutter = computed(() => {
 })
 
 const isReady = computed(() => {
-  const acti = activites.activities.status === 'success'
+  const acti = activites.status === 'success'
   const tagsReady = tags.status === 'success'
   const user = userStore.isLoaded
   return {
