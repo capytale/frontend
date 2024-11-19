@@ -1,5 +1,7 @@
 import httpClient from '@capytale/activity.js/backend/capytale/http'
-import type { Activity } from '~/types/activities'
+import { fetchActivities } from '~/api/activities'
+import type { Activity, ActivityMetadata } from '~/types/activities'
+import type { Status } from '~/types/store'
 
 
 // Definit le endpoint de l'API
@@ -9,24 +11,16 @@ function metaDataEp(nid: number | string) {
   return `/web/c-hdls/api/metadata/${nid}`
 }
 
-type ActivityMetadata = {
-  status_shared: boolean;
-  status_web: boolean;
-  abstract: string;
-  enseignements: string[];
-  niveaux: string[];
-  modules: number[];
-  themes: number[];
-}
+
 
 export const useActivitiesStore = defineStore('activities', () => {
-  const activities = ref<Activity[] | null>([])
+  const activities = ref<Activity[]>([])
   const status = ref<Status>("idle")
 
   const getActivities = async () => {
     status.value = "loading"
     try {
-      activities.value = await httpClient.getJsonAsync<Activity[]>("/web/c-hdls/api/all-activities")
+      activities.value = await fetchActivities()
       status.value = "success"
     } catch (e) {
       status.value = "error"
