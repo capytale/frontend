@@ -7,9 +7,9 @@ const nbShortcuts = 8;
 </script>
 
 <script setup lang="ts">
-import { useActivityTypesList } from "~/composables/activityTypes/list"
-import { useActivityTypeFavorites } from "~/composables/activityTypes/favorites"
-import { useActivityTypeWeights } from "~/composables/activityTypes/weights"
+import { useActivityTypesList } from "~/stores/activityTypes/list"
+import { useActivityTypeFavorites } from "~/stores/activityTypes/favorites"
+import { useActivityTypeWeights } from "~/stores/activityTypes/weights"
 
 const atl = useActivityTypesList()
 const atf = useActivityTypeFavorites()

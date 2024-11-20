@@ -10,7 +10,7 @@ const props = defineProps<{
 const type = defineModel<string[] | null>()
 
 
-import { useActivityTypesList } from "~/composables/activityTypes/list"
+import { useActivityTypesList } from "~/stores/activityTypes/list"
 const atl = useActivityTypesList()
 
 /**

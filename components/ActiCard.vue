@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useActivityTypesList } from "~/composables/activityTypes/list";
-import { useActivityTypeFavorites } from "~/composables/activityTypes/favorites";
+import { useActivityTypesList } from "~/stores/activityTypes/list";
+import { useActivityTypeFavorites } from "~/stores/activityTypes/favorites";
 
 const props = defineProps < {
   type: string,

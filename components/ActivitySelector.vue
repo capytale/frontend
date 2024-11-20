@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import Fuse from "fuse.js";
-import { useActivityTypesList } from "~/composables/activityTypes/list";
-import { useActivityTypeFavorites } from "~/composables/activityTypes/favorites";
-import { useActivityTypeWeights } from "~/composables/activityTypes/weights";
+import { useActivityTypesList } from "~/stores/activityTypes/list";
+import { useActivityTypeFavorites } from "~/stores/activityTypes/favorites";
+import { useActivityTypeWeights } from "~/stores/activityTypes/weights";
 
 const inputstyle = {
   base:

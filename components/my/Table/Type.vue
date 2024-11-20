@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useActivityTypesList } from "~/composables/activityTypes/list";
+import { useActivityTypesList } from "~/stores/activityTypes/list";
 
 const atl = useActivityTypesList();
 

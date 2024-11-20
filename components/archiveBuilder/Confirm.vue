@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { inject, onMounted } from "vue";
-import { useActivityTypesList } from "~/composables/activityTypes/list"
+import { useActivityTypesList } from "~/stores/activityTypes/list"
 
 
 const dialogRef = inject<Ref<{

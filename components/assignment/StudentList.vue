@@ -8,7 +8,7 @@ import { useToast } from "primevue/usetoast";
 import { FilterMatchMode } from '@primevue/core/api';
 import { useMyStore } from '@/stores/my'
 import { useArchiveBuilder } from "~/composables/archiveBuilder/builder";
-import { useActivityTypesList } from "~/composables/activityTypes/list";
+import { useActivityTypesList } from "~/stores/activityTypes/list";
 import { formatDateTime } from '~/utils/format';
 
 const toast = useToast();

@@ -1,4 +1,4 @@
-import { useActivityTypesList } from "~/composables/activityTypes/list"
+import { useActivityTypesList } from "~/stores/activityTypes/list"
 import { useJobManager } from "./jobStore";
 import { zipActivities, zipAssigments, type ActivityInfo } from "~/utils/archiveBuilder/builder";
 
