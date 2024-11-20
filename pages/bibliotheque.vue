@@ -5,7 +5,6 @@ import { FilterMatchMode } from '@primevue/core/api';
 
 const router = useRouter()
 const userStore = useCurrentUserStore()
-userStore.getUser()
 
 const q = useRoute().query
 

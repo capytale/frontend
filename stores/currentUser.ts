@@ -1,26 +1,30 @@
 import { loadCurrentUser, type CurrentUser } from "~/utils/currentUser";
+import type { Status } from '~/types/store';
 
 export const useCurrentUserStore = defineStore('user', () => {
-  const user = ref<CurrentUser | null | false>(false)
-  const getUser = async () => {
-    user.value = await loadCurrentUser();
-  }
+  const user = ref<CurrentUser | null>()
+  const status = shallowRef<Status>("idle")
 
-  const isLoaded = computed(() => user.value !== false)
-  const isAuthenticated = computed(() => (user.value != null && user.value !== false))
-  const isTeacher = computed(() => {
-    if (user.value == null || user.value === false) return false;
-    return user.value.profil === 'teacher';
-  })
-  const isStudent = computed(() => {
-    if (user.value == null || user.value === false) return false;
-    return user.value.profil === 'student';
-  })
+  const loadUser = async () => {
+    if (status.value == "success") return
+    if (status.value == "loading") return
+    try {
+      status.value = "loading"
+      user.value = await loadCurrentUser();
+      status.value = "success"
+    } catch (e) {
+      status.value = "error"
+    }
+  }
+  loadUser()
+
+  const isAuthenticated = computed(() => (!!user.value))
+  const isTeacher = computed(() => (user.value && (user.value.profil === 'teacher')))
+  const isStudent = computed(() => (user.value && (user.value.profil === 'student')))
 
   return {
     user,
-    getUser,
-    isLoaded,
+    status,
     isAuthenticated,
     isTeacher,
     isStudent,

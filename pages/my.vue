@@ -40,7 +40,7 @@ const gutter = computed(() => {
 const isReady = computed(() => {
   const acti = activites.status === 'success'
   const tagsReady = tags.status === 'success'
-  const user = userStore.isLoaded
+  const user = userStore.isAuthenticated
   return {
     acti,
     tags: tagsReady,

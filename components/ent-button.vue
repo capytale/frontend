@@ -4,7 +4,6 @@ const links = useEnts();
 import Fuse from "fuse.js";
 
 const userStore = useCurrentUserStore()
-userStore.getUser()
 
 const fuse = ref(
   new Fuse(links.value, {

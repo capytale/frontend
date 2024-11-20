@@ -1,6 +1,5 @@
 <script setup>
 const userStore = useCurrentUserStore()
-userStore.getUser()
 
 const props = defineProps({
   data: Object,

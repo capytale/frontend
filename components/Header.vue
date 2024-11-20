@@ -25,7 +25,7 @@ const checked = computed({
 
       <div class="activityMenu grow justify-end order-3">
         <NuxtLink to="/sesame"
-          v-if="userStore.isAuthenticated && userStore.user?.provider === 'mail' && userStore.isTeacher" class="mr-4">
+          v-if="userStore.isAuthenticated && (userStore.user?.provider === 'mail') && userStore.isTeacher" class="mr-4">
           Sésame
         </NuxtLink>
         <i :class="checked ? 'pi pi-sun' : 'pi pi-sun text-yellow-400'"></i>

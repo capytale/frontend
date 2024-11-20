@@ -4,9 +4,6 @@ const colorMode = useColorMode()
 const { path } = useRoute()
 const bgColor = computed(() => colorMode.value === 'light' ? 'background-color: var(--p-neutral-100)' : 'background-color: var(--p-gray-800)')
 
-
-userStore.getUser()
-
 useHead({
   htmlAttrs: {
     lang: 'fr',
