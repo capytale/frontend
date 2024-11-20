@@ -12,7 +12,7 @@ const q = useRoute().query
 const bibStore = useBibList();
 const metaDataStore = useBibMetaData();
 
-const advancedSearch = ref(q != null);
+const advancedSearch = ref(false);
 
 const filters = ref()
 
