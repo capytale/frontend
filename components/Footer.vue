@@ -1,4 +1,16 @@
-<script setup>
+<script setup lang="ts">
+const userStore = useCurrentUserStore()
+const currentRoute = useRoute();
+
+const backToLegacy = () => {
+  let backUrl: string = '/web/my?legacy&force'
+  if (currentRoute.name === 'bibliotheque') {
+    backUrl = '/web/bibliotheque?legacy&force'
+  } else if (currentRoute.name === 'assignments-nid') {
+    backUrl = `/web/assignments/${currentRoute.params.nid}?legacy&force`
+  }
+  window.location.assign(backUrl)
+}
 </script>
 
 <template>
@@ -9,6 +21,7 @@
       <NuxtLink to="/cgu" class="link">Conditions générales d'utilisation</NuxtLink>
       <NuxtLink to="/rgpd" class="link">Politique de protection des données personnelles</NuxtLink>
       <NuxtLink to="/contact" class="link">Contact</NuxtLink>
+      <span v-if="userStore.isAuthenticated" @click="backToLegacy" class="link cursor-pointer">Ancienne interface</span>
     </div>
   </div>
 </template>

@@ -1,17 +1,6 @@
 <script setup lang="ts">
 const colorMode = useColorMode()
 const userStore = useCurrentUserStore()
-const $route = useRoute();
-
-const backToLegacy = () => {
-  let backUrl: string = '/web/my?legacy&force'
-  if ($route.name === 'bibliotheque') {
-    backUrl = '/web/bibliotheque?legacy&force'
-  } else if ($route.name === 'assignments-nid') {
-    backUrl = `/web/assignments/${$route.params.nid}?legacy&force`
-  }
-  window.location.assign(backUrl)
-}
 
 const checked = computed({
   get() {
@@ -35,9 +24,6 @@ const checked = computed({
       </div>
 
       <div class="activityMenu grow justify-end order-3">
-        <Button v-if="userStore.isAuthenticated" type="button" label="Ancienne interface" @click="backToLegacy"
-          severity="info" text aria-haspopup="true" aria-controls="overlay_menu" class="mr-4" />
-
         <NuxtLink to="/sesame"
           v-if="userStore.isAuthenticated && userStore.user?.provider === 'mail' && userStore.isTeacher" class="mr-4">
           Sésame
