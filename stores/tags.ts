@@ -2,13 +2,14 @@ import httpClient from '@capytale/activity.js/backend/capytale/http'
 
 import type { Tag } from '~/types/tags'
 import { fetchPrivateTags, createTag as _createTag } from '~/api/tags'
+import type { Status } from '~/types/store';
 
 const privateTagsApiEp = "/web/c-hdls/api/private-tags"
 
 export const useTagsStore = defineStore('tags', () => {
   const tags = ref<Tag[]>([])
   const flatTags = ref<Tag[]>([])
-  const status = ref<"idle" | "loading" | "success" | "error">("idle")
+  const status = ref<Status>("idle")
 
 
   const getAllTags = async () => {
