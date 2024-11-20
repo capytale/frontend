@@ -36,7 +36,7 @@ const nbViews = computed(() => {
 
 const testAssignments = async () => {
   // visible.value = true
-  await navigateTo(`/my/${props.data.nid}`, )
+  await navigateTo(`/my/assignment/${props.data.nid}`, )
 }
 </script>
 
