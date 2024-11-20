@@ -8,14 +8,28 @@
     <DataTable ref="dt" :value="data">
       <Column field="name" header="Élève">
       </Column>
-      <Column field="evalProf" header="Éval ens." bodyStyle="text-align: center;">
+      <Column field="evalProf" bodyStyle="text-align: center;">
+        <template #header>
+          <span v-tooltip.top="{ value: 'Évaluation manuelle de l\'enseignant', showDelay: tooltipDelay, hideDelay: 0 }"
+            class="cursor-help">Éval ens.</span>
+        </template><
       </Column>
-      <Column field="evalAuto" header="Éval auto" bodyStyle="text-align: center;"></Column>
-      <Column v-for="(e, idx) in evals" :key="e.label" :header="e.label" :field="idx.toString()">
+      <Column field="evalAuto" bodyStyle="text-align: center;">
+        <template #header>
+          <span
+            v-tooltip.top="{ value: 'Évaluation totale automatique remontée par MathALÉA', showDelay: tooltipDelay, hideDelay: 0 }"
+            class="cursor-help">Éval auto</span>
+        </template>
+      </Column>
+      <Column v-for="(e, idx) in evals" :key="e.label" :field="idx.toString()">
+        <template #header>
+          <span v-tooltip.top="{ value: e.title, showDelay: tooltipDelay, hideDelay: 0 }" class="cursor-help">{{ e.label
+            }}</span>
+        </template>
         <template #body="slotProps">
           <Tag :style="getScoreStyle(slotProps.data[idx], e.scoreMax)"
-            v-tooltip.top="{ value: e.title, showDelay: 400, hideDelay: 0 }" class="infott">
-            <span>{{ slotProps.data[idx] !== null ? slotProps.data[idx] : '-' }} / {{ e.scoreMax }}</span>
+            v-tooltip.top="{ value: e.title, showDelay: tooltipDelay, hideDelay: 0 }" class="cursor-help">
+            <span>{{ slotProps.data[idx] !== null ? slotProps.data[idx] : '-' }}&nbsp;/&nbsp;{{ e.scoreMax }}</span>
           </Tag>
         </template>
       </Column>
@@ -24,6 +38,7 @@
 </template>
 
 <script lang="ts" setup>
+const tooltipDelay = 400
 import { getScoreStyle } from '~/utils/evaluation';
 const my = useMyStore()
 const visible = defineModel<boolean>()
@@ -51,13 +66,3 @@ const exportCSV = () => {
 };
 
 </script>
-
-<style scoped>
-.infott {
-  cursor: help;
-}
-
-.limitSize {
-  max-width: 10%;
-}
-</style>
