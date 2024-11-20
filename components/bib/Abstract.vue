@@ -11,7 +11,7 @@ const crlfRegex = /\r\n|\r|\n/;
 </script>
 
 <script setup lang="ts">
-import { useBibList, type BibActivityDetail } from "@/composables/bib/list";
+import { useBibList, type BibActivityDetail } from "~/composables/bib/list";
 
 const p = defineProps<{
     data: BibActivityDetail

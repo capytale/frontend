@@ -1,4 +1,4 @@
-import { loadCurrentUser, type CurrentUser } from "@/utils/currentUser";
+import { loadCurrentUser, type CurrentUser } from "~/utils/currentUser";
 
 export const useCurrentUserStore = defineStore('user', () => {
   const user = ref<CurrentUser | null | false>(false)
