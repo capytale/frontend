@@ -202,10 +202,9 @@ const corbeilleTid = () => {
         </template>
       </Tree>
     </div>
-    <div cl:ass="flex justify-content-end gap-2">
-      <Button type="button" label="Cancel" severity="secondary" @click="editVisible = false"></Button>
-      <Button v-if="authSave" type="button" label="Save" @click="save"></Button>
-      <Button v-else disabled type="button" label="Save" @click="save"></Button>
+    <div class="flex justify-end gap-2 mt-4">
+      <Button type="button" label="Annuler" severity="secondary" @click="editVisible = false"></Button>
+      <Button :disabled="!authSave" type="button" label="Enregistrer" @click="save"></Button>
       <div v-if="!authSave" class="info">Vous ne pouvez pas imbriquer une étiquette dans elle-même.</div>
 
     </div>
@@ -218,9 +217,9 @@ const corbeilleTid = () => {
       <label for="label" class="font-semibold w-6rem">Couleur </label>
       <InputText v-model="color" id="label" class="flex-auto" autocomplete="off" />
     </div>
-    <div class="flex justify-content-end gap-2">
-      <Button type="button" label="Cancel" severity="secondary" @click="colorVisible = false"></Button>
-      <Button type="button" label="Save" @click="saveColor"></Button>
+    <div class="flex justify-end gap-2 mt-4">
+      <Button type="button" label="Annuler" severity="secondary" @click="colorVisible = false"></Button>
+      <Button type="button" label="Enregistrer" @click="saveColor"></Button>
     </div>
   </Dialog>
 </template>

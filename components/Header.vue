@@ -35,7 +35,7 @@ const checked = computed({
       </div>
 
       <div class="activityMenu grow justify-end order-3">
-        <Button v-if="userStore.isAuthenticated" type="button" label="Interface classique" icon="pi pi-chevron-left" @click="backToLegacy"
+        <Button v-if="userStore.isAuthenticated" type="button" label="Ancienne interface" @click="backToLegacy"
           severity="info" text aria-haspopup="true" aria-controls="overlay_menu" class="mr-4" />
 
         <NuxtLink to="/sesame"

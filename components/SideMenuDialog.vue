@@ -67,7 +67,7 @@ const visible = defineModel('visible')
         </template>
       </Tree>
     </div>
-    <div class="flex justify-center gap-2">
+    <div class="flex justify-end gap-2 mt-4">
       <Button type="button" label="Annuler" severity="secondary" @click="visible = false"></Button>
       <Button type="button" label="Enregistrer" @click="save"></Button>
 
