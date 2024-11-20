@@ -1,8 +1,9 @@
-import { shallowRef, readonly, computed, customRef } from 'vue';
+import { shallowRef, readonly, computed } from 'vue';
 
 import { type ActivityType } from '@capytale/activity.js/backend/capytale/activityType';
 
 import { loadActivityIndex } from '~/utils/activityTypes';
+import type { Status } from '~/types/store';
 
 type ActivityIndex = {
   [t: string]: ActivityType;
@@ -31,7 +32,7 @@ function buildUnknownType(type: string): ActivityType {
   };
 }
 
-const status = shallowRef<'loading' | 'loaded' | 'error'>('loading');
+const status = shallowRef<Status>('idle');
 
 const error = shallowRef<any>();
 
@@ -39,33 +40,27 @@ const list = shallowRef<string[]>([]);
 
 const index = shallowRef<ActivityIndex>({});
 
-let fetchPromise: Promise<void> | null = null;
-
 /**
  * Charge la liste des types d'activité.
  * 
  * @param forceReload force le rechargement de la liste des types d'activité même si elle est déjà chargée
  */
 function load(forceReload: boolean = false): void {
-  if (forceReload || (status.value !== 'loaded')) {
-    if (fetchPromise != null) return;
-    status.value = 'loading';
-    error.value = null;
-    fetchPromise = loadActivityIndex(forceReload)
-      .then((ta) => {
-        const ll = Object.keys(ta);
-        list.value = ll;
-        index.value = ta;
-        status.value = 'loaded';
-      })
-      .catch((e) => {
-        error.value = e;
-        status.value = 'error';
-      })
-      .finally(() => {
-        fetchPromise = null;
-      });
-  }
+  if (status.value === 'loading') return;
+  if ((status.value === 'success') && (!forceReload)) return;
+  status.value = 'loading';
+  error.value = null;
+  loadActivityIndex(forceReload)
+    .then((ta) => {
+      const ll = Object.keys(ta);
+      list.value = ll;
+      index.value = ta;
+      status.value = 'success';
+    })
+    .catch((e) => {
+      error.value = e;
+      status.value = 'error';
+    })
 }
 
 /**
@@ -80,7 +75,7 @@ function getTypeInfo(type: string): ActivityType | null {
   if (typeExists(type)) {
     return index.value[type];
   } else {
-    if (status.value === 'loaded') {
+    if (status.value === 'success') {
       return buildUnknownType(type);
     } else {
       return null;
@@ -172,7 +167,7 @@ let store: Store | null = null;
  */
 function useActivityTypesList(lazy: boolean = false): Store {
   if (!lazy) load();
-  return store ?? (store = buildStore());
+  return store ??= buildStore();
 }
 
 export { useActivityTypesList };

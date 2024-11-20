@@ -1,16 +1,16 @@
 import { ref, shallowRef, computed, readonly } from 'vue';
 
 import typeApi from '@capytale/activity.js/backend/capytale/activityType';
+import type { Status } from '~/types/store';
 
 import { useActivityTypesList } from './list';
 
 let atl = useActivityTypesList(true);
 
-const status = shallowRef<'loading' | 'loaded' | 'error'>('loading');
+const status = shallowRef<Status>('idle');
 const error = shallowRef<any>();
 const favorites = ref<{ [t: string]: boolean }>({});
 const showFavorites = shallowRef<boolean>(false);
-let fetchPromise: Promise<void> | null = null;
 
 /**
  * Charge les favoris des types d'activité.
@@ -18,41 +18,39 @@ let fetchPromise: Promise<void> | null = null;
  * @param forceReload force le rechargement des favoris des types d'activité même si ils sont déjà chargés
  */
 function load(forceReload: boolean = false): void {
-  atl.load();
-  if (forceReload || (status.value !== 'loaded')) {
-    if (fetchPromise != null) return;
-    if (typeApi.showFavorites()) {
-      status.value = 'loading';
-      error.value = null;
-      fetchPromise = typeApi.getFavorites()
-        .then((fa) => {
-          updateFavorites(fa);
-          showFavorites.value = true;
-          status.value = 'loaded';
-        })
-        .catch((e) => {
-          error.value = e;
-          status.value = 'error';
-        })
-        .finally(() => {
-          fetchPromise = null;
-        });
-    } else {
-      status.value = 'loaded';
-      error.value = null;
-    }
+  if (status.value === 'loading') return;
+  if ((status.value === 'success') && (!forceReload)) return;
+  if (!typeApi.showFavorites()) {
+    showFavorites.value = false;
+    status.value = 'success';
+    return;
   }
+  atl.load();
+  status.value = 'loading';
+  error.value = null;
+  showFavorites.value = true;
+  typeApi.getFavorites()
+    .then((fa) => {
+      updateFavorites(fa);
+      status.value = 'success';
+    })
+    .catch((e) => {
+      error.value = e;
+      status.value = 'error';
+    })
 }
 
 const compStatus = computed(() => {
-  if (status.value === 'error' || atl!.status === 'error') return 'error';
-  if (status.value === 'loading' || atl!.status === 'loading') return 'loading';
+  if (showFavorites.value) {
+    if (status.value === 'error' || atl.status === 'error') return 'error';
+    if (status.value === 'loading' || atl.status === 'loading') return 'loading';
+  }
   return status.value;
 });
 
 const compError = computed(() => {
   if (error.value != null) return error.value;
-  if (atl!.error.value != null) return atl!.error.value;
+  if (showFavorites.value && (atl.error.value != null)) return atl.error.value;
 });
 
 function isFavorite(t: string): boolean {
@@ -60,6 +58,7 @@ function isFavorite(t: string): boolean {
 }
 
 function updateFavorites(f: string[]): void {
+  if (!showFavorites.value) return;
   const remove = [];
   for (const t in favorites.value) {
     if (!f.includes(t)) remove.push(t);
@@ -74,6 +73,7 @@ function updateFavorites(f: string[]): void {
 
 const lockedToggle: { [t: string]: boolean } = {}
 async function toggleFavorite(t: string): Promise<void> {
+  if (!showFavorites.value) return;
   if (lockedToggle[t]) return;
   lockedToggle[t] = true;
   const current = favorites.value[t] ?? false;
@@ -92,7 +92,13 @@ async function toggleFavorite(t: string): Promise<void> {
   }
 }
 
-const favoriteTypes = computed(() => atl!.availableTypes.filter(t => isFavorite(t)));
+const favoriteTypes = computed(() => {
+  if (showFavorites.value)
+    return atl.availableTypes.filter(t => isFavorite(t))
+  else
+    return [];
+}
+);
 
 function buildStore() {
   return readonly({
@@ -111,7 +117,7 @@ let store: Store | null = null;
 
 function useActivityTypeFavorites(lazy: boolean = false) {
   if (!lazy) load();
-  return store ?? (store = buildStore());
+  return store ??= buildStore();
 }
 
 export { useActivityTypeFavorites };

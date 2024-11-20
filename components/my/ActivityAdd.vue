@@ -20,11 +20,11 @@ const activites = useActivitiesStore()
 
 const visible = ref(false);
 
-// index des types déjà utilisés avec leur nombre d'occurences
+// index des types déjà utilisés avec leur nombre d’occurrences
 type NbUsedIndex = { [key: string]: number }
 const existingTypeIndex = computed<NbUsedIndex | null>(() => {
   if (!activites.activities) return null;
-  if (atf.status !== "loaded") return null;
+  if (atf.status !== "success") return null;
   if (nbShortcuts === atf.favoriteTypes.length) return null;
   const ti: NbUsedIndex = {};
   for (const act of activites.activities) {
@@ -43,7 +43,7 @@ const existingTypeIndex = computed<NbUsedIndex | null>(() => {
 
 // liste des favoris
 const shortcutList1 = computed(() => {
-  if (atf.status !== "loaded") return null;
+  if (atf.status !== "success") return null;
   if (nbShortcuts === atf.favoriteTypes.length) return atf.favoriteTypes;
   if (atf.favoriteTypes.length > nbShortcuts) {
     if (existingTypeIndex.value == null) return null;
@@ -78,7 +78,7 @@ const shortcutList3 = computed(() => {
   if (shortcutList2.value.length >= nbShortcuts) {
     return shortcutList2.value;
   } else {
-    if (atw.status !== "loaded") return shortcutList2.value;
+    if (atw.status !== "success") return shortcutList2.value;
     const promoted = [];
     for (const t in atw.all) {
       if (shortcutList2.value.includes(t)) continue;
